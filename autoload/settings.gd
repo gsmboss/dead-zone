@@ -23,6 +23,8 @@ var render_scale: float = 1.0
 var show_fps: bool = false
 ## Сила тряски камеры 0..1
 var camera_shake: float = 1.0
+## Показывать кат-сцены (вступление, интро миссий, появление босса)
+var cutscenes: bool = true
 
 var _fps_layer: CanvasLayer
 var _fps_label: Label
@@ -86,13 +88,14 @@ func load_settings() -> void:
 	render_scale = float(config.get_value(SECTION, "render_scale", render_scale))
 	show_fps = bool(config.get_value(SECTION, "show_fps", show_fps))
 	camera_shake = float(config.get_value(SECTION, "camera_shake", camera_shake))
+	cutscenes = bool(config.get_value(SECTION, "cutscenes", cutscenes))
 	_clamp_values()
 
 
 func save_settings() -> void:
 	var config := ConfigFile.new()
 	for key: String in ["look_sensitivity", "invert_y", "auto_fire", "master_volume", "music_volume",
-			"shadows", "render_scale", "show_fps", "camera_shake"]:
+			"shadows", "render_scale", "show_fps", "camera_shake", "cutscenes"]:
 		config.set_value(SECTION, key, get(key))
 	var err: Error = config.save(PATH)
 	if err != OK:
@@ -109,6 +112,7 @@ func reset_to_defaults() -> void:
 	render_scale = 1.0
 	show_fps = false
 	camera_shake = 1.0
+	cutscenes = true
 	apply()
 	save_settings()
 	changed.emit()

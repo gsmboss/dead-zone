@@ -1,11 +1,14 @@
 extends Node3D
 ## Убежище: игрок ходит между терминалами, оружие в хабе отключено.
-## Окна миссий и оружейной открывает HubHUD.
+## Окна миссий и оружейной открывает HubHUD. При первом запуске — вступительная кат-сцена.
+
+const INTRO_PATH: String = "res://cutscene/hub_intro.tres"
 
 
 func _ready() -> void:
 	# Ждём, пока игрок закончит свой _ready (он сам находит WeaponManager)
 	_disable_player_weapons.call_deferred()
+	_play_intro.call_deferred()
 
 
 func _disable_player_weapons() -> void:
@@ -18,3 +21,13 @@ func _disable_player_weapons() -> void:
 		return
 	player.weapon_manager.process_mode = Node.PROCESS_MODE_DISABLED
 	player.weapon_manager.visible = false
+
+
+func _play_intro() -> void:
+	if not Settings.cutscenes or GameState.has_seen_cutscene("hub_intro"):
+		return
+	var intro := load(INTRO_PATH) as CutsceneData if ResourceLoader.exists(INTRO_PATH) else null
+	if intro == null:
+		push_warning("%s: не найдена кат-сцена %s" % [name, INTRO_PATH])
+		return
+	CutscenePlayer.play(get_tree(), intro)

@@ -62,6 +62,7 @@ var _quests: Array[Dictionary] = []  # {"id": String, "progress": int, "claimed"
 var _inventory: Dictionary = {}  # id предмета -> количество
 var _buildings_owned: Array[String] = []
 var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
+var _cutscenes_seen: Array[String] = []
 
 
 func _ready() -> void:
@@ -304,6 +305,25 @@ func buy_item(item_id: String) -> bool:
 	coins_changed.emit(coins)
 	save_game()
 	return true
+
+
+# ---------- Кат-сцены ----------
+
+func has_seen_cutscene(cutscene_id: String) -> bool:
+	return cutscene_id in _cutscenes_seen
+
+
+func mark_cutscene_seen(cutscene_id: String) -> void:
+	if cutscene_id.is_empty() or has_seen_cutscene(cutscene_id):
+		return
+	_cutscenes_seen.append(cutscene_id)
+	save_game()
+
+
+## Показать вступление и интро миссий заново
+func reset_cutscenes() -> void:
+	_cutscenes_seen.clear()
+	save_game()
 
 
 # ---------- База и гараж ----------
@@ -577,6 +597,7 @@ func save_game() -> void:
 		"inventory": _inventory,
 		"buildings": _buildings_owned,
 		"car_upgrades": _car_upgrades,
+		"cutscenes_seen": _cutscenes_seen,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -656,6 +677,12 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_cutscenes_seen.clear()
+	var seen: Variant = data.get("cutscenes_seen", [])
+	if seen is Array:
+		for cutscene_id: Variant in seen:
+			_cutscenes_seen.append(str(cutscene_id))
 
 	_buildings_owned.clear()
 	var owned_buildings: Variant = data.get("buildings", [])

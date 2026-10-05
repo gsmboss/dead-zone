@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="CutsceneData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://cutscene/cutscene_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://cutscene/cutscene_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+from_position = Vector3(-14, 9, 14)
+to_position = Vector3(-6, 6, 10)
+look_from = Vector3(0, 1, 0)
+look_to = Vector3(0, 1, 0)
+duration = 4.5
+subtitle = "2031 ГОД. ВИРУС ПРЕВРАТИЛ ГОРОДА В КЛАДБИЩА."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+from_position = Vector3(10, 4, -2)
+to_position = Vector3(6, 3, -9)
+look_from = Vector3(0, 1.5, -5)
+look_to = Vector3(0, 1.5, -5)
+duration = 4.0
+subtitle = "МЫ ПОСТРОИЛИ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ И ЖЕЛЕЗА."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+from_position = Vector3(-4, 2.5, -1.5)
+to_position = Vector3(4, 2.5, -1.5)
+look_from = Vector3(-4, 1.5, -5)
+look_to = Vector3(4, 1.5, -5)
+duration = 5.0
+subtitle = "ТЕРМИНАЛ МИССИЙ — ВЫЛАЗКИ ЗА ПРИПАСАМИ.
+ОРУЖЕЙНАЯ — СТВОЛЫ И УЛУЧШЕНИЯ."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+from_position = Vector3(4, 2.5, -1.5)
+to_position = Vector3(0, 1.7, 4.5)
+look_from = Vector3(4, 1.5, -5)
+look_to = Vector3(0, 1.5, -5)
+duration = 3.0
+subtitle = "ВЫЖИВИ. ЗАЧИСТИ. ВЕРНИСЬ."
+
+[resource]
+script = ExtResource("1_data")
+id = "hub_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

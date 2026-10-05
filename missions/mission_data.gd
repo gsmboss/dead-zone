@@ -83,3 +83,60 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 @export var reward_coins: int = 100
 ## ENDLESS: монеты за каждую пройденную волну
 @export var coins_per_wave: int = 25
+
+
+# ---------- Тексты для досье и кат-сцен ----------
+
+const TYPE_NAMES: Dictionary = {
+	Type.WAVES: "ВОЛНЫ",
+	Type.KILL_COUNT: "ОХОТА",
+	Type.SURVIVE: "ВЫЖИВАНИЕ",
+	Type.DEFEND: "ОБОРОНА ТОЧКИ",
+	Type.COLLECT: "СБОР ПРИПАСОВ",
+	Type.ENDLESS: "БЕСКОНЕЧНЫЙ РЕЖИМ",
+	Type.FREE_ROAM: "ОТКРЫТЫЙ ГОРОД",
+}
+## Название локации по файлу сцены уровня
+const LOCATIONS: Dictionary = {
+	"test_level": "ПОЛИГОН",
+	"street_level": "УЛИЦА",
+	"yard_level": "СТОЯНКА КОНТЕЙНЕРОВ",
+	"city_level": "ГОРОД",
+}
+
+
+func get_type_name() -> String:
+	return TYPE_NAMES.get(type, "МИССИЯ")
+
+
+func get_location_name() -> String:
+	var path: String = level_scene
+	if path.begins_with("uid://"):
+		var uid: int = ResourceUID.text_to_id(path)
+		if ResourceUID.has_id(uid):
+			path = ResourceUID.get_id_path(uid)
+	var file: String = path.get_file().get_basename()
+	return LOCATIONS.get(file, file.to_upper())
+
+
+func get_goal_text() -> String:
+	match type:
+		Type.WAVES:
+			var text: String = "Отбей %d волн" % wave_count
+			if boss != null:
+				text += ", в последней — %s" % boss.display_name
+			return text
+		Type.KILL_COUNT:
+			return "Убей %d зомби" % kill_target
+		Type.SURVIVE:
+			var total: int = maxi(ceili(survive_time), 0)
+			return "Продержись %d:%02d" % [floori(total / 60.0), total % 60]
+		Type.DEFEND:
+			return "Простой на точке %d секунд" % roundi(defend_time)
+		Type.COLLECT:
+			return "Собери %d ящиков с припасами" % collect_target
+		Type.ENDLESS:
+			return "Держись как можно дольше: волны без конца"
+		Type.FREE_ROAM:
+			return "Исследуй город, спасай выживших, катайся и сбивай зомби"
+	return ""

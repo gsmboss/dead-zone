@@ -38,6 +38,8 @@ func _exit_tree() -> void:
 
 func _process(delta: float) -> void:
 	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
+	if CutscenePlayer.is_blocking_input():
+		return  # кат-сцена сама обрабатывает «пропуск»
 	if Input.is_action_just_pressed(&"throw") and not get_tree().paused:
 		_throw()
 	if Input.is_action_just_pressed(&"pause"):

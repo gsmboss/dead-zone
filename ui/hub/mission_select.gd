@@ -11,23 +11,6 @@ const LIST_WIDTH: float = 400.0
 const DOSSIER_WIDTH: float = 560.0
 const MAX_DANGER: int = 5
 
-const TYPE_NAMES: Dictionary = {
-	MissionData.Type.WAVES: "ВОЛНЫ",
-	MissionData.Type.KILL_COUNT: "ОХОТА",
-	MissionData.Type.SURVIVE: "ВЫЖИВАНИЕ",
-	MissionData.Type.DEFEND: "ОБОРОНА ТОЧКИ",
-	MissionData.Type.COLLECT: "СБОР ПРИПАСОВ",
-	MissionData.Type.ENDLESS: "БЕСКОНЕЧНЫЙ РЕЖИМ",
-	MissionData.Type.FREE_ROAM: "ОТКРЫТЫЙ ГОРОД",
-}
-## Название локации по сцене уровня
-const LOCATIONS: Dictionary = {
-	"test_level": "ПОЛИГОН",
-	"street_level": "УЛИЦА",
-	"yard_level": "СТОЯНКА КОНТЕЙНЕРОВ",
-	"city_level": "ГОРОД",
-}
-
 var missions: Array[MissionData] = []
 
 var _map: MissionMap3D
@@ -168,12 +151,12 @@ func _fill_dossier(mission: MissionData) -> void:
 	var endless: bool = _is_endless(mission)
 	var title_text: String = mission.title if level <= 1 or endless else "%s  •  УР. %d" % [mission.title, level]
 	UIKit.label(title_text, 36, head_texts).modulate = color.lightened(0.25)
-	UIKit.label("%s  •  %s" % [TYPE_NAMES.get(mission.type, "МИССИЯ"), _location(mission)], 22, head_texts).modulate = UIKit.DIM
+	UIKit.label("%s  •  %s" % [mission.get_type_name(), mission.get_location_name()], 22, head_texts).modulate = UIKit.DIM
 
 	if not mission.description.is_empty():
 		UIKit.label(mission.description, 22, _dossier)
 
-	_fact("ЦЕЛЬ", _goal_text(mission))
+	_fact("ЦЕЛЬ", mission.get_goal_text())
 	_fact("ВРАГИ", _enemies_text(mission))
 	var danger_row := HBoxContainer.new()
 	danger_row.add_theme_constant_override(&"separation", 12)
@@ -231,28 +214,6 @@ func _fact(title: String, value: String) -> void:
 	text.size_flags_horizontal = SIZE_EXPAND_FILL
 
 
-func _goal_text(mission: MissionData) -> String:
-	match mission.type:
-		MissionData.Type.WAVES:
-			var text: String = "Отбей %d волн" % mission.wave_count
-			if mission.boss != null:
-				text += ", в последней — %s" % mission.boss.display_name
-			return text
-		MissionData.Type.KILL_COUNT:
-			return "Убей %d зомби" % mission.kill_target
-		MissionData.Type.SURVIVE:
-			return "Продержись %s" % MissionManager.format_time(mission.survive_time)
-		MissionData.Type.DEFEND:
-			return "Простой на точке %d секунд" % roundi(mission.defend_time)
-		MissionData.Type.COLLECT:
-			return "Собери %d ящиков с припасами" % mission.collect_target
-		MissionData.Type.ENDLESS:
-			return "Держись как можно дольше: волны без конца"
-		MissionData.Type.FREE_ROAM:
-			return "Исследуй город, спасай выживших, катайся и сбивай зомби"
-	return ""
-
-
 func _enemies_text(mission: MissionData) -> String:
 	var names := PackedStringArray()
 	for data: ZombieData in [mission.walker, mission.runner, mission.tank]:
@@ -279,16 +240,6 @@ func _danger(mission: MissionData) -> int:
 	if not _is_endless(mission):
 		base += GameState.get_mission_level(mission.id) - 1
 	return clampi(base, 1, MAX_DANGER)
-
-
-func _location(mission: MissionData) -> String:
-	var path: String = mission.level_scene
-	if path.begins_with("uid://"):
-		var id: int = ResourceUID.text_to_id(path)
-		if ResourceUID.has_id(id):
-			path = ResourceUID.get_id_path(id)
-	var file: String = path.get_file().get_basename()
-	return LOCATIONS.get(file, file.to_upper())
 
 
 func _is_endless(mission: MissionData) -> bool:

@@ -187,4 +187,10 @@ levels/static_prop.gd (StaticProp: StaticBody3D с моделью-ребёнко
 custom_size для фонарей/светофоров); props в hub.tscn и test_level.tscn (дороги, машины, контейнеры,
 пятна крови в Decals); ZombieData.model_scene/model_scale — runner = Zombie_Arm, tank = Zombie_Chubby 1.9.
 
+Кат-сцены (cutscene/): CutsceneData (id, shots, time_scale, once) из CutsceneShot (from/to, look_from/look_to,
+duration, subtitle, relative_to WORLD/ANCHOR); CutscenePlayer.play(tree, data, anchor) — своя камера, чёрные
+полосы, субтитры, «ПРОПУСТИТЬ», HUD скрыт, ввод игрока выключен; is_blocking_input() глушит паузу.
+hub_intro.tres — вступление в убежище (hub/hub.gd), интро миссии и замедленное появление босса строятся кодом
+в MissionManager (по разу; флаги GameState.has_seen_cutscene, сброс в настройках, Settings.cutscenes).
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

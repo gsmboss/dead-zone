@@ -133,12 +133,77 @@ func _start() -> void:
 
 	state = State.STARTING
 	_phase_timer = mission.start_delay
+	await _play_intro()
+	if not is_inside_tree():
+		return
 	var title: String = mission.title if _level <= 1 else "%s • УРОВЕНЬ %d" % [mission.title, _level]
 	if _event != null and (not is_equal_approx(_event.coin_multiplier, 1.0)
 			or not is_equal_approx(_event.spawn_multiplier, 1.0) or not is_equal_approx(_event.drop_multiplier, 1.0)):
 		title += "\nСОБЫТИЕ ДНЯ: %s" % _event.title
 	announcement.emit(title)
 	_update_objective()
+
+
+# ---------- Кат-сцены ----------
+
+## Облёт локации при первом заходе в миссию: обзор, цель, «В БОЙ!»
+func _play_intro() -> void:
+	var cutscene_id: String = "mission_%s" % mission.id
+	if not Settings.cutscenes or _player == null or GameState.has_seen_cutscene(cutscene_id):
+		return
+	var p: Vector3 = _player.global_position
+	var forward: Vector3 = -_player.global_basis.z
+	forward.y = 0.0
+	forward = forward.normalized() if forward.length_squared() > 0.001 else Vector3.FORWARD
+	var side: Vector3 = forward.cross(Vector3.UP)
+	var head: Vector3 = p + Vector3.UP * 1.5
+
+	var intro := CutsceneData.new()
+	intro.id = cutscene_id
+	intro.once = true
+	intro.shots.append(_shot(p + Vector3(18.0, 14.0, 18.0), p + Vector3(10.0, 10.0, -12.0), p, p, 3.5,
+		"ЛОКАЦИЯ: %s\n%s" % [mission.get_location_name(), mission.title]))
+	intro.shots.append(_shot(p + forward * 8.0 + Vector3.UP * 2.0, p + forward * 4.0 + Vector3.UP * 1.8 + side * 2.0,
+		head, head, 3.0, "ЦЕЛЬ: %s" % mission.get_goal_text().to_upper()))
+	intro.shots.append(_shot(p - forward * 3.0 + Vector3.UP * 2.5, p + Vector3.UP * 1.6,
+		head + forward * 10.0, head + forward * 10.0, 1.8, "В БОЙ!"))
+	set_process(false)  # отсчёт start_delay — после сцены
+	await CutscenePlayer.play(get_tree(), intro).finished
+	if is_inside_tree():
+		set_process(true)
+
+
+## Замедленное появление босса: камера у его лица, имя в субтитрах (раз на тип босса)
+func _play_boss_intro(boss: Zombie) -> void:
+	if not Settings.cutscenes or CutscenePlayer.active or not is_instance_valid(boss) or not boss.is_inside_tree():
+		return
+	var cutscene_id: String = "boss_%s" % mission.boss.resource_path.get_file().get_basename()
+	if GameState.has_seen_cutscene(cutscene_id):
+		return
+	var forward: Vector3 = -boss.global_basis.z
+	forward.y = 0.0
+	forward = forward.normalized() if forward.length_squared() > 0.001 else Vector3.FORWARD
+	var face: Vector3 = Vector3.UP * 2.5
+	var intro := CutsceneData.new()
+	intro.id = cutscene_id
+	intro.once = true
+	intro.time_scale = 0.25
+	var shot := _shot(forward * 7.0 + Vector3.UP * 1.2, forward * 4.0 + Vector3.UP * 2.6 + forward.cross(Vector3.UP) * 1.5,
+		face, face, 2.4, mission.boss.display_name.to_upper())
+	shot.relative_to = CutsceneShot.Space.ANCHOR
+	intro.shots.append(shot)
+	CutscenePlayer.play(get_tree(), intro, boss)
+
+
+func _shot(from: Vector3, to: Vector3, look_from: Vector3, look_to: Vector3, duration: float, subtitle: String) -> CutsceneShot:
+	var shot := CutsceneShot.new()
+	shot.from_position = from
+	shot.to_position = to
+	shot.look_from = look_from
+	shot.look_to = look_to
+	shot.duration = duration
+	shot.subtitle = subtitle
+	return shot
 
 
 func _process(delta: float) -> void:
@@ -251,6 +316,7 @@ func _spawn_boss() -> void:
 	boss.despawned.connect(_on_zombie_despawned)
 	_alive += 1
 	boss_spawned.emit(boss)
+	_play_boss_intro.call_deferred(boss)
 
 
 func _retry_boss_later() -> void:

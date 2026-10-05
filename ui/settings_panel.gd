@@ -26,6 +26,14 @@ func _build_content() -> void:
 	_slider("ТРЯСКА КАМЕРЫ", &"camera_shake", 0.0, 1.0, 0.05,
 		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
 
+	_section("СЮЖЕТ")
+	_toggle("ПОКАЗЫВАТЬ КАТ-СЦЕНЫ", &"cutscenes")
+	var replay := UIKit.button("ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА", 22)
+	replay.pressed.connect(func() -> void:
+		GameState.reset_cutscenes()
+		Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0))
+	content.add_child(replay)
+
 	_section("ЗВУК")
 	_slider("ГРОМКОСТЬ", &"master_volume", 0.0, 1.0, 0.05,
 		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
