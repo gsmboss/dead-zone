@@ -107,7 +107,7 @@ func is_enemy(peer_id: int) -> bool:
 	return false
 
 
-static func mode_allows_respawn(match_type: int) -> bool:
+func mode_allows_respawn(match_type: int) -> bool:
 	return match_type != Mode.LAST_STANDING
 
 
