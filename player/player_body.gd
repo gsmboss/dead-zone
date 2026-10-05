@@ -21,6 +21,8 @@ var _flash_left: float = 0.0
 var _current_anim: StringName = &""
 var _one_shot_left: float = 0.0
 var _dead: bool = false
+## Оружие, встроенное в модель (у выживших Quaternius все стволы уже в руке): имя → меш
+var _builtin_weapons: Dictionary = {}
 
 
 ## Сменить скин. null — скин по умолчанию из GameState
@@ -38,6 +40,7 @@ func set_skin(new_skin: PlayerSkin) -> void:
 	_model.name = "Model"
 	add_child(_model)
 	_model.rotation.y = PI
+	_collect_builtin_weapons()
 	_fit_height(_model, new_skin.height)
 	_animation_player = _find_animation_player(_model)
 	if _animation_player != null:
@@ -54,7 +57,16 @@ func set_weapon(weapon: WeaponData) -> void:
 	if _weapon_model != null:
 		_weapon_model.queue_free()
 		_weapon_model = null
-	if weapon == null or weapon.view_model == null or _hand == null:
+	for builtin: Node3D in _builtin_weapons.values():
+		builtin.visible = false
+	if weapon == null or weapon.view_model == null:
+		return
+	# Такой же ствол уже есть в модели и правильно лежит в руке — просто показываем его
+	var key: String = weapon.view_model.resource_path.get_file().get_basename()
+	if _builtin_weapons.has(key):
+		(_builtin_weapons[key] as Node3D).visible = true
+		return
+	if _hand == null:
 		return
 	_weapon_model = weapon.view_model.instantiate() as Node3D
 	if _weapon_model == null:
@@ -183,6 +195,24 @@ func _create_hand() -> void:
 	_hand.add_child(_flash)
 
 
+## Нескинованные меши в модели со скелетом — это оружие в руке: прячем, показываем нужное
+func _collect_builtin_weapons() -> void:
+	_builtin_weapons.clear()
+	var meshes: Array[Node] = _model.find_children("*", "MeshInstance3D", true, false)
+	var has_skinned: bool = false
+	for node: Node in meshes:
+		if (node as MeshInstance3D).skin != null:
+			has_skinned = true
+			break
+	if not has_skinned:
+		return
+	for node: Node in meshes:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.skin == null:
+			mesh_instance.visible = false
+			_builtin_weapons[String(mesh_instance.name)] = mesh_instance
+
+
 func _find_animation_player(root: Node) -> AnimationPlayer:
 	var players: Array[Node] = root.find_children("*", "AnimationPlayer", true, false)
 	return players[0] as AnimationPlayer if not players.is_empty() else null
@@ -207,12 +237,21 @@ func _fit_length(model: Node3D, length: float) -> void:
 	model.scale = Vector3.ONE * (length / longest)
 
 
+## Габариты мешей; если в модели есть скинованные (тело) — только по ним, без оружия
 func _measure(model: Node3D) -> AABB:
 	var bounds := AABB()
 	var has_bounds: bool = false
-	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
+	var meshes: Array[Node] = model.find_children("*", "MeshInstance3D", true, false)
+	var has_skinned: bool = false
+	for node: Node in meshes:
+		if (node as MeshInstance3D).skin != null:
+			has_skinned = true
+			break
+	for node: Node in meshes:
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		if has_skinned and mesh_instance.skin == null:
 			continue
 		var local: AABB = _transform_to(mesh_instance, model) * mesh_instance.get_aabb()
 		bounds = bounds.merge(local) if has_bounds else local
