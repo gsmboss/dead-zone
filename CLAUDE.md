@@ -63,6 +63,9 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
 - missions/data/: mission_waves.tres, mission_kill.tres, mission_survive.tres.
 - models/zombies/ и models/weapons/: Quaternius Zombie Apocalypse Kit (CC0, glTF).
   Модель зомби в zombie.tscn: Visual/Model = Zombie_Basic.gltf, scale 1.6, rotation y 180.
+  Модель типа задаётся в ZombieData (model_scene, model_scale) и подменяет Visual/Model при спавне:
+  walker — Zombie_Basic (из сцены), runner — Zombie_Arm, tank — Zombie_Chubby (1.9).
+  Хитбоксы масштабируются как model_scale / 1.6. Idle/Walk/Run зацикливаются в коде.
 
 Сцены: player/player.tscn, enemies/zombie.tscn, combat/target_dummy.tscn,
 levels/test_level.tscn (навмеш, 6 точек спавна, MissionManager+ZombieSpawner, HUD), hub/hub.tscn.

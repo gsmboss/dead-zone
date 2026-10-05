@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="ZombieData" format=3 uid="uid://cgohwgveryuy2"]
 
 [ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_byaxb"]
+[ext_resource type="PackedScene" uid="uid://odbeiqagf5bi" path="res://models/zombies/Zombie_Chubby.gltf" id="2_chb01"]
 
 [resource]
 script = ExtResource("1_byaxb")
@@ -14,6 +15,8 @@ attack_windup = 0.8
 attack_cooldown = 1.2
 detection_radius = 12.0
 hearing_radius = 25.0
+model_scene = ExtResource("2_chb01")
+model_scale = 1.9
 body_color = Color(0.3019608, 0.3019608, 0.4509804, 1)
 score = 40
 metadata/_custom_type_script = "uid://bsomw8gt06pq4"

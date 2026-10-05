@@ -38,6 +38,10 @@ const UNSTUCK_DURATION: float = 0.5
 const FLASH_TIME: float = 0.08
 const CORPSE_TIME: float = 4.0
 const SINK_TIME: float = 1.5
+## Масштаб модели, под который настроены хитбоксы в zombie.tscn
+const BASE_MODEL_SCALE: float = 1.6
+## Модели Quaternius смотрят в +Z, зомби — в -Z
+const MODEL_YAW_DEGREES: float = 180.0
 
 @export var data: ZombieData
 
@@ -580,15 +584,48 @@ func _resolve_references() -> bool:
 		visual = get_node_or_null(^"Visual") as Node3D
 	if visual != null:
 		_visual_base_position = visual.position
+		if _apply_type_model():
+			animation_player = null  # старый плеер удалён вместе со старой моделью
 		if animation_player == null:
 			var players: Array[Node] = visual.find_children("*", "AnimationPlayer", true, false)
 			if not players.is_empty():
 				animation_player = players[0] as AnimationPlayer
+		_setup_loops()
 
+	var hitbox_scale: float = data.model_scale / BASE_MODEL_SCALE
 	for child: Node in get_children():
 		if child is Hitbox:
 			_hitboxes.append(child)
+			# Крупный тип — крупнее зоны попадания (голова на своей высоте)
+			if not is_equal_approx(hitbox_scale, 1.0):
+				(child as Hitbox).scale = Vector3.ONE * hitbox_scale
 	return true
+
+
+## Ставит модель из data.model_scene вместо Visual/Model. true — модель заменена
+func _apply_type_model() -> bool:
+	if data.model_scene == null:
+		return false
+	var model := data.model_scene.instantiate() as Node3D
+	if model == null:
+		push_warning("Zombie '%s': model_scene у '%s' не Node3D-сцена" % [name, data.display_name])
+		return false
+	var old_model: Node = visual.get_node_or_null(^"Model")
+	if old_model != null:
+		visual.remove_child(old_model)
+		old_model.queue_free()
+	model.name = &"Model"
+	model.rotation_degrees = Vector3(0.0, MODEL_YAW_DEGREES, 0.0)
+	model.scale = Vector3.ONE * data.model_scale
+	visual.add_child(model)
+	return true
+
+
+## Idle/Walk/Run должны повторяться: в импорте не у всех моделей включён цикл
+func _setup_loops() -> void:
+	for anim_name: StringName in [anim_idle, anim_walk, anim_run]:
+		if _has_anim(anim_name):
+			animation_player.get_animation(anim_name).loop_mode = Animation.LOOP_LINEAR
 
 
 func _setup_agent() -> void:

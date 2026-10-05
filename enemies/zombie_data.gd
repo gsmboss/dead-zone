@@ -43,6 +43,10 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var stagger_time: float = 0.3
 
 @export_group("Visual")
+## Модель типа (glTF с AnimationPlayer). Пусто → модель из zombie.tscn
+@export var model_scene: PackedScene
+## Масштаб модели. 1.6 — рост обычного зомби; хитбоксы растут пропорционально
+@export_range(0.5, 4.0, 0.05) var model_scale: float = 1.6
 ## Цвет капсулы-заглушки. На реальную модель не влияет
 @export var body_color: Color = Color(0.35, 0.5, 0.3)
 
