@@ -121,9 +121,10 @@ func _interact() -> void:
 		return
 	match _current.action_id:
 		&"missions":
-			var board := MissionBoardPanel.new()
-			board.missions = missions
-			_open_window(board)
+			# Карта заражения в 3D вместо списка
+			var select := MissionSelect.new()
+			select.missions = missions
+			_open_window(select)
 		&"shop":
 			_open_window(ShopPanel.new())
 		_:

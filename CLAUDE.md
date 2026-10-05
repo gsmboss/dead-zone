@@ -110,6 +110,10 @@ tint, specials в MissionData), effects/explosion.gd, effects/thrown_item.gd (г
 стрельба из машины и фары, levels/day_night_cycle.gd (DayNightCycle.night_amount), levels/weather.gd,
 город: LootSpot, Survivor, EvacPoint; игрок: выносливость, бег, подкат (sprint/slide);
 события дня (DailyEventData в quest_pool.tres); музыка autoload/music.gd (Music, динамическая боевая).
+Выбор миссий: терминал МИССИИ открывает ui/hub/mission_select.gd (MissionSelect, «КАРТА ЗАРАЖЕНИЯ»):
+3D-фон ui/hub/mission_map_3d.gd (маяки миссий по кругу, камера облетает выбранную), список с
+MissionIcon, досье (тип, локация, цель, враги, DangerMeter, награда, рекорд, звёзды, «В БОЙ»),
+полосы ui/hazard_stripe.gd. Огнемёт — своя модель weapons/models/flamethrower.tscn (примитивы).
 
 Этап 6 (код): вью-модель уменьшена в VIEW_MODEL_SHRINK=0.35 раз и придвинута к камере (не входит
 в стены; камера near=0.02), спрайт вспышки; хитмаркер (ui/hit_marker.gd), индикатор урона

@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_byaxb")
-display_name = "TANK"
+display_name = "ТАНК"
 max_health = 350.0
 move_speed = 1.1
 turn_speed = 5.0

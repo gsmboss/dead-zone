@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_q1qs2")
-display_name = "RUNNER"
+display_name = "БЕГУН"
 max_health = 60.0
 move_speed = 4.2
 turn_speed = 10.0
