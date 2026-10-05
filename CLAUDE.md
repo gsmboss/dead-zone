@@ -10,8 +10,9 @@
   RenderingDevice (Vulkan/Metal падают с "Placement heap type is not supported").
 - В project.godot обязательно и не менять:
   - renderer/rendering_method="gl_compatibility" (редактор и ПК)
-  - renderer/rendering_method.mobile="mobile" (Android)
   - textures/vram_compression/compress_with_gpu=false (иначе импорт текстур крашит редактор)
+- renderer/rendering_method.mobile в project.godot не добавлять: "mobile" (Android) — значение
+  по умолчанию, Godot его не сохраняет.
 - Ничего, что требует RenderingDevice в редакторе: GPU-сжатие, compute shaders, SDFGI, VoxelGI.
 - Работа в облаке (Claude Code on the web): Godot недоступен. Проверяй код особенно тщательно
   (типы, имена нод, пути ресурсов, uid в .tscn/.tres). В конце каждой задачи давай чек-лист
