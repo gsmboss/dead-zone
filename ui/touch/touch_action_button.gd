@@ -21,7 +21,7 @@ const PRESS_SPEED: float = 14.0
 @export var use_action_color: bool = true
 @export var base_color: Color = DEFAULT_BUTTON_COLOR
 ## Непрозрачность кнопки (не закрывать обзор)
-@export_range(0.1, 1.0, 0.05) var opacity: float = 0.7
+@export_range(0.1, 1.0, 0.05) var opacity: float = 0.38
 @export var label_color: Color = Color(1, 1, 1, 0.95)
 ## Подсвечивать кнопку, пока оружие в прицеле (для кнопки прицела)
 @export var show_aim_state: bool = false
@@ -115,14 +115,14 @@ func _draw() -> void:
 	color = color.lightened(0.15 * p)
 
 	# Тень
-	draw_circle(size * 0.5 + Vector2(0.0, depth * 1.4), r, Color(0.0, 0.0, 0.0, 0.35 * opacity))
+	draw_circle(size * 0.5 + Vector2(0.0, depth * 1.4), r, Color(0.0, 0.0, 0.0, 0.25 * opacity))
 	# Боковина (объём) — темнее и ниже лицевой стороны
 	draw_circle(center + Vector2(0.0, depth * (1.0 - p)), r, _with_alpha(color.darkened(0.55)))
 	# Ободок
 	draw_circle(center, r, _with_alpha(color.darkened(0.3)))
 	# Лицевая сторона: низ темнее, верх светлее (имитация градиента)
 	draw_circle(center, r * 0.86, _with_alpha(color.darkened(0.12)))
-	draw_circle(center - Vector2(0.0, r * 0.06), r * 0.78, _with_alpha(color))
+	draw_circle(center - Vector2(0.0, r * 0.06), r * 0.78, Color(color.r, color.g, color.b, 0.35))
 	# Блик сверху (эллипс через масштаб)
 	draw_set_transform(center - Vector2(0.0, r * 0.38), 0.0, Vector2(1.0, 0.5))
 	draw_circle(Vector2.ZERO, r * 0.5, Color(1.0, 1.0, 1.0, 0.22 * (1.0 - p * 0.6) * opacity))
@@ -144,4 +144,6 @@ func _draw() -> void:
 
 
 func _with_alpha(color: Color) -> Color:
-	return Color(color.r, color.g, color.b, color.a * opacity)
+	# Нажатая кнопка плотнее, чтобы был виден отклик
+	var alpha: float = minf(opacity + 0.25 * _press_amount, 1.0)
+	return Color(color.r, color.g, color.b, color.a * alpha)

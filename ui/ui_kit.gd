@@ -35,15 +35,15 @@ static func button(text: String, font_size: int = 26, min_width: float = 0.0) ->
 
 
 ## Объёмная кнопка: толстый нижний край (боковина), тень; при нажатии «вдавливается»
-static func apply_3d_style(button: Button) -> void:
-	button.add_theme_stylebox_override(&"normal", _button_box(BUTTON_COLOR, 7, 0))
-	button.add_theme_stylebox_override(&"hover", _button_box(BUTTON_COLOR.lightened(0.12), 7, 0))
-	button.add_theme_stylebox_override(&"pressed", _button_box(BUTTON_COLOR.darkened(0.1), 2, 5))
-	button.add_theme_stylebox_override(&"disabled", _button_box(BUTTON_COLOR.darkened(0.45), 4, 3))
-	button.add_theme_stylebox_override(&"focus", StyleBoxEmpty.new())
-	button.add_theme_color_override(&"font_disabled_color", Color(1.0, 1.0, 1.0, 0.35))
-	button.add_theme_constant_override(&"outline_size", 4)
-	button.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.6))
+static func apply_3d_style(target: Button) -> void:
+	target.add_theme_stylebox_override(&"normal", _button_box(BUTTON_COLOR, 7, 0))
+	target.add_theme_stylebox_override(&"hover", _button_box(BUTTON_COLOR.lightened(0.12), 7, 0))
+	target.add_theme_stylebox_override(&"pressed", _button_box(BUTTON_COLOR.darkened(0.1), 2, 5))
+	target.add_theme_stylebox_override(&"disabled", _button_box(BUTTON_COLOR.darkened(0.45), 4, 3))
+	target.add_theme_stylebox_override(&"focus", StyleBoxEmpty.new())
+	target.add_theme_color_override(&"font_disabled_color", Color(1.0, 1.0, 1.0, 0.35))
+	target.add_theme_constant_override(&"outline_size", 4)
+	target.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.6))
 
 
 ## edge — высота боковины снизу, sink — насколько содержимое опущено (нажатие)

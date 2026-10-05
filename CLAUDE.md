@@ -60,7 +60,9 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
 - missions/: mission_data.gd (MissionData: WAVES/KILL_COUNT/SURVIVE, id, level_scene),
   spawn_point.gd (ZombieSpawnPoint, группа "zombie_spawn"), zombie_spawner.gd (ZombieSpawner),
   mission_manager.gd (MissionManager: берёт GameState.selected_mission, начисляет монеты).
-- ui/: ammo_display.gd, crosshair.gd (рисованный динамический прицел: зазор = текущий разброс
+- ui/: ammo_display.gd, health_display.gd (HealthLabel: рисованная 3D-полоска здоровья — градиент,
+  след урона, значок аптечки, мигание при низком HP; сама ставит себя в левый верхний угол),
+  crosshair.gd (рисованный динамический прицел: зазор = текущий разброс
   WeaponManager.get_current_spread() с учётом FOV; прицеливание — WeaponManager.set_aiming(),
   зум ads_fov_multiplier, разброс ads_spread_multiplier, расхождение bloom_per_shot в WeaponData), health_display.gd, damage_overlay.gd,
   mission_hud.gd (UI миссии создаётся кодом; кнопка «В УБЕЖИЩЕ» появляется, если есть res://hub/hub.tscn),

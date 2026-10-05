@@ -6,9 +6,9 @@ extends Control
 
 @export var radius: float = 110.0
 @export_range(0.0, 0.9, 0.01) var deadzone: float = 0.12
-@export var base_color: Color = Color(0.12, 0.13, 0.15, 0.45)
-@export var ring_color: Color = Color(1, 1, 1, 0.35)
-@export var knob_color: Color = Color(0.5, 0.53, 0.6, 0.85)
+@export var base_color: Color = Color(0.12, 0.13, 0.15, 0.25)
+@export var ring_color: Color = Color(1, 1, 1, 0.25)
+@export var knob_color: Color = Color(0.5, 0.53, 0.6, 0.5)
 
 ## Выход в диапазоне -1..1. Вверх по экрану = -Y (как у Input.get_vector).
 var output: Vector2 = Vector2.ZERO
@@ -103,10 +103,10 @@ func _draw() -> void:
 
 	# Стик: тень, боковина, лицевая сторона, блик
 	var knob_radius: float = radius * 0.42
-	draw_circle(_knob + Vector2(0.0, knob_radius * 0.22), knob_radius, Color(0.0, 0.0, 0.0, 0.35))
-	draw_circle(_knob + Vector2(0.0, knob_radius * 0.1), knob_radius, knob_color.darkened(0.5))
-	draw_circle(_knob, knob_radius, knob_color.darkened(0.15))
+	draw_circle(_knob + Vector2(0.0, knob_radius * 0.22), knob_radius, Color(0.0, 0.0, 0.0, 0.2))
+	draw_circle(_knob + Vector2(0.0, knob_radius * 0.1), knob_radius, Color(knob_color.darkened(0.5), 0.3))
+	draw_circle(_knob, knob_radius, Color(knob_color.darkened(0.15), 0.3))
 	draw_circle(_knob - Vector2(0.0, knob_radius * 0.08), knob_radius * 0.82, knob_color)
 	draw_set_transform(_knob - Vector2(0.0, knob_radius * 0.4), 0.0, Vector2(1.0, 0.55))
-	draw_circle(Vector2.ZERO, knob_radius * 0.5, Color(1.0, 1.0, 1.0, 0.3))
+	draw_circle(Vector2.ZERO, knob_radius * 0.5, Color(1.0, 1.0, 1.0, 0.2))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
