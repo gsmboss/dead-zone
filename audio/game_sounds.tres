@@ -60,6 +60,10 @@
 [ext_resource type="AudioStream" path="res://audio/ui/pickup.ogg" id="a57"]
 [ext_resource type="AudioStream" path="res://audio/ui/hitmarker.ogg" id="a58"]
 [ext_resource type="AudioStream" path="res://audio/weapons/dry_fire.ogg" id="a59"]
+[ext_resource type="AudioStream" path="res://audio/world/explosion_01.ogg" id="w1"]
+[ext_resource type="AudioStream" path="res://audio/world/explosion_02.ogg" id="w2"]
+[ext_resource type="AudioStream" path="res://audio/world/fire_loop.ogg" id="w3"]
+[ext_resource type="AudioStream" path="res://audio/world/rain_loop.ogg" id="w4"]
 
 [resource]
 script = ExtResource("1_snd")
@@ -80,3 +84,6 @@ purchase = ExtResource("a56")
 pickup = ExtResource("a57")
 hitmarker = ExtResource("a58")
 dry_fire = ExtResource("a59")
+explosions = Array[AudioStream]([ExtResource("w1"), ExtResource("w2")])
+fire_loop = ExtResource("w3")
+rain_loop = ExtResource("w4")

@@ -15,7 +15,7 @@ signal died(zombie: Zombie)
 ## Убран без смерти (далеко от игрока в открытом мире)
 signal despawned(zombie: Zombie)
 
-enum State { WANDER, CHASE, SEARCH, ATTACK, STAGGER, DEAD, CHARGE, SLAM }
+enum State { WANDER, CHASE, SEARCH, ATTACK, STAGGER, DEAD, CHARGE, SLAM, RANGED, FUSE }
 
 const PATH_UPDATE_INTERVAL: float = 0.25
 const SENSE_INTERVAL: float = 0.2
@@ -74,7 +74,14 @@ const GOLDEN_ANGLE: float = 2.39996
 ## Кто сейчас атакует (общая очередь всех зомби)
 static var _attackers: Array[Zombie] = []
 static var _flank_counter: int = 0
+## Типы, о которых уже предупредили (без спама в лог на каждом спавне)
+static var _warned_types: Dictionary = {}
 
+## Плевок: пауза после выстрела и точка вылета (доля высоты модели)
+const RANGED_RECOVERY: float = 0.4
+const SPIT_HEIGHT: float = 1.4
+## Взрывной раздувается перед взрывом
+const FUSE_SWELL: float = 0.35
 ## Кость головы в скелетах Quaternius
 const HEAD_BONE: StringName = &"Head"
 ## Высота кости Head у Zombie_Basic в масштабе 1.6 (под неё настроены хитбоксы zombie.tscn)
@@ -175,6 +182,9 @@ var _special_elapsed: float = 0.0
 var _special_hit_done: bool = false
 var _charge_direction: Vector3 = Vector3.ZERO
 var _last_hit_headshot: bool = false
+var _ranged_cooldown: float = 0.0
+var _exploded: bool = false
+var _tint_material: StandardMaterial3D
 
 # Хитбоксы под модель
 var _size_factor: float = 1.0
@@ -222,6 +232,8 @@ func _ready() -> void:
 	_charge_cooldown = data.charge_cooldown * 0.5
 	_slam_cooldown = 0.0
 
+	_apply_animation_overrides()
+	_ranged_cooldown = data.ranged_cooldown * _rng.randf_range(0.3, 1.0)
 	_setup_agent()
 	_setup_visuals()
 	_play(anim_idle)
@@ -257,6 +269,7 @@ func _physics_process(delta: float) -> void:
 	_stagger_cooldown = maxf(_stagger_cooldown - delta, 0.0)
 	_hurt_sound_cooldown = maxf(_hurt_sound_cooldown - delta, 0.0)
 	_charge_cooldown = maxf(_charge_cooldown - delta, 0.0)
+	_ranged_cooldown = maxf(_ranged_cooldown - delta, 0.0)
 	_slam_cooldown = maxf(_slam_cooldown - delta, 0.0)
 	_update_voice(delta)
 
@@ -284,6 +297,14 @@ func _physics_process(delta: float) -> void:
 				_process_slam(delta)
 				return
 			_set_state(State.WANDER)
+		State.RANGED:
+			if _has_live_target():
+				_process_ranged(delta)
+				return
+			_set_state(State.WANDER)
+		State.FUSE:
+			_process_fuse(delta)
+			return
 
 	if _target_known:
 		_process_hunt(delta)
@@ -357,6 +378,16 @@ func _process_hunt(delta: float) -> void:
 	var can_see: bool = _time_since_seen <= VISIBLE_GRACE
 
 	_ai_time += delta
+	# Особые типы: взрывной поджигает фитиль рядом, плевун стреляет издалека
+	if data.behavior == ZombieData.Behavior.EXPLODER and can_see \
+			and distance <= data.explode_trigger_distance:
+		_start_fuse()
+		return
+	if data.behavior == ZombieData.Behavior.RANGED and can_see and _ranged_cooldown <= 0.0 \
+			and distance >= data.ranged_min_distance and distance <= data.ranged_max_distance:
+		_start_ranged()
+		return
+
 	# Очередь атак: вблизи пытаемся занять место, далеко или без видимости — освобождаем
 	# После удара (кулдаун) место не занимаем — отходим на кольцо, пропуская других
 	if can_see and distance <= ENGAGE_DISTANCE and _cooldown <= 0.0:
@@ -647,6 +678,72 @@ func _push_player(shake_strength: float) -> void:
 	_player.shake(shake_strength)
 
 
+# ---------- Плевун и взрывной ----------
+
+func _start_ranged() -> void:
+	_set_state(State.RANGED)
+	_special_elapsed = 0.0
+	_special_hit_done = false
+	_voice(Sfx.sounds.zombie_attack, 0.0)
+	_play(anim_attack, true)
+
+
+func _process_ranged(delta: float) -> void:
+	_special_elapsed += delta
+	_face(_flat(_player.global_position - global_position), delta)
+	_set_desired_velocity(Vector3.ZERO)
+	if not _special_hit_done and _special_elapsed >= data.ranged_windup:
+		_special_hit_done = true
+		_spit()
+	if _special_elapsed >= data.ranged_windup + RANGED_RECOVERY:
+		_ranged_cooldown = data.ranged_cooldown
+		_set_state(State.CHASE)
+
+
+## Комок кислоты по дуге в точку, где игрок будет через полёт
+func _spit() -> void:
+	var from: Vector3 = global_position + Vector3.UP * SPIT_HEIGHT * _size_factor - global_basis.z * 0.5
+	var target: Vector3 = _player.global_position + Vector3.UP * 1.2
+	var flight: float = from.distance_to(target) / maxf(data.projectile_speed, 1.0)
+	target += _flat(_player.velocity) * flight * 0.7
+	var projectile := AcidProjectile.new()
+	projectile.damage = data.projectile_damage * damage_multiplier
+	get_tree().current_scene.add_child(projectile)
+	projectile.launch(from, target, data.projectile_speed)
+
+
+func _start_fuse() -> void:
+	_set_state(State.FUSE)
+	_special_elapsed = 0.0
+	_set_desired_velocity(Vector3.ZERO)
+	_voice(Sfx.sounds.zombie_attack, 4.0)
+	_play(anim_idle, true)
+
+
+## Фитиль: раздувается и мигает, потом взрыв
+func _process_fuse(delta: float) -> void:
+	_special_elapsed += delta
+	_set_desired_velocity(Vector3.ZERO)
+	var progress: float = clampf(_special_elapsed / maxf(data.explode_fuse, 0.05), 0.0, 1.0)
+	if visual != null:
+		visual.scale = Vector3.ONE * (1.0 + FUSE_SWELL * progress)
+	_set_flash(fmod(_special_elapsed, 0.2) < 0.1)
+	if progress >= 1.0:
+		_explode()
+
+
+func _explode() -> void:
+	if _exploded:
+		return
+	_exploded = true
+	if visual != null:
+		visual.scale = Vector3.ONE
+	Explosion.create(get_tree().current_scene, global_position + Vector3.UP * 0.5,
+		data.explode_radius, data.explode_damage * damage_multiplier, 1.0)
+	if health != null and not health.is_dead:
+		health.take_damage(health.current + 1.0, global_position, false)
+
+
 func _try_stagger(is_headshot: bool) -> void:
 	if data.stagger_time <= 0.0 or _stagger_cooldown > 0.0 or state == State.DEAD:
 		return
@@ -788,6 +885,9 @@ func _on_damaged(_amount: float, _hit_position: Vector3, is_headshot: bool) -> v
 
 func _on_died() -> void:
 	killed_by_headshot = _last_hit_headshot
+	if data.behavior == ZombieData.Behavior.EXPLODER and data.explode_on_death and not _exploded:
+		# Отложенно: смерть случается внутри обработки выстрела/другого взрыва
+		_explode.call_deferred()
 	_release_token()
 	state = State.DEAD
 	velocity = Vector3.ZERO
@@ -834,6 +934,11 @@ func despawn() -> void:
 
 ## Удар машиной: урон по скорости, отбрасывание; погибший отлетает
 func hit_by_vehicle(damage: float, push: Vector3) -> void:
+	apply_blast(damage, push)
+
+
+## Урон с отбрасыванием (машина, взрыв); погибший отлетает по дуге
+func apply_blast(damage: float, push: Vector3) -> void:
 	if state == State.DEAD or health == null:
 		return
 	health.take_damage(damage, global_position + Vector3.UP, false)
@@ -925,10 +1030,11 @@ func _animate_placeholder(delta: float) -> void:
 
 
 func _set_flash(enabled: bool) -> void:
-	# Overlay поверх любого материала: работает и с текстурированной моделью
+	# Overlay поверх любого материала: работает и с текстурированной моделью.
+	# Без вспышки возвращается постоянный оттенок типа (если есть)
 	for geometry: GeometryInstance3D in _geometries:
 		if is_instance_valid(geometry):
-			geometry.material_overlay = _flash_material if enabled else null
+			geometry.material_overlay = _flash_material if enabled else _tint_material
 
 
 # ---------- Инициализация ----------
@@ -981,6 +1087,19 @@ func _fit_hitboxes() -> void:
 					(shape as BoxShape3D).size *= _size_factor
 				collision.shape = shape
 
+	# Ползун и собака: капсула тела лежит вдоль земли
+	if data.hitbox_lying:
+		for hitbox: Hitbox in _hitboxes:
+			if hitbox.is_head:
+				continue
+			for shape_node: Node in hitbox.get_children():
+				var lying := shape_node as CollisionShape3D
+				if lying == null or not lying.shape is CapsuleShape3D:
+					continue
+				var radius: float = (lying.shape as CapsuleShape3D).radius
+				lying.rotation.x = PI * 0.5
+				lying.position = Vector3(lying.position.x, radius, -0.2 * _size_factor)
+
 	# Голова следует за костью
 	if _skeleton == null or _head_bone < 0:
 		return
@@ -1007,7 +1126,10 @@ func _measure_size_factor() -> float:
 	_skeleton = skeletons[0] as Skeleton3D
 	_head_bone = _skeleton.find_bone(HEAD_BONE)
 	if _head_bone < 0:
-		push_warning("Zombie '%s': в скелете нет кости %s, хитбоксы по model_scale" % [name, HEAD_BONE])
+		if not _warned_types.has(data.display_name):
+			_warned_types[data.display_name] = true
+			push_warning("Zombie: у типа %s в скелете нет кости %s, хитбоксы по model_scale" % [
+				data.display_name, HEAD_BONE])
 		_skeleton = null
 		return fallback
 	_skeleton_to_body = _transform_to_body(_skeleton)
@@ -1093,6 +1215,29 @@ func _setup_visuals() -> void:
 	_flash_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_flash_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_flash_material.albedo_color = Color(1.0, 0.1, 0.1, 0.55)
+
+	if data.tint.a > 0.0:
+		_tint_material = StandardMaterial3D.new()
+		_tint_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_tint_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_tint_material.albedo_color = data.tint
+		_set_flash(false)
+
+
+## Свои имена анимаций из ZombieData (собака: Attack, HitReact_Left и т.п.)
+func _apply_animation_overrides() -> void:
+	if data.anim_idle != &"":
+		anim_idle = data.anim_idle
+	if data.anim_walk != &"":
+		anim_walk = data.anim_walk
+	if data.anim_run != &"":
+		anim_run = data.anim_run
+	if data.anim_attack != &"":
+		anim_attack = data.anim_attack
+	if data.anim_hit != &"":
+		anim_hit = data.anim_hit
+	if data.anim_death != &"":
+		anim_death = data.anim_death
 
 
 func _find_player() -> void:

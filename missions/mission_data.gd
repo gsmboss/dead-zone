@@ -38,6 +38,10 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 ## Рост шансов за каждую волну (в других режимах — каждые 30 секунд)
 @export_range(0.0, 0.5, 0.01) var runner_chance_per_level: float = 0.08
 @export_range(0.0, 0.5, 0.01) var tank_chance_per_level: float = 0.04
+## Особые зомби (ползун, плевун, взрывной, собака): шанс на старте и рост за уровень
+@export var specials: Array[ZombieData] = []
+@export_range(0.0, 1.0, 0.01) var special_chance: float = 0.12
+@export_range(0.0, 0.2, 0.01) var special_chance_per_level: float = 0.02
 ## Босс: в режиме волн появляется в начале последней волны, в ENDLESS — каждые boss_every_waves
 ## волн, в остальных — через boss_delay (в FREE_ROAM — каждые boss_delay секунд)
 @export var boss: ZombieData

@@ -19,6 +19,12 @@ extends Resource
 @export var zombie_hurt: Array[AudioStream] = []
 @export var zombie_death: Array[AudioStream] = []
 
+@export_group("World")
+@export var explosions: Array[AudioStream] = []
+## Петли: огонь (коктейль Молотова), дождь
+@export var fire_loop: AudioStream
+@export var rain_loop: AudioStream
+
 @export_group("UI")
 @export var ui_click: AudioStream
 @export var ui_back: AudioStream

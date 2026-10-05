@@ -2,7 +2,11 @@ class_name ZombieData
 extends Resource
 ## Параметры типа зомби. Каждый тип — отдельный .tres файл.
 
+## MELEE — бьёт вблизи; RANGED — плюётся кислотой издалека; EXPLODER — взрывается рядом с игроком
+enum Behavior { MELEE, RANGED, EXPLODER }
+
 @export var display_name: String = "WALKER"
+@export var behavior: Behavior = Behavior.MELEE
 
 @export_group("Stats")
 @export var max_health: float = 100.0
@@ -50,6 +54,36 @@ extends Resource
 @export var model_scene: PackedScene
 ## Масштаб своей модели (модель зомби в zombie.tscn — 1.6)
 @export var model_scale: float = 1.6
+
+@export_group("Animations")
+## Свои имена анимаций модели (пусто — как в zombie.tscn: Idle/Walk/Run/Punch/HitReact/Death)
+@export var anim_idle: StringName = &""
+@export var anim_walk: StringName = &""
+@export var anim_run: StringName = &""
+@export var anim_attack: StringName = &""
+@export var anim_hit: StringName = &""
+@export var anim_death: StringName = &""
+## Хитбокс тела лежит вдоль земли (ползун, собака)
+@export var hitbox_lying: bool = false
+## Постоянный оттенок модели (альфа — сила), например зелёный у взрывного
+@export var tint: Color = Color(0, 0, 0, 0)
+
+@export_group("Ranged")
+@export var ranged_min_distance: float = 6.0
+@export var ranged_max_distance: float = 18.0
+@export var ranged_cooldown: float = 2.8
+@export var ranged_windup: float = 0.6
+@export var projectile_damage: float = 12.0
+@export var projectile_speed: float = 14.0
+
+@export_group("Exploder")
+## На этой дистанции до игрока поджигает фитиль
+@export var explode_trigger_distance: float = 2.2
+@export var explode_fuse: float = 0.7
+@export var explode_radius: float = 4.5
+@export var explode_damage: float = 45.0
+## Взрывается и при смерти от выстрела (задевает соседей)
+@export var explode_on_death: bool = true
 
 @export_group("Tactics")
 ## Участвует в очереди атак (не больше MAX_ATTACKERS бьют одновременно, остальные кружат)

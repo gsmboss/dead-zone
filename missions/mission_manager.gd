@@ -19,6 +19,7 @@ const HORDE_PING_INTERVAL: float = 4.0
 const RESULT_DELAY: float = 1.5
 const MAX_TANK_CHANCE: float = 0.4
 const MAX_RUNNER_CHANCE: float = 0.6
+const MAX_SPECIAL_CHANCE: float = 0.35
 const MAX_DROPS_ALIVE: int = 6
 const DROP_LIFETIME: float = 20.0
 const BOSS_RETRY_TIME: float = 2.0
@@ -366,6 +367,14 @@ func _pick_zombie_type() -> ZombieData:
 	if mission.runner != null:
 		runner_chance = clampf(mission.runner_chance + level * mission.runner_chance_per_level,
 			0.0, MAX_RUNNER_CHANCE)
+
+	if not mission.specials.is_empty():
+		var special_chance: float = clampf(mission.special_chance + level * mission.special_chance_per_level,
+			0.0, MAX_SPECIAL_CHANCE)
+		if _rng.randf() < special_chance:
+			var special: ZombieData = mission.specials[_rng.randi() % mission.specials.size()]
+			if special != null:
+				return special
 
 	var roll: float = _rng.randf()
 	if roll < tank_chance:

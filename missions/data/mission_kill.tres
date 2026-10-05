@@ -4,6 +4,11 @@
 [ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="1_7miqy"]
 [ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="3_tybg1"]
 [ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="4_jw4yw"]
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" path="res://enemies/crawler.tres" id="sp_1"]
+[ext_resource type="Resource" path="res://enemies/spitter.tres" id="sp_2"]
+[ext_resource type="Resource" path="res://enemies/exploder.tres" id="sp_3"]
+[ext_resource type="Resource" path="res://enemies/dog.tres" id="sp_4"]
 
 [resource]
 script = ExtResource("1_7miqy")
@@ -23,4 +28,5 @@ max_alive = 8
 spawn_interval = 1.5
 min_spawn_interval = 0.7
 reward_coins = 120
+specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4")])
 metadata/_custom_type_script = "uid://dp7avtsfoxban"
