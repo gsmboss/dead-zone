@@ -14,6 +14,10 @@ const TRAIL_SPEED: float = 0.6
 const HEAL_FLASH_TIME: float = 0.5
 const LOW_PULSE_SPEED: float = 6.0
 const FONT_SIZE: int = 22
+## Полоска выносливости под здоровьем
+const STAMINA_HEIGHT: float = 9.0
+const STAMINA_COLOR: Color = Color(0.35, 0.75, 1.0)
+const STAMINA_LOW_COLOR: Color = Color(1.0, 0.55, 0.2)
 
 const FULL_COLOR: Color = Color(0.25, 0.85, 0.35)
 const MID_COLOR: Color = Color(0.95, 0.8, 0.2)
@@ -31,6 +35,7 @@ var _trail_wait: float = 0.0
 var _heal_flash: float = 0.0
 var _time: float = 0.0
 var _text: String = ""
+var _stamina: float = 1.0
 
 # Стили создаются один раз (без аллокаций в кадре)
 var _frame_style: StyleBoxFlat
@@ -45,7 +50,7 @@ func _ready() -> void:
 	# Своё место в левом верхнем углу (якоря в сцене не используются)
 	set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
 	position = BAR_POSITION
-	size = Vector2(BAR_SIZE.x + ICON_RADIUS, BAR_SIZE.y + 8.0)
+	size = Vector2(BAR_SIZE.x + ICON_RADIUS, BAR_SIZE.y + STAMINA_HEIGHT + 14.0)
 	_build_styles()
 	set_process(false)
 	_connect_player.call_deferred()
@@ -57,6 +62,7 @@ func _connect_player() -> void:
 		push_warning("HealthDisplay: игрок или его Health не найдены")
 		return
 	player.health.health_changed.connect(_on_health_changed)
+	player.stamina_changed.connect(_on_stamina_changed)
 	_current = player.health.current
 	_max = player.health.max_health
 	_shown = _ratio()
@@ -74,6 +80,11 @@ func _on_health_changed(current: float, max_value: float) -> void:
 	_max = max_value
 	_update_text()
 	set_process(true)
+
+
+func _on_stamina_changed(current: float, max_value: float) -> void:
+	_stamina = clampf(current / max_value, 0.0, 1.0) if max_value > 0.0 else 0.0
+	queue_redraw()
 
 
 func _process(delta: float) -> void:
@@ -138,6 +149,16 @@ func _draw() -> void:
 	var text_pos := Vector2(inner.get_center().x - text_size.x * 0.5, baseline)
 	draw_string_outline(font, text_pos, _text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 5, Color(0.0, 0.0, 0.0, 0.8))
 	draw_string(font, text_pos, _text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color.WHITE)
+
+	# Выносливость: тонкая полоска под здоровьем (видна, пока не полная)
+	if _stamina < 0.999:
+		var stamina_rect := Rect2(Vector2(bar.position.x + 8.0, bar.end.y + 4.0),
+			Vector2(bar.size.x - 16.0, STAMINA_HEIGHT))
+		draw_rect(stamina_rect, Color(0.0, 0.0, 0.0, 0.55))
+		var fill_color: Color = STAMINA_COLOR if _stamina > 0.25 else STAMINA_LOW_COLOR
+		draw_rect(Rect2(stamina_rect.position, Vector2(stamina_rect.size.x * _stamina, STAMINA_HEIGHT)), fill_color)
+		draw_rect(Rect2(stamina_rect.position, Vector2(stamina_rect.size.x * _stamina, STAMINA_HEIGHT * 0.35)),
+			Color(1.0, 1.0, 1.0, 0.3))
 
 	_draw_icon(Vector2(ICON_RADIUS, bar.get_center().y), low)
 

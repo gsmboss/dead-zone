@@ -59,6 +59,8 @@ func _setup_buttons() -> void:
 	_touch_controls = player.touch_controls
 	_pause_button = _make_touch_button(&"pause", "II", Vector2(1.0, 0.0), Vector2(-120.0, 130.0))
 	_bag_button = _make_touch_button(&"inventory", "СУМКА", Vector2(0.0, 0.0), Vector2(24.0, 110.0))
+	var slide_button := _make_touch_button(&"slide", "ПОДКАТ", Vector2(1.0, 1.0), Vector2(-500.0, -160.0))
+	slide_button.base_color = Color(0.25, 0.45, 0.65)
 	_throw_button = _make_touch_button(&"throw", "", Vector2(1.0, 1.0), Vector2(-140.0, -500.0))
 	_throw_button.base_color = Color(0.3, 0.42, 0.22)
 	GameState.inventory_changed.connect(_update_throw_button)

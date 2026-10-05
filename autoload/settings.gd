@@ -138,7 +138,7 @@ func _build_fps_label() -> void:
 	_fps_layer.layer = 100
 	add_child(_fps_layer)
 	_fps_label = Label.new()
-	_fps_label.position = Vector2(12.0, 70.0)
+	_fps_label.position = Vector2(12.0, 210.0)
 	_fps_label.add_theme_font_size_override(&"font_size", 22)
 	_fps_label.add_theme_constant_override(&"outline_size", 6)
 	_fps_label.add_theme_color_override(&"font_outline_color", Color.BLACK)

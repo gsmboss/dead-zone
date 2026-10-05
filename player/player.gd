@@ -1,6 +1,9 @@
 class_name Player
 extends CharacterBody3D
 ## FPS-контроллер: тач (джойстик + свайп) и клавиатура для теста на ПК.
+## Выносливость: бег (Shift или джойстик до упора вперёд) и подкат (C / кнопка ПОДКАТ).
+
+signal stamina_changed(current: float, max_value: float)
 
 @export var touch_controls: TouchControls
 ## Пусто → ищется по пути Head/Camera3D/WeaponManager
@@ -13,6 +16,22 @@ extends CharacterBody3D
 @export var acceleration: float = 30.0
 @export_range(0.0, 1.0, 0.05) var air_control: float = 0.3
 @export var jump_velocity: float = 4.8
+
+@export_group("Sprint & Slide")
+@export var sprint_multiplier: float = 1.6
+@export var stamina_max: float = 100.0
+## Расход выносливости на бег в секунду и восстановление
+@export var stamina_drain: float = 20.0
+@export var stamina_regen: float = 16.0
+## Пауза перед восстановлением после траты
+@export var stamina_regen_delay: float = 0.8
+@export var slide_speed: float = 11.0
+@export var slide_time: float = 0.55
+@export var slide_cost: float = 25.0
+## Камера опускается в подкате
+@export var slide_camera_drop: float = 0.6
+## На телефоне: джойстик вперёд сильнее этого — бег
+@export_range(0.5, 1.0, 0.01) var touch_sprint_threshold: float = 0.93
 
 @export_group("Look")
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -46,6 +65,12 @@ var _pitch: float = 0.0
 var _recoil_pitch: float = 0.0
 var _bob_time: float = 0.0
 var _last_bob_sin: float = 0.0
+var stamina: float = 100.0
+var sprinting: bool = false
+var _stamina_delay: float = 0.0
+var _slide_left: float = 0.0
+var _slide_direction: Vector3 = Vector3.ZERO
+var _last_stamina_emit: float = -1.0
 var _camera_base_y: float = 0.0
 var _camera_base_x: float = 0.0
 var _shake: float = 0.0
@@ -80,6 +105,7 @@ func _ready() -> void:
 	_rng.randomize()
 	_apply_settings()
 	Settings.changed.connect(_apply_settings)
+	stamina = stamina_max
 
 
 func _process(delta: float) -> void:
@@ -98,13 +124,19 @@ func _physics_process(delta: float) -> void:
 
 	var input_dir: Vector2 = Vector2.ZERO
 	if input_enabled:
-		if Input.is_action_just_pressed(&"jump") and is_on_floor():
+		if Input.is_action_just_pressed(&"jump") and is_on_floor() and _slide_left <= 0.0:
 			velocity.y = jump_velocity
 		input_dir = _get_move_input()
 
+	_update_stamina(input_dir, delta)
+	if _slide_left > 0.0:
+		_process_slide(delta)
+		return
+
 	# Аналоговое движение: длина вектора сохраняется (не normalize)
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).limit_length(1.0)
-	var target: Vector2 = Vector2(direction.x, direction.z) * move_speed
+	var speed: float = move_speed * (sprint_multiplier if sprinting else 1.0)
+	var target: Vector2 = Vector2(direction.x, direction.z) * speed
 	var accel: float = acceleration if is_on_floor() else acceleration * air_control
 
 	var horizontal: Vector2 = Vector2(velocity.x, velocity.z).move_toward(target, accel * delta)
@@ -136,6 +168,59 @@ func add_recoil(pitch_deg: float, yaw_deg: float) -> void:
 	_recoil_pitch = clampf(_recoil_pitch + pitch_deg, 0.0, max_recoil_pitch)
 	rotate_y(deg_to_rad(yaw_deg))
 	_update_head_rotation()
+
+
+# ---------- Бег и подкат ----------
+
+func _update_stamina(input_dir: Vector2, delta: float) -> void:
+	var wants_sprint: bool = false
+	if input_enabled and is_on_floor() and input_dir.y < -0.5:
+		wants_sprint = Input.is_action_pressed(&"sprint")
+		if touch_controls != null and touch_controls.get_move_vector().y <= -touch_sprint_threshold:
+			wants_sprint = true
+	var aiming: bool = weapon_manager != null and weapon_manager.is_aiming()
+	sprinting = wants_sprint and not aiming and stamina > 0.0
+	if sprinting:
+		stamina = maxf(stamina - stamina_drain * delta, 0.0)
+		_stamina_delay = stamina_regen_delay
+	elif _stamina_delay > 0.0:
+		_stamina_delay -= delta
+	else:
+		stamina = minf(stamina + stamina_regen * delta, stamina_max)
+
+	if input_enabled and Input.is_action_just_pressed(&"slide"):
+		_try_slide(input_dir)
+	# Сигнал только при заметном изменении (без лишних обновлений HUD)
+	if absf(stamina - _last_stamina_emit) >= 0.5 or (stamina >= stamina_max and _last_stamina_emit < stamina_max):
+		_last_stamina_emit = stamina
+		stamina_changed.emit(stamina, stamina_max)
+
+
+func _try_slide(input_dir: Vector2) -> void:
+	if not is_on_floor() or _slide_left > 0.0 or stamina < slide_cost:
+		return
+	var horizontal := Vector2(velocity.x, velocity.z)
+	if horizontal.length() < move_speed * 0.6 and input_dir.y > -0.3:
+		return  # подкат только на бегу вперёд
+	stamina -= slide_cost
+	_stamina_delay = stamina_regen_delay
+	_slide_left = slide_time
+	_slide_direction = -global_basis.z
+	Sfx.play_2d(Sfx.pick(Sfx.sounds.footsteps), footstep_volume_db + 6.0, 0.7, 0.0)
+
+
+## Рывок вперёд с опущенной камерой, скорость падает к концу
+func _process_slide(delta: float) -> void:
+	_slide_left -= delta
+	var progress: float = 1.0 - clampf(_slide_left / slide_time, 0.0, 1.0)
+	var speed: float = lerpf(slide_speed, move_speed, progress)
+	velocity.x = _slide_direction.x * speed
+	velocity.z = _slide_direction.z * speed
+	move_and_slide()
+	var drop: float = slide_camera_drop * sin(progress * PI)
+	camera.position.y = _camera_base_y - drop
+	if _slide_left <= 0.0:
+		camera.position.y = _camera_base_y
 
 
 func _on_damaged(_amount: float, _hit_position: Vector3, _is_headshot: bool) -> void:
