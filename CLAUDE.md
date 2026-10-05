@@ -193,4 +193,13 @@ duration, subtitle, relative_to WORLD/ANCHOR); CutscenePlayer.play(tree, data, a
 hub_intro.tres — вступление в убежище (hub/hub.gd), интро миссии и замедленное появление босса строятся кодом
 в MissionManager (по разу; флаги GameState.has_seen_cutscene, сброс в настройках, Settings.cutscenes).
 
+Управление (настройки): ui/touch/control_layout.gd (ControlLayout: стандартные места кнопок DEFAULTS —
+держать в синхроне со сценами уровней, GameMenus и DriveController; apply_to_button/apply_to_joystick),
+редактор раскладки ui/touch/control_layout_editor.gd (перетаскивание, ЗЕРКАЛО, СБРОС; Settings.button_layout —
+центры в долях экрана, joystick_right). Settings: button_style (3D/ПЛОСКИЕ/КОНТУР), button_scale,
+button_opacity, crosshair_scale, crosshair_color, гироскоп gyro_* (режим ВСЕГДА/В ПРИЦЕЛЕ, чувствительность X/Y,
+инверсия, сглаживание, частота опроса gyro_rate Гц; Player._process_gyro; project.godot
+input_devices/sensors/enable_gyroscope=true). Зомби: обход стен (_steer_around_wall), шаг на бордюры
+(STEP_HEIGHT), выход из застревания по шагам и перенос на навмеш (_snap_to_navmesh).
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

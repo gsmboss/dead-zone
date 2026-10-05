@@ -83,6 +83,11 @@ var _camera_base_y: float = 0.0
 var _camera_base_x: float = 0.0
 var _shake: float = 0.0
 var _rng := RandomNumberGenerator.new()
+# Гироскоп: опрос с частотой Settings.gyro_rate, сглаженная скорость поворота (рад/с)
+var _gyro_timer: float = 0.0
+var _gyro_rate: Vector2 = Vector2.ZERO
+## Ниже этой скорости (рад/с) дрожание рук не крутит камеру
+const GYRO_DEADZONE: float = 0.015
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -123,6 +128,7 @@ func _process(delta: float) -> void:
 		# Пока управление выключено, свайпы просто сбрасываются
 		if input_enabled and look != Vector2.ZERO:
 			_apply_look(look)
+	_process_gyro(delta)
 	_update_recoil(delta)
 	_update_shake(delta)
 
@@ -289,6 +295,41 @@ func _apply_look(delta_px: Vector2) -> void:
 
 	var dy: float = delta_px.y * deg_per_px * (-1.0 if invert_y else 1.0)
 	_pitch = clampf(_pitch - dy, min_pitch, max_pitch)
+	_update_head_rotation()
+
+
+## Обзор наклоном телефона. Опрос со своей частотой (gyro_rate, Гц), поворот за всё
+## прошедшее время — скорость камеры не зависит от FPS игры
+func _process_gyro(delta: float) -> void:
+	if not Settings.gyro_enabled or not input_enabled:
+		_gyro_timer = 0.0
+		_gyro_rate = Vector2.ZERO
+		return
+	if Settings.gyro_mode == Settings.GyroMode.AIM_ONLY \
+			and (weapon_manager == null or not weapon_manager.is_aiming()):
+		_gyro_timer = 0.0
+		_gyro_rate = Vector2.ZERO
+		return
+	_gyro_timer += delta
+	var interval: float = 1.0 / float(maxi(Settings.gyro_rate, 1))
+	if _gyro_timer < interval:
+		return
+	var elapsed: float = minf(_gyro_timer, 0.1)  # после лага — без рывка
+	_gyro_timer = 0.0
+	# Оси экрана: y — поворот влево/вправо, x — наклон вверх/вниз (рад/с)
+	var raw: Vector3 = Input.get_gyroscope()
+	var sample := Vector2(raw.y, raw.x)
+	if absf(sample.x) < GYRO_DEADZONE:
+		sample.x = 0.0
+	if absf(sample.y) < GYRO_DEADZONE:
+		sample.y = 0.0
+	_gyro_rate = _gyro_rate.lerp(sample, 1.0 - Settings.gyro_smoothing)
+	if _gyro_rate == Vector2.ZERO:
+		return
+	var yaw: float = _gyro_rate.x * elapsed * Settings.gyro_sensitivity_x * (-1.0 if Settings.gyro_invert_x else 1.0)
+	var pitch: float = _gyro_rate.y * elapsed * Settings.gyro_sensitivity_y * (-1.0 if Settings.gyro_invert_y else 1.0)
+	rotate_y(yaw)
+	_pitch = clampf(_pitch + rad_to_deg(pitch), min_pitch, max_pitch)
 	_update_head_rotation()
 
 

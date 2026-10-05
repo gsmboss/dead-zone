@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 		modulate = _flash_color
 		scale = Vector2.ONE * (1.0 + _flash * 4.0)
 	else:
-		modulate = target_color if weapon_manager.is_target_in_sight() else normal_color
+		modulate = target_color if weapon_manager.is_target_in_sight() else _normal_color()
 		scale = Vector2.ONE
 	var target_gap: float = clampf(_spread_to_pixels(weapon_manager.get_current_spread()), MIN_GAP, MAX_GAP)
 	_gap = lerpf(_gap, target_gap, clampf(GAP_SMOOTH * delta, 0.0, 1.0))
@@ -67,16 +67,26 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
+	# Размер из настроек: длина и толщина черт, точка (зазор — по разбросу оружия)
+	var k: float = Settings.crosshair_scale
 	var center: Vector2 = size * 0.5
-	draw_circle(center, DOT_RADIUS + 1.5, OUTLINE_COLOR)
-	draw_circle(center, DOT_RADIUS, Color.WHITE)
+	draw_circle(center, (DOT_RADIUS + 1.5) * k, OUTLINE_COLOR)
+	draw_circle(center, DOT_RADIUS * k, Color.WHITE)
 	if _melee:
 		return  # у ближнего боя только точка
+	var gap: float = maxf(_gap, MIN_GAP * k)
 	for dir: Vector2 in DIRECTIONS:
-		var from: Vector2 = center + dir * _gap
-		var to: Vector2 = center + dir * (_gap + LINE_LENGTH)
-		draw_line(from - dir, to + dir, OUTLINE_COLOR, OUTLINE_WIDTH)
-		draw_line(from, to, Color.WHITE, LINE_WIDTH)
+		var from: Vector2 = center + dir * gap
+		var to: Vector2 = center + dir * (gap + LINE_LENGTH * k)
+		draw_line(from - dir, to + dir, OUTLINE_COLOR, OUTLINE_WIDTH * k)
+		draw_line(from, to, Color.WHITE, LINE_WIDTH * k)
+
+
+## Цвет прицела: из настроек игрока (белый по умолчанию — normal_color сцены)
+func _normal_color() -> Color:
+	if Settings.crosshair_color <= 0:
+		return normal_color
+	return Settings.CROSSHAIR_COLORS[Settings.crosshair_color]
 
 
 ## Угол разброса → пиксели на экране с учётом текущего FOV камеры

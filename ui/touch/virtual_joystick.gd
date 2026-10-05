@@ -10,6 +10,13 @@ extends Control
 @export var ring_color: Color = Color(1, 1, 1, 0.25)
 @export var knob_color: Color = Color(0.5, 0.53, 0.6, 0.5)
 
+## Джойстик в правой зоне: место покоя у правого края
+var mirrored: bool = false:
+	set(value):
+		mirrored = value
+		if not _active:
+			end()
+
 ## Выход в диапазоне -1..1. Вверх по экрану = -Y (как у Input.get_vector).
 var output: Vector2 = Vector2.ZERO
 
@@ -79,7 +86,8 @@ func _to_local(viewport_pos: Vector2) -> Vector2:
 
 
 func _rest_center() -> Vector2:
-	return Vector2(radius * 1.5, size.y - radius * 1.5)
+	var x: float = size.x - radius * 1.5 if mirrored else radius * 1.5
+	return Vector2(x, size.y - radius * 1.5)
 
 
 func _on_resized() -> void:

@@ -23,8 +23,36 @@ func _build_content() -> void:
 		Settings.SENSITIVITY_MAX, 5.0, func(v: float) -> String: return "%d" % roundi(v))
 	_toggle("ИНВЕРСИЯ ОСИ Y", &"invert_y")
 	_toggle("АВТООГОНЬ ПРИ НАВЕДЕНИИ", &"auto_fire")
-	_slider("ТРЯСКА КАМЕРЫ", &"camera_shake", 0.0, 1.0, 0.05,
-		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
+	_slider("ТРЯСКА КАМЕРЫ", &"camera_shake", 0.0, 1.0, 0.05, _percent)
+
+	_section("КНОПКИ")
+	var layout := UIKit.button("НАСТРОИТЬ РАСКЛАДКУ КНОПОК", 24)
+	layout.pressed.connect(_open_layout_editor)
+	content.add_child(layout)
+	_choice("СТИЛЬ КНОПОК", &"button_style", Settings.BUTTON_STYLE_NAMES)
+	_slider("РАЗМЕР КНОПОК", &"button_scale", 0.7, 1.4, 0.05, _percent)
+	_slider("НЕПРОЗРАЧНОСТЬ КНОПОК", &"button_opacity", 0.15, 0.9, 0.05, _percent)
+
+	_section("ПРИЦЕЛ")
+	_slider("РАЗМЕР ПРИЦЕЛА", &"crosshair_scale", 0.5, 2.0, 0.05, _percent)
+	_choice("ЦВЕТ ПРИЦЕЛА", &"crosshair_color", Settings.CROSSHAIR_COLOR_NAMES)
+
+	_section("ГИРОСКОП")
+	if not OS.has_feature("mobile"):
+		UIKit.label("ГИРОСКОП РАБОТАЕТ НА ТЕЛЕФОНЕ", 20, content).modulate = UIKit.DIM
+	_toggle("ОБЗОР НАКЛОНОМ ТЕЛЕФОНА", &"gyro_enabled")
+	_choice("КОГДА РАБОТАЕТ", &"gyro_mode", Settings.GYRO_MODE_NAMES)
+	_slider("ЧУВСТВИТЕЛЬНОСТЬ ПО ГОРИЗОНТАЛИ", &"gyro_sensitivity_x", 0.1, 4.0, 0.05, _multiplier)
+	_slider("ЧУВСТВИТЕЛЬНОСТЬ ПО ВЕРТИКАЛИ", &"gyro_sensitivity_y", 0.1, 4.0, 0.05, _multiplier)
+	_toggle("ИНВЕРСИЯ ПО ГОРИЗОНТАЛИ", &"gyro_invert_x")
+	_toggle("ИНВЕРСИЯ ПО ВЕРТИКАЛИ", &"gyro_invert_y")
+	_slider("СГЛАЖИВАНИЕ", &"gyro_smoothing", 0.0, 0.9, 0.05, _percent)
+	var rate_names := PackedStringArray()
+	var rate_values: Array = []
+	for rate: int in Settings.GYRO_RATES:
+		rate_names.append("%d ГЦ" % rate)
+		rate_values.append(rate)
+	_choice("ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)", &"gyro_rate", rate_names, rate_values)
 
 	_section("СЮЖЕТ")
 	_toggle("ПОКАЗЫВАТЬ КАТ-СЦЕНЫ", &"cutscenes")
@@ -66,6 +94,55 @@ func _build_content() -> void:
 
 func _section(title: String) -> void:
 	UIKit.label(title, 28, content).modulate = UIKit.ACCENT
+
+
+## Выбор из вариантов (ряд кнопок, выбранная подсвечена). values — значения вариантов,
+## по умолчанию индексы 0..N-1
+func _choice(title: String, key: StringName, names: PackedStringArray, values: Array = []) -> void:
+	var card := UIKit.card()
+	content.add_child(card)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 8)
+	card.add_child(box)
+	UIKit.label(title, 24, box)
+	var row := HFlowContainer.new()
+	row.add_theme_constant_override(&"h_separation", 10)
+	row.add_theme_constant_override(&"v_separation", 10)
+	box.add_child(row)
+	var buttons: Array[Button] = []
+	for i in names.size():
+		var value: Variant = values[i] if i < values.size() else i
+		var button := UIKit.button(names[i], 22, 150.0)
+		buttons.append(button)
+		row.add_child(button)
+		button.pressed.connect(func() -> void:
+			Sfx.click()
+			Settings.set_value(key, value)
+			_highlight_choice(buttons, values, Settings.get(key)))
+	_highlight_choice(buttons, values, Settings.get(key))
+
+
+func _highlight_choice(buttons: Array[Button], values: Array, current: Variant) -> void:
+	for i in buttons.size():
+		var value: Variant = values[i] if i < values.size() else i
+		buttons[i].modulate = UIKit.ACCENT if value == current else Color(1.0, 1.0, 1.0, 0.75)
+
+
+func _open_layout_editor() -> void:
+	Sfx.click()
+	var editor := ControlLayoutEditor.open(get_tree())
+	visible = false
+	editor.closed.connect(func() -> void:
+		if is_instance_valid(self):
+			visible = true)
+
+
+func _percent(v: float) -> String:
+	return "%d%%" % roundi(v * 100.0)
+
+
+func _multiplier(v: float) -> String:
+	return "x%.2f" % v
 
 
 func _toggle(title: String, key: StringName) -> void:

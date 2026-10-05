@@ -20,8 +20,10 @@ const PRESS_SPEED: float = 14.0
 ## Цвет из ACTION_COLORS по действию; иначе — base_color
 @export var use_action_color: bool = true
 @export var base_color: Color = DEFAULT_BUTTON_COLOR
-## Непрозрачность кнопки (не закрывать обзор)
+## Непрозрачность кнопки (не закрывать обзор). Если use_settings_style — из Settings.button_opacity
 @export_range(0.1, 1.0, 0.05) var opacity: float = 0.38
+## Стиль, прозрачность и размер из настроек игрока (выключить — для превью и особых кнопок)
+@export var use_settings_style: bool = true
 @export var label_color: Color = Color(1, 1, 1, 0.95)
 ## Подсвечивать кнопку, пока оружие в прицеле (для кнопки прицела)
 @export var show_aim_state: bool = false
@@ -34,6 +36,7 @@ var _press_amount: float = 0.0
 var _color: Color = DEFAULT_BUTTON_COLOR
 var _aim_active: bool = false
 var _weapon_manager: WeaponManager
+var _style: int = 0  # Settings.ButtonStyle
 
 
 func _ready() -> void:
@@ -43,6 +46,22 @@ func _ready() -> void:
 		push_warning("TouchActionButton '%s': действие '%s' не найдено в InputMap" % [name, action])
 	_color = ACTION_COLORS.get(action, base_color) if use_action_color else base_color
 	set_process(show_aim_state)
+	if use_settings_style:
+		Settings.changed.connect(_on_settings_changed)
+		_on_settings_changed()
+
+
+func _on_settings_changed() -> void:
+	opacity = Settings.button_opacity
+	_style = Settings.button_style
+	queue_redraw()
+
+
+## Стиль для превью (редактор раскладки)
+func set_style(style: int, alpha: float) -> void:
+	_style = style
+	opacity = alpha
+	queue_redraw()
 
 
 func _process(delta: float) -> void:
@@ -113,6 +132,21 @@ func _draw() -> void:
 	var center: Vector2 = size * 0.5 + Vector2(0.0, depth * p)
 	var color: Color = _color.lightened(0.25) if _aim_active else _color
 	color = color.lightened(0.15 * p)
+	if _style == Settings.ButtonStyle.FLAT:
+		draw_circle(size * 0.5, r, _with_alpha(color))
+		draw_circle(size * 0.5, r * 0.9, _with_alpha(color.lightened(0.08)))
+		if _aim_active:
+			draw_arc(size * 0.5, r * 1.06, 0.0, TAU, 40, Color(0.6, 0.85, 1.0, 0.9), 3.0, false)
+		_draw_label(size * 0.5, r)
+		return
+	if _style == Settings.ButtonStyle.OUTLINE:
+		var ring_alpha: float = minf(opacity * 1.8 + 0.3 * p, 1.0)
+		draw_circle(size * 0.5, r, Color(0.0, 0.0, 0.0, 0.12 * opacity + 0.2 * p))
+		draw_arc(size * 0.5, r - 2.0, 0.0, TAU, 48, Color(color.lightened(0.4), ring_alpha), 4.0, false)
+		if _aim_active:
+			draw_arc(size * 0.5, r * 1.08, 0.0, TAU, 40, Color(0.6, 0.85, 1.0, 0.9), 3.0, false)
+		_draw_label(size * 0.5, r)
+		return
 
 	# Тень
 	draw_circle(size * 0.5 + Vector2(0.0, depth * 1.4), r, Color(0.0, 0.0, 0.0, 0.25 * opacity))
@@ -130,6 +164,10 @@ func _draw() -> void:
 	if _aim_active:
 		draw_arc(center, r * 1.06, 0.0, TAU, 40, Color(0.6, 0.85, 1.0, 0.9), 3.0, false)
 
+	_draw_label(center, r)
+
+
+func _draw_label(center: Vector2, r: float) -> void:
 	if label.is_empty():
 		return
 	var font: Font = ThemeDB.fallback_font
