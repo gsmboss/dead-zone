@@ -48,6 +48,12 @@ const CHARGE_BLOCKED_FACTOR: float = 0.25
 const CHARGE_HIT_DISTANCE: float = 1.6
 const SLAM_SHAKE: float = 0.8
 const CHARGE_SHAKE: float = 0.6
+## Кость головы в скелетах Quaternius
+const HEAD_BONE: StringName = &"Head"
+## Высота кости Head у Zombie_Basic в масштабе 1.6 (под неё настроены хитбоксы zombie.tscn)
+const REFERENCE_HEAD_HEIGHT: float = 1.216
+## Центр хитбокса головы относительно кости Head у Zombie_Basic (в осях зомби)
+const HEAD_OFFSET_REFERENCE: Vector3 = Vector3(0.018, 0.234, -0.179)
 ## Масштаб модели Visual/Model в zombie.tscn (под него настроены хитбоксы)
 const DEFAULT_MODEL_SCALE: float = 1.6
 
@@ -136,6 +142,14 @@ var _special_hit_done: bool = false
 var _charge_direction: Vector3 = Vector3.ZERO
 var _last_hit_headshot: bool = false
 
+# Хитбоксы под модель
+var _size_factor: float = 1.0
+var _skeleton: Skeleton3D
+var _head_bone: int = -1
+var _skeleton_to_body: Transform3D = Transform3D.IDENTITY
+var _head_shape: CollisionShape3D
+var _head_offset: Vector3 = Vector3.ZERO
+
 # Звук
 var _voice_timer: float = 0.0
 var _hurt_sound_cooldown: float = 0.0
@@ -198,6 +212,7 @@ func notify_target(target_position: Vector3, propagate: bool = false) -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
 		return
+	_update_head_hitbox()
 
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -685,11 +700,9 @@ func _voice(list: Array[AudioStream], extra_db: float = 0.0) -> void:
 		data.voice_volume_db + extra_db, data.voice_pitch)
 
 
-## Во сколько раз модель выше стандартной (для звука и хитбоксов)
+## Во сколько раз модель выше стандартной (для звука)
 func _model_height_factor() -> float:
-	if data.model_scene == null:
-		return 1.0
-	return data.model_scale / DEFAULT_MODEL_SCALE
+	return _size_factor
 
 
 # ---------- Анимация ----------
@@ -772,28 +785,84 @@ func _resolve_references() -> bool:
 	return true
 
 
-## Своя модель другого масштаба: хитбоксы (тело и голова) растут вместе с ней.
-## Формы дублируются — они общие для всех зомби из zombie.tscn
+## Хитбоксы под реальный размер модели. Размер меряется по кости Head скелета
+## (у Chubby голова в ~2 раза выше, чем у Zombie_Basic), без скелета — по model_scale.
+## Формы дублируются — они общие для всех зомби из zombie.tscn.
+## Хитбокс головы дальше следует за костью головы в анимации (_update_head_hitbox).
 func _fit_hitboxes() -> void:
-	var factor: float = _model_height_factor()
-	if is_equal_approx(factor, 1.0):
+	_size_factor = _measure_size_factor()
+	if not is_equal_approx(_size_factor, 1.0):
+		for hitbox: Hitbox in _hitboxes:
+			for shape_node: Node in hitbox.get_children():
+				var collision := shape_node as CollisionShape3D
+				if collision == null or collision.shape == null:
+					continue
+				collision.position *= _size_factor
+				var shape: Shape3D = collision.shape.duplicate() as Shape3D
+				if shape is CapsuleShape3D:
+					var capsule := shape as CapsuleShape3D
+					capsule.radius *= _size_factor
+					capsule.height *= _size_factor
+				elif shape is SphereShape3D:
+					(shape as SphereShape3D).radius *= _size_factor
+				elif shape is BoxShape3D:
+					(shape as BoxShape3D).size *= _size_factor
+				collision.shape = shape
+
+	# Голова следует за костью
+	if _skeleton == null or _head_bone < 0:
 		return
 	for hitbox: Hitbox in _hitboxes:
+		if not hitbox.is_head:
+			continue
 		for shape_node: Node in hitbox.get_children():
-			var collision := shape_node as CollisionShape3D
-			if collision == null or collision.shape == null:
-				continue
-			collision.position *= factor
-			var shape: Shape3D = collision.shape.duplicate() as Shape3D
-			if shape is CapsuleShape3D:
-				var capsule := shape as CapsuleShape3D
-				capsule.radius *= factor
-				capsule.height *= factor
-			elif shape is SphereShape3D:
-				(shape as SphereShape3D).radius *= factor
-			elif shape is BoxShape3D:
-				(shape as BoxShape3D).size *= factor
-			collision.shape = shape
+			if shape_node is CollisionShape3D:
+				_head_shape = shape_node as CollisionShape3D
+				break
+		break
+	_head_offset = HEAD_OFFSET_REFERENCE * _size_factor
+	_update_head_hitbox()
+
+
+## Во сколько раз модель больше Zombie_Basic (1.0 — такая же)
+func _measure_size_factor() -> float:
+	var fallback: float = 1.0 if data.model_scene == null else data.model_scale / DEFAULT_MODEL_SCALE
+	if visual == null:
+		return fallback
+	var skeletons: Array[Node] = visual.find_children("*", "Skeleton3D", true, false)
+	if skeletons.is_empty():
+		return fallback
+	_skeleton = skeletons[0] as Skeleton3D
+	_head_bone = _skeleton.find_bone(HEAD_BONE)
+	if _head_bone < 0:
+		push_warning("Zombie '%s': в скелете нет кости %s, хитбоксы по model_scale" % [name, HEAD_BONE])
+		_skeleton = null
+		return fallback
+	_skeleton_to_body = _transform_to_body(_skeleton)
+	var head: Vector3 = _skeleton_to_body * _skeleton.get_bone_global_rest(_head_bone).origin
+	if head.y <= 0.1:
+		return fallback
+	return clampf(head.y / REFERENCE_HEAD_HEIGHT, 0.5, 4.0)
+
+
+## Хитбокс головы в текущей позе кости Head (каждый физический кадр, без аллокаций)
+func _update_head_hitbox() -> void:
+	if _head_shape == null or _skeleton == null:
+		return
+	var bone: Vector3 = _skeleton_to_body * _skeleton.get_bone_global_pose(_head_bone).origin
+	_head_shape.position = bone + _head_offset
+
+
+## Трансформ ноды в координатах зомби (по цепочке родителей, без global_*)
+func _transform_to_body(node: Node3D) -> Transform3D:
+	var result: Transform3D = Transform3D.IDENTITY
+	var current: Node = node
+	while current != null and current != self:
+		var current_3d := current as Node3D
+		if current_3d != null:
+			result = current_3d.transform * result
+		current = current.get_parent()
+	return result
 
 
 ## Подменяет Visual/Model моделью типа из data.model_scene (если задана)

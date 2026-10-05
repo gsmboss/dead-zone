@@ -81,7 +81,8 @@ MissionManager+ZombieSpawner, HUD.
 в стены; камера near=0.02), спрайт вспышки; хитмаркер (ui/hit_marker.gd), индикатор урона
 (ui/damage_indicator.gd, создаёт DamageOverlay); подборы pickups/pickup.gd (AMMO/HEALTH/MISSION_ITEM,
 дропы из зомби по шансам MissionData); босс enemies/boss.tres (ZombieData.is_boss, рывок charge_*,
-удар slam_*), полоска босса в MissionHUD; хитбоксы растут с model_scale; типы миссий DEFEND и COLLECT;
+удар slam_*), полоска босса в MissionHUD; хитбоксы растут по высоте кости Head скелета модели
+(эталон Zombie_Basic: 1.216 м), хитбокс головы следует за костью Head в анимации; типы миссий DEFEND и COLLECT;
 звёзды (победа, здоровье ≥ star_health, точность ≥ star_accuracy); оружие smg.tres и axe.tres
 (WeaponData.is_melee — веер лучей, замах модели); окно «ЕЖЕДНЕВНО» (ui/hub/daily_panel.gd);
 карточка «ВЫЖИВШИЙ» в оружейной. Анимации: покачивание оружия при дыхании/ходьбе и наклон
