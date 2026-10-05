@@ -53,6 +53,7 @@
 [ext_resource type="PackedScene" path="res://models/environment/WaterTower.gltf" id="m_WaterTower"]
 [ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
 [ext_resource type="PackedScene" path="res://models/environment/Wheels_Stack.gltf" id="m_Wheels_Stack"]
+[ext_resource type="Script" path="res://ui/game_menus.gd" id="50_menu1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Sky_mat"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -253,6 +254,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("14_mhud1")
+
+[node name="GameMenus" type="Control" parent="HUD" unique_id=1056910491]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("50_menu1")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=697913488]
 navigation_mesh = SubResource("Nav_mesh")

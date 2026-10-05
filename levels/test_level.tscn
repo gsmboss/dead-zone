@@ -58,6 +58,7 @@
 [ext_resource type="Script" path="res://levels/runtime_nav_region.gd" id="31_nav01"]
 [ext_resource type="Script" path="res://missions/defend_point.gd" id="32_def01"]
 [ext_resource type="Script" path="res://missions/item_spawn_point.gd" id="33_itm01"]
+[ext_resource type="Script" path="res://ui/game_menus.gd" id="50_menu1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wndkh"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -255,6 +256,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("14_mhud1")
+
+[node name="GameMenus" type="Control" parent="HUD" unique_id=592491201]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("50_menu1")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1637263258]
 navigation_mesh = SubResource("NavigationMesh_avdwy")

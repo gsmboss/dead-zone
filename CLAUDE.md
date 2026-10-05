@@ -34,6 +34,9 @@
   и задания (quests/quest_pool.tres, report_event(&"kill"...)), selected_mission, start_mission(),
   сохранение в user://save.json (атомарно через .tmp), F9 = +1000 монет в debug-сборке.
   Каталог: res://weapons/data/weapon_catalog.tres.
+- Settings — autoload/settings.gd: user://settings.cfg (чувствительность, инверсия Y, автоогонь,
+  громкость, тени, разрешение 3D, FPS, тряска камеры), set_value(key, value, save), сигнал changed.
+  Окно ui/settings_panel.gd (SettingsPanel) — в убежище (кнопка НАСТРОЙКИ) и в меню паузы.
 - Sfx — autoload/sfx.gd: пулы AudioStreamPlayer/3D, play_2d/play_3d/pick, звуки в audio/game_sounds.tres
   (GameSounds); звуки оружия — поля fire_sound/reload_sound/reload_end_sound в WeaponData.
 
@@ -85,6 +88,18 @@ levels/test_level.tscn, levels/street_level.tscn (улица, 60×60), levels/ya
 строится при запуске по коллизиям WORLD — «Bake» в редакторе не нужен), Bounds (невидимые стены),
 SpawnPoints, DefendPoint (missions/defend_point.gd), ItemPoints (missions/item_spawn_point.gd),
 MissionManager+ZombieSpawner, HUD.
+
+Инвентарь: items/item_data.gd (ItemData: medkit.tres, ammo_pack.tres), GameState.add_item/use_item/buy_item,
+ненужный подбор кладётся в сумку; окно ui/inventory_panel.gd; «ПРИПАСЫ В СУМКУ» в оружейной.
+Меню уровня ui/game_menus.gd (GameMenus в HUD всех уровней): кнопки «II» и «СУМКА», пауза
+(продолжить, сумка, настройки, заново, в убежище — MissionManager.leave_mission() сохраняет монеты).
+Режимы миссий ENDLESS (волны без конца, рекорд волн, босс каждые boss_every_waves) и FREE_ROAM
+(открытый мир без цели). ZombieSpawner.dynamic_spawn — спавн на навмеше вокруг игрока, despawn далёких.
+Машины: vehicles/drivable_car.gd (DrivableCar, аркадная езда, бампер сбивает зомби —
+Zombie.hit_by_vehicle), vehicles/drive_controller.gd (кнопка СЕСТЬ/ВЫЙТИ, E, спидометр).
+Город: levels/city_level.tscn, levels/city/city_generator.gd + city_config.tres (CityConfig): кварталы,
+дороги и здания Kenney City Kit (models/city/commercial, suburban — у каждого своя Textures/colormap.png)
+через MultiMesh, коробки коллизий в одном StaticBody, навмеш cell_size 0.5.
 
 Этап 6 (код): вью-модель уменьшена в VIEW_MODEL_SHRINK=0.35 раз и придвинута к камере (не входит
 в стены; камера near=0.02), спрайт вспышки; хитмаркер (ui/hit_marker.gd), индикатор урона

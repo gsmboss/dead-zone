@@ -9,6 +9,9 @@
   (glTF с вшитой текстурой Zombie_Atlas). В models/environment/ есть Blood_1..3 (пятна крови)
   и Chest/Chest_Special (ящики для подборов).
 
+- models/city/commercial/ — Kenney, City Kit (Commercial) 2.1: https://kenney.nl/assets/city-kit-commercial
+- models/city/suburban/ — Kenney, City Kit (Suburban): https://kenney.nl/assets/city-kit-suburban
+
 ## Звуки (audio/, перекодировано в OGG mono 44.1 kHz)
 - weapons/pistol_shot, rifle_shot, shotgun_shot — "Gunshot Sounds" (tabasco),
   https://opengameart.org/content/gunshot-sounds (cz.wav, sks.wav, shotty.wav; вырезан один выстрел).

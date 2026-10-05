@@ -14,6 +14,8 @@
 [ext_resource type="Resource" path="res://missions/data/mission_defend.tres" id="12_mdf01"]
 [ext_resource type="Resource" path="res://missions/data/mission_collect.tres" id="13_mcl01"]
 [ext_resource type="Resource" path="res://missions/data/mission_boss.tres" id="14_mbs01"]
+[ext_resource type="Resource" path="res://missions/data/mission_endless.tres" id="15_men01"]
+[ext_resource type="Resource" path="res://missions/data/mission_city.tres" id="16_mct01"]
 [ext_resource type="PackedScene" path="res://models/environment/Barrel.gltf" id="m_Barrel"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest.gltf" id="m_Chest"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest_Special.gltf" id="m_Chest_Special"]
@@ -476,4 +478,4 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("7_hud01")
-missions = Array[ExtResource("8_mdt01")]([ExtResource("9_mwv01"), ExtResource("10_mkl01"), ExtResource("11_msv01"), ExtResource("12_mdf01"), ExtResource("13_mcl01"), ExtResource("14_mbs01")])
+missions = Array[ExtResource("8_mdt01")]([ExtResource("9_mwv01"), ExtResource("10_mkl01"), ExtResource("11_msv01"), ExtResource("12_mdf01"), ExtResource("13_mcl01"), ExtResource("14_mbs01"), ExtResource("15_men01"), ExtResource("16_mct01")])
