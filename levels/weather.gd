@@ -18,6 +18,9 @@ var raining: bool = false
 var _intensity: float = 0.0
 var _timer: float = 0.0
 var _particles: CPUParticles3D
+## Материал капель: у CPUParticles3D нет amount_ratio — силу дождя показываем прозрачностью
+var _rain_material: StandardMaterial3D
+const RAIN_ALPHA: float = 0.35
 var _sound: AudioStreamPlayer
 var _environment: Environment
 var _base_fog: float = 0.0
@@ -52,7 +55,8 @@ func _process(delta: float) -> void:
 	if camera != null:
 		global_position = camera.global_position + Vector3.UP * RAIN_HEIGHT
 	_particles.emitting = _intensity > 0.05
-	_particles.amount_ratio = _intensity
+	if _rain_material != null:
+		_rain_material.albedo_color.a = RAIN_ALPHA * _intensity
 	if _environment != null and _environment.fog_enabled:
 		_environment.fog_density = _base_fog * lerpf(1.0, rain_fog_multiplier, _intensity)
 	if _sound.stream != null:
@@ -72,7 +76,8 @@ func _build_rain() -> void:
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.albedo_color = Color(0.75, 0.8, 0.9, 0.35)
+	material.albedo_color = Color(0.75, 0.8, 0.9, RAIN_ALPHA)
+	_rain_material = material
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_FIXED_Y
 	var streak := QuadMesh.new()
 	streak.size = Vector2(0.03, 0.7)
