@@ -89,6 +89,17 @@ var _gyro_rate: Vector2 = Vector2.ZERO
 ## Ниже этой скорости (рад/с) дрожание рук не крутит камеру
 const GYRO_DEADZONE: float = 0.015
 
+# Вид от 3-го лица: камера на «пружине» за правым плечом (не проходит сквозь стены)
+const SHOULDER_OFFSET: Vector3 = Vector3(0.55, 0.15, 0.0)
+const CAMERA_PROBE_RADIUS: float = 0.2
+## Тело игрока (видно от 3-го лица и другим игрокам)
+var body: PlayerBody
+var third_person: bool = false
+var _spring: SpringArm3D
+var _camera_pivot: Node3D
+var _camera_fps_position: Vector3 = Vector3.ZERO
+var _weapons_enabled: bool = true
+
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 
@@ -115,6 +126,9 @@ func _ready() -> void:
 		health.damaged.connect(_on_damaged)
 	_camera_base_y = camera.position.y
 	_camera_base_x = camera.position.x
+	_camera_fps_position = camera.position
+	_setup_body()
+	_setup_spring_arm()
 	_rng.randomize()
 	_apply_settings()
 	Settings.changed.connect(_apply_settings)
@@ -129,8 +143,12 @@ func _process(delta: float) -> void:
 		if input_enabled and look != Vector2.ZERO:
 			_apply_look(look)
 	_process_gyro(delta)
+	if input_enabled and Input.is_action_just_pressed(&"camera_view"):
+		Settings.set_value(&"camera_mode", 1 - Settings.camera_mode)
 	_update_recoil(delta)
 	_update_shake(delta)
+	if third_person:
+		_update_third_person_camera()
 
 
 func _physics_process(delta: float) -> void:
@@ -172,6 +190,92 @@ func shake(strength: float) -> void:
 func _apply_settings() -> void:
 	look_sensitivity = Settings.look_sensitivity
 	invert_y = Settings.invert_y
+	if _spring != null:
+		_spring.spring_length = Settings.camera_distance
+	set_third_person(Settings.camera_mode == Settings.CameraMode.THIRD_PERSON)
+
+
+# ---------- Вид от 1-го / 3-го лица ----------
+
+func set_third_person(enabled: bool) -> void:
+	if body == null or _spring == null:
+		return
+	third_person = enabled
+	body.visible = enabled
+	if weapon_manager != null:
+		weapon_manager.visible = _weapons_enabled and not enabled
+	if not enabled:
+		camera.position = _camera_fps_position
+		_camera_base_x = _camera_fps_position.x
+		_camera_base_y = _camera_fps_position.y
+
+
+## Оружие включено (в убежище — нет): вью-модель, стрельба и оружие в руке тела
+func set_weapons_enabled(enabled: bool) -> void:
+	_weapons_enabled = enabled
+	if weapon_manager == null:
+		return
+	weapon_manager.process_mode = Node.PROCESS_MODE_INHERIT if enabled else Node.PROCESS_MODE_DISABLED
+	weapon_manager.visible = enabled and not third_person
+	if body != null:
+		body.set_weapon(weapon_manager.get_current_weapon() if enabled else null)
+
+
+func _setup_body() -> void:
+	body = PlayerBody.new()
+	body.name = "Body"
+	add_child(body)
+	body.set_skin(GameState.get_selected_skin())
+	body.visible = false
+	GameState.skin_changed.connect(_on_skin_changed)
+	if weapon_manager != null:
+		weapon_manager.weapon_changed.connect(_on_weapon_changed)
+		weapon_manager.fired.connect(body.on_fired)
+		body.set_weapon(weapon_manager.get_current_weapon())
+	if health != null:
+		health.damaged.connect(func(_a: float, _p: Vector3, _h: bool) -> void: body.on_hit())
+		health.died.connect(body.on_died)
+
+
+func _setup_spring_arm() -> void:
+	_spring = SpringArm3D.new()
+	_spring.name = "CameraArm"
+	_spring.position = SHOULDER_OFFSET
+	_spring.spring_length = Settings.camera_distance
+	_spring.collision_mask = PhysicsLayers.WORLD
+	_spring.margin = 0.1
+	var probe := SphereShape3D.new()
+	probe.radius = CAMERA_PROBE_RADIUS
+	_spring.shape = probe
+	_spring.add_excluded_object(get_rid())
+	head.add_child(_spring)
+	_camera_pivot = Node3D.new()
+	_camera_pivot.name = "CameraPivot"
+	_spring.add_child(_camera_pivot)
+
+
+## Камера в точке «пружины» (в осях головы, как и сама камера)
+func _update_third_person_camera() -> void:
+	var local: Vector3 = _spring.transform * _camera_pivot.position
+	_camera_base_x = local.x
+	_camera_base_y = local.y
+	camera.position.z = local.z
+	camera.position.y = local.y
+	if _shake <= 0.0:
+		camera.position.x = local.x
+
+
+func _on_skin_changed(skin: PlayerSkin) -> void:
+	if body == null:
+		return
+	body.set_skin(skin)
+	if weapon_manager != null and _weapons_enabled:
+		body.set_weapon(weapon_manager.get_current_weapon())
+
+
+func _on_weapon_changed(weapon: WeaponData) -> void:
+	if body != null and _weapons_enabled:
+		body.set_weapon(weapon)
 
 
 ## Отбрасывание (рывок и удар босса)
@@ -363,10 +467,15 @@ func _update_shake(delta: float) -> void:
 
 
 func _update_head_bob(delta: float, speed: float) -> void:
+	if body != null and body.visible:
+		body.update_motion(speed, is_on_floor(), delta)
+	# От 3-го лица камера не качается (её ставит «пружина»), но шаги звучат так же
+	var move_camera: bool = not third_person
 	if bob_enabled and is_on_floor() and speed > 0.1:
 		_bob_time += delta * bob_frequency * TAU * (speed / move_speed)
 		var bob_sin: float = sin(_bob_time)
-		camera.position.y = _camera_base_y + bob_sin * bob_amplitude
+		if move_camera:
+			camera.position.y = _camera_base_y + bob_sin * bob_amplitude
 		# Шаг — в нижней точке покачивания
 		if _last_bob_sin > 0.0 and bob_sin <= 0.0:
 			Sfx.play_2d(Sfx.pick(Sfx.sounds.footsteps), footstep_volume_db, 1.0, 0.1)
@@ -374,4 +483,5 @@ func _update_head_bob(delta: float, speed: float) -> void:
 	else:
 		_bob_time = 0.0
 		_last_bob_sin = 0.0
-		camera.position.y = lerpf(camera.position.y, _camera_base_y, clampf(10.0 * delta, 0.0, 1.0))
+		if move_camera:
+			camera.position.y = lerpf(camera.position.y, _camera_base_y, clampf(10.0 * delta, 0.0, 1.0))

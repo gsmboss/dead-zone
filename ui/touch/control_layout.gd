@@ -15,6 +15,7 @@ const DEFAULTS: Dictionary = {
 	&"throw": [Vector2(1.0, 1.0), Vector2(-95.0, -455.0), 90.0, "ГРАНАТА"],
 	&"interact": [Vector2(1.0, 0.5), Vector2(-105.0, -40.0), 130.0, "СЕСТЬ"],
 	&"pause": [Vector2(1.0, 0.0), Vector2(-75.0, 175.0), 90.0, "II"],
+	&"camera_view": [Vector2(1.0, 0.0), Vector2(-185.0, 175.0), 90.0, "ВИД"],
 	&"inventory": [Vector2(0.0, 0.0), Vector2(69.0, 155.0), 90.0, "СУМКА"],
 }
 ## Зона джойстика по ширине экрана (слева; при joystick_right — зеркально справа)

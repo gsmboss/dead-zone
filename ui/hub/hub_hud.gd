@@ -64,6 +64,8 @@ func _build_ui() -> void:
 	_base_button.offset_right = 290.0
 	_base_button.offset_bottom = 52.0 + UIKit.BUTTON_HEIGHT * 3.0
 
+	_add_menu_button("ПЕРСОНАЖ", 3, func() -> void: _open_window(SkinPanel.new()))
+
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
 	_interact_button.pressed.connect(_interact)
@@ -73,6 +75,19 @@ func _build_ui() -> void:
 	_interact_button.offset_right = 190.0
 	_interact_button.offset_top = -140.0
 	_interact_button.offset_bottom = -50.0
+
+
+## Кнопка в левой колонке меню убежища (row — номер строки сверху, с 0)
+func _add_menu_button(text: String, row: int, callback: Callable) -> Button:
+	var button := UIKit.button(text, 26, 260.0)
+	button.pressed.connect(callback)
+	add_child(button)
+	button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
+	button.offset_left = 30.0
+	button.offset_top = 20.0 + 16.0 * row + UIKit.BUTTON_HEIGHT * row
+	button.offset_right = 290.0
+	button.offset_bottom = button.offset_top + UIKit.BUTTON_HEIGHT
+	return button
 
 
 func _connect_world() -> void:

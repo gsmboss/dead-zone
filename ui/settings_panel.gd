@@ -25,6 +25,11 @@ func _build_content() -> void:
 	_toggle("АВТООГОНЬ ПРИ НАВЕДЕНИИ", &"auto_fire")
 	_slider("ТРЯСКА КАМЕРЫ", &"camera_shake", 0.0, 1.0, 0.05, _percent)
 
+	_section("КАМЕРА")
+	_choice("ВИД", &"camera_mode", Settings.CAMERA_MODE_NAMES)
+	_slider("ДИСТАНЦИЯ КАМЕРЫ (3-Е ЛИЦО)", &"camera_distance", 1.5, 4.5, 0.1,
+		func(v: float) -> String: return "%.1f М" % v)
+
 	_section("КНОПКИ")
 	var layout := UIKit.button("НАСТРОИТЬ РАСКЛАДКУ КНОПОК", 24)
 	layout.pressed.connect(_open_layout_editor)

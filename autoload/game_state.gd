@@ -8,6 +8,7 @@ signal weapons_changed
 ## Изменились задания, ежедневная награда или улучшения игрока
 signal progress_changed
 signal inventory_changed
+signal skin_changed(skin: PlayerSkin)
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -30,6 +31,14 @@ const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_
 	"res://items/grenade.tres", "res://items/molotov.tres", "res://items/scrap.tres"]
 const SCRAP_ID: String = "scrap"
 ## Постройки базы (порядок = порядок в окне БАЗА и во дворе убежища)
+## Скины игрока (вид от 3-го лица и мультиплеер). Первый — по умолчанию
+const SKIN_PATHS: Array[String] = [
+	"res://player/skins/shaun.tres", "res://player/skins/lis.tres", "res://player/skins/matt.tres",
+	"res://player/skins/sam.tres", "res://player/skins/kenney_male_a.tres",
+	"res://player/skins/kenney_female_a.tres", "res://player/skins/kenney_male_c.tres",
+	"res://player/skins/kenney_female_c.tres", "res://player/skins/kenney_male_e.tres",
+	"res://player/skins/kenney_female_e.tres",
+]
 const BUILDING_PATHS: Array[String] = ["res://base/workshop.tres", "res://base/medbay.tres",
 	"res://base/armory.tres", "res://base/garage.tres"]
 ## Улучшения машин (гараж): таран — урон сбивания, двигатель — скорость
@@ -63,6 +72,9 @@ var _inventory: Dictionary = {}  # id предмета -> количество
 var _buildings_owned: Array[String] = []
 var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
 var _cutscenes_seen: Array[String] = []
+var skins: Array[PlayerSkin] = []
+var _skins_owned: Array[String] = []
+var _skin_id: String = ""
 
 
 func _ready() -> void:
@@ -93,6 +105,12 @@ func _ready() -> void:
 			push_warning("GameState: не найдена постройка %s" % path)
 			continue
 		buildings.append(building)
+	for path: String in SKIN_PATHS:
+		var skin: PlayerSkin = load(path) as PlayerSkin if ResourceLoader.exists(path) else null
+		if skin == null or skin.id.is_empty():
+			push_warning("GameState: не найден скин %s" % path)
+			continue
+		skins.append(skin)
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -305,6 +323,47 @@ func buy_item(item_id: String) -> bool:
 	coins_changed.emit(coins)
 	save_game()
 	return true
+
+
+# ---------- Скины ----------
+
+func get_skin(skin_id: String) -> PlayerSkin:
+	for skin: PlayerSkin in skins:
+		if skin.id == skin_id:
+			return skin
+	return null
+
+
+## Выбранный скин (или первый доступный)
+func get_selected_skin() -> PlayerSkin:
+	var skin: PlayerSkin = get_skin(_skin_id)
+	if skin != null and owns_skin(skin.id):
+		return skin
+	return skins[0] if not skins.is_empty() else null
+
+
+func owns_skin(skin_id: String) -> bool:
+	var skin: PlayerSkin = get_skin(skin_id)
+	return skin != null and (skin.price <= 0 or skin_id in _skins_owned)
+
+
+func buy_skin(skin_id: String) -> bool:
+	var skin: PlayerSkin = get_skin(skin_id)
+	if skin == null or owns_skin(skin_id) or coins < skin.price:
+		return false
+	coins -= skin.price
+	_skins_owned.append(skin_id)
+	coins_changed.emit(coins)
+	select_skin(skin_id)
+	return true
+
+
+func select_skin(skin_id: String) -> void:
+	if not owns_skin(skin_id):
+		return
+	_skin_id = skin_id
+	save_game()
+	skin_changed.emit(get_skin(skin_id))
 
 
 # ---------- Кат-сцены ----------
@@ -572,6 +631,8 @@ func reset_progress() -> void:
 	_inventory.clear()
 	_buildings_owned.clear()
 	_car_upgrades.clear()
+	_skins_owned.clear()
+	_skin_id = ""
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -598,6 +659,8 @@ func save_game() -> void:
 		"buildings": _buildings_owned,
 		"car_upgrades": _car_upgrades,
 		"cutscenes_seen": _cutscenes_seen,
+		"skins_owned": _skins_owned,
+		"skin": _skin_id,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -677,6 +740,14 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_skins_owned.clear()
+	var stored_skins: Variant = data.get("skins_owned", [])
+	if stored_skins is Array:
+		for skin_id: Variant in stored_skins:
+			if get_skin(str(skin_id)) != null and not str(skin_id) in _skins_owned:
+				_skins_owned.append(str(skin_id))
+	_skin_id = str(data.get("skin", ""))
 
 	_cutscenes_seen.clear()
 	var seen: Variant = data.get("cutscenes_seen", [])

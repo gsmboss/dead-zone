@@ -19,8 +19,8 @@ func _disable_player_weapons() -> void:
 	if player.weapon_manager == null:
 		push_warning("%s: у игрока нет WeaponManager" % name)
 		return
-	player.weapon_manager.process_mode = Node.PROCESS_MODE_DISABLED
-	player.weapon_manager.visible = false
+	# Выключает стрельбу, вью-модель и оружие в руке тела (вид от 3-го лица)
+	player.set_weapons_enabled(false)
 
 
 func _play_intro() -> void:

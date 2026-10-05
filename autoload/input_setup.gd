@@ -18,6 +18,7 @@ const ACTIONS: Dictionary = {
 	&"sprint": [KEY_SHIFT],
 	&"slide": [KEY_C],
 	&"pause": [KEY_ESCAPE, KEY_P],
+	&"camera_view": [KEY_V],
 }
 ## Дополнительно: прицеливание правой кнопкой мыши
 const MOUSE_ACTIONS: Dictionary = {

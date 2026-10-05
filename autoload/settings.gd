@@ -30,6 +30,7 @@ const DEFAULTS: Dictionary = {
 	"button_style": 0, "button_scale": 1.0, "button_opacity": 0.38, "button_layout": {},
 	"joystick_right": false, "crosshair_scale": 1.0, "crosshair_color": 0,
 	"gyro_enabled": false, "gyro_mode": 0, "gyro_sensitivity_x": 1.0, "gyro_sensitivity_y": 1.0,
+	"camera_mode": 0, "camera_distance": 2.6,
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 }
 
@@ -60,6 +61,13 @@ var button_layout: Dictionary = {}
 var joystick_right: bool = false
 var crosshair_scale: float = 1.0
 var crosshair_color: int = 0
+
+# Камера: 0 — от первого лица, 1 — от третьего
+enum CameraMode { FIRST_PERSON, THIRD_PERSON }
+const CAMERA_MODE_NAMES: PackedStringArray = ["1-Е ЛИЦО", "3-Е ЛИЦО"]
+var camera_mode: int = CameraMode.FIRST_PERSON
+## Расстояние камеры за спиной в виде от 3-го лица, м
+var camera_distance: float = 2.6
 
 # Гироскоп
 var gyro_enabled: bool = false
@@ -172,6 +180,8 @@ func _clamp_values() -> void:
 	crosshair_scale = clampf(crosshair_scale, 0.5, 2.0)
 	crosshair_color = clampi(crosshair_color, 0, CROSSHAIR_COLORS.size() - 1)
 	gyro_mode = clampi(gyro_mode, 0, GYRO_MODE_NAMES.size() - 1)
+	camera_mode = clampi(camera_mode, 0, CAMERA_MODE_NAMES.size() - 1)
+	camera_distance = clampf(camera_distance, 1.5, 4.5)
 	gyro_sensitivity_x = clampf(gyro_sensitivity_x, 0.1, 4.0)
 	gyro_sensitivity_y = clampf(gyro_sensitivity_y, 0.1, 4.0)
 	gyro_smoothing = clampf(gyro_smoothing, 0.0, 0.9)
