@@ -51,6 +51,18 @@ func show_skin(skin: PlayerSkin) -> void:
 	if _body == null or skin == null:
 		return
 	_body.set_skin(skin)
+	_body.set_weapon(best_weapon())
+
+
+## Самый дорогой купленный огнестрел — для красоты в превью и лобби
+static func best_weapon() -> WeaponData:
+	var best: WeaponData = null
+	for weapon: WeaponData in GameState.get_loadout():
+		if weapon.is_melee or weapon.is_flamethrower:
+			continue
+		if best == null or weapon.price > best.price:
+			best = weapon
+	return best
 
 
 func _process(delta: float) -> void:

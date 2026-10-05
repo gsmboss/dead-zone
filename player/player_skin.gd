@@ -19,6 +19,10 @@ extends Resource
 @export var anim_death: StringName = &"Death"
 @export var anim_hit: StringName = &"HitReact"
 @export var anim_melee: StringName = &"Slash"
+## Без огнестрела (пустые руки или ближний бой) — обычные анимации, не стрелковая стойка
+@export var anim_idle_unarmed: StringName = &"Idle"
+@export var anim_walk_unarmed: StringName = &"Walk"
+@export var anim_run_unarmed: StringName = &"Run"
 ## Приветствие в лобби
 @export var anim_emote: StringName = &"Wave"
 ## Скорость (м/с), при которой анимация ходьбы и бега выглядит естественно

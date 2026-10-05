@@ -304,7 +304,8 @@ func set_weapons_enabled(enabled: bool) -> void:
 	weapon_manager.process_mode = Node.PROCESS_MODE_INHERIT if enabled else Node.PROCESS_MODE_DISABLED
 	weapon_manager.visible = enabled and not third_person
 	if body != null:
-		body.set_weapon(weapon_manager.get_current_weapon() if enabled else null)
+		# В убежище стрелять нельзя, но ствол в руке видно (вид от 3-го лица)
+		body.set_weapon(weapon_manager.get_current_weapon())
 
 
 func _setup_body() -> void:
@@ -356,12 +357,12 @@ func _on_skin_changed(skin: PlayerSkin) -> void:
 	if body == null:
 		return
 	body.set_skin(skin)
-	if weapon_manager != null and _weapons_enabled:
+	if weapon_manager != null:
 		body.set_weapon(weapon_manager.get_current_weapon())
 
 
 func _on_weapon_changed(weapon: WeaponData) -> void:
-	if body != null and _weapons_enabled:
+	if body != null:
 		body.set_weapon(weapon)
 
 

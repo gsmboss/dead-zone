@@ -23,6 +23,8 @@ var _one_shot_left: float = 0.0
 var _dead: bool = false
 ## Оружие, встроенное в модель (у выживших Quaternius все стволы уже в руке): имя → меш
 var _builtin_weapons: Dictionary = {}
+## В руках огнестрел — стрелковая стойка (Idle_Gun и т.п.)
+var _armed: bool = false
 
 
 ## Сменить скин. null — скин по умолчанию из GameState
@@ -44,7 +46,8 @@ func set_skin(new_skin: PlayerSkin) -> void:
 	_fit_height(_model, new_skin.height)
 	_animation_player = _find_animation_player(_model)
 	if _animation_player != null:
-		for anim: StringName in [new_skin.anim_idle, new_skin.anim_walk, new_skin.anim_run]:
+		for anim: StringName in [new_skin.anim_idle, new_skin.anim_walk, new_skin.anim_run,
+				new_skin.anim_idle_unarmed, new_skin.anim_walk_unarmed, new_skin.anim_run_unarmed]:
 			if _animation_player.has_animation(anim):
 				_animation_player.get_animation(anim).loop_mode = Animation.LOOP_LINEAR
 	_create_hand()
@@ -59,6 +62,8 @@ func set_weapon(weapon: WeaponData) -> void:
 		_weapon_model = null
 	for builtin: Node3D in _builtin_weapons.values():
 		builtin.visible = false
+	_armed = weapon != null and not weapon.is_melee
+	_current_anim = &""  # сменить стойку сразу
 	if weapon == null or weapon.view_model == null:
 		return
 	# Такой же ствол уже есть в модели и правильно лежит в руке — просто показываем его
@@ -89,13 +94,13 @@ func update_motion(horizontal_speed: float, on_floor: bool, delta: float) -> voi
 		_animation_player.speed_scale = 1.0
 		return
 	if horizontal_speed < MOVE_THRESHOLD:
-		_play(skin.anim_idle)
+		_play(skin.anim_idle if _armed else skin.anim_idle_unarmed)
 		_animation_player.speed_scale = 1.0
 	elif horizontal_speed < RUN_THRESHOLD:
-		_play(skin.anim_walk)
+		_play(skin.anim_walk if _armed else skin.anim_walk_unarmed)
 		_animation_player.speed_scale = clampf(horizontal_speed / skin.walk_anim_speed, 0.5, 2.0)
 	else:
-		_play(skin.anim_run)
+		_play(skin.anim_run if _armed else skin.anim_run_unarmed)
 		_animation_player.speed_scale = clampf(horizontal_speed / skin.run_anim_speed, 0.6, 1.8)
 
 
