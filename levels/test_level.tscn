@@ -55,6 +55,9 @@
 [ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
 [ext_resource type="PackedScene" path="res://models/environment/Wheels_Stack.gltf" id="m_Wheels_Stack"]
 [ext_resource type="Script" path="res://levels/static_prop.gd" id="30_prop1"]
+[ext_resource type="Script" path="res://levels/runtime_nav_region.gd" id="31_nav01"]
+[ext_resource type="Script" path="res://missions/defend_point.gd" id="32_def01"]
+[ext_resource type="Script" path="res://missions/item_spawn_point.gd" id="33_itm01"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wndkh"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -73,6 +76,12 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 4, 3), PackedInt32Arr
 agent_height = 1.8
 agent_radius = 0.4
 agent_max_slope = 0.3
+
+[sub_resource type="BoxShape3D" id="Wall_x"]
+size = Vector3(51, 6, 0.5)
+
+[sub_resource type="BoxShape3D" id="Wall_z"]
+size = Vector3(0.5, 6, 51)
 
 [node name="TestLevel" type="Node3D" unique_id=189371250]
 
@@ -231,6 +240,7 @@ script = ExtResource("14_mhud1")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1637263258]
 navigation_mesh = SubResource("NavigationMesh_avdwy")
+script = ExtResource("31_nav01")
 
 [node name="Floor" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1058501883]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -578,6 +588,62 @@ transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 
 
 [node name="Blood3" parent="Decals" unique_id=2031036101 instance=ExtResource("m_Blood_3")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 1, 0.01, 15)
+
+[node name="Bounds" type="StaticBody3D" parent="." unique_id=515205767]
+
+[node name="North" type="CollisionShape3D" parent="Bounds" unique_id=689580873]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -25)
+shape = SubResource("Wall_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds" unique_id=445864875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 25)
+shape = SubResource("Wall_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds" unique_id=375253256]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds" unique_id=1305216238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="DefendPoint" type="Marker3D" parent="." unique_id=1622025886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 12)
+script = ExtResource("32_def01")
+
+[node name="ItemPoints" type="Node3D" parent="." unique_id=2075324794]
+
+[node name="Item1" type="Marker3D" parent="ItemPoints" unique_id=329372715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -10)
+script = ExtResource("33_itm01")
+
+[node name="Item2" type="Marker3D" parent="ItemPoints" unique_id=429417954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
+script = ExtResource("33_itm01")
+
+[node name="Item3" type="Marker3D" parent="ItemPoints" unique_id=648518074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 4)
+script = ExtResource("33_itm01")
+
+[node name="Item4" type="Marker3D" parent="ItemPoints" unique_id=984249723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 4)
+script = ExtResource("33_itm01")
+
+[node name="Item5" type="Marker3D" parent="ItemPoints" unique_id=512252275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 20)
+script = ExtResource("33_itm01")
+
+[node name="Item6" type="Marker3D" parent="ItemPoints" unique_id=1277427838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 22)
+script = ExtResource("33_itm01")
+
+[node name="Item7" type="Marker3D" parent="ItemPoints" unique_id=1635647753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -20)
+script = ExtResource("33_itm01")
+
+[node name="Item8" type="Marker3D" parent="ItemPoints" unique_id=1716503382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -14)
+script = ExtResource("33_itm01")
 
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=1453819253]
 

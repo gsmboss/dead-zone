@@ -1,0 +1,715 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dxkjvqcbx2yt6" path="res://ui/touch/touch_controls.gd" id="2_o6mel"]
+[ext_resource type="Script" uid="uid://dghnj5repsr7p" path="res://ui/damage_overlay.gd" id="2_wkb0e"]
+[ext_resource type="Script" uid="uid://b5ehpirj8va4c" path="res://ui/touch/virtual_joystick.gd" id="3_e7anx"]
+[ext_resource type="Script" uid="uid://l7ge3tjil0vp" path="res://ui/touch/touch_action_button.gd" id="4_ur00s"]
+[ext_resource type="Script" uid="uid://bpix1h3rg7vin" path="res://ui/crosshair.gd" id="5_ur00s"]
+[ext_resource type="Script" uid="uid://cor576lrvs0cp" path="res://ui/ammo_display.gd" id="6_wndkh"]
+[ext_resource type="Script" uid="uid://s84lkipfd2x5" path="res://ui/health_display.gd" id="8_paa45"]
+[ext_resource type="Script" uid="uid://bqofxke15edqw" path="res://ui/mission_hud.gd" id="14_mhud1"]
+[ext_resource type="PackedScene" uid="uid://ckdq70rsi165h" path="res://player/player.tscn" id="1_w7r7j"]
+[ext_resource type="PackedScene" uid="uid://ct6h4tc3s40c6" path="res://enemies/zombie.tscn" id="7_ly3hx"]
+[ext_resource type="Script" uid="uid://dvhn03ojbn765" path="res://missions/spawn_point.gd" id="10_0vv12"]
+[ext_resource type="Script" uid="uid://dovqnlj1fo70i" path="res://missions/mission_manager.gd" id="11_o5yuq"]
+[ext_resource type="Resource" path="res://missions/data/mission_collect.tres" id="12_miss1"]
+[ext_resource type="Script" uid="uid://bxnfpultch60d" path="res://missions/zombie_spawner.gd" id="13_xag4j"]
+[ext_resource type="Script" path="res://levels/static_prop.gd" id="30_prop1"]
+[ext_resource type="Script" path="res://levels/runtime_nav_region.gd" id="31_nav01"]
+[ext_resource type="Script" path="res://missions/defend_point.gd" id="32_def01"]
+[ext_resource type="Script" path="res://missions/item_spawn_point.gd" id="33_itm01"]
+[ext_resource type="PackedScene" path="res://models/environment/Barrel.gltf" id="m_Barrel"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_1.gltf" id="m_Blood_1"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_2.gltf" id="m_Blood_2"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_3.gltf" id="m_Blood_3"]
+[ext_resource type="PackedScene" path="res://models/environment/Chest.gltf" id="m_Chest"]
+[ext_resource type="PackedScene" path="res://models/environment/Chest_Special.gltf" id="m_Chest_Special"]
+[ext_resource type="PackedScene" path="res://models/environment/CinderBlock.gltf" id="m_CinderBlock"]
+[ext_resource type="PackedScene" path="res://models/environment/Container_Green.gltf" id="m_Container_Green"]
+[ext_resource type="PackedScene" path="res://models/environment/Container_Red.gltf" id="m_Container_Red"]
+[ext_resource type="PackedScene" path="res://models/environment/Couch.gltf" id="m_Couch"]
+[ext_resource type="PackedScene" path="res://models/environment/FireHydrant.gltf" id="m_FireHydrant"]
+[ext_resource type="PackedScene" path="res://models/environment/Pallet.gltf" id="m_Pallet"]
+[ext_resource type="PackedScene" path="res://models/environment/Pallet_Broken.gltf" id="m_Pallet_Broken"]
+[ext_resource type="PackedScene" path="res://models/environment/Pipes.gltf" id="m_Pipes"]
+[ext_resource type="PackedScene" path="res://models/environment/PlasticBarrier.gltf" id="m_PlasticBarrier"]
+[ext_resource type="PackedScene" path="res://models/environment/StreetLights.gltf" id="m_StreetLights"]
+[ext_resource type="PackedScene" path="res://models/environment/Street_Straight.gltf" id="m_Street_Straight"]
+[ext_resource type="PackedScene" path="res://models/environment/TownSign.gltf" id="m_TownSign"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficBarrier_1.gltf" id="m_TrafficBarrier_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficBarrier_2.gltf" id="m_TrafficBarrier_2"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficCone_1.gltf" id="m_TrafficCone_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficCone_2.gltf" id="m_TrafficCone_2"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficLight_1.gltf" id="m_TrafficLight_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficLight_2.gltf" id="m_TrafficLight_2"]
+[ext_resource type="PackedScene" path="res://models/environment/TrashBag_1.gltf" id="m_TrashBag_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrashBag_2.gltf" id="m_TrashBag_2"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup.gltf" id="m_Vehicle_Pickup"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup_Armored.gltf" id="m_Vehicle_Pickup_Armored"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Sports.gltf" id="m_Vehicle_Sports"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Sports_Armored.gltf" id="m_Vehicle_Sports_Armored"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck.gltf" id="m_Vehicle_Truck"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck_Armored.gltf" id="m_Vehicle_Truck_Armored"]
+[ext_resource type="PackedScene" path="res://models/environment/WaterTower.gltf" id="m_WaterTower"]
+[ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
+[ext_resource type="PackedScene" path="res://models/environment/Wheels_Stack.gltf" id="m_Wheels_Stack"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_mat"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_res"]
+sky_material = SubResource("Sky_mat")
+
+[sub_resource type="Environment" id="Env_res"]
+background_mode = 2
+sky = SubResource("Sky_res")
+ambient_light_source = 3
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.26, 0.26, 0.27, 1)
+roughness = 0.95
+
+[sub_resource type="BoxShape3D" id="Wall_x"]
+size = Vector3(57, 6, 0.5)
+
+[sub_resource type="BoxShape3D" id="Wall_z"]
+size = Vector3(0.5, 6, 57)
+
+[sub_resource type="NavigationMesh" id="Nav_mesh"]
+agent_height = 1.8
+agent_radius = 0.4
+agent_max_slope = 35.0
+
+[node name="YardLevel" type="Node3D" unique_id=1909746146]
+
+[node name="Player" parent="." unique_id=252144313 node_paths=PackedStringArray("touch_controls") instance=ExtResource("1_w7r7j")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1, -2)
+touch_controls = NodePath("../HUD/TouchControls")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=747196567]
+environment = SubResource("Env_res")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=749616815]
+transform = Transform3D(0.866025, -0.383022, 0.321394, 0, 0.642788, 0.766044, -0.5, -0.663414, 0.55667, 0, 0, 0)
+shadow_enabled = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=498262993]
+
+[node name="DamageOverlay" type="ColorRect" parent="HUD" unique_id=1835518200]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_wkb0e")
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1780298419 node_paths=PackedStringArray("joystick")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_o6mel")
+joystick = NodePath("Joystick")
+
+[node name="Joystick" type="Control" parent="HUD/TouchControls" unique_id=1314025991]
+layout_mode = 1
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_e7anx")
+
+[node name="FireButton" type="Control" parent="HUD/TouchControls" unique_id=1688909280]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -230.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"fire"
+label = "FIRE"
+
+[node name="JumpButton" type="Control" parent="HUD/TouchControls" unique_id=674373442]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -170.0
+offset_right = -260.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"jump"
+label = "JUMP"
+
+[node name="ReloadButton" type="Control" parent="HUD/TouchControls" unique_id=568355740]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -380.0
+offset_right = -100.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"reload"
+label = "R"
+
+[node name="Crosshair" type="CenterContainer" parent="HUD/TouchControls" unique_id=2080779263]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="HUD/TouchControls/Crosshair" unique_id=86499869]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "+"
+script = ExtResource("5_ur00s")
+
+[node name="SwitchButton" type="Control" parent="HUD/TouchControls" unique_id=979111094]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -380.0
+offset_right = -230.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"switch_weapon"
+label = "⇄"
+
+[node name="AmmoLabel" type="Label" parent="HUD" unique_id=1137799918]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("6_wndkh")
+
+[node name="HealthLabel" type="Label" parent="HUD" unique_id=73412667]
+anchors_preset = -1
+anchor_left = 30.0
+anchor_top = 20.0
+anchor_right = 300.0
+anchor_bottom = 70.0
+offset_left = -34560.0
+offset_top = -12960.0
+offset_right = -345599.0
+offset_bottom = -45321.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("8_paa45")
+
+[node name="MissionHUD" type="Control" parent="HUD" unique_id=433307376]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_mhud1")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=697913488]
+navigation_mesh = SubResource("Nav_mesh")
+script = ExtResource("31_nav01")
+
+[node name="Floor" type="CSGBox3D" parent="NavigationRegion3D" unique_id=391557661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(56, 1, 56)
+material = SubResource("Mat_floor")
+
+[node name="Roads" type="Node3D" parent="NavigationRegion3D" unique_id=1312339653]
+
+[node name="Road0" parent="NavigationRegion3D/Roads" unique_id=1520784404 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -24, 0.01, 24)
+
+[node name="Road1" parent="NavigationRegion3D/Roads" unique_id=1670478376 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -16, 0.01, 24)
+
+[node name="Road2" parent="NavigationRegion3D/Roads" unique_id=636929524 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8, 0.01, 24)
+
+[node name="Road3" parent="NavigationRegion3D/Roads" unique_id=1232398476 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0.01, 24)
+
+[node name="Road4" parent="NavigationRegion3D/Roads" unique_id=316061634 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8, 0.01, 24)
+
+[node name="Road5" parent="NavigationRegion3D/Roads" unique_id=1163475331 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 16, 0.01, 24)
+
+[node name="Road6" parent="NavigationRegion3D/Roads" unique_id=569625410 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 24, 0.01, 24)
+
+[node name="Props" type="Node3D" parent="NavigationRegion3D" unique_id=2013436058]
+
+[node name="Container1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=519705192]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -18, 0, -18)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container1" unique_id=1784308009 instance=ExtResource("m_Container_Green")]
+
+[node name="Container2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=934509914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, -8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container2" unique_id=478210694 instance=ExtResource("m_Container_Red")]
+
+[node name="Container2Top" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1206529605]
+transform = Transform3D(0.99863, 0, -0.052336, 0, 1, 0, 0.052336, 0, 0.99863, -18, 2.6, -8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container2Top" unique_id=1925730804 instance=ExtResource("m_Container_Green")]
+
+[node name="Container3" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=579397565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 2)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container3" unique_id=787083709 instance=ExtResource("m_Container_Green")]
+
+[node name="Container4" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=861521830]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -18, 0, 12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container4" unique_id=1710886410 instance=ExtResource("m_Container_Red")]
+
+[node name="Container5" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1608704767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -18)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container5" unique_id=2014289678 instance=ExtResource("m_Container_Red")]
+
+[node name="Container6" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1817510047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container6" unique_id=197946042 instance=ExtResource("m_Container_Green")]
+
+[node name="Container7" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1343089441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -18)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container7" unique_id=2034711234 instance=ExtResource("m_Container_Green")]
+
+[node name="Container8" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=2101526814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container8" unique_id=1556038891 instance=ExtResource("m_Container_Red")]
+
+[node name="Container8Top" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1268573677]
+transform = Transform3D(0.99863, 0, -0.052336, 0, 1, 0, 0.052336, 0, 0.99863, 6, 2.6, 12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container8Top" unique_id=909509115 instance=ExtResource("m_Container_Green")]
+
+[node name="Container9" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=2110327874]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 18, 0, -18)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container9" unique_id=1692140878 instance=ExtResource("m_Container_Red")]
+
+[node name="Container9Top" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1647181082]
+transform = Transform3D(-0.069756, 0, 0.997564, 0, 1, 0, -0.997564, 0, -0.069756, 18, 2.6, -18)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container9Top" unique_id=2141416415 instance=ExtResource("m_Container_Green")]
+
+[node name="Container10" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1460274152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container10" unique_id=257556241 instance=ExtResource("m_Container_Green")]
+
+[node name="Container11" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=354585488]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 2)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container11" unique_id=592951383 instance=ExtResource("m_Container_Red")]
+
+[node name="Container12" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=219757448]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 18, 0, 12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Container12" unique_id=1211829602 instance=ExtResource("m_Container_Green")]
+
+[node name="Truck" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=369452056]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -12, 0, -13)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Truck" unique_id=2129794094 instance=ExtResource("m_Vehicle_Truck")]
+
+[node name="TruckArmored" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1881434524]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12, 0, -3)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/TruckArmored" unique_id=551489136 instance=ExtResource("m_Vehicle_Truck_Armored")]
+
+[node name="Pickup" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=2047062246]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0, 8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Pickup" unique_id=1463621525 instance=ExtResource("m_Vehicle_Pickup")]
+
+[node name="Sports" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1420587147]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -12, 0, 7)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Sports" unique_id=2083860964 instance=ExtResource("m_Vehicle_Sports")]
+
+[node name="PickupArmored" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=288706797]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 12, 0, 17)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/PickupArmored" unique_id=2132485998 instance=ExtResource("m_Vehicle_Pickup_Armored")]
+
+[node name="SportsArmored" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1182632908]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 0, -14)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/SportsArmored" unique_id=473144429 instance=ExtResource("m_Vehicle_Sports_Armored")]
+
+[node name="Barrel1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=607347558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -3)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrel1" unique_id=1148078985 instance=ExtResource("m_Barrel")]
+
+[node name="Barrel2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1353993212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, -3.4)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrel2" unique_id=1815684768 instance=ExtResource("m_Barrel")]
+
+[node name="Barrel3" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1671615377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 1)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrel3" unique_id=454484819 instance=ExtResource("m_Barrel")]
+
+[node name="Pallet1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=447968805]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3, 0, -5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Pallet1" unique_id=286376428 instance=ExtResource("m_Pallet")]
+
+[node name="Pallet2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=369111905]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -3.5, 0, 3)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Pallet2" unique_id=1426687647 instance=ExtResource("m_Pallet_Broken")]
+
+[node name="ChestSpecial" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=323976858]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 3, 0.14, -5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/ChestSpecial" unique_id=1842439398 instance=ExtResource("m_Chest_Special")]
+
+[node name="Wheels1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=2126359764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -24)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Wheels1" unique_id=1375970680 instance=ExtResource("m_Wheels_Stack")]
+
+[node name="Wheels2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1306190375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -24)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Wheels2" unique_id=1844791504 instance=ExtResource("m_Wheels_Stack")]
+
+[node name="Wheel" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1397784522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.3, 0, -23)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Wheel" unique_id=1456159222 instance=ExtResource("m_Wheel")]
+
+[node name="Cinder1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=164805311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -6)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Cinder1" unique_id=1378579823 instance=ExtResource("m_CinderBlock")]
+
+[node name="Cinder2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=331841065]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -0.6, 0.23, -6)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Cinder2" unique_id=1302662058 instance=ExtResource("m_CinderBlock")]
+
+[node name="Barrier1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=486184279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 21)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrier1" unique_id=1268843620 instance=ExtResource("m_TrafficBarrier_1")]
+
+[node name="Barrier2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1599622405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 21)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrier2" unique_id=775898059 instance=ExtResource("m_TrafficBarrier_1")]
+
+[node name="Barrier3" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=100997257]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Barrier3" unique_id=363849344 instance=ExtResource("m_TrafficBarrier_2")]
+
+[node name="Cone1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=703357218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 21)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Cone1" unique_id=162104627 instance=ExtResource("m_TrafficCone_1")]
+
+[node name="Cone2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=491374070]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 21)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Cone2" unique_id=232031652 instance=ExtResource("m_TrafficCone_2")]
+
+[node name="Trash1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=322905595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 0)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Trash1" unique_id=1464401392 instance=ExtResource("m_TrashBag_1")]
+
+[node name="Trash2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1941142479]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 24, 0, 10)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Trash2" unique_id=1441955894 instance=ExtResource("m_TrashBag_2")]
+
+[node name="Trash3" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1546214083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -24)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Trash3" unique_id=1431147636 instance=ExtResource("m_TrashBag_1")]
+
+[node name="Couch" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1676725477]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -24, 0, -12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Couch" unique_id=551343928 instance=ExtResource("m_Couch")]
+
+[node name="Pipes" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1343741503]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -12)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Pipes" unique_id=546366167 instance=ExtResource("m_Pipes")]
+
+[node name="Hydrant" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1484163068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 20.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Hydrant" unique_id=508227193 instance=ExtResource("m_FireHydrant")]
+
+[node name="Plastic1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1089937229]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 20.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Plastic1" unique_id=499771315 instance=ExtResource("m_PlasticBarrier")]
+
+[node name="Plastic2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1115712424]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 10.1, 0, 20.7)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Plastic2" unique_id=773584820 instance=ExtResource("m_PlasticBarrier")]
+
+[node name="Light1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=685633624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 19.6)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 6.6, 0.4)
+custom_center = Vector3(0, 3.3, 0)
+
+[node name="Model" parent="NavigationRegion3D/Props/Light1" unique_id=1673242178 instance=ExtResource("m_StreetLights")]
+
+[node name="Light2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1074716350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 19.6)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 6.6, 0.4)
+custom_center = Vector3(0, 3.3, 0)
+
+[node name="Model" parent="NavigationRegion3D/Props/Light2" unique_id=1462149827 instance=ExtResource("m_StreetLights")]
+
+[node name="Light3" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1043002796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -25.5)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 6.6, 0.4)
+custom_center = Vector3(0, 3.3, 0)
+
+[node name="Model" parent="NavigationRegion3D/Props/Light3" unique_id=1892335863 instance=ExtResource("m_StreetLights")]
+
+[node name="TrafficLight1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1637491045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 19.6)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 4.6, 0.4)
+custom_center = Vector3(0, 2.3, 0)
+
+[node name="Model" parent="NavigationRegion3D/Props/TrafficLight1" unique_id=1830485148 instance=ExtResource("m_TrafficLight_1")]
+
+[node name="TrafficLight2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1869550993]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 19.6)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 4.6, 0.4)
+custom_center = Vector3(0, 2.3, 0)
+
+[node name="Model" parent="NavigationRegion3D/Props/TrafficLight2" unique_id=566607113 instance=ExtResource("m_TrafficLight_2")]
+
+[node name="WaterTower" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=959430463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 14)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/WaterTower" unique_id=1359134585 instance=ExtResource("m_WaterTower")]
+
+[node name="TownSign" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1961216658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -26)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/TownSign" unique_id=1063646500 instance=ExtResource("m_TownSign")]
+
+[node name="Chest1" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1954822201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Chest1" unique_id=998554811 instance=ExtResource("m_Chest")]
+
+[node name="Chest2" type="StaticBody3D" parent="NavigationRegion3D/Props" unique_id=1376427781]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -4)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="NavigationRegion3D/Props/Chest2" unique_id=1609749475 instance=ExtResource("m_Chest")]
+
+[node name="Bounds" type="StaticBody3D" parent="." unique_id=387283084]
+
+[node name="North" type="CollisionShape3D" parent="Bounds" unique_id=1994908799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -28)
+shape = SubResource("Wall_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds" unique_id=549840642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 28)
+shape = SubResource("Wall_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds" unique_id=444404286]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds" unique_id=769261453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="Decals" type="Node3D" parent="." unique_id=954483657]
+
+[node name="Blood1" parent="Decals" unique_id=522916172 instance=ExtResource("m_Blood_1")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0.01, 0)
+
+[node name="Blood2" parent="Decals" unique_id=1716255822 instance=ExtResource("m_Blood_2")]
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -12, 0.01, -3)
+
+[node name="Blood3" parent="Decals" unique_id=485314126 instance=ExtResource("m_Blood_3")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 6, 0.01, -20)
+
+[node name="SpawnPoints" type="Node3D" parent="." unique_id=865964532]
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints" unique_id=1077810330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints" unique_id=1574526753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints" unique_id=131979127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn4" type="Marker3D" parent="SpawnPoints" unique_id=356087537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn5" type="Marker3D" parent="SpawnPoints" unique_id=820152552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn6" type="Marker3D" parent="SpawnPoints" unique_id=1548914809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, -4)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn7" type="Marker3D" parent="SpawnPoints" unique_id=106277814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 4)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn8" type="Marker3D" parent="SpawnPoints" unique_id=1759633692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 27)
+script = ExtResource("10_0vv12")
+
+[node name="DefendPoint" type="Marker3D" parent="." unique_id=578760142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -3)
+script = ExtResource("32_def01")
+
+[node name="ItemPoints" type="Node3D" parent="." unique_id=1715145574]
+
+[node name="Item1" type="Marker3D" parent="ItemPoints" unique_id=1188529771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -22)
+script = ExtResource("33_itm01")
+
+[node name="Item2" type="Marker3D" parent="ItemPoints" unique_id=1000269012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -22)
+script = ExtResource("33_itm01")
+
+[node name="Item3" type="Marker3D" parent="ItemPoints" unique_id=1514281600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -17)
+script = ExtResource("33_itm01")
+
+[node name="Item4" type="Marker3D" parent="ItemPoints" unique_id=180727451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 6)
+script = ExtResource("33_itm01")
+
+[node name="Item5" type="Marker3D" parent="ItemPoints" unique_id=559952051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 3)
+script = ExtResource("33_itm01")
+
+[node name="Item6" type="Marker3D" parent="ItemPoints" unique_id=1406773869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 8)
+script = ExtResource("33_itm01")
+
+[node name="Item7" type="Marker3D" parent="ItemPoints" unique_id=1097757251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 22.5)
+script = ExtResource("33_itm01")
+
+[node name="Item8" type="Marker3D" parent="ItemPoints" unique_id=1290888986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 24)
+script = ExtResource("33_itm01")
+
+[node name="MissionManager" type="Node" parent="." unique_id=1166034990]
+script = ExtResource("11_o5yuq")
+mission = ExtResource("12_miss1")
+
+[node name="ZombieSpawner" type="Node3D" parent="MissionManager" unique_id=1275131797]
+script = ExtResource("13_xag4j")
+zombie_scene = ExtResource("7_ly3hx")

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MissionData" format=3]
+
+[ext_resource type="Resource" uid="uid://bxalb3sauqja6" path="res://enemies/runner.tres" id="1_run01"]
+[ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="2_mdt01"]
+[ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="3_tnk01"]
+[ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="4_wlk01"]
+
+[resource]
+script = ExtResource("2_mdt01")
+id = "defend"
+title = "ОБОРОНА"
+description = "Удерживай перекрёсток 60 секунд. Время вне точки не идёт"
+type = 3
+level_scene = "res://levels/street_level.tscn"
+defend_time = 60.0
+defend_radius = 5.0
+walker = ExtResource("4_wlk01")
+runner = ExtResource("1_run01")
+tank = ExtResource("3_tnk01")
+runner_chance = 0.2
+tank_chance = 0.05
+runner_chance_per_level = 0.08
+tank_chance_per_level = 0.04
+max_alive = 10
+spawn_interval = 1.4
+min_spawn_interval = 0.6
+reward_coins = 160
+metadata/_custom_type_script = "uid://dp7avtsfoxban"
