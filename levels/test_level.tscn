@@ -65,10 +65,9 @@ joystick = NodePath("Joystick")
 
 [node name="Joystick" type="Control" parent="HUD/TouchControls" unique_id=1314025991]
 layout_mode = 1
+anchors_preset = -1
 anchor_right = 0.4
 anchor_bottom = 1.0
-offset_right = 40.0
-offset_bottom = 40.0
 script = ExtResource("3_e7anx")
 
 [node name="FireButton" type="Control" parent="HUD/TouchControls" unique_id=1688909280]
@@ -166,15 +165,10 @@ theme_override_font_sizes/font_size = 28
 script = ExtResource("6_wndkh")
 
 [node name="HealthLabel" type="Label" parent="HUD" unique_id=73412667]
-anchors_preset = -1
-anchor_left = 30.0
-anchor_top = 20.0
-anchor_right = 300.0
-anchor_bottom = 70.0
-offset_left = -34560.0
-offset_top = -12960.0
-offset_right = -345599.0
-offset_bottom = -45321.0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = 70.0
 theme_override_font_sizes/font_size = 28
 script = ExtResource("8_paa45")
 
