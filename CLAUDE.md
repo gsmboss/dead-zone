@@ -167,6 +167,8 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   HubHUD (Control, скрипт ui/hub/hub_hud.gd, missions = [mission_waves, mission_kill, mission_survive]).
 - project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.png или 3D-зомби,
   3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn). Промпт картинки — ui/splash/PROMPT.md.
+- Иконка: res://icon.png (1024, углы залиты фоном, оригинал icons/icon_source.png); для экспорта Android —
+  icons/icon_192.png, adaptive_foreground_432.png, adaptive_background_432.png. Заставка Godot выключена.
 
 ## Статус и план
 Готово: этапы 1–4 и код этапа 5 (GameState, магазин, доска миссий, HUD убежища).

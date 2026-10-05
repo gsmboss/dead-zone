@@ -13,7 +13,9 @@ config_version=5
 config/name="Dead Zone"
 run/main_scene="res://boot/boot.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.02, 0.02, 0.03, 1)
+boot_splash/show_image=false
 
 [autoload]
 
