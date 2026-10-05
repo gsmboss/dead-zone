@@ -15,6 +15,11 @@ extends Resource
 ## Выстрелов (ударов) в секунду
 @export_range(0.5, 20.0, 0.1) var fire_rate: float = 4.0
 
+@export_group("Flamethrower")
+## Огнемёт: урон всем зомби в конусе на max_range каждый «выстрел», струя пламени
+@export var is_flamethrower: bool = false
+@export_range(5.0, 60.0, 1.0) var flame_cone_degrees: float = 20.0
+
 @export_group("Melee")
 ## Оружие ближнего боя: без патронов, удар на max_range веером лучей
 @export var is_melee: bool = false

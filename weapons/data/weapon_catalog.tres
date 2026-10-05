@@ -7,8 +7,9 @@
 [ext_resource type="Resource" uid="uid://5jq04uokjeru" path="res://weapons/data/rifle.tres" id="5_xjcnx"]
 [ext_resource type="Resource" path="res://weapons/data/smg.tres" id="6_smg01"]
 [ext_resource type="Resource" path="res://weapons/data/axe.tres" id="7_axe01"]
+[ext_resource type="Resource" path="res://weapons/data/flamethrower.tres" id="8_flm01"]
 
 [resource]
 script = ExtResource("1_cwg10")
-weapons = Array[ExtResource("2_gdngq")]([ExtResource("3_v5thg"), ExtResource("4_7v7ss"), ExtResource("6_smg01"), ExtResource("5_xjcnx"), ExtResource("7_axe01")])
+weapons = Array[ExtResource("2_gdngq")]([ExtResource("3_v5thg"), ExtResource("4_7v7ss"), ExtResource("6_smg01"), ExtResource("5_xjcnx"), ExtResource("8_flm01"), ExtResource("7_axe01")])
 metadata/_custom_type_script = "uid://1px8k4o813s1"

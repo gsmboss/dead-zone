@@ -50,6 +50,8 @@ const ADS_SWAY_FACTOR: float = 0.25
 const BLOOM_DECAY: float = 6.0
 ## Доп. разброс при беге (доля от spread_degrees на полной скорости)
 const MOVE_SPREAD_FACTOR: float = 0.8
+## Огнемёт: струя горит ещё столько после последнего «выстрела»
+const FLAME_HOLD_TIME: float = 0.15
 ## Длительность замаха и возврата модели ближнего боя (доли интервала удара)
 const SWING_OUT_SHARE: float = 0.35
 const SWING_BACK_SHARE: float = 0.5
@@ -90,6 +92,9 @@ var _reload_player: AudioStreamPlayer
 var _reload_stream: AudioStream
 var _hit_sound_played: bool = false
 var _swing_tween: Tween
+var _flame_particles: CPUParticles3D
+var _flame_sound: AudioStreamPlayer
+var _flame_time: float = 0.0
 var _reload_total: float = 0.0
 var _model_base_rotation: Vector3 = Vector3.ZERO
 var _anim_time: float = 0.0
@@ -305,6 +310,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_update_aim(delta)
+	_update_flame(delta)
 	if _current_model != null and is_instance_valid(_current_model):
 		_animate_model(delta)
 	if _flash_left > 0.0:
@@ -437,6 +443,9 @@ func _fire(weapon: WeaponData) -> void:
 	_magazine[_index] -= 1
 	_cooldown = weapon.get_fire_interval()
 	_hit_sound_played = false
+	if weapon.is_flamethrower:
+		_flame_burst(weapon)
+		return
 	Sfx.play_2d(weapon.fire_sound, weapon.fire_volume_db, weapon.fire_pitch)
 
 	var any_hit: bool = false
@@ -460,6 +469,96 @@ func _fire(weapon: WeaponData) -> void:
 
 	if _magazine[_index] == 0:
 		reload()
+
+
+# ---------- Огнемёт ----------
+
+## Урон всем зомби в конусе перед камерой (с проверкой стен)
+func _flame_burst(weapon: WeaponData) -> void:
+	_flame_time = FLAME_HOLD_TIME
+	var origin: Vector3 = camera.global_position
+	var forward: Vector3 = -camera.global_basis.z
+	var cone_cos: float = cos(deg_to_rad(weapon.flame_cone_degrees * 0.5))
+	var any_hit: bool = false
+	var killed: bool = false
+	for node: Node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as Zombie
+		if zombie == null or zombie.health == null or zombie.health.is_dead:
+			continue
+		var target: Vector3 = zombie.global_position + Vector3.UP
+		var offset: Vector3 = target - origin
+		var distance: float = offset.length()
+		if distance > weapon.max_range or distance < 0.01:
+			continue
+		if forward.dot(offset / distance) < cone_cos:
+			continue
+		# Огонь не проходит сквозь стены
+		var query := PhysicsRayQueryParameters3D.create(origin, target, PhysicsLayers.WORLD)
+		if not get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+			continue
+		zombie.health.take_damage(weapon.damage, target, false)
+		any_hit = true
+		killed = killed or zombie.health.is_dead
+	fired.emit(weapon)
+	_emit_ammo()
+	if any_hit:
+		hit_landed.emit(false, killed)
+	if _magazine[_index] == 0:
+		reload()
+
+
+func _update_flame(delta: float) -> void:
+	if _flame_time <= 0.0 and (_flame_particles == null or not _flame_particles.emitting):
+		return
+	_flame_time = maxf(_flame_time - delta, 0.0)
+	var active: bool = _flame_time > 0.0
+	if _flame_particles == null:
+		_create_flame()
+	_flame_particles.emitting = active
+	if active and _flame_sound.stream != null and not _flame_sound.playing:
+		_flame_sound.play()
+	elif not active and _flame_sound.playing:
+		_flame_sound.stop()
+
+
+func _create_flame() -> void:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	material.vertex_color_use_as_albedo = true
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	var quad := QuadMesh.new()
+	quad.size = Vector2.ONE * 0.5
+	quad.material = material
+	_flame_particles = CPUParticles3D.new()
+	_flame_particles.name = "Flame"
+	_flame_particles.mesh = quad
+	_flame_particles.amount = 48
+	_flame_particles.lifetime = 0.5
+	_flame_particles.emitting = false
+	_flame_particles.direction = Vector3.FORWARD
+	_flame_particles.spread = 9.0
+	_flame_particles.initial_velocity_min = 10.0
+	_flame_particles.initial_velocity_max = 14.0
+	_flame_particles.gravity = Vector3(0.0, 2.0, 0.0)
+	_flame_particles.scale_amount_min = 0.4
+	_flame_particles.scale_amount_max = 2.2
+	var ramp := Gradient.new()
+	ramp.set_color(0, Color(1.0, 0.9, 0.5, 0.9))
+	ramp.set_color(1, Color(0.5, 0.08, 0.0, 0.0))
+	ramp.add_point(0.4, Color(1.0, 0.45, 0.1, 0.8))
+	_flame_particles.color_ramp = ramp
+	var growth := Curve.new()
+	growth.add_point(Vector2(0.0, 0.3))
+	growth.add_point(Vector2(1.0, 1.0))
+	_flame_particles.scale_amount_curve = growth
+	add_child(_flame_particles)
+	_flame_particles.position = muzzle_flash.position if muzzle_flash != null else Vector3(0.1, -0.1, -0.4)
+	_flame_sound = AudioStreamPlayer.new()
+	_flame_sound.stream = Sfx.sounds.fire_loop
+	_flame_sound.volume_db = -2.0
+	add_child(_flame_sound)
 
 
 ## Удар ближнего боя: веер из трёх лучей, каждая цель получает урон один раз
