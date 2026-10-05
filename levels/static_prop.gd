@@ -43,14 +43,14 @@ func _ready() -> void:
 
 ## Габариты всех MeshInstance3D-потомков в локальных координатах этого тела
 func _compute_local_bounds() -> AABB:
-	var to_local: Transform3D = global_transform.affine_inverse()
+	var inverse_xform: Transform3D = global_transform.affine_inverse()
 	var result := AABB()
 	var has_bounds: bool = false
 	for node: Node in find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null:
 			continue
-		var bounds: AABB = (to_local * mesh_instance.global_transform) * mesh_instance.get_aabb()
+		var bounds: AABB = (inverse_xform * mesh_instance.global_transform) * mesh_instance.get_aabb()
 		if has_bounds:
 			result = result.merge(bounds)
 		else:
