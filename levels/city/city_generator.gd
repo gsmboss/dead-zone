@@ -45,6 +45,7 @@ var _no_shadow: Dictionary = {}
 var _courtyards: Array[Vector3] = []
 ## Плафоны фонарей: светятся ночью (DayNightCycle, группа night_glow)
 var _lamps: Array[Transform3D] = []
+var _loot_spots: Array[LootSpot] = []
 
 
 func _ready() -> void:
@@ -76,6 +77,9 @@ func _ready() -> void:
 	_build_lamp_glow()
 	_spawn_drivable_cars()
 	_spawn_pickups()
+	for spot: LootSpot in _loot_spots:
+		add_child(spot)
+	_spawn_survivors()
 	_build_bounds()
 
 
@@ -188,6 +192,12 @@ func _place_building(lot_center: Vector3, lot: float, ix: int, iz: int, downtown
 		facing = Vector3(ix, 0.0, 0.0) if _rng.randf() < 0.5 else Vector3(0.0, 0.0, iz)
 	var yaw: float = atan2(facing.x, facing.z)
 	_add_static(scene, _xform(lot_center, yaw, scale_value))
+	# Вход в магазин с лутом — перед фасадом
+	if downtown and _rng.randf() < config.loot_spot_chance:
+		var depth: float = maxf(bounds.size.x, bounds.size.z) * scale_value * 0.5
+		var spot := LootSpot.new()
+		spot.position = lot_center + facing.normalized() * (depth + 1.6)
+		_loot_spots.append(spot)
 	# У домов — дерево во дворе
 	if not downtown and not config.trees.is_empty() and _rng.randf() < 0.5:
 		var tree_offset: Vector3 = -facing * lot * 0.42 + Vector3(_rng.randf_range(-2.0, 2.0), 0.0, _rng.randf_range(-2.0, 2.0))
@@ -320,6 +330,33 @@ func _spawn_pickups() -> void:
 			pickup.amount = 0.35
 		pickup.position = at
 		add_child(pickup)
+
+
+## Выжившие в дальних дворах и точка эвакуации в центре (у старта игрока)
+func _spawn_survivors() -> void:
+	if config.survivor_models.is_empty() or config.survivor_count <= 0:
+		return
+	var far_yards: Array[Vector3] = []
+	for yard: Vector3 in _courtyards:
+		if yard.length() >= config.survivor_min_distance:
+			far_yards.append(yard)
+	if far_yards.is_empty():
+		far_yards = _courtyards.duplicate()
+	for i in config.survivor_count:
+		if far_yards.is_empty():
+			break
+		var index: int = _rng.randi() % far_yards.size()
+		var survivor := Survivor.new()
+		survivor.name = "Survivor%d" % (i + 1)
+		survivor.model_scene = config.survivor_models[i % config.survivor_models.size()]
+		survivor.position = far_yards[index] + Vector3(_rng.randf_range(-2.0, 2.0), 0.2, _rng.randf_range(-2.0, 2.0))
+		survivor.rotation.y = _rng.randf() * TAU
+		add_child(survivor)
+		far_yards.remove_at(index)
+	var evac := EvacPoint.new()
+	evac.name = "EvacPoint"
+	evac.position = _closest_courtyard(Vector3.ZERO) + Vector3(0.0, 0.0, -2.0)
+	add_child(evac)
 
 
 # ---------- MultiMesh и коллизии ----------

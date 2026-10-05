@@ -68,6 +68,8 @@ var _shots: int = 0
 var _hits: int = 0
 var _drops: Array[Pickup] = []
 var _waves_cleared: int = 0
+var _survivors_total: int = 0
+var _survivors_rescued: int = 0
 
 
 func _ready() -> void:
@@ -477,6 +479,16 @@ func _record_endless() -> void:
 		GameState.record_score(mission, _waves_cleared)
 
 
+## Выжившие города сообщают о себе (для цели «СПАСЕНО N / M»)
+func register_survivor() -> void:
+	_survivors_total += 1
+
+
+func on_survivor_rescued(coins: int) -> void:
+	_survivors_rescued += 1
+	announcement.emit("ВЫЖИВШИЙ СПАСЁН  +%d" % coins)
+
+
 func _on_zombie_despawned(_zombie: Zombie) -> void:
 	_alive = maxi(_alive - 1, 0)
 
@@ -603,6 +615,8 @@ func _update_objective() -> void:
 						_wave, _wave_left_to_spawn + _alive, GameState.get_best_score(mission.id)]
 				MissionData.Type.FREE_ROAM:
 					text = "УБИТО %d • ОЧКИ %d • %s" % [kills, score, format_time(elapsed)]
+					if _survivors_total > 0:
+						text += " • СПАСЕНО %d/%d" % [_survivors_rescued, _survivors_total]
 	if text != _objective_text:
 		_objective_text = text
 		objective_changed.emit(text)

@@ -75,6 +75,14 @@ event = &"item_collect"
 target = 5
 reward_coins = 150
 
+[sub_resource type="Resource" id="Quest_rescue_2"]
+script = ExtResource("2_qdt01")
+id = "rescue_2"
+title = "СПАСИ 2 ВЫЖИВШИХ В ГОРОДЕ"
+event = &"rescue"
+target = 2
+reward_coins = 250
+
 [resource]
 script = ExtResource("1_qpl01")
-quests = Array[ExtResource("2_qdt01")]([SubResource("Quest_kill_40"), SubResource("Quest_kill_100"), SubResource("Quest_head_15"), SubResource("Quest_head_40"), SubResource("Quest_tank_5"), SubResource("Quest_boss_1"), SubResource("Quest_win_2"), SubResource("Quest_win_4"), SubResource("Quest_items_5")])
+quests = Array[ExtResource("2_qdt01")]([SubResource("Quest_kill_40"), SubResource("Quest_kill_100"), SubResource("Quest_head_15"), SubResource("Quest_head_40"), SubResource("Quest_tank_5"), SubResource("Quest_boss_1"), SubResource("Quest_win_2"), SubResource("Quest_win_4"), SubResource("Quest_items_5"), SubResource("Quest_rescue_2")])

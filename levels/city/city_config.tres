@@ -69,6 +69,10 @@
 [ext_resource type="PackedScene" path="res://models/environment/FireHydrant.gltf" id="c66"]
 [ext_resource type="PackedScene" path="res://models/environment/Pipes.gltf" id="c67"]
 [ext_resource type="PackedScene" path="res://models/environment/StreetLights.gltf" id="c68"]
+[ext_resource type="PackedScene" uid="uid://dslw3rc6df824" path="res://models/zombies/Characters_Lis.gltf" id="s1"]
+[ext_resource type="PackedScene" uid="uid://cwccpqvnf6gds" path="res://models/zombies/Characters_Matt.gltf" id="s2"]
+[ext_resource type="PackedScene" uid="uid://dihkut06hhkvb" path="res://models/zombies/Characters_Sam.gltf" id="s3"]
+[ext_resource type="PackedScene" uid="uid://kb4dy6tcbcs3" path="res://models/zombies/Characters_Shaun.gltf" id="s4"]
 
 [resource]
 script = ExtResource("1_cfg01")
@@ -82,3 +86,4 @@ wrecks = Array[PackedScene]([ExtResource("c45"), ExtResource("c46"), ExtResource
 drivable_cars = Array[PackedScene]([ExtResource("c45"), ExtResource("c46"), ExtResource("c47"), ExtResource("c49"), ExtResource("c48"), ExtResource("c50")])
 props = Array[PackedScene]([ExtResource("c51"), ExtResource("c52"), ExtResource("c53"), ExtResource("c54"), ExtResource("c55"), ExtResource("c56"), ExtResource("c57"), ExtResource("c58"), ExtResource("c59"), ExtResource("c60"), ExtResource("c61"), ExtResource("c62"), ExtResource("c63"), ExtResource("c64"), ExtResource("c65"), ExtResource("c66"), ExtResource("c67")])
 street_light = ExtResource("c68")
+survivor_models = Array[PackedScene]([ExtResource("s1"), ExtResource("s2"), ExtResource("s3"), ExtResource("s4")])

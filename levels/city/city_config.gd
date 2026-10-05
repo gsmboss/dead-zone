@@ -27,6 +27,8 @@ extends Resource
 ## Мелочи на тротуарах и во дворах (бочки, барьеры, мусор)
 @export var props: Array[PackedScene] = []
 @export var street_light: PackedScene
+## Модели выживших (Characters_* Quaternius)
+@export var survivor_models: Array[PackedScene] = []
 
 @export_group("Scale")
 ## Kenney: 1 единица ≈ ширина дороги; масштаб под метры игры
@@ -40,5 +42,10 @@ extends Resource
 @export_range(0, 80) var wreck_count: int = 24
 @export_range(0, 200) var prop_count: int = 90
 @export_range(0, 40) var pickup_count: int = 14
+@export_range(0, 12) var survivor_count: int = 4
+## Выжившие не ближе этого к центру (точке эвакуации)
+@export var survivor_min_distance: float = 45.0
+## Доля зданий делового района с обыскиваемым входом (лут)
+@export_range(0.0, 1.0, 0.05) var loot_spot_chance: float = 0.25
 ## Фонари вдоль дорог через столько метров (0 — без фонарей)
 @export var street_light_spacing: float = 24.0
