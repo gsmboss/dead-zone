@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://k6p8yjsd7l10v"]
+
+[ext_resource type="Script" uid="uid://52rwuxjshexxm" path="res://hub/hub.gd" id="1_hub01"]
+[ext_resource type="PackedScene" uid="uid://ckdq70rsi165h" path="res://player/player.tscn" id="2_plr01"]
+[ext_resource type="Script" uid="uid://nwkjoliwpxc7" path="res://hub/interactable.gd" id="3_int01"]
+[ext_resource type="Script" uid="uid://dxkjvqcbx2yt6" path="res://ui/touch/touch_controls.gd" id="4_tch01"]
+[ext_resource type="Script" uid="uid://b5ehpirj8va4c" path="res://ui/touch/virtual_joystick.gd" id="5_joy01"]
+[ext_resource type="Script" uid="uid://l7ge3tjil0vp" path="res://ui/touch/touch_action_button.gd" id="6_btn01"]
+[ext_resource type="Script" uid="uid://dm0hvya1p5p46" path="res://ui/hub/hub_hud.gd" id="7_hud01"]
+[ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="8_mdt01"]
+[ext_resource type="Resource" uid="uid://c725jtemdrvwt" path="res://missions/data/mission_waves.tres" id="9_mwv01"]
+[ext_resource type="Resource" uid="uid://npkxgt3ikibj" path="res://missions/data/mission_kill.tres" id="10_mkl01"]
+[ext_resource type="Resource" uid="uid://c3rr631lkbms2" path="res://missions/data/mission_survive.tres" id="11_msv01"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub01"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_hub01"]
+sky_material = SubResource("ProceduralSkyMaterial_hub01")
+
+[sub_resource type="Environment" id="Environment_hub01"]
+background_mode = 2
+sky = SubResource("Sky_hub01")
+ambient_light_source = 3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_term01"]
+size = Vector3(3, 2, 3)
+
+[node name="Hub" type="Node3D" unique_id=846140359]
+script = ExtResource("1_hub01")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=626033331]
+environment = SubResource("Environment_hub01")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=609936320]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Room" type="Node3D" parent="." unique_id=571501370]
+
+[node name="Floor" type="CSGBox3D" parent="Room" unique_id=1867148235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+use_collision = true
+size = Vector3(16, 0.5, 16)
+
+[node name="WallNorth" type="CSGBox3D" parent="Room" unique_id=618449449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8)
+use_collision = true
+size = Vector3(16, 4, 0.4)
+
+[node name="WallSouth" type="CSGBox3D" parent="Room" unique_id=1503359194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8)
+use_collision = true
+size = Vector3(16, 4, 0.4)
+
+[node name="WallWest" type="CSGBox3D" parent="Room" unique_id=597186023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 0)
+use_collision = true
+size = Vector3(0.4, 4, 16)
+
+[node name="WallEast" type="CSGBox3D" parent="Room" unique_id=1290073392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0)
+use_collision = true
+size = Vector3(0.4, 4, 16)
+
+[node name="Player" parent="." unique_id=1830088657 node_paths=PackedStringArray("touch_controls") instance=ExtResource("2_plr01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4)
+touch_controls = NodePath("../HUD/TouchControls")
+
+[node name="MissionTerminal" type="Area3D" parent="." unique_id=1738755715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -5)
+script = ExtResource("3_int01")
+prompt = "МИССИИ"
+action_id = &"missions"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MissionTerminal" unique_id=1006852060]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_term01")
+
+[node name="Desk" type="CSGBox3D" parent="MissionTerminal" unique_id=911638134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+size = Vector3(2, 1, 1)
+
+[node name="Label3D" type="Label3D" parent="MissionTerminal" unique_id=824246358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+billboard = 1
+text = "МИССИИ"
+font_size = 96
+
+[node name="ShopTerminal" type="Area3D" parent="." unique_id=813106454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -5)
+script = ExtResource("3_int01")
+prompt = "ОРУЖЕЙНАЯ"
+action_id = &"shop"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopTerminal" unique_id=769882759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_term01")
+
+[node name="Desk" type="CSGBox3D" parent="ShopTerminal" unique_id=1367383851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+size = Vector3(2, 1, 1)
+
+[node name="Label3D" type="Label3D" parent="ShopTerminal" unique_id=1975959397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+billboard = 1
+text = "ОРУЖЕЙНАЯ"
+font_size = 96
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=329524396]
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1633658255 node_paths=PackedStringArray("joystick")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_tch01")
+joystick = NodePath("Joystick")
+
+[node name="Joystick" type="Control" parent="HUD/TouchControls" unique_id=479975472]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.4
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("5_joy01")
+
+[node name="JumpButton" type="Control" parent="HUD/TouchControls" unique_id=2005940058]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -170.0
+offset_right = -260.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("6_btn01")
+action = &"jump"
+label = "JUMP"
+
+[node name="HubHUD" type="Control" parent="HUD" unique_id=700354219]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_hud01")
+missions = Array[ExtResource("8_mdt01")]([ExtResource("9_mwv01"), ExtResource("10_mkl01"), ExtResource("11_msv01")])
