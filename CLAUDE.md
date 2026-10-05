@@ -165,7 +165,8 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   с детьми Joystick (TouchJoystick, якоря 0,0,0.4,1, отступы 0) и JumpButton (TouchActionButton,
   action "jump", label "JUMP", якоря все 1, отступы -370,-170,-260,-60); последним ребёнком HUD —
   HubHUD (Control, скрипт ui/hub/hub_hud.gd, missions = [mission_waves, mission_kill, mission_survive]).
-- project.godot: run/main_scene = hub/hub.tscn.
+- project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.png или 3D-зомби,
+  3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn). Промпт картинки — ui/splash/PROMPT.md.
 
 ## Статус и план
 Готово: этапы 1–4 и код этапа 5 (GameState, магазин, доска миссий, HUD убежища).
