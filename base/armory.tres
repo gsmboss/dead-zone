@@ -11,3 +11,4 @@ description = "Запас патронов всех стволов +30%"
 price = 800
 icon_color = Color(0.55, 0.6, 0.25, 1)
 hub_model = ExtResource("2_mdl01")
+hub_model_scale = 2.0

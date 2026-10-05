@@ -11,3 +11,4 @@ description = "Открывает улучшения машин: таран и �
 price = 700
 icon_color = Color(0.3, 0.5, 0.85, 1)
 hub_model = ExtResource("2_mdl01")
+hub_model_scale = 0.6

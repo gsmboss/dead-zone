@@ -8,6 +8,7 @@ extends Control
 var _coins_label: Label
 var _daily_button: Button
 var _settings_button: Button
+var _base_button: Button
 var _interact_button: Button
 var _current: Interactable
 var _window: HubWindow
@@ -53,6 +54,15 @@ func _build_ui() -> void:
 	_settings_button.offset_top = 36.0 + UIKit.BUTTON_HEIGHT
 	_settings_button.offset_right = 290.0
 	_settings_button.offset_bottom = 36.0 + UIKit.BUTTON_HEIGHT * 2.0
+
+	_base_button = UIKit.button("БАЗА", 26, 260.0)
+	_base_button.pressed.connect(func() -> void: _open_window(BasePanel.new()))
+	add_child(_base_button)
+	_base_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
+	_base_button.offset_left = 30.0
+	_base_button.offset_top = 52.0 + UIKit.BUTTON_HEIGHT * 2.0
+	_base_button.offset_right = 290.0
+	_base_button.offset_bottom = 52.0 + UIKit.BUTTON_HEIGHT * 3.0
 
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
@@ -130,6 +140,7 @@ func _open_window(window: HubWindow) -> void:
 	_interact_button.visible = false
 	_daily_button.visible = false
 	_settings_button.visible = false
+	_base_button.visible = false
 	_set_player_controls(false)
 
 
@@ -138,6 +149,7 @@ func _on_window_closed() -> void:
 	_interact_button.visible = _current != null
 	_daily_button.visible = true
 	_settings_button.visible = true
+	_base_button.visible = true
 	_set_player_controls(true)
 
 

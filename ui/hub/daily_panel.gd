@@ -10,6 +10,10 @@ func _ready() -> void:
 
 
 func _build_content() -> void:
+	var event: DailyEventData = GameState.get_daily_event()
+	if event != null:
+		var banner := UIKit.label("СОБЫТИЕ ДНЯ: %s — %s" % [event.title, event.description], 24, content)
+		banner.modulate = UIKit.GOOD
 	content.add_child(_make_daily_card())
 	UIKit.label("ЗАДАНИЯ НА СЕГОДНЯ", 28, content).modulate = UIKit.ACCENT
 	var quests: Array[Dictionary] = GameState.get_quests()

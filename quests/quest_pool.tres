@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://quests/quest_pool.gd" id="1_qpl01"]
 [ext_resource type="Script" path="res://quests/quest_data.gd" id="2_qdt01"]
+[ext_resource type="Script" path="res://quests/daily_event_data.gd" id="3_evt01"]
 
 [sub_resource type="Resource" id="Quest_kill_40"]
 script = ExtResource("2_qdt01")
@@ -83,6 +84,43 @@ event = &"rescue"
 target = 2
 reward_coins = 250
 
+[sub_resource type="Resource" id="Event_double"]
+script = ExtResource("3_evt01")
+id = "double"
+title = "ДВОЙНЫЕ МОНЕТЫ"
+description = "Все монеты за миссии ×2"
+coin_multiplier = 2.0
+spawn_multiplier = 1.0
+drop_multiplier = 1.0
+
+[sub_resource type="Resource" id="Event_horde"]
+script = ExtResource("3_evt01")
+id = "horde"
+title = "ОРДА"
+description = "Зомби приходят в 1.5 раза чаще, монеты ×1.5"
+coin_multiplier = 1.5
+spawn_multiplier = 1.5
+drop_multiplier = 1.0
+
+[sub_resource type="Resource" id="Event_scavenger"]
+script = ExtResource("3_evt01")
+id = "scavenger"
+title = "ДЕНЬ МАРОДЁРА"
+description = "Лом, патроны и аптечки выпадают в 2 раза чаще"
+coin_multiplier = 1.0
+spawn_multiplier = 1.0
+drop_multiplier = 2.0
+
+[sub_resource type="Resource" id="Event_quiet"]
+script = ExtResource("3_evt01")
+id = "quiet"
+title = "ТИХИЙ ДЕНЬ"
+description = "Зомби приходят реже, можно спокойно исследовать город"
+coin_multiplier = 1.0
+spawn_multiplier = 0.75
+drop_multiplier = 1.0
+
 [resource]
 script = ExtResource("1_qpl01")
 quests = Array[ExtResource("2_qdt01")]([SubResource("Quest_kill_40"), SubResource("Quest_kill_100"), SubResource("Quest_head_15"), SubResource("Quest_head_40"), SubResource("Quest_tank_5"), SubResource("Quest_boss_1"), SubResource("Quest_win_2"), SubResource("Quest_win_4"), SubResource("Quest_items_5"), SubResource("Quest_rescue_2")])
+events = Array[ExtResource("3_evt01")]([SubResource("Event_double"), SubResource("Event_horde"), SubResource("Event_scavenger"), SubResource("Event_quiet")])

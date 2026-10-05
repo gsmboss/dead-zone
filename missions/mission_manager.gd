@@ -69,6 +69,7 @@ var _hits: int = 0
 var _drops: Array[Pickup] = []
 var _waves_cleared: int = 0
 var _survivors_total: int = 0
+var _event: DailyEventData
 var _survivors_rescued: int = 0
 
 
@@ -96,6 +97,7 @@ func _ready() -> void:
 	_health_multiplier = difficulty
 	_damage_multiplier = 1.0 + (difficulty - 1.0) * DAMAGE_DIFFICULTY_SHARE
 	_reward_multiplier = GameState.get_reward_multiplier(mission.id)
+	_event = GameState.get_daily_event()
 	_start.call_deferred()
 
 
@@ -131,7 +133,11 @@ func _start() -> void:
 
 	state = State.STARTING
 	_phase_timer = mission.start_delay
-	announcement.emit(mission.title if _level <= 1 else "%s • УРОВЕНЬ %d" % [mission.title, _level])
+	var title: String = mission.title if _level <= 1 else "%s • УРОВЕНЬ %d" % [mission.title, _level]
+	if _event != null and (not is_equal_approx(_event.coin_multiplier, 1.0)
+			or not is_equal_approx(_event.spawn_multiplier, 1.0) or not is_equal_approx(_event.drop_multiplier, 1.0)):
+		title += "\nСОБЫТИЕ ДНЯ: %s" % _event.title
+	announcement.emit(title)
 	_update_objective()
 
 
@@ -318,13 +324,28 @@ func on_item_collected() -> void:
 
 # ---------- Дропы ----------
 
+## Множитель события дня: &"coins", &"spawn", &"drops"
+func _event_value(kind: StringName) -> float:
+	if _event == null:
+		return 1.0
+	match kind:
+		&"coins":
+			return maxf(_event.coin_multiplier, 0.0)
+		&"spawn":
+			return maxf(_event.spawn_multiplier, 0.1)
+		&"drops":
+			return maxf(_event.drop_multiplier, 0.0)
+	return 1.0
+
+
 func _try_drop(at: Vector3) -> void:
 	for i in range(_drops.size() - 1, -1, -1):
 		if not is_instance_valid(_drops[i]):
 			_drops.remove_at(i)
 	if _drops.size() >= MAX_DROPS_ALIVE:
 		return
-	if _rng.randf() < mission.scrap_drop_chance:
+	var drop_boost: float = _event_value(&"drops")
+	if _rng.randf() < mission.scrap_drop_chance * drop_boost:
 		var scrap := Pickup.new()
 		scrap.kind = Pickup.Kind.SCRAP
 		scrap.amount = 1.0
@@ -334,9 +355,9 @@ func _try_drop(at: Vector3) -> void:
 		_drops.append(scrap)
 	var roll: float = _rng.randf()
 	var kind: Pickup.Kind
-	if roll < mission.health_drop_chance:
+	if roll < mission.health_drop_chance * drop_boost:
 		kind = Pickup.Kind.HEALTH
-	elif roll < mission.health_drop_chance + mission.ammo_drop_chance:
+	elif roll < (mission.health_drop_chance + mission.ammo_drop_chance) * drop_boost:
 		kind = Pickup.Kind.AMMO
 	else:
 		return
@@ -365,7 +386,7 @@ func _current_spawn_interval() -> float:
 	var t: float = clampf(elapsed / DIFFICULTY_RAMP_TIME, 0.0, 1.0)
 	# Ночью (город) зомби приходят чаще
 	return lerpf(mission.spawn_interval, mission.min_spawn_interval, t) \
-		/ (1.0 + DayNightCycle.night_amount * NIGHT_SPAWN_BOOST)
+		/ (1.0 + DayNightCycle.night_amount * NIGHT_SPAWN_BOOST) / _event_value(&"spawn")
 
 
 func _difficulty_level() -> int:
@@ -463,7 +484,7 @@ func leave_mission() -> void:
 	if state == State.WON or state == State.LOST:
 		return
 	state = State.LOST
-	var earned: int = score + _waves_cleared * mission.coins_per_wave
+	var earned: int = roundi((score + _waves_cleared * mission.coins_per_wave) * _event_value(&"coins"))
 	_record_endless()
 	GameState.add_coins(earned)
 	GameState.save_game()
@@ -540,8 +561,8 @@ func _finish(won: bool) -> void:
 
 	# Монеты: очки за убитых всегда + награда за победу (растёт с уровнем миссии)
 	# + за пройденные волны бесконечного режима
-	var earned: int = score + (roundi(mission.reward_coins * _reward_multiplier) if won else 0) \
-		+ _waves_cleared * mission.coins_per_wave
+	var earned: int = roundi((score + (roundi(mission.reward_coins * _reward_multiplier) if won else 0)
+		+ _waves_cleared * mission.coins_per_wave) * _event_value(&"coins"))
 	_record_endless()
 	if won:
 		GameState.complete_mission(mission, score, stars)

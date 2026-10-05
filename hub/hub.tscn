@@ -19,9 +19,7 @@
 [ext_resource type="PackedScene" path="res://models/environment/Barrel.gltf" id="m_Barrel"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest.gltf" id="m_Chest"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest_Special.gltf" id="m_Chest_Special"]
-[ext_resource type="PackedScene" path="res://models/environment/CinderBlock.gltf" id="m_CinderBlock"]
 [ext_resource type="PackedScene" path="res://models/environment/Container_Green.gltf" id="m_Container_Green"]
-[ext_resource type="PackedScene" path="res://models/environment/Couch.gltf" id="m_Couch"]
 [ext_resource type="PackedScene" path="res://models/environment/FireHydrant.gltf" id="m_FireHydrant"]
 [ext_resource type="PackedScene" path="res://models/environment/Pallet.gltf" id="m_Pallet"]
 [ext_resource type="PackedScene" path="res://models/environment/Pipes.gltf" id="m_Pipes"]
@@ -32,8 +30,6 @@
 [ext_resource type="PackedScene" path="res://models/environment/TrafficBarrier_2.gltf" id="m_TrafficBarrier_2"]
 [ext_resource type="PackedScene" path="res://models/environment/TrafficCone_1.gltf" id="m_TrafficCone_1"]
 [ext_resource type="PackedScene" path="res://models/environment/TrafficCone_2.gltf" id="m_TrafficCone_2"]
-[ext_resource type="PackedScene" path="res://models/environment/TrashBag_1.gltf" id="m_TrashBag_1"]
-[ext_resource type="PackedScene" path="res://models/environment/TrashBag_2.gltf" id="m_TrashBag_2"]
 [ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup_Armored.gltf" id="m_Vehicle_Pickup_Armored"]
 [ext_resource type="PackedScene" path="res://models/environment/WaterTower.gltf" id="m_WaterTower"]
 [ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
@@ -45,6 +41,7 @@
 [ext_resource type="Script" path="res://hub/hologram.gd" id="40_holo1"]
 [ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="41_zmb01"]
 [ext_resource type="PackedScene" uid="uid://bsgnpeqcp580x" path="res://models/weapons/Rifle.gltf" id="42_rfl01"]
+[ext_resource type="Script" path="res://hub/base_visuals.gd" id="60_base1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub01"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -279,36 +276,6 @@ custom_center = Vector3(0, 3.3, 0)
 
 [node name="Model" parent="Props/StreetLight2" unique_id=1838698399 instance=ExtResource("m_StreetLights")]
 
-[node name="Couch" type="StaticBody3D" parent="Props" unique_id=2012077536]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.5, 0, 7)
-script = ExtResource("30_prop1")
-
-[node name="Model" parent="Props/Couch" unique_id=1589147795 instance=ExtResource("m_Couch")]
-
-[node name="CinderBlock1" type="StaticBody3D" parent="Props" unique_id=1462476977]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.6, 0, 7.3)
-script = ExtResource("30_prop1")
-
-[node name="Model" parent="Props/CinderBlock1" unique_id=189937331 instance=ExtResource("m_CinderBlock")]
-
-[node name="CinderBlock2" type="StaticBody3D" parent="Props" unique_id=1378690149]
-transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, -0.5, 0.23, 7.3)
-script = ExtResource("30_prop1")
-
-[node name="Model" parent="Props/CinderBlock2" unique_id=950747065 instance=ExtResource("m_CinderBlock")]
-
-[node name="TrashBag1" type="StaticBody3D" parent="Props" unique_id=1072799061]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 0, 7.3)
-script = ExtResource("30_prop1")
-
-[node name="Model" parent="Props/TrashBag1" unique_id=1504287947 instance=ExtResource("m_TrashBag_1")]
-
-[node name="TrashBag2" type="StaticBody3D" parent="Props" unique_id=1686809769]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 3.6, 0, 7.2)
-script = ExtResource("30_prop1")
-
-[node name="Model" parent="Props/TrashBag2" unique_id=1421910847 instance=ExtResource("m_TrashBag_2")]
-
 [node name="FireHydrant" type="StaticBody3D" parent="Props" unique_id=1496016796]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0, 6.8)
 script = ExtResource("30_prop1")
@@ -352,6 +319,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -14)
 
 [node name="TownSign" parent="Props/Outside" unique_id=1770975072 instance=ExtResource("m_TownSign")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -13)
+
+[node name="BaseBuildings" type="Node3D" parent="." unique_id=1560241127]
+script = ExtResource("60_base1")
+
+[node name="Slot1" type="Marker3D" parent="BaseBuildings" unique_id=1183081030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -5.5, 0, 6.4)
+
+[node name="Slot2" type="Marker3D" parent="BaseBuildings" unique_id=466655869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -1.8, 0, 6.4)
+
+[node name="Slot3" type="Marker3D" parent="BaseBuildings" unique_id=748166977]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 1.9, 0, 6.4)
+
+[node name="Slot4" type="Marker3D" parent="BaseBuildings" unique_id=2138240631]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 5.3, 0, 6.8)
 
 [node name="Player" parent="." unique_id=1830088657 node_paths=PackedStringArray("touch_controls") instance=ExtResource("2_plr01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4)

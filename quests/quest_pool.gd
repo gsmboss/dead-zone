@@ -3,6 +3,8 @@ extends Resource
 ## Пул ежедневных заданий; каждый день выбираются daily_count штук.
 
 @export var quests: Array[QuestData] = []
+## События дня (одно на день, выбирается по дате)
+@export var events: Array[DailyEventData] = []
 @export_range(1, 5) var daily_count: int = 3
 ## Награда за вход: reward_base × день серии (серия до max_streak дней)
 @export var daily_reward_base: int = 50

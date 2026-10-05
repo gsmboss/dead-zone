@@ -11,3 +11,4 @@ description = "Сборка гранат, коктейлей, аптечек и 
 price = 400
 icon_color = Color(0.8, 0.55, 0.2, 1)
 hub_model = ExtResource("2_mdl01")
+hub_model_scale = 0.5

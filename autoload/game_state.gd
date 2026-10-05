@@ -422,6 +422,15 @@ func get_daily_reward() -> int:
 	return quest_pool.daily_reward_base * get_next_streak()
 
 
+## Событие сегодняшнего дня (одинаковое весь день); null — событий нет
+func get_daily_event() -> DailyEventData:
+	if quest_pool.events.is_empty():
+		return null
+	var rng := RandomNumberGenerator.new()
+	rng.seed = get_today() * 7919 + 17
+	return quest_pool.events[rng.randi() % quest_pool.events.size()]
+
+
 ## Возвращает выданные монеты (0 — сегодня уже получено)
 func claim_daily() -> int:
 	if not can_claim_daily():
