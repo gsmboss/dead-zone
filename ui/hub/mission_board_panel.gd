@@ -28,9 +28,22 @@ func _make_mission_card(mission: MissionData) -> Control:
 	card.add_child(box)
 
 	var level: int = GameState.get_mission_level(mission.id)
-	UIKit.label(mission.title if level <= 1 else "%s  •  УРОВЕНЬ %d" % [mission.title, level], 32, box)
+	var endless_mode: bool = mission.type == MissionData.Type.ENDLESS or mission.type == MissionData.Type.FREE_ROAM
+	UIKit.label(mission.title if level <= 1 or endless_mode else "%s  •  УРОВЕНЬ %d" % [mission.title, level], 32, box)
 	if not mission.description.is_empty():
 		UIKit.label(mission.description, 22, box).modulate = UIKit.DIM
+
+	# Бесконечные режимы: без звёзд и уровня, свой рекорд
+	if mission.type == MissionData.Type.ENDLESS or mission.type == MissionData.Type.FREE_ROAM:
+		var endless_info: String = "Монеты за каждого убитого зомби"
+		if mission.type == MissionData.Type.ENDLESS:
+			endless_info = "Монеты: %d за волну + за убитых  •  рекорд %d волн" % [
+				mission.coins_per_wave, GameState.get_best_score(mission.id)]
+		UIKit.label(endless_info, 22, box).modulate = UIKit.ACCENT
+		var play := UIKit.button("ИГРАТЬ", 28)
+		play.pressed.connect(func() -> void: GameState.start_mission(mission))
+		box.add_child(play)
+		return card
 
 	var reward: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
 	var info := "Награда: %d монет" % reward

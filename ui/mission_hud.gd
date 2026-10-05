@@ -217,6 +217,8 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 	var level: int = int(stats.get("level", 1))
 	lines.append(str(stats.get("title", "")) + ("" if level <= 1 else "  •  уровень %d" % level))
 	lines.append("Убито зомби: %d" % int(stats.get("kills", 0)))
+	if bool(stats.get("endless", false)):
+		lines.append("Волн пройдено: %d" % int(stats.get("waves", 0)))
 	lines.append("Очки: %d" % int(stats.get("score", 0)))
 	lines.append("Время: %s" % MissionManager.format_time(float(stats.get("time", 0.0))))
 	lines.append("Точность: %d%%  •  Здоровье: %d%%" % [

@@ -1,0 +1,213 @@
+class_name DriveController
+extends Node
+## Посадка в машины уровня (группа drivable_cars) и выход из них.
+## Рядом с машиной появляется кнопка «СЕСТЬ» (или E), в машине — «ВЫЙТИ».
+## Пока игрок за рулём: он спрятан на крыше машины (зомби видят и атакуют его),
+## джойстик управляет машиной, кнопки стрельбы скрыты, показан спидометр.
+
+const ENTER_DISTANCE: float = 3.8
+const CHECK_INTERVAL: float = 0.15
+const BUTTON_SIZE: float = 130.0
+## Выйти можно только почти на месте
+const MAX_EXIT_SPEED: float = 5.0
+
+var _player: Player
+var _touch_controls: TouchControls
+var _button: TouchActionButton
+var _speed_label: Label
+var _hud_layer: CanvasLayer
+var _car: DrivableCar          # машина, в которой сидим
+var _nearby: DrivableCar       # ближайшая машина рядом
+var _check_timer: float = 0.0
+var _saved_layer: int = 0
+var _saved_mask: int = 0
+var _hidden_buttons: Array[TouchActionButton] = []
+
+
+func _ready() -> void:
+	_setup.call_deferred()
+
+
+func _setup() -> void:
+	_player = get_tree().get_first_node_in_group(&"player") as Player
+	if _player == null:
+		push_warning("DriveController: игрок не найден")
+		set_process(false)
+		set_physics_process(false)
+		return
+	if _player.health != null:
+		_player.health.died.connect(_on_player_died)
+	_touch_controls = _player.touch_controls
+	_hud_layer = CanvasLayer.new()
+	add_child(_hud_layer)
+	_build_speed_label()
+	if _touch_controls != null:
+		_button = TouchActionButton.new()
+		_button.action = &"interact"
+		_button.label = "СЕСТЬ"
+		_button.base_color = Color(0.2, 0.55, 0.35)
+		_button.use_action_color = false
+		_button.name = "DriveButton"
+		_touch_controls.add_child(_button)
+		_button.anchor_left = 1.0
+		_button.anchor_right = 1.0
+		_button.anchor_top = 0.5
+		_button.anchor_bottom = 0.5
+		_button.offset_left = -BUTTON_SIZE - 40.0
+		_button.offset_right = -40.0
+		_button.offset_top = -BUTTON_SIZE * 0.5 - 40.0
+		_button.offset_bottom = BUTTON_SIZE * 0.5 - 40.0
+		_button.visible = false
+		_touch_controls.register_button(_button)
+
+
+func _process(delta: float) -> void:
+	if _player == null:
+		return
+	if _car == null:
+		_check_timer -= delta
+		if _check_timer <= 0.0:
+			_check_timer = CHECK_INTERVAL
+			_nearby = _find_nearby_car()
+			_update_button()
+	else:
+		_speed_label.text = "%d КМ/Ч" % roundi(_car.get_speed_kmh())
+	if Input.is_action_just_pressed(&"interact"):
+		if _car != null:
+			_exit_car()
+		elif _nearby != null:
+			_enter_car(_nearby)
+
+
+func _physics_process(_delta: float) -> void:
+	if _car == null or _player == null:
+		return
+	var input: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+	if _touch_controls != null:
+		var touch: Vector2 = _touch_controls.get_move_vector()
+		if touch.length() > input.length():
+			input = touch
+	_car.set_input(input.x, -input.y)
+	# Игрок едет на крыше (спрятан): зомби идут к машине и видят цель
+	_player.global_position = _car.global_position + Vector3.UP * _car.get_roof_height()
+
+
+func _find_nearby_car() -> DrivableCar:
+	if _player.health != null and _player.health.is_dead:
+		return null
+	var best: DrivableCar
+	var best_distance: float = ENTER_DISTANCE
+	for node: Node in get_tree().get_nodes_in_group(DrivableCar.GROUP):
+		var car := node as DrivableCar
+		if car == null or car.is_driven():
+			continue
+		var distance: float = car.global_position.distance_to(_player.global_position)
+		if distance < best_distance:
+			best_distance = distance
+			best = car
+	return best
+
+
+func _update_button() -> void:
+	if _button == null:
+		return
+	var should_show: bool = _car != null or _nearby != null
+	var caption: String = "ВЫЙТИ" if _car != null else "СЕСТЬ"
+	if _button.visible != should_show or _button.label != caption:
+		_button.visible = should_show
+		_button.label = caption
+		_button.queue_redraw()
+
+
+func _enter_car(car: DrivableCar) -> void:
+	_car = car
+	_saved_layer = _player.collision_layer
+	_saved_mask = _player.collision_mask
+	_player.collision_layer = 0
+	_player.collision_mask = 0
+	_player.input_enabled = false
+	_player.visible = false
+	_player.process_mode = Node.PROCESS_MODE_DISABLED
+	if _player.weapon_manager != null:
+		_player.weapon_manager.set_aiming(false)
+	_set_combat_buttons_visible(false)
+	car.enter()
+	_speed_label.visible = true
+	_update_button()
+	Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 0.8, 0.0)
+
+
+func _exit_car() -> void:
+	if _car == null:
+		return
+	if absf(_car.speed) > MAX_EXIT_SPEED:
+		Sfx.error()  # сначала притормози
+		return
+	var car: DrivableCar = _car
+	_car = null
+	car.exit()
+	_player.process_mode = Node.PROCESS_MODE_INHERIT
+	_player.global_position = car.get_exit_position()
+	_player.velocity = Vector3.ZERO
+	_player.collision_layer = _saved_layer
+	_player.collision_mask = _saved_mask
+	_player.visible = true
+	_player.camera.make_current()
+	if _player.health == null or not _player.health.is_dead:
+		_player.input_enabled = true
+	_set_combat_buttons_visible(true)
+	if _touch_controls != null:
+		_touch_controls.consume_look_delta()  # свайпы за рулём не крутят камеру после выхода
+	_speed_label.visible = false
+	_nearby = car
+	_update_button()
+
+
+## Кнопки стрельбы, прыжка и т.п. в машине не нужны
+func _set_combat_buttons_visible(visible_state: bool) -> void:
+	if _touch_controls == null:
+		return
+	if not visible_state:
+		_hidden_buttons.clear()
+		for child: Node in _touch_controls.get_children():
+			var button := child as TouchActionButton
+			if button == null or button == _button or not button.visible:
+				continue
+			if button.action in [&"pause", &"inventory"]:
+				continue
+			button.force_release()
+			button.visible = false
+			_hidden_buttons.append(button)
+	else:
+		for button: TouchActionButton in _hidden_buttons:
+			if is_instance_valid(button):
+				button.visible = true
+		_hidden_buttons.clear()
+
+
+func _on_player_died() -> void:
+	if _car == null:
+		return
+	# Погиб за рулём: машина катится дальше, камера остаётся на ней
+	var car: DrivableCar = _car
+	_car = null
+	car.exit()
+	_speed_label.visible = false
+	if _button != null:
+		_button.visible = false
+
+
+func _build_speed_label() -> void:
+	_speed_label = Label.new()
+	_speed_label.visible = false
+	_speed_label.add_theme_font_size_override(&"font_size", 40)
+	_speed_label.add_theme_constant_override(&"outline_size", 10)
+	_speed_label.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.8))
+	_speed_label.modulate = UIKit.ACCENT
+	_speed_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hud_layer.add_child(_speed_label)
+	_speed_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	_speed_label.offset_left = -150.0
+	_speed_label.offset_right = 150.0
+	_speed_label.offset_top = -90.0
+	_speed_label.offset_bottom = -30.0

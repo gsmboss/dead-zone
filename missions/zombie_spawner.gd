@@ -2,6 +2,8 @@ class_name ZombieSpawner
 extends Node3D
 ## Создаёт зомби в точках ZombieSpawnPoint.
 ## Приоритет: точки вне поля зрения игрока → просто далёкие → любые.
+## Открытый мир (dynamic_spawn): точки берутся на навмеше в кольце вокруг игрока,
+## а зомби дальше despawn_distance убираются (без награды), чтобы держать лимит.
 
 signal zombie_spawned(zombie: Zombie)
 
@@ -12,6 +14,21 @@ signal zombie_spawned(zombie: Zombie)
 @export var spawn_jitter: float = 1.0
 ## Сразу сообщать зомби, где игрок
 @export var aggressive: bool = true
+
+@export_group("Open World")
+## Спавн вокруг игрока по навмешу вместо точек ZombieSpawnPoint
+@export var dynamic_spawn: bool = false
+@export var dynamic_min_distance: float = 22.0
+@export var dynamic_max_distance: float = 42.0
+## Зомби дальше этого убираются (0 — не убирать)
+@export var despawn_distance: float = 70.0
+
+const DYNAMIC_ATTEMPTS: int = 8
+const DESPAWN_CHECK_INTERVAL: float = 1.0
+## Точка на навмеше не дальше этого от выбранной (иначе там стена/здание)
+const NAV_SNAP_TOLERANCE: float = 3.0
+
+var _despawn_timer: float = 0.0
 
 var _rng := RandomNumberGenerator.new()
 var _warned_no_points: bool = false
@@ -30,7 +47,7 @@ func spawn(data: ZombieData, health_multiplier: float = 1.0, damage_multiplier: 
 		return null
 
 	var player := get_tree().get_first_node_in_group(&"player") as Node3D
-	var point: Variant = _pick_point(player)
+	var point: Variant = _pick_dynamic_point(player) if dynamic_spawn else _pick_point(player)
 	if point == null:
 		return null
 
@@ -54,6 +71,47 @@ func spawn(data: ZombieData, health_multiplier: float = 1.0, damage_multiplier: 
 		zombie.notify_target(player.global_position)
 	zombie_spawned.emit(zombie)
 	return zombie
+
+
+func _process(delta: float) -> void:
+	if despawn_distance <= 0.0 or not dynamic_spawn:
+		return
+	_despawn_timer -= delta
+	if _despawn_timer > 0.0:
+		return
+	_despawn_timer = DESPAWN_CHECK_INTERVAL
+	var player := get_tree().get_first_node_in_group(&"player") as Node3D
+	if player == null:
+		return
+	for child: Node in get_children():
+		var zombie := child as Zombie
+		if zombie != null and zombie.global_position.distance_to(player.global_position) > despawn_distance:
+			zombie.despawn()
+
+
+## Случайная точка на навмеше в кольце вокруг игрока, по возможности вне поля зрения
+func _pick_dynamic_point(player: Node3D) -> Variant:
+	if player == null:
+		return null
+	var map: RID = get_world_3d().navigation_map
+	if NavigationServer3D.map_get_iteration_id(map) == 0:
+		return null  # навмеш ещё строится
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	var fallback: Variant = null
+	for attempt in DYNAMIC_ATTEMPTS:
+		var angle: float = _rng.randf() * TAU
+		var distance: float = _rng.randf_range(dynamic_min_distance, dynamic_max_distance)
+		var candidate: Vector3 = player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * distance
+		var on_mesh: Vector3 = NavigationServer3D.map_get_closest_point(map, candidate)
+		if Vector2(on_mesh.x - candidate.x, on_mesh.z - candidate.z).length() > NAV_SNAP_TOLERANCE:
+			continue
+		if on_mesh.distance_to(player.global_position) < dynamic_min_distance * 0.7:
+			continue
+		if camera != null and camera.is_position_in_frustum(on_mesh + Vector3.UP):
+			fallback = on_mesh
+			continue
+		return on_mesh
+	return fallback
 
 
 func _pick_point(player: Node3D) -> Variant:

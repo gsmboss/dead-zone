@@ -2,8 +2,9 @@ class_name MissionData
 extends Resource
 ## Описание миссии. Каждая миссия — отдельный .tres файл.
 
-## DEFEND — удерживать точку (DefendPoint), COLLECT — собрать ящики (ItemSpawnPoint)
-enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT }
+## DEFEND — удерживать точку (DefendPoint), COLLECT — собрать ящики (ItemSpawnPoint),
+## ENDLESS — волны без конца (рекорд — волна), FREE_ROAM — свободная игра в городе без цели
+enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 
 ## Уникальный id для сохранений, латиницей: waves, kill, survive
 @export var id: String = ""
@@ -37,9 +38,11 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT }
 ## Рост шансов за каждую волну (в других режимах — каждые 30 секунд)
 @export_range(0.0, 0.5, 0.01) var runner_chance_per_level: float = 0.08
 @export_range(0.0, 0.5, 0.01) var tank_chance_per_level: float = 0.04
-## Босс: в режиме волн появляется в начале последней волны, в остальных — через boss_delay
+## Босс: в режиме волн появляется в начале последней волны, в ENDLESS — каждые boss_every_waves
+## волн, в остальных — через boss_delay (в FREE_ROAM — каждые boss_delay секунд)
 @export var boss: ZombieData
 @export var boss_delay: float = 45.0
+@export_range(1, 50) var boss_every_waves: int = 5
 
 @export_group("Spawning")
 @export var start_delay: float = 3.0
@@ -72,3 +75,5 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT }
 @export_group("Reward")
 ## Монеты за победу (плюс очки за каждого убитого зомби)
 @export var reward_coins: int = 100
+## ENDLESS: монеты за каждую пройденную волну
+@export var coins_per_wave: int = 25

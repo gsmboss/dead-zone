@@ -63,6 +63,7 @@ var _items_total: int = 0
 var _shots: int = 0
 var _hits: int = 0
 var _drops: Array[Pickup] = []
+var _waves_cleared: int = 0
 
 
 func _ready() -> void:
@@ -148,7 +149,7 @@ func _process(delta: float) -> void:
 
 
 func _begin() -> void:
-	if mission.type == MissionData.Type.WAVES:
+	if _is_wave_mode():
 		_start_wave(1)
 	else:
 		state = State.RUNNING
@@ -160,7 +161,15 @@ func _start_wave(number: int) -> void:
 	_wave_left_to_spawn = maxi(mission.first_wave_size + (number - 1) * mission.wave_size_growth, 1)
 	_spawn_timer = 0.0
 	state = State.RUNNING
-	if number >= mission.wave_count and mission.boss != null and not _boss_spawned:
+	if mission.type == MissionData.Type.ENDLESS:
+		# Бесконечные волны: босс каждые boss_every_waves волн
+		if mission.boss != null and number % mission.boss_every_waves == 0:
+			announcement.emit("ВОЛНА %d: %s!" % [number, mission.boss.display_name])
+			_boss_spawned = false
+			_spawn_boss()
+		else:
+			announcement.emit("ВОЛНА %d" % number)
+	elif number >= mission.wave_count and mission.boss != null and not _boss_spawned:
 		announcement.emit("ПОСЛЕДНЯЯ ВОЛНА: %s!" % mission.boss.display_name)
 		_spawn_boss()
 	else:
@@ -175,7 +184,7 @@ func _process_spawning(delta: float) -> void:
 		return
 
 	match mission.type:
-		MissionData.Type.WAVES:
+		MissionData.Type.WAVES, MissionData.Type.ENDLESS:
 			if _wave_left_to_spawn <= 0:
 				return
 		MissionData.Type.KILL_COUNT:
@@ -193,8 +202,9 @@ func _process_spawning(delta: float) -> void:
 		return
 
 	zombie.died.connect(_on_zombie_died)
+	zombie.despawned.connect(_on_zombie_despawned)
 	_alive += 1
-	if mission.type == MissionData.Type.WAVES:
+	if _is_wave_mode():
 		_wave_left_to_spawn -= 1
 	_spawn_timer = _current_spawn_interval()
 
@@ -202,10 +212,13 @@ func _process_spawning(delta: float) -> void:
 # ---------- Босс ----------
 
 func _process_boss(delta: float) -> void:
-	if mission.boss == null or _boss_spawned or mission.type == MissionData.Type.WAVES:
+	if mission.boss == null or _is_wave_mode():
+		return
+	if _boss_spawned and mission.type != MissionData.Type.FREE_ROAM:
 		return
 	_boss_timer += delta
 	if _boss_timer >= mission.boss_delay:
+		_boss_timer = 0.0  # в открытом мире босс приходит снова через boss_delay
 		announcement.emit("%s!" % mission.boss.display_name)
 		_spawn_boss()
 
@@ -214,13 +227,14 @@ func _spawn_boss() -> void:
 	var boss: Zombie = spawner.spawn(mission.boss, _health_multiplier, _damage_multiplier)
 	if boss == null:
 		# Нет подходящей точки — повторим чуть позже
-		if mission.type == MissionData.Type.WAVES:
+		if _is_wave_mode():
 			_retry_boss_later.call_deferred()
 		else:
 			_boss_timer = mission.boss_delay - BOSS_RETRY_TIME
 		return
 	_boss_spawned = true
 	boss.died.connect(_on_zombie_died)
+	boss.despawned.connect(_on_zombie_despawned)
 	_alive += 1
 	boss_spawned.emit(boss)
 
@@ -330,14 +344,14 @@ func _on_player_hit(_is_headshot: bool, _killed: bool) -> void:
 
 
 func _current_spawn_interval() -> float:
-	if mission.type == MissionData.Type.WAVES:
+	if _is_wave_mode():
 		return mission.spawn_interval
 	var t: float = clampf(elapsed / DIFFICULTY_RAMP_TIME, 0.0, 1.0)
 	return lerpf(mission.spawn_interval, mission.min_spawn_interval, t)
 
 
 func _difficulty_level() -> int:
-	if mission.type == MissionData.Type.WAVES:
+	if _is_wave_mode():
 		return maxi(_wave - 1, 0)
 	return floori(elapsed / DIFFICULTY_STEP_TIME)
 
@@ -408,6 +422,39 @@ func _check_goal() -> void:
 		MissionData.Type.COLLECT:
 			if _items_total > 0 and _items_collected >= _items_total:
 				_finish(true)
+		MissionData.Type.ENDLESS:
+			# Волны без конца: каждая пройденная — монеты, затем следующая
+			if _wave_left_to_spawn <= 0 and _alive <= 0:
+				_waves_cleared = _wave
+				state = State.BETWEEN_WAVES
+				_phase_timer = mission.time_between_waves
+				announcement.emit("ВОЛНА %d ПРОЙДЕНА  +%d" % [_wave, mission.coins_per_wave])
+		# FREE_ROAM: цели нет — игра до смерти или выхода в убежище
+
+
+## Выход из миссии через меню паузы: монеты за убитых сохраняются, победы нет
+func leave_mission() -> void:
+	if state == State.WON or state == State.LOST:
+		return
+	state = State.LOST
+	var earned: int = score + _waves_cleared * mission.coins_per_wave
+	_record_endless()
+	GameState.add_coins(earned)
+	GameState.save_game()
+
+
+func _is_wave_mode() -> bool:
+	return mission.type == MissionData.Type.WAVES or mission.type == MissionData.Type.ENDLESS
+
+
+## Рекорд бесконечного режима — номер пройденной волны (хранится как лучший счёт)
+func _record_endless() -> void:
+	if mission.type == MissionData.Type.ENDLESS and _waves_cleared > 0:
+		GameState.record_score(mission, _waves_cleared)
+
+
+func _on_zombie_despawned(_zombie: Zombie) -> void:
+	_alive = maxi(_alive - 1, 0)
 
 
 func _on_zombie_died(zombie: Zombie) -> void:
@@ -456,7 +503,10 @@ func _finish(won: bool) -> void:
 		GameState.report_event(&"mission_win")
 
 	# Монеты: очки за убитых всегда + награда за победу (растёт с уровнем миссии)
-	var earned: int = score + (roundi(mission.reward_coins * _reward_multiplier) if won else 0)
+	# + за пройденные волны бесконечного режима
+	var earned: int = score + (roundi(mission.reward_coins * _reward_multiplier) if won else 0) \
+		+ _waves_cleared * mission.coins_per_wave
+	_record_endless()
 	if won:
 		GameState.complete_mission(mission, score, stars)
 	GameState.add_coins(earned)
@@ -474,6 +524,8 @@ func _finish(won: bool) -> void:
 		"accuracy": accuracy,
 		"health_share": health_share,
 		"level": _level,
+		"waves": _waves_cleared,
+		"endless": mission.type == MissionData.Type.ENDLESS,
 	}
 	await get_tree().create_timer(RESULT_DELAY).timeout
 	if not is_inside_tree():
@@ -522,6 +574,11 @@ func _update_objective() -> void:
 					text = "УДЕРЖИВАЙ ТОЧКУ %d%%%s" % [percent, "" if _on_point else " • ВЕРНИСЬ НА ТОЧКУ!"]
 				MissionData.Type.COLLECT:
 					text = "ЯЩИКИ С ПРИПАСАМИ %d / %d • УБИТО %d" % [_items_collected, _items_total, kills]
+				MissionData.Type.ENDLESS:
+					text = "ВОЛНА %d • ЗОМБИ: %d • РЕКОРД %d" % [
+						_wave, _wave_left_to_spawn + _alive, GameState.get_best_score(mission.id)]
+				MissionData.Type.FREE_ROAM:
+					text = "УБИТО %d • ОЧКИ %d • %s" % [kills, score, format_time(elapsed)]
 	if text != _objective_text:
 		_objective_text = text
 		objective_changed.emit(text)

@@ -5,12 +5,13 @@ extends NavigationRegion3D
 ## визуальных мешей с видеокарты (это медленно и даёт предупреждение движка).
 ## Коллизии StaticProp создаются в их _ready, поэтому ждём пару физических кадров.
 
-## Размер ячейки должен совпадать с картой навигации (по умолчанию 0.25)
-const CELL_SIZE: float = 0.25
 const CELL_HEIGHT: float = 0.25
 
 ## Строить навмеш при запуске (выключите, если навмеш запечён в редакторе вручную)
 @export var bake_on_ready: bool = true
+## Размер ячейки навмеша; карта навигации получает такой же (мир общий для всех сцен,
+## поэтому каждый уровень выставляет свой). Большой город — 0.5 (быстрее строится)
+@export var cell_size: float = 0.25
 ## Параметры агента кратны размерам ячейки, иначе движок округляет их с предупреждением
 @export var agent_radius: float = 0.5
 @export var agent_height: float = 2.0
@@ -27,9 +28,12 @@ func _ready() -> void:
 	var mesh: NavigationMesh = navigation_mesh.duplicate() as NavigationMesh \
 		if navigation_mesh != null else NavigationMesh.new()
 	mesh.clear_polygons()
-	mesh.cell_size = CELL_SIZE
+	mesh.cell_size = cell_size
 	mesh.cell_height = CELL_HEIGHT
-	mesh.agent_radius = snappedf(agent_radius, CELL_SIZE)
+	var map: RID = get_world_3d().navigation_map
+	NavigationServer3D.map_set_cell_size(map, cell_size)
+	NavigationServer3D.map_set_cell_height(map, CELL_HEIGHT)
+	mesh.agent_radius = snappedf(agent_radius, cell_size)
 	mesh.agent_height = snappedf(agent_height, CELL_HEIGHT)
 	mesh.agent_max_climb = snappedf(agent_max_climb, CELL_HEIGHT)
 	mesh.agent_max_slope = agent_max_slope

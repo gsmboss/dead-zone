@@ -12,6 +12,8 @@ extends CharacterBody3D
 ## и с капсулой-заглушкой.
 
 signal died(zombie: Zombie)
+## Убран без смерти (далеко от игрока в открытом мире)
+signal despawned(zombie: Zombie)
 
 enum State { WANDER, CHASE, SEARCH, ATTACK, STAGGER, DEAD, CHARGE, SLAM }
 
@@ -818,6 +820,37 @@ func _on_died() -> void:
 		sink.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
 		await sink.finished
 	queue_free()
+
+
+## Убрать зомби без смерти и награды (спавнер открытого мира)
+func despawn() -> void:
+	if state == State.DEAD or not is_inside_tree():
+		return
+	_release_token()
+	state = State.DEAD
+	despawned.emit(self)
+	queue_free()
+
+
+## Удар машиной: урон по скорости, отбрасывание; погибший отлетает
+func hit_by_vehicle(damage: float, push: Vector3) -> void:
+	if state == State.DEAD or health == null:
+		return
+	health.take_damage(damage, global_position + Vector3.UP, false)
+	if state == State.DEAD:
+		# Отлёт тела по дуге (в состоянии DEAD физика зомби не работает)
+		var target: Vector3 = global_position + Vector3(push.x, 0.0, push.z) * 0.35
+		var fly := create_tween().set_parallel(true)
+		fly.tween_property(self, "global_position:x", target.x, 0.5).set_ease(Tween.EASE_OUT)
+		fly.tween_property(self, "global_position:z", target.z, 0.5).set_ease(Tween.EASE_OUT)
+		var up := create_tween()
+		up.tween_property(self, "global_position:y", global_position.y + minf(push.length() * 0.08, 1.5), 0.2) \
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		up.tween_property(self, "global_position:y", global_position.y, 0.3) \
+			.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	else:
+		velocity += Vector3(push.x, 2.0, push.z)
+		_try_stagger(false)
 
 
 # ---------- Звук ----------
