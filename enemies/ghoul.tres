@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" path="res://models/graveyard/character-zombie.glb" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "ГНИЛЯК"
+max_health = 130.0
+move_speed = 1.9
+turn_speed = 7.0
+attack_damage = 14.0
+attack_range = 1.4
+attack_windup = 0.5
+detection_radius = 15.0
+model_scene = ExtResource("2_md01")
+model_scale = 2.0
+anim_idle = &"idle"
+anim_walk = &"walk"
+anim_run = &"sprint"
+anim_attack = &"attack-melee-right"
+anim_hit = &"emote-no"
+anim_death = &"die"
+voice_pitch = 0.8
+score = 16
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

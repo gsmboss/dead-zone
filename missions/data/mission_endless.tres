@@ -6,6 +6,8 @@
 [ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="4_wlk01"]
 [ext_resource type="Resource" path="res://enemies/boss.tres" id="5_bos01"]
 [ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" path="res://enemies/skeleton.tres" id="sp_skl"]
+[ext_resource type="Resource" path="res://enemies/ghoul.tres" id="sp_ghl"]
 [ext_resource type="Resource" path="res://enemies/crawler.tres" id="sp_1"]
 [ext_resource type="Resource" path="res://enemies/spitter.tres" id="sp_2"]
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="sp_3"]
@@ -36,5 +38,5 @@ ammo_drop_chance = 0.18
 health_drop_chance = 0.09
 reward_coins = 0
 coins_per_wave = 25
-specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4"), ExtResource("sp_skl"), ExtResource("sp_ghl")])
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

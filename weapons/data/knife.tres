@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_knife"]
+[ext_resource type="PackedScene" uid="uid://dqkblmkcj1ivw" path="res://models/weapons/Knife.gltf" id="2_knife"]
+
+[resource]
+script = ExtResource("1_knife")
+display_name = "НОЖ"
+damage = 35.0
+max_range = 1.9
+spread_degrees = 0.0
+fire_rate = 3.2
+is_melee = true
+melee_arc_degrees = 28.0
+swing_rotation_degrees = Vector3(-45, 0, 30)
+magazine_size = 1
+max_reserve_ammo = -1
+recoil_pitch = 0.0
+recoil_yaw = 0.0
+gun_kick = 0.0
+view_model = ExtResource("2_knife")
+model_position = Vector3(0.28, -0.42, -0.45)
+model_rotation_degrees = Vector3(-110, 0, 0)
+model_scale = 0.4
+muzzle_position = Vector3(0, 0, 0)
+id = "knife"
+price = 150
+upgrade_base_cost = 60
+damage_per_level = 0.2
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

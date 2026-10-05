@@ -11,6 +11,9 @@
 
 - models/city/commercial/ — Kenney, City Kit (Commercial) 2.1: https://kenney.nl/assets/city-kit-commercial
 - models/city/suburban/ — Kenney, City Kit (Suburban): https://kenney.nl/assets/city-kit-suburban
+- models/characters/kenney/ — Kenney, Mini Characters: https://kenney.nl/assets/mini-characters
+- models/graveyard/ — Kenney, Graveyard Kit 5.0: https://kenney.nl/assets/graveyard-kit
+- models/survival/ — Kenney, Survival Kit: https://kenney.nl/assets/survival-kit
 
 ## Звуки (audio/, перекодировано в OGG mono 44.1 kHz)
 - weapons/pistol_shot, rifle_shot, shotgun_shot — "Gunshot Sounds" (tabasco),
