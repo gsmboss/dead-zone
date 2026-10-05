@@ -35,8 +35,16 @@ const SEARCH_TURN_SPEED: float = 1.2
 const WANDER_REACHED_DISTANCE: float = 0.8
 const STAGGER_COOLDOWN: float = 1.0
 const HEADSHOT_STAGGER_MULTIPLIER: float = 1.8
-const STUCK_TIME: float = 0.8
-const UNSTUCK_DURATION: float = 0.5
+const STUCK_TIME: float = 0.6
+const UNSTUCK_DURATION: float = 0.6
+## Ступенька (бордюр, тротуар), на которую зомби шагает без прыжка
+const STEP_HEIGHT: float = 0.4
+## Перед стеной путь сворачивает вдоль неё на это время
+const WALL_FOLLOW_TIME: float = 0.35
+## После стольких застреваний подряд — перенос на ближайшую точку навмеша
+const MAX_UNSTUCK_TRIES: int = 4
+## Дальше этого от навмеша зомби считается «выпавшим» с него
+const OFF_MESH_DISTANCE: float = 0.8
 const FLASH_TIME: float = 0.08
 const CORPSE_TIME: float = 4.0
 const SINK_TIME: float = 1.5
@@ -162,6 +170,11 @@ var _wander_wait: float = 0.0
 var _stuck_time: float = 0.0
 var _unstuck_left: float = 0.0
 var _unstuck_direction: Vector3 = Vector3.ZERO
+var _unstuck_tries: int = 0
+var _unstuck_side: float = 1.0
+var _wall_normal: Vector3 = Vector3.ZERO
+var _wall_follow_left: float = 0.0
+var _wall_follow_direction: Vector3 = Vector3.ZERO
 
 # Бой
 var _cooldown: float = 0.0
@@ -791,6 +804,8 @@ func _move_to(target: Vector3, speed: float, delta: float) -> void:
 	if _unstuck_left > 0.0:
 		_unstuck_left -= delta
 		direction = _unstuck_direction
+	else:
+		direction = _steer_around_wall(direction, delta)
 
 	if direction.length_squared() < 0.0001:
 		_set_desired_velocity(Vector3.ZERO)
@@ -814,13 +829,77 @@ func _check_stuck(speed: float, delta: float) -> void:
 	else:
 		_stuck_time = 0.0
 
+	if actual > speed * 0.6:
+		_unstuck_tries = 0
+
 	if _stuck_time >= STUCK_TIME:
-		# Упёрся: шаг в сторону и новый путь
 		_stuck_time = 0.0
 		_path_timer = 0.0
-		var side: Vector3 = (-global_basis.z).cross(Vector3.UP).normalized()
-		_unstuck_direction = side * (1.0 if _rng.randf() > 0.5 else -1.0)
+		_unstuck_tries += 1
+		if _unstuck_tries == 1:
+			_snap_to_navmesh(false)  # вытолкнули с навмеша — вернуть
+		if _unstuck_tries >= MAX_UNSTUCK_TRIES:
+			_unstuck_tries = 0
+			_snap_to_navmesh(true)
+			return
+		_unstuck_direction = _pick_unstuck_direction()
 		_unstuck_left = UNSTUCK_DURATION
+
+
+## Направление выхода из застревания: чередуем стороны вдоль стены, третья попытка — назад
+func _pick_unstuck_direction() -> Vector3:
+	var forward: Vector3 = _flat(-global_basis.z)
+	if forward.length_squared() < 0.0001:
+		forward = Vector3.FORWARD
+	forward = forward.normalized()
+	var normal: Vector3 = _wall_normal if _wall_normal.length_squared() > 0.01 else -forward
+	var tangent: Vector3 = normal.cross(Vector3.UP).normalized()
+	if _unstuck_tries == 1:
+		_unstuck_side = 1.0 if _rng.randf() < 0.5 else -1.0
+	else:
+		_unstuck_side = -_unstuck_side
+	if _unstuck_tries >= 3:
+		# Отступить от препятствия и чуть в сторону
+		return (normal * 0.8 + tangent * _unstuck_side * 0.6).normalized()
+	return (tangent * _unstuck_side + normal * 0.3).normalized()
+
+
+## Упёрся в стену — идём вдоль неё в сторону цели, а не «бодаем» стену
+func _steer_around_wall(direction: Vector3, delta: float) -> Vector3:
+	if _wall_follow_left > 0.0:
+		_wall_follow_left -= delta
+		# Стена кончилась — снова прямо к цели
+		if _wall_normal.length_squared() < 0.01 and _wall_follow_left < WALL_FOLLOW_TIME * 0.5:
+			_wall_follow_left = 0.0
+		return _wall_follow_direction
+	if _wall_normal.length_squared() < 0.01 or direction.length_squared() < 0.0001:
+		return direction
+	var into_wall: float = direction.normalized().dot(-_wall_normal)
+	if into_wall < 0.5:
+		return direction  # скользит вдоль, move_and_slide справится сам
+	var tangent: Vector3 = _wall_normal.cross(Vector3.UP).normalized()
+	if tangent.dot(direction) < 0.0:
+		tangent = -tangent
+	_wall_follow_direction = (tangent + _wall_normal * 0.25).normalized()
+	_wall_follow_left = WALL_FOLLOW_TIME
+	return _wall_follow_direction
+
+
+## Вернуть на навмеш, если вытолкнули (машина, взрыв) или безнадёжно застрял
+func _snap_to_navmesh(force: bool) -> void:
+	if _agent == null or not _is_navigation_ready():
+		return
+	var map: RID = _agent.get_navigation_map()
+	var closest: Vector3 = NavigationServer3D.map_get_closest_point(map, global_position)
+	var offset: Vector3 = closest - global_position
+	if not force and _flat(offset).length() < OFF_MESH_DISTANCE:
+		return
+	if force and _flat(offset).length() < 0.05:
+		# Уже на навмеше: шагнуть к следующей точке пути
+		closest = NavigationServer3D.map_get_closest_point(map, _agent.get_next_path_position())
+	global_position = closest + Vector3.UP * 0.1
+	velocity = Vector3.ZERO
+	_path_timer = 0.0
 
 
 func _face(direction: Vector3, delta: float) -> void:
@@ -847,6 +926,44 @@ func _apply_velocity(horizontal: Vector3) -> void:
 	velocity.x = horizontal.x
 	velocity.z = horizontal.z
 	move_and_slide()
+	_wall_normal = Vector3.ZERO
+	if is_on_wall() and _is_wall_static():
+		_wall_normal = _flat(get_wall_normal())
+		if _wall_normal.length_squared() > 0.0001:
+			_wall_normal = _wall_normal.normalized()
+		_try_step_up(horizontal)
+
+
+## Стена — часть мира, а не игрок или другой зомби (их обходит очередь атак)
+func _is_wall_static() -> bool:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		if absf(collision.get_normal().y) >= 0.7:
+			continue
+		var collider: Object = collision.get_collider()
+		var layer: int = 0
+		if collider is CollisionObject3D:
+			layer = (collider as CollisionObject3D).collision_layer
+		elif collider is CSGShape3D:
+			layer = (collider as CSGShape3D).collision_layer
+		if (layer & PhysicsLayers.WORLD) != 0:
+			return true
+	return false
+
+
+## Шаг на низкое препятствие (бордюр, тротуар): если сверху свободно — поднимаемся
+func _try_step_up(horizontal: Vector3) -> void:
+	if not is_on_floor() or horizontal.length_squared() < 0.01:
+		return
+	var step := Vector3.UP * STEP_HEIGHT
+	var forward: Vector3 = horizontal.normalized() * 0.3
+	var start: Transform3D = global_transform
+	if test_move(start, step):
+		return  # над головой препятствие
+	if test_move(start.translated(step), forward):
+		return  # высокая стена — не ступенька
+	global_position += step + forward
+	apply_floor_snap()
 
 
 func _is_navigation_ready() -> bool:
@@ -1131,9 +1248,10 @@ func _measure_size_factor() -> float:
 	_skeleton = skeletons[0] as Skeleton3D
 	_head_bone = _skeleton.find_bone(HEAD_BONE)
 	if _head_bone < 0:
+		# Модели без головы (Zombie_Ribcage — одни ноги) — это нормально: хитбоксы по model_scale
 		if not _warned_types.has(data.display_name):
 			_warned_types[data.display_name] = true
-			push_warning("Zombie: у типа %s в скелете нет кости %s, хитбоксы по model_scale" % [
+			print_verbose("Zombie: у типа %s нет кости %s, хитбоксы по model_scale" % [
 				data.display_name, HEAD_BONE])
 		_skeleton = null
 		return fallback
