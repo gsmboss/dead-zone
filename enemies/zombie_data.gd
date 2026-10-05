@@ -51,6 +51,20 @@ extends Resource
 ## Масштаб своей модели (модель зомби в zombie.tscn — 1.6)
 @export var model_scale: float = 1.6
 
+@export_group("Tactics")
+## Участвует в очереди атак (не больше MAX_ATTACKERS бьют одновременно, остальные кружат)
+@export var uses_attack_queue: bool = true
+## Издалека заходит со спины игрока
+@export var flank_from_behind: bool = false
+## Зигзаг, когда игрок целится в зомби издалека (0 = бежит прямо), метры
+@export var zigzag_amplitude: float = 0.0
+@export var zigzag_frequency: float = 2.5
+## Потеряв игрока, проверяет столько точек вокруг места, где видел его последним
+@export_range(0, 8) var search_points: int = 3
+@export var search_radius: float = 6.0
+## Слышит бегущего игрока на этом расстоянии без прямой видимости (0 = не слышит)
+@export var footstep_hearing_radius: float = 7.0
+
 @export_group("Boss")
 ## Босс: полоска здоровья в HUD, задание «убить босса»
 @export var is_boss: bool = false

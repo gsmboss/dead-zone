@@ -50,7 +50,9 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
   weapon_catalog.gd (WeaponCatalog), weapon_manager.gd (WeaponManager: стволы из GameState.get_loadout()).
 - combat/: health.gd (Health), hitbox.gd (Hitbox), target_dummy.gd, target_dummy.tscn (тест).
 - enemies/: zombie_data.gd (ZombieData), zombie.gd (Zombie: WANDER/CHASE/SEARCH/ATTACK/STAGGER/DEAD,
-  видимость, слух, зов стаи, окружение, упреждение, notify_target(), анимации
+  видимость, слух выстрелов и бега, зов стаи, окружение по золотому углу, упреждение, очередь атак
+  (MAX_ATTACKERS=3, остальные кружат на кольце), заход со спины и зигзаг (бегун), обыск точек вокруг
+  последней позиции игрока (параметры — группа Tactics в ZombieData), notify_target(), анимации
   Idle/Walk/Run/Punch/HitReact/Death через AnimationPlayer внутри Visual).
 - missions/: mission_data.gd (MissionData: WAVES/KILL_COUNT/SURVIVE, id, level_scene),
   spawn_point.gd (ZombieSpawnPoint, группа "zombie_spawn"), zombie_spawner.gd (ZombieSpawner),

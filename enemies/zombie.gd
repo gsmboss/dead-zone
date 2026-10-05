@@ -48,6 +48,31 @@ const CHARGE_BLOCKED_FACTOR: float = 0.25
 const CHARGE_HIT_DISTANCE: float = 1.6
 const SLAM_SHAKE: float = 0.8
 const CHARGE_SHAKE: float = 0.6
+# Тактика
+## Одновременно атакуют не больше стольких зомби (с очередью), остальные ждут на кольце
+const MAX_ATTACKERS: int = 3
+## Ближе этого зомби без очереди не подходит — кружит вокруг игрока
+const WAIT_RING_DISTANCE: float = 3.2
+## С этой дистанции зомби пытается занять место в очереди атак
+const ENGAGE_DISTANCE: float = 4.0
+## На сколько радиан вперёд по кругу смотрит точка обхода и доля скорости при ожидании
+const CIRCLE_LEAD: float = 0.6
+const WAIT_SPEED_FACTOR: float = 0.55
+## Заход со спины: дистанция точки за игроком и разброс угла
+const BEHIND_DISTANCE: float = 4.0
+const BEHIND_SPREAD: float = deg_to_rad(60.0)
+## Игрок «целится» в зомби, если угол меньше этого (для зигзага)
+const AIMED_AT_COS: float = 0.985
+const ZIGZAG_MIN_DISTANCE: float = 5.0
+## Бег игрока слышен, если его скорость выше этой
+const LOUD_STEP_SPEED: float = 3.0
+## Золотой угол: соседние зомби берут сектора равномерно вокруг игрока
+const GOLDEN_ANGLE: float = 2.39996
+
+## Кто сейчас атакует (общая очередь всех зомби)
+static var _attackers: Array[Zombie] = []
+static var _flank_counter: int = 0
+
 ## Кость головы в скелетах Quaternius
 const HEAD_BONE: StringName = &"Head"
 ## Высота кости Head у Zombie_Basic в масштабе 1.6 (под неё настроены хитбоксы zombie.tscn)
@@ -112,6 +137,13 @@ var _sense_timer: float = 0.0
 var _path_timer: float = 0.0
 var _speed_multiplier: float = 1.0
 var _flank_angle: float = 0.0
+var _ai_time: float = 0.0
+## Направление обхода по кругу: половина зомби по часовой, половина против
+var _circle_direction: float = 1.0
+var _has_token: bool = false
+var _search_left: int = 0
+var _search_target: Vector3 = Vector3.ZERO
+var _searching_points: bool = false
 var _home_position: Vector3 = Vector3.ZERO
 var _wander_target: Vector3 = Vector3.ZERO
 var _has_wander_target: bool = false
@@ -177,7 +209,10 @@ func _ready() -> void:
 	# Индивидуальность каждого зомби
 	_rng.randomize()
 	_speed_multiplier = 1.0 + _rng.randf_range(-data.speed_variation, data.speed_variation)
-	_flank_angle = _rng.randf() * TAU
+	# Сектора по золотому углу: каждый новый зомби заходит со своей стороны
+	_flank_angle = fmod(_flank_counter * GOLDEN_ANGLE, TAU)
+	_flank_counter += 1
+	_circle_direction = 1.0 if _flank_counter % 2 == 0 else -1.0
 	_home_position = global_position
 	_wander_wait = _rng.randf_range(0.0, 2.0)
 	_sense_timer = _rng.randf() * SENSE_INTERVAL  # разносим проверки по разным кадрам
@@ -276,10 +311,15 @@ func _update_senses(delta: float) -> void:
 	var sight: float = data.detection_radius * (KNOWN_SIGHT_MULTIPLIER if _target_known else 1.0)
 	var sees: bool = distance <= data.close_sense_radius \
 		or (distance <= sight and _has_line_of_sight())
+	if not sees and distance <= data.footstep_hearing_radius \
+			and _flat(_player.velocity).length() >= LOUD_STEP_SPEED:
+		# Слышит бег: знает, где игрок, но не видит
+		notify_target(_player.global_position)
 
 	if sees:
 		_last_known_position = _player.global_position
 		_time_since_seen = 0.0
+		_searching_points = false
 		if not _target_known:
 			_target_known = true
 			_alert_others()
@@ -314,6 +354,25 @@ func _process_hunt(delta: float) -> void:
 	var distance: float = _flat_distance_to(player_position)
 	var can_see: bool = _time_since_seen <= VISIBLE_GRACE
 
+	_ai_time += delta
+	# Очередь атак: вблизи пытаемся занять место, далеко или без видимости — освобождаем
+	# После удара (кулдаун) место не занимаем — отходим на кольцо, пропуская других
+	if can_see and distance <= ENGAGE_DISTANCE and _cooldown <= 0.0:
+		_try_take_token()
+	elif _has_token and (not can_see or distance > ENGAGE_DISTANCE + 1.5):
+		_release_token()
+
+	if can_see and distance <= ENGAGE_DISTANCE and not _has_token:
+		# Очередь занята: держимся на кольце и обходим игрока по кругу
+		_set_state(State.CHASE)
+		# Точка на кольце чуть впереди по ходу обхода от текущего положения зомби
+		var from_player: Vector3 = _flat(global_position - player_position)
+		var around: float = atan2(from_player.z, from_player.x) + _circle_direction * CIRCLE_LEAD
+		var ring: Vector3 = player_position + Vector3(cos(around), 0.0, sin(around)) * WAIT_RING_DISTANCE
+		_move_to(ring, data.move_speed * _speed_multiplier * WAIT_SPEED_FACTOR, delta)
+		_face(_flat(player_position - global_position), delta)
+		return
+
 	if can_see and distance <= data.attack_range:
 		_face(_flat(player_position - global_position), delta)
 		_set_desired_velocity(Vector3.ZERO)
@@ -335,14 +394,67 @@ func _process_hunt(delta: float) -> void:
 		_move_to(_chase_point(player_position, distance), data.move_speed * _speed_multiplier, delta)
 		return
 
-	# Не видит: идёт к последней известной точке и осматривается
+	# Не видит: идёт к последней известной точке, потом обыскивает точки вокруг
+	if state != State.SEARCH:
+		_searching_points = false
+		_search_left = data.search_points
 	_set_state(State.SEARCH)
-	if _flat_distance_to(_last_known_position) <= SEARCH_REACHED_DISTANCE:
+	var goal: Vector3 = _search_target if _searching_points else _last_known_position
+	if _flat_distance_to(goal) <= SEARCH_REACHED_DISTANCE:
+		if _search_left > 0 and _pick_search_point():
+			_search_left -= 1
+			return
 		_set_desired_velocity(Vector3.ZERO)
 		rotation.y += SEARCH_TURN_SPEED * delta
 		_play_locomotion(0.0)
 	else:
-		_move_to(_last_known_position, data.move_speed * _speed_multiplier * 0.85, delta)
+		_move_to(goal, data.move_speed * _speed_multiplier * 0.85, delta)
+
+
+## Случайная точка на навмеше вокруг места, где игрока видели последним
+func _pick_search_point() -> bool:
+	if not _is_navigation_ready():
+		return false
+	var angle: float = _rng.randf() * TAU
+	var radius: float = _rng.randf_range(data.search_radius * 0.4, data.search_radius)
+	var candidate: Vector3 = _last_known_position + Vector3(cos(angle), 0.0, sin(angle)) * radius
+	_search_target = NavigationServer3D.map_get_closest_point(_agent.get_navigation_map(), candidate)
+	_searching_points = true
+	_path_timer = 0.0
+	return true
+
+
+# ---------- Очередь атак ----------
+
+func _exit_tree() -> void:
+	_release_token()
+
+
+func _try_take_token() -> void:
+	if _has_token:
+		return
+	if not data.uses_attack_queue:
+		_has_token = true
+		return
+	_cleanup_attackers()
+	if _attackers.size() < MAX_ATTACKERS:
+		_attackers.append(self)
+		_has_token = true
+
+
+func _release_token() -> void:
+	if not _has_token:
+		return
+	_has_token = false
+	_attackers.erase(self)
+
+
+## Убираем из очереди удалённых и мёртвых (например, после смены сцены)
+static func _cleanup_attackers() -> void:
+	for i in range(_attackers.size() - 1, -1, -1):
+		var zombie: Zombie = _attackers[i]
+		if not is_instance_valid(zombie) or not zombie.is_inside_tree() or zombie.state == State.DEAD:
+			_attackers.remove_at(i)
 
 
 func _chase_point(player_position: Vector3, distance: float) -> Vector3:
@@ -350,8 +462,31 @@ func _chase_point(player_position: Vector3, distance: float) -> Vector3:
 	var predicted: Vector3 = player_position + _flat(_player.velocity) * data.prediction_time
 	if distance <= FLANK_MIN_DISTANCE:
 		return predicted
-	# Издалека каждый заходит со своей стороны → окружают
-	return predicted + Vector3(cos(_flank_angle), 0.0, sin(_flank_angle)) * FLANK_RADIUS
+	var point: Vector3
+	if data.flank_from_behind:
+		# Заходит со спины: точка за игроком со своим смещением по углу
+		var back: Vector3 = _flat(_player.global_basis.z).normalized()
+		var spread: float = (_flank_angle / TAU - 0.5) * 2.0 * BEHIND_SPREAD
+		point = predicted + back.rotated(Vector3.UP, spread) * BEHIND_DISTANCE
+	else:
+		# Издалека каждый заходит со своей стороны → окружают
+		point = predicted + Vector3(cos(_flank_angle), 0.0, sin(_flank_angle)) * FLANK_RADIUS
+	return point + _zigzag_offset(distance)
+
+
+## Боковое смещение, когда игрок целится в зомби (уворачивается от пуль)
+func _zigzag_offset(distance: float) -> Vector3:
+	if data.zigzag_amplitude <= 0.0 or distance < ZIGZAG_MIN_DISTANCE:
+		return Vector3.ZERO
+	var to_zombie: Vector3 = _flat(global_position - _player.global_position)
+	if to_zombie.length_squared() < 0.01:
+		return Vector3.ZERO
+	to_zombie = to_zombie.normalized()
+	var aim: Vector3 = _flat(-_player.global_basis.z).normalized()
+	if aim.dot(to_zombie) < AIMED_AT_COS:
+		return Vector3.ZERO
+	var side: Vector3 = to_zombie.cross(Vector3.UP)
+	return side * sin(_ai_time * data.zigzag_frequency * TAU) * data.zigzag_amplitude
 
 
 func _process_wander(delta: float) -> void:
@@ -417,6 +552,8 @@ func _process_attack(delta: float) -> void:
 	if _attack_elapsed >= data.attack_windup + ATTACK_RECOVERY:
 		_cooldown = data.attack_cooldown
 		_set_state(State.CHASE)
+		# Отдаём место в очереди, чтобы ударили другие (сразу встанет в конец)
+		_release_token()
 
 
 # ---------- Способности босса ----------
@@ -512,6 +649,7 @@ func _try_stagger(is_headshot: bool) -> void:
 	if data.stagger_time <= 0.0 or _stagger_cooldown > 0.0 or state == State.DEAD:
 		return
 	_stagger_left = data.stagger_time * (HEADSHOT_STAGGER_MULTIPLIER if is_headshot else 1.0)
+	_release_token()
 	# Кулдаун, чтобы автомат не держал зомби в вечном оцепенении
 	_stagger_cooldown = _stagger_left + STAGGER_COOLDOWN
 	_set_state(State.STAGGER)
@@ -648,6 +786,7 @@ func _on_damaged(_amount: float, _hit_position: Vector3, is_headshot: bool) -> v
 
 func _on_died() -> void:
 	killed_by_headshot = _last_hit_headshot
+	_release_token()
 	state = State.DEAD
 	velocity = Vector3.ZERO
 	_set_flash(false)
