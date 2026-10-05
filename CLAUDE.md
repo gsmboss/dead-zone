@@ -88,8 +88,10 @@ levels/test_level.tscn (навмеш, 6 точек спавна, MissionManager+
   "player" и отключает оружие: weapon_manager.process_mode = PROCESS_MODE_DISABLED, visible = false.
 - Свет и небо: WorldEnvironment (ProceduralSky) + DirectionalLight3D с тенями. Потолок не нужен
   (открытый двор убежища), чтобы не было темно на Compatibility.
-- Комната из CSGBox3D с use_collision = true: пол 16×0.5×16 (y = -0.25), четыре стены высотой 4
-  и толщиной 0.4 по краям (±8).
+- Room: пол CSGBox3D 16×0.5×16 (y = -0.25, use_collision); стены — невидимые коллизии Room/Bounds
+  (StaticBody3D, 4 бокса высотой 4 по краям ±8); OutsideGround — земля вокруг без коллизии.
+- Perimeter: видимая ограда из контейнеров Quaternius снаружи коллизий, ворота — бронированный грузовик.
+  Props: машина, бочки, ящики, фонари и т.п. (StaticProp); Props/Outside: башня, знак, дорога.
 - Player: экземпляр player/player.tscn в (0, 0.1, 4), touch_controls → HUD/TouchControls.
 - MissionTerminal (Interactable) в (-4, 0, -5): prompt «МИССИИ», action_id &"missions";
   дети: CollisionShape3D BoxShape3D 3×2×3 (y = 1), стол CSGBox3D 2×1×1 (y = 0.5, use_collision),
