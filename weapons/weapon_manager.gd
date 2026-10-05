@@ -123,6 +123,8 @@ func _ready() -> void:
 		set_process(false)
 		return
 	_base_fov = camera.fov
+	auto_fire_enabled = Settings.auto_fire
+	Settings.changed.connect(_on_settings_changed)
 
 	if use_game_state_loadout:
 		var loadout: Array[WeaponData] = GameState.get_loadout()
@@ -142,6 +144,10 @@ func _ready() -> void:
 		push_warning("WeaponManager: нет ни одного ствола")
 		return
 	equip(0)
+
+
+func _on_settings_changed() -> void:
+	auto_fire_enabled = Settings.auto_fire
 
 
 # ---------- Публичный API ----------

@@ -78,6 +78,8 @@ func _ready() -> void:
 	_camera_base_y = camera.position.y
 	_camera_base_x = camera.position.x
 	_rng.randomize()
+	_apply_settings()
+	Settings.changed.connect(_apply_settings)
 
 
 func _process(delta: float) -> void:
@@ -115,7 +117,13 @@ func _physics_process(delta: float) -> void:
 
 ## Тряска камеры (удар босса, взрыв). strength 0..1, складывается
 func shake(strength: float) -> void:
-	_shake = clampf(_shake + strength, 0.0, 1.0)
+	_shake = clampf(_shake + strength * Settings.camera_shake, 0.0, 1.0)
+
+
+## Чувствительность и инверсия из настроек игрока
+func _apply_settings() -> void:
+	look_sensitivity = Settings.look_sensitivity
+	invert_y = Settings.invert_y
 
 
 ## Отбрасывание (рывок и удар босса)

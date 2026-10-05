@@ -7,6 +7,7 @@ extends Control
 
 var _coins_label: Label
 var _daily_button: Button
+var _settings_button: Button
 var _interact_button: Button
 var _current: Interactable
 var _window: HubWindow
@@ -43,6 +44,15 @@ func _build_ui() -> void:
 	_daily_button.offset_top = 20.0
 	_daily_button.offset_right = 290.0
 	_daily_button.offset_bottom = 20.0 + UIKit.BUTTON_HEIGHT
+
+	_settings_button = UIKit.button("НАСТРОЙКИ", 26, 260.0)
+	_settings_button.pressed.connect(func() -> void: _open_window(SettingsPanel.new()))
+	add_child(_settings_button)
+	_settings_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
+	_settings_button.offset_left = 30.0
+	_settings_button.offset_top = 36.0 + UIKit.BUTTON_HEIGHT
+	_settings_button.offset_right = 290.0
+	_settings_button.offset_bottom = 36.0 + UIKit.BUTTON_HEIGHT * 2.0
 
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
@@ -119,6 +129,7 @@ func _open_window(window: HubWindow) -> void:
 	add_child(window)
 	_interact_button.visible = false
 	_daily_button.visible = false
+	_settings_button.visible = false
 	_set_player_controls(false)
 
 
@@ -126,6 +137,7 @@ func _on_window_closed() -> void:
 	_window = null
 	_interact_button.visible = _current != null
 	_daily_button.visible = true
+	_settings_button.visible = true
 	_set_player_controls(true)
 
 

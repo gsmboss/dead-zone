@@ -24,6 +24,7 @@ func _build_content() -> void:
 	var coins := UIKit.label("Монеты: %d" % GameState.coins, 30, content)
 	coins.modulate = UIKit.ACCENT
 	content.add_child(_make_survivor_card())
+	content.add_child(_make_supplies_card())
 	for weapon: WeaponData in GameState.catalog.weapons:
 		if weapon != null and not weapon.id.is_empty():
 			content.add_child(_make_weapon_card(weapon))
@@ -111,6 +112,33 @@ func _make_survivor_card() -> Control:
 		upgrade.disabled = cost < 0 or GameState.coins < cost
 		upgrade.pressed.connect(func() -> void: _play_result(GameState.upgrade_player(stat)))
 		row.add_child(upgrade)
+	return card
+
+
+## Припасы в сумку: аптечки и патроны
+func _make_supplies_card() -> Control:
+	var card := UIKit.card()
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 10)
+	card.add_child(box)
+	UIKit.label("ПРИПАСЫ В СУМКУ", 32, box).modulate = UIKit.GOOD
+	for item: ItemData in GameState.items:
+		if item.price <= 0:
+			continue
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override(&"separation", 16)
+		box.add_child(row)
+		row.add_child(ItemIcon.create(item, 56.0))
+		var count: int = GameState.get_item_count(item.id)
+		var name_label := UIKit.label("%s: %d / %d" % [item.title, count, item.max_stack], 24, row)
+		name_label.size_flags_horizontal = SIZE_EXPAND_FILL
+		var full: bool = count >= item.max_stack
+		var buy := UIKit.button("ПОЛНО" if full else "+  %d" % item.price, 24, 200.0)
+		buy.disabled = full or GameState.coins < item.price
+		buy.pressed.connect(func() -> void:
+			_play_result(GameState.buy_item(item.id))
+			refresh())
+		row.add_child(buy)
 	return card
 
 

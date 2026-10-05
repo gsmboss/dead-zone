@@ -15,6 +15,9 @@ const BOB_HEIGHT: float = 0.12
 const BOB_SPEED: float = 2.5
 const BLINK_TIME: float = 3.0
 const PICKUP_RADIUS: float = 0.9
+## Ненужный сейчас подбор кладётся в сумку как этот предмет
+const AMMO_ITEM: String = "ammo_pack"
+const HEALTH_ITEM: String = "medkit"
 ## Как часто проверять игрока, стоящего на ненужном предмете (здоровье потом упало)
 const RECHECK_INTERVAL: float = 0.5
 
@@ -82,10 +85,12 @@ func _on_body_entered(body: Node3D) -> void:
 func _apply(player: Player) -> bool:
 	match kind:
 		Kind.AMMO:
-			return player.weapon_manager != null and player.weapon_manager.add_reserve_ammo(amount)
+			if player.weapon_manager != null and player.weapon_manager.add_reserve_ammo(amount):
+				return true
+			return GameState.add_item(AMMO_ITEM)  # патроны полные — в сумку
 		Kind.HEALTH:
 			if player.health.current >= player.health.max_health:
-				return false
+				return GameState.add_item(HEALTH_ITEM)  # здоровье полное — в сумку
 			player.health.heal(amount)
 			return true
 		Kind.MISSION_ITEM:

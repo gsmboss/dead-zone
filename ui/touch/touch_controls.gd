@@ -36,6 +36,22 @@ func consume_look_delta() -> Vector2:
 	return delta
 
 
+## Кнопка, созданная кодом после _ready (меню, машина)
+func register_button(button: TouchActionButton) -> void:
+	if button != null and not button in _buttons:
+		_buttons.append(button)
+
+
+func unregister_button(button: TouchActionButton) -> void:
+	if button == null:
+		return
+	button.force_release()
+	_buttons.erase(button)
+	for index: int in _button_touches.keys():
+		if _button_touches[index] == button:
+			_button_touches.erase(index)
+
+
 func reset_all() -> void:
 	for button: TouchActionButton in _buttons:
 		if is_instance_valid(button):

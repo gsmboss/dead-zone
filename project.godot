@@ -21,6 +21,7 @@ InputSetup="*uid://eeyph23ddjd2"
 Impacts="*uid://df11sgt7xyxlh"
 GameState="*uid://cy30ouli4lnvv"
 Sfx="*res://autoload/sfx.gd"
+Settings="*res://autoload/settings.gd"
 
 [display]
 

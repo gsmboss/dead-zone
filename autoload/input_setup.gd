@@ -13,6 +13,8 @@ const ACTIONS: Dictionary = {
 	&"switch_weapon": [KEY_Q],
 	&"interact": [KEY_E],
 	&"aim": [KEY_Z],
+	&"inventory": [KEY_I],
+	&"pause": [KEY_ESCAPE, KEY_P],
 }
 ## Дополнительно: прицеливание правой кнопкой мыши
 const MOUSE_ACTIONS: Dictionary = {

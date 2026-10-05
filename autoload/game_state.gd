@@ -7,6 +7,7 @@ signal coins_changed(coins: int)
 signal weapons_changed
 ## Изменились задания, ежедневная награда или улучшения игрока
 signal progress_changed
+signal inventory_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -24,6 +25,8 @@ const MAX_DIFFICULTY: float = 3.0
 const REWARD_PER_CLEAR: float = 0.1
 const MAX_REWARD_MULTIPLIER: float = 2.0
 const SECONDS_PER_DAY: int = 86400
+## Предметы инвентаря (порядок = порядок в сумке и оружейной)
+const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_pack.tres"]
 
 var coins: int = 0
 var catalog: WeaponCatalog
@@ -31,6 +34,7 @@ var catalog: WeaponCatalog
 var selected_mission: MissionData
 var player_stats: PlayerStats
 var quest_pool: QuestPool
+var items: Array[ItemData] = []
 
 var _owned: Array[String] = []
 var _upgrades: Dictionary = {}     # id оружия -> {"damage": int, "magazine": int, "reload": int}
@@ -42,6 +46,7 @@ var _daily_last_day: int = -1
 var _daily_streak: int = 0
 var _quest_day: int = -1
 var _quests: Array[Dictionary] = []  # {"id": String, "progress": int, "claimed": bool}
+var _inventory: Dictionary = {}  # id предмета -> количество
 
 
 func _ready() -> void:
@@ -60,6 +65,12 @@ func _ready() -> void:
 	if quest_pool == null:
 		push_warning("GameState: не найден %s, заданий не будет" % QUEST_POOL_PATH)
 		quest_pool = QuestPool.new()
+	for path: String in ITEM_PATHS:
+		var item: ItemData = load(path) as ItemData if ResourceLoader.exists(path) else null
+		if item == null or item.id.is_empty():
+			push_warning("GameState: не найден предмет %s" % path)
+			continue
+		items.append(item)
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -157,6 +168,15 @@ func complete_mission(mission: MissionData, score: int, stars: int = 1) -> void:
 	save_game()
 
 
+## Рекорд без засчитанной победы (бесконечный режим: число волн)
+func record_score(mission: MissionData, score: int) -> void:
+	if mission == null or mission.id.is_empty():
+		return
+	if score > int(_best_scores.get(mission.id, -1)):
+		_best_scores[mission.id] = maxi(score, 0)
+		save_game()
+
+
 func get_mission_stars(mission_id: String) -> int:
 	return int(_mission_stars.get(mission_id, 0))
 
@@ -172,6 +192,57 @@ func get_difficulty_multiplier(mission_id: String) -> float:
 
 func get_reward_multiplier(mission_id: String) -> float:
 	return minf(1.0 + REWARD_PER_CLEAR * (get_mission_level(mission_id) - 1), MAX_REWARD_MULTIPLIER)
+
+
+# ---------- Инвентарь ----------
+
+func get_item(item_id: String) -> ItemData:
+	for item: ItemData in items:
+		if item.id == item_id:
+			return item
+	return null
+
+
+func get_item_count(item_id: String) -> int:
+	return int(_inventory.get(item_id, 0))
+
+
+## Положить в сумку. false — нет такого предмета или стопка полна.
+## Не сохраняет сразу (подборы частые) — сохранение в конце миссии
+func add_item(item_id: String, count: int = 1) -> bool:
+	var item: ItemData = get_item(item_id)
+	if item == null or count <= 0:
+		return false
+	var current: int = get_item_count(item_id)
+	if current >= item.max_stack:
+		return false
+	_inventory[item_id] = mini(current + count, item.max_stack)
+	inventory_changed.emit()
+	return true
+
+
+## Использовать предмет на игроке; тратится, только если подействовал
+func use_item(item_id: String, player: Player) -> bool:
+	var item: ItemData = get_item(item_id)
+	if item == null or get_item_count(item_id) <= 0:
+		return false
+	if not item.apply(player):
+		return false
+	_inventory[item_id] = get_item_count(item_id) - 1
+	inventory_changed.emit()
+	return true
+
+
+func buy_item(item_id: String) -> bool:
+	var item: ItemData = get_item(item_id)
+	if item == null or item.price <= 0 or coins < item.price:
+		return false
+	if not add_item(item_id):
+		return false
+	coins -= item.price
+	coins_changed.emit(coins)
+	save_game()
+	return true
 
 
 # ---------- Улучшения игрока ----------
@@ -348,6 +419,7 @@ func reset_progress() -> void:
 	_daily_streak = 0
 	_quest_day = -1
 	_quests.clear()
+	_inventory.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -370,6 +442,7 @@ func save_game() -> void:
 		"daily_streak": _daily_streak,
 		"quest_day": _quest_day,
 		"quests": _quests,
+		"inventory": _inventory,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -449,6 +522,13 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_inventory.clear()
+	var stored: Dictionary = _load_int_dictionary(data.get("inventory", {}), 0, 99)
+	for item_id: String in stored:
+		var item: ItemData = get_item(item_id)
+		if item != null:
+			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
 
 
 ## Словарь {строка: int} из JSON с ограничением значений
