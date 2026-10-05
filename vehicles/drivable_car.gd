@@ -14,6 +14,7 @@ const HIT_COOLDOWN: float = 0.6
 const HIT_SLOWDOWN: float = 0.9
 ## Столкновение со стеной: скорость умножается на это
 const WALL_SLOWDOWN: float = 0.35
+const FALL_LIMIT_Y: float = -12.0
 ## Гараж: двигатель +8% скорости, таран +25% урона и меньше потеря скорости за уровень
 const ENGINE_PER_LEVEL: float = 0.08
 const RAM_PER_LEVEL: float = 0.25
@@ -62,6 +63,7 @@ var _box_center: Vector3 = Vector3(0.0, 0.8, 0.0)
 var _recent_hits: Dictionary = {}
 var _time: float = 0.0
 var _hit_slowdown: float = HIT_SLOWDOWN
+var _safe_position: Vector3 = Vector3.ZERO
 var _headlights: Array[SpotLight3D] = []
 
 
@@ -76,6 +78,7 @@ func _ready() -> void:
 	_build_camera()
 	_build_headlights()
 	_apply_garage()
+	_safe_position = global_position
 
 
 func is_driven() -> bool:
@@ -121,6 +124,7 @@ func set_input(steer: float, throttle: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_time += delta
+	_check_fall()
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	else:
@@ -160,6 +164,17 @@ func _process(delta: float) -> void:
 	var target: Vector3 = _camera_target()
 	camera.global_position = camera.global_position.lerp(target, clampf(camera_smooth * delta, 0.0, 1.0))
 	camera.look_at(global_position + Vector3.UP * 1.2, Vector3.UP)
+
+
+## Упала за карту — вернуть на место последней стоянки на земле
+func _check_fall() -> void:
+	if global_position.y < FALL_LIMIT_Y:
+		global_position = _safe_position + Vector3.UP * 1.0
+		velocity = Vector3.ZERO
+		speed = 0.0
+		return
+	if is_on_floor() and fmod(_time, 0.5) < get_physics_process_delta_time():
+		_safe_position = global_position
 
 
 ## Удар о стену гасит скорость (иначе машина «скользит» вдоль домов на полном ходу)

@@ -17,7 +17,7 @@ const LOT_FILL: float = 0.86
 const ROAD_HEIGHT: float = 0.01
 const GROUND_VISUAL_SIZE: float = 600.0
 const BOUNDS_MARGIN: float = 6.0
-const BOUNDS_HEIGHT: float = 8.0
+const BOUNDS_HEIGHT: float = 40.0
 ## Фонари и брошенные машины не ставятся ближе этого к перекрёстку
 const CROSSING_CLEARANCE: float = 7.0
 const POLE_BOX: Vector3 = Vector3(0.4, 6.6, 0.4)

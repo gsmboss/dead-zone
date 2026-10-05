@@ -82,6 +82,8 @@ const RANGED_RECOVERY: float = 0.4
 const SPIT_HEIGHT: float = 1.4
 ## Взрывной раздувается перед взрывом
 const FUSE_SWELL: float = 0.35
+## Ниже этой высоты зомби считается провалившимся за карту
+const FALL_LIMIT_Y: float = -15.0
 ## Кость головы в скелетах Quaternius
 const HEAD_BONE: StringName = &"Head"
 ## Высота кости Head у Zombie_Basic в масштабе 1.6 (под неё настроены хитбоксы zombie.tscn)
@@ -260,6 +262,9 @@ func notify_target(target_position: Vector3, propagate: bool = false) -> void:
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
+		return
+	if global_position.y < FALL_LIMIT_Y:
+		despawn()  # провалился за карту — убираем без награды
 		return
 	_update_head_hitbox()
 

@@ -47,6 +47,7 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
 
 Ключевые скрипты:
 - player/player.gd (Player, CharacterBody3D): движение, обзор свайпом, отдача, aim assist,
+  защита от падения за карту (ниже fall_limit_y — возврат на последнюю точку на полу),
   группа "player", поля touch_controls, weapon_manager, health, input_enabled.
 - ui/touch/: touch_controls.gd (TouchControls, мультитач по индексам пальцев),
   virtual_joystick.gd (class_name TouchJoystick — встроенный VirtualJoystick в 4.7 занимает имя),

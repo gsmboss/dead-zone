@@ -79,10 +79,10 @@ agent_radius = 0.4
 agent_max_slope = 0.3
 
 [sub_resource type="BoxShape3D" id="Wall_x"]
-size = Vector3(51, 6, 0.5)
+size = Vector3(51, 60, 0.5)
 
 [sub_resource type="BoxShape3D" id="Wall_z"]
-size = Vector3(0.5, 6, 51)
+size = Vector3(0.5, 60, 51)
 
 [node name="TestLevel" type="Node3D" unique_id=189371250]
 

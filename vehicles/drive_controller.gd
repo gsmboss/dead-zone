@@ -161,6 +161,7 @@ func _exit_car() -> void:
 	car.exit()
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	_player.global_position = car.get_exit_position()
+	_player.set_safe_position(_player.global_position)
 	_player.velocity = Vector3.ZERO
 	_player.collision_layer = _saved_layer
 	_player.collision_mask = _saved_mask

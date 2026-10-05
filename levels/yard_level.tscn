@@ -72,10 +72,10 @@ albedo_color = Color(0.26, 0.26, 0.27, 1)
 roughness = 0.95
 
 [sub_resource type="BoxShape3D" id="Wall_x"]
-size = Vector3(57, 6, 0.5)
+size = Vector3(57, 60, 0.5)
 
 [sub_resource type="BoxShape3D" id="Wall_z"]
-size = Vector3(0.5, 6, 57)
+size = Vector3(0.5, 60, 57)
 
 [sub_resource type="NavigationMesh" id="Nav_mesh"]
 agent_height = 1.8

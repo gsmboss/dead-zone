@@ -72,10 +72,10 @@ metallic = 0.3
 roughness = 0.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wallx"]
-size = Vector3(16.8, 4, 0.4)
+size = Vector3(16.8, 40, 0.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wallz"]
-size = Vector3(0.4, 4, 16.8)
+size = Vector3(0.4, 40, 16.8)
 
 [node name="Hub" type="Node3D" unique_id=846140359]
 script = ExtResource("1_hub01")

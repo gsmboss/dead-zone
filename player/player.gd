@@ -33,6 +33,10 @@ signal stamina_changed(current: float, max_value: float)
 ## На телефоне: джойстик вперёд сильнее этого — бег
 @export_range(0.5, 1.0, 0.01) var touch_sprint_threshold: float = 0.93
 
+@export_group("Fall Safety")
+## Ниже этой высоты игрок считается упавшим за карту и возвращается на землю
+@export var fall_limit_y: float = -12.0
+
 @export_group("Look")
 ## Поворот в градусах за свайп на всю высоту экрана
 @export_range(30.0, 720.0, 5.0) var look_sensitivity: float = 180.0
@@ -71,6 +75,10 @@ var _stamina_delay: float = 0.0
 var _slide_left: float = 0.0
 var _slide_direction: Vector3 = Vector3.ZERO
 var _last_stamina_emit: float = -1.0
+## Последняя точка, где игрок стоял на полу (для возврата при падении за карту)
+var _safe_position: Vector3 = Vector3.ZERO
+var _safe_timer: float = 0.0
+const SAFE_POSITION_INTERVAL: float = 0.3
 var _camera_base_y: float = 0.0
 var _camera_base_x: float = 0.0
 var _shake: float = 0.0
@@ -106,6 +114,7 @@ func _ready() -> void:
 	_apply_settings()
 	Settings.changed.connect(_apply_settings)
 	stamina = stamina_max
+	_safe_position = global_position
 
 
 func _process(delta: float) -> void:
@@ -119,6 +128,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_check_fall(delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 
@@ -168,6 +178,27 @@ func add_recoil(pitch_deg: float, yaw_deg: float) -> void:
 	_recoil_pitch = clampf(_recoil_pitch + pitch_deg, 0.0, max_recoil_pitch)
 	rotate_y(deg_to_rad(yaw_deg))
 	_update_head_rotation()
+
+
+# ---------- Защита от падения за карту ----------
+
+## Запоминает безопасную точку на полу; упавшего ниже fall_limit_y возвращает туда
+func _check_fall(delta: float) -> void:
+	if global_position.y < fall_limit_y:
+		global_position = _safe_position + Vector3.UP * 0.5
+		velocity = Vector3.ZERO
+		_slide_left = 0.0
+		push_warning("Player: упал за карту, возвращён на %s" % _safe_position)
+		return
+	_safe_timer -= delta
+	if _safe_timer <= 0.0 and is_on_floor():
+		_safe_timer = SAFE_POSITION_INTERVAL
+		_safe_position = global_position
+
+
+## Сменить безопасную точку вручную (выход из машины и т.п.)
+func set_safe_position(point: Vector3) -> void:
+	_safe_position = point
 
 
 # ---------- Бег и подкат ----------
