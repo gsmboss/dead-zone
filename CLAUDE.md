@@ -202,4 +202,20 @@ button_opacity, crosshair_scale, crosshair_color, гироскоп gyro_* (ре�
 input_devices/sensors/enable_gyroscope=true). Зомби: обход стен (_steer_around_wall), шаг на бордюры
 (STEP_HEIGHT), выход из застревания по шагам и перенос на навмеш (_snap_to_navmesh).
 
+Вид от 3-го лица: Settings.camera_mode (кнопка «ВИД» / V), Player: SpringArm3D «CameraArm» за плечом,
+тело PlayerBody (player/player_body.gd: скин, анимации, оружие на BoneAttachment3D, вспышка), скины
+PlayerSkin (player/skins/*.tres, GameState.SKIN_PATHS, покупка/выбор — окно ПЕРСОНАЖ ui/hub/skin_panel.gd).
+Player.set_weapons_enabled() — убежище. Модели Kenney: models/characters/kenney (скины), models/graveyard
+(скелет, гниляк — enemies/skeleton.tres, ghoul.tres; уровень levels/graveyard_level.tscn строит
+levels/graveyard/graveyard_builder.gd через levels/prop_batch.gd), models/survival (лагерь hub/hub_camp.gd).
+Оружие ближнего боя: knife, bat, saw_bat, spear (модели Quaternius).
+Мультиплеер (ENet, Wi-Fi/точка доступа, до 4): автозагрузка Net (autoload/net.gd: лобби, поиск игр UDP 24681,
+игра на порту 24680, join_hotspot — шлюз x.x.x.1, все RPC), окно ui/hub/lobby_panel.gd (кнопка «ПО СЕТИ»).
+В матче MissionManager отключается и создаёт net/match_manager.gd (MatchManager): копии игроков —
+player.tscn с is_remote (без WeaponManager, группа remote_player, PvP-хитбоксы врагам), состояние 20/с;
+зомби ведёт хост (Zombie.multi_target — ближайший игрок), клиенты — копии Zombie.net_puppet;
+урон уходит владельцу (Hitbox.applying — признак выстрела). Режимы Net.Mode: COOP_SCORE, FREE_FOR_ALL,
+TEAMS, LAST_STANDING (AUTO по числу игроков). Интерфейс ui/match_hud.gd. Для Android в экспорте нужны
+разрешения INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CHANGE_WIFI_MULTICAST_STATE.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

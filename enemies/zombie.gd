@@ -79,6 +79,10 @@ const LOUD_STEP_SPEED: float = 3.0
 ## Золотой угол: соседние зомби берут сектора равномерно вокруг игрока
 const GOLDEN_ANGLE: float = 2.39996
 
+## Мультиплеер (хост): цель — ближайший живой игрок, включая чужих (ставит MatchManager)
+static var multi_target: bool = false
+const RETARGET_INTERVAL: float = 1.0
+
 ## Кто сейчас атакует (общая очередь всех зомби)
 static var _attackers: Array[Zombie] = []
 static var _flank_counter: int = 0
@@ -102,6 +106,10 @@ const HEAD_OFFSET_REFERENCE: Vector3 = Vector3(0.018, 0.234, -0.179)
 const DEFAULT_MODEL_SCALE: float = 1.6
 
 @export var data: ZombieData
+
+## Мультиплеер на клиенте: копия зомби хоста — без ИИ, только позиция и анимации из сети
+var net_puppet: bool = false
+var net_id: int = 0
 
 ## Сложность миссии: задаётся спавнером до add_child
 var health_multiplier: float = 1.0
@@ -209,6 +217,15 @@ var _skeleton_to_body: Transform3D = Transform3D.IDENTITY
 var _head_shape: CollisionShape3D
 var _head_offset: Vector3 = Vector3.ZERO
 
+# Сеть
+var _retarget_timer: float = 0.0
+var _net_position: Vector3 = Vector3.ZERO
+var _net_yaw: float = 0.0
+var _net_state: int = State.WANDER
+var _net_last_state: int = -1
+var _net_speed: float = 0.0
+var _net_has_state: bool = false
+
 # Звук
 var _voice_timer: float = 0.0
 var _hurt_sound_cooldown: float = 0.0
@@ -276,6 +293,14 @@ func notify_target(target_position: Vector3, propagate: bool = false) -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
 		return
+	if net_puppet:
+		_puppet_process(delta)
+		return
+	if multi_target:
+		_retarget_timer -= delta
+		if _retarget_timer <= 0.0:
+			_retarget_timer = RETARGET_INTERVAL
+			_pick_nearest_target()
 	if global_position.y < FALL_LIMIT_Y:
 		despawn()  # провалился за карту — убираем без награды
 		return
@@ -756,8 +781,10 @@ func _explode() -> void:
 	_exploded = true
 	if visual != null:
 		visual.scale = Vector3.ONE
+	# Копия на клиенте: только вид взрыва, урон считает хост
+	var blast_damage: float = 0.0 if net_puppet else data.explode_damage * damage_multiplier
 	Explosion.create(get_tree().current_scene, global_position + Vector3.UP * 0.5,
-		data.explode_radius, data.explode_damage * damage_multiplier, 1.0)
+		data.explode_radius, blast_damage, 1.0)
 	if health != null and not health.is_dead:
 		health.take_damage(health.current + 1.0, global_position, false)
 
@@ -1042,6 +1069,74 @@ func _on_died() -> void:
 		sink.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
 		await sink.finished
 	queue_free()
+
+
+# ---------- Мультиплеер ----------
+
+## Состояние от хоста (копия на клиенте)
+func net_apply_state(position_value: Vector3, yaw: float, state_value: int, hp: float) -> void:
+	_net_position = position_value
+	_net_yaw = yaw
+	_net_state = state_value
+	if not _net_has_state:
+		_net_has_state = true
+		global_position = position_value
+		rotation.y = yaw
+	if health != null and not health.is_dead:
+		health.current = clampf(hp, 0.0, health.max_health)
+
+
+## Хост сообщил о смерти
+func net_kill() -> void:
+	if state == State.DEAD or health == null:
+		return
+	health.take_damage(health.current + 1.0, global_position + Vector3.UP, false)
+
+
+func _puppet_process(delta: float) -> void:
+	_update_head_hitbox()
+	_update_voice(delta)
+	if not _net_has_state:
+		return
+	var before: Vector3 = global_position
+	var weight: float = clampf(10.0 * delta, 0.0, 1.0)
+	if global_position.distance_squared_to(_net_position) > 36.0:
+		global_position = _net_position
+	else:
+		global_position = global_position.lerp(_net_position, weight)
+	rotation.y = lerp_angle(rotation.y, _net_yaw, weight)
+	var moved: float = Vector2(global_position.x - before.x, global_position.z - before.z).length()
+	_net_speed = lerpf(_net_speed, moved / maxf(delta, 0.001), 0.2)
+	var changed: bool = _net_state != _net_last_state
+	_net_last_state = _net_state
+	match _net_state:
+		State.ATTACK, State.SLAM, State.RANGED, State.FUSE:
+			if changed:
+				_play(anim_attack, true)
+		State.STAGGER:
+			if changed:
+				_play(anim_hit, true)
+		_:
+			_play_locomotion(_net_speed)
+
+
+## Ближайший живой игрок (свой или чужой) — новая цель
+func _pick_nearest_target() -> void:
+	var best: Player = null
+	var best_distance: float = INF
+	for group: StringName in [&"player", &"remote_player"]:
+		for node: Node in get_tree().get_nodes_in_group(group):
+			var candidate := node as Player
+			if candidate == null or candidate.health == null or candidate.health.is_dead \
+					or not candidate.is_inside_tree():
+				continue
+			var distance: float = global_position.distance_squared_to(candidate.global_position)
+			if distance < best_distance:
+				best_distance = distance
+				best = candidate
+	if best != null and best != _player:
+		_player = best
+		_player_health = best.health
 
 
 ## Убрать зомби без смерти и награды (спавнер открытого мира)

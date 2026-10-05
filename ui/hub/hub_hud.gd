@@ -65,6 +65,7 @@ func _build_ui() -> void:
 	_base_button.offset_bottom = 52.0 + UIKit.BUTTON_HEIGHT * 3.0
 
 	_add_menu_button("ПЕРСОНАЖ", 3, func() -> void: _open_window(SkinPanel.new()))
+	_add_menu_button("ПО СЕТИ", 4, func() -> void: _open_window(LobbyPanel.new()))
 
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
@@ -91,6 +92,9 @@ func _add_menu_button(text: String, row: int, callback: Callable) -> Button:
 
 
 func _connect_world() -> void:
+	# Вернулись из матча по сети — сразу в лобби
+	if Net.is_online():
+		_open_window.call_deferred(LobbyPanel.new())
 	_player = get_tree().get_first_node_in_group(&"player") as Player
 	GameState.coins_changed.connect(_update_coins)
 	GameState.progress_changed.connect(_update_daily_badge)

@@ -63,6 +63,16 @@ signal stamina_changed(current: float, max_value: float)
 
 ## Отключение управления (смерть, пауза, катсцены)
 var input_enabled: bool = true
+## Мультиплеер: копия другого игрока (без ввода, камеры и оружия; позиция из сети)
+var is_remote: bool = false
+var peer_id: int = 0
+var _net_position: Vector3 = Vector3.ZERO
+var _net_yaw: float = 0.0
+var _net_pitch: float = 0.0
+var _net_speed: float = 0.0
+var _net_on_floor: bool = true
+var _net_has_state: bool = false
+var _head_base_y: float = 1.6
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _pitch: float = 0.0
@@ -105,6 +115,9 @@ var _weapons_enabled: bool = true
 
 
 func _ready() -> void:
+	if is_remote:
+		_ready_remote()
+		return
 	add_to_group(&"player")
 	collision_layer = PhysicsLayers.PLAYER
 	collision_mask = PhysicsLayers.WORLD | PhysicsLayers.ENEMY
@@ -127,6 +140,7 @@ func _ready() -> void:
 	_camera_base_y = camera.position.y
 	_camera_base_x = camera.position.x
 	_camera_fps_position = camera.position
+	_head_base_y = head.position.y
 	_setup_body()
 	_setup_spring_arm()
 	_rng.randomize()
@@ -137,6 +151,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if is_remote:
+		return
 	if touch_controls != null:
 		var look: Vector2 = touch_controls.consume_look_delta()
 		# Пока управление выключено, свайпы просто сбрасываются
@@ -152,6 +168,9 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if is_remote:
+		_remote_physics(delta)
+		return
 	_check_fall(delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -195,6 +214,73 @@ func _apply_settings() -> void:
 	set_third_person(Settings.camera_mode == Settings.CameraMode.THIRD_PERSON)
 
 
+# ---------- Мультиплеер ----------
+
+func _ready_remote() -> void:
+	add_to_group(&"remote_player")
+	collision_layer = PhysicsLayers.PLAYER
+	collision_mask = PhysicsLayers.WORLD
+	input_enabled = false
+	weapon_manager = null
+	if health == null:
+		health = get_node_or_null(^"Health") as Health
+	camera.current = false
+	_setup_body()
+	body.visible = true
+	_net_position = global_position
+	_net_yaw = rotation.y
+
+
+## Состояние другого игрока из сети
+func apply_net_state(position_value: Vector3, yaw: float, pitch: float, speed: float, on_floor: bool) -> void:
+	_net_position = position_value
+	_net_yaw = yaw
+	_net_pitch = pitch
+	_net_speed = speed
+	_net_on_floor = on_floor
+	if not _net_has_state:
+		_net_has_state = true
+		global_position = position_value
+		rotation.y = yaw
+
+
+func _remote_physics(delta: float) -> void:
+	var weight: float = clampf(12.0 * delta, 0.0, 1.0)
+	if global_position.distance_squared_to(_net_position) > 25.0:
+		global_position = _net_position  # возрождение или сильный лаг — без «полёта»
+	else:
+		global_position = global_position.lerp(_net_position, weight)
+	rotation.y = lerp_angle(rotation.y, _net_yaw, weight)
+	head.rotation.x = lerp_angle(head.rotation.x, deg_to_rad(_net_pitch), weight)
+	if body != null:
+		body.update_motion(_net_speed, _net_on_floor, delta)
+
+
+## Поворот камеры по вертикали (для отправки по сети), градусы
+func get_pitch() -> float:
+	return _pitch
+
+
+## Возрождение в точке at (мультиплеер)
+func respawn(at: Vector3) -> void:
+	global_position = at
+	velocity = Vector3.ZERO
+	_safe_position = at
+	_slide_left = 0.0
+	if health != null:
+		health.reset()
+	input_enabled = true
+	head.position.y = _head_base_y
+	head.rotation.z = 0.0
+	if touch_controls != null:
+		touch_controls.show()
+	if body != null:
+		body.revive()
+	if weapon_manager != null:
+		weapon_manager.add_reserve_ammo(1.0)
+	stamina = stamina_max
+
+
 # ---------- Вид от 1-го / 3-го лица ----------
 
 func set_third_person(enabled: bool) -> void:
@@ -225,9 +311,10 @@ func _setup_body() -> void:
 	body = PlayerBody.new()
 	body.name = "Body"
 	add_child(body)
-	body.set_skin(GameState.get_selected_skin())
 	body.visible = false
-	GameState.skin_changed.connect(_on_skin_changed)
+	if not is_remote:
+		body.set_skin(GameState.get_selected_skin())
+		GameState.skin_changed.connect(_on_skin_changed)
 	if weapon_manager != null:
 		weapon_manager.weapon_changed.connect(_on_weapon_changed)
 		weapon_manager.fired.connect(body.on_fired)

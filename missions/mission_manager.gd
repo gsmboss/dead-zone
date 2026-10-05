@@ -91,6 +91,13 @@ func _ready() -> void:
 		push_error("MissionManager: нет дочерней ноды ZombieSpawner")
 		set_process(false)
 		return
+	if Net.in_match:
+		# Игра по сети: уровнем управляет MatchManager, миссия не идёт
+		set_process(false)
+		var match_manager := MatchManager.new()
+		match_manager.spawner = spawner
+		get_parent().add_child.call_deferred(match_manager)
+		return
 	_rng.randomize()
 	_level = GameState.get_mission_level(mission.id)
 	var difficulty: float = GameState.get_difficulty_multiplier(mission.id)

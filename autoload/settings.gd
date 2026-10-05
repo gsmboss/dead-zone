@@ -30,7 +30,7 @@ const DEFAULTS: Dictionary = {
 	"button_style": 0, "button_scale": 1.0, "button_opacity": 0.38, "button_layout": {},
 	"joystick_right": false, "crosshair_scale": 1.0, "crosshair_color": 0,
 	"gyro_enabled": false, "gyro_mode": 0, "gyro_sensitivity_x": 1.0, "gyro_sensitivity_y": 1.0,
-	"camera_mode": 0, "camera_distance": 2.6,
+	"camera_mode": 0, "camera_distance": 2.6, "player_name": "",
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 }
 
@@ -68,6 +68,8 @@ const CAMERA_MODE_NAMES: PackedStringArray = ["1-Е ЛИЦО", "3-Е ЛИЦО"]
 var camera_mode: int = CameraMode.FIRST_PERSON
 ## Расстояние камеры за спиной в виде от 3-го лица, м
 var camera_distance: float = 2.6
+## Имя в игре по сети
+var player_name: String = ""
 
 # Гироскоп
 var gyro_enabled: bool = false
@@ -146,6 +148,8 @@ func load_settings() -> void:
 				value = bool(value) if value is bool or value is int else get(key)
 			TYPE_DICTIONARY:
 				value = value if value is Dictionary else {}
+			TYPE_STRING:
+				value = str(value)
 		set(key, value)
 	_clamp_values()
 

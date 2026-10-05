@@ -146,8 +146,8 @@ func _make_button(text: String) -> Button:
 func _connect_manager() -> void:
 	if mission_manager == null:
 		mission_manager = get_tree().get_first_node_in_group(&"mission_manager") as MissionManager
-	if mission_manager == null:
-		hide()  # в уровне нет миссии
+	if mission_manager == null or Net.in_match:
+		hide()  # в уровне нет миссии или идёт матч по сети (свой интерфейс MatchHUD)
 		return
 	mission_manager.objective_changed.connect(_on_objective_changed)
 	mission_manager.announcement.connect(_show_announcement)

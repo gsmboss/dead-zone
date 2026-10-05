@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"pause"):
 		if _window != null:
 			_window.close_window()
-		elif get_tree().paused:
+		elif _pause_panel.visible:
 			_resume()
 		else:
 			_pause()
@@ -133,7 +133,8 @@ func _pause() -> void:
 		return
 	if _touch_controls != null:
 		_touch_controls.reset_all()
-	get_tree().paused = true
+	# По сети игру не останавливаем: остальные продолжают играть
+	get_tree().paused = not Net.in_match
 	_pause_panel.visible = true
 
 
@@ -158,7 +159,8 @@ func _build_pause_panel() -> void:
 	_add_pause_button(box, "ПРОДОЛЖИТЬ", _resume)
 	_add_pause_button(box, "СУМКА", func() -> void: _open_window(InventoryPanel.new(), false))
 	_add_pause_button(box, "НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new(), false))
-	_add_pause_button(box, "ЗАНОВО", _restart)
+	if not Net.in_match:
+		_add_pause_button(box, "ЗАНОВО", _restart)
 	if ResourceLoader.exists(HUB_SCENE):
 		_add_pause_button(box, "В УБЕЖИЩЕ", _go_to_hub)
 
@@ -181,7 +183,7 @@ func _open_window(window: HubWindow, from_hud: bool) -> void:
 	if from_hud:
 		if _touch_controls != null:
 			_touch_controls.reset_all()
-		get_tree().paused = true
+		get_tree().paused = not Net.in_match
 	_window_from_hud = from_hud
 	_window = window
 	window.closed.connect(_on_window_closed)
@@ -204,6 +206,10 @@ func _restart() -> void:
 
 func _go_to_hub() -> void:
 	get_tree().paused = false
+	if Net.in_match:
+		Net.leave()  # выход из матча по сети
+		get_tree().change_scene_to_file(HUB_SCENE)
+		return
 	var manager := get_tree().get_first_node_in_group(&"mission_manager") as MissionManager
 	if manager != null:
 		manager.leave_mission()  # монеты за убитых сохраняются

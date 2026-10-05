@@ -8,6 +8,9 @@ extends Area3D
 ## Попадание в эту зону считается хедшотом
 @export var is_head: bool = false
 
+## Сейчас идёт урон от выстрела через хитбокс (мультиплеер: отличить выстрел от удара зомби)
+static var applying: bool = false
+
 
 func _ready() -> void:
 	collision_layer = PhysicsLayers.HITBOX
@@ -22,5 +25,7 @@ func _ready() -> void:
 func apply_hit(damage: float, hit_position: Vector3) -> bool:
 	if health == null or health.is_dead or damage <= 0.0:
 		return false
+	applying = true
 	health.take_damage(damage * damage_multiplier, hit_position, is_head)
+	applying = false
 	return true
