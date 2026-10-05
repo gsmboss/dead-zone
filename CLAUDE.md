@@ -119,5 +119,10 @@ levels/test_level.tscn (навмеш, 6 точек спавна, MissionManager+
 https://www.instagram.com/salamandersec/); откат на OpenGL для Android без Vulkan; экспорт AAB,
 подпись keystore, Play Console.
 
+Этап 6, сделано: ассеты (models/environment, models/vehicles, audio/, CREDITS.md);
+levels/static_prop.gd (StaticProp: StaticBody3D с моделью-ребёнком, коробка коллизии по мешам,
+custom_size для фонарей/светофоров); props в hub.tscn и test_level.tscn (дороги, машины, контейнеры,
+пятна крови в Decals); ZombieData.model_scene/model_scale — runner = Zombie_Arm, tank = Zombie_Chubby 1.9.
+
 Бэклог: оружие не проваливается в стены (отдельный слой/камера вью-модели), спрайт вспышки,
 звук хитмаркера, индикатор направления урона.

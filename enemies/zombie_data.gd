@@ -45,6 +45,11 @@ extends Resource
 @export_group("Visual")
 ## Цвет капсулы-заглушки. На реальную модель не влияет
 @export var body_color: Color = Color(0.35, 0.5, 0.3)
+## Своя модель типа (glTF с анимациями Idle/Walk/Run/Punch/HitReact/Death).
+## Пусто — остаётся модель из zombie.tscn (Visual/Model)
+@export var model_scene: PackedScene
+## Масштаб своей модели (модель зомби в zombie.tscn — 1.6)
+@export var model_scale: float = 1.6
 
 @export_group("Reward")
 ## Очки за убийство (понадобится на этапе 4)

@@ -38,6 +38,8 @@ const UNSTUCK_DURATION: float = 0.5
 const FLASH_TIME: float = 0.08
 const CORPSE_TIME: float = 4.0
 const SINK_TIME: float = 1.5
+## Масштаб модели Visual/Model в zombie.tscn (под него настроены хитбоксы)
+const DEFAULT_MODEL_SCALE: float = 1.6
 
 @export var data: ZombieData
 
@@ -580,6 +582,7 @@ func _resolve_references() -> bool:
 		visual = get_node_or_null(^"Visual") as Node3D
 	if visual != null:
 		_visual_base_position = visual.position
+		_apply_model_override()
 		if animation_player == null:
 			var players: Array[Node] = visual.find_children("*", "AnimationPlayer", true, false)
 			if not players.is_empty():
@@ -588,7 +591,47 @@ func _resolve_references() -> bool:
 	for child: Node in get_children():
 		if child is Hitbox:
 			_hitboxes.append(child)
+	_fit_head_hitboxes()
 	return true
+
+
+## Своя модель другого масштаба: голова выше/ниже — сдвигаем хитбоксы головы
+func _fit_head_hitboxes() -> void:
+	if data.model_scene == null or is_equal_approx(data.model_scale, DEFAULT_MODEL_SCALE):
+		return
+	var factor: float = data.model_scale / DEFAULT_MODEL_SCALE
+	for hitbox: Hitbox in _hitboxes:
+		if not hitbox.is_head:
+			continue
+		for shape_node: Node in hitbox.get_children():
+			var shape := shape_node as CollisionShape3D
+			if shape != null:
+				shape.position *= factor
+
+
+## Подменяет Visual/Model моделью типа из data.model_scene (если задана)
+func _apply_model_override() -> void:
+	if data.model_scene == null:
+		return
+	var instance: Node = data.model_scene.instantiate()
+	var model := instance as Node3D
+	if model == null:
+		if instance != null:
+			instance.free()
+		push_warning("Zombie '%s': model_scene типа %s не Node3D, оставлена модель по умолчанию" \
+				% [name, data.display_name])
+		return
+	var old_model: Node = visual.get_node_or_null(^"Model")
+	if old_model != null:
+		# AnimationPlayer старой модели больше не нужен — найдём новый
+		if animation_player != null and old_model.is_ancestor_of(animation_player):
+			animation_player = null
+		visual.remove_child(old_model)
+		old_model.queue_free()
+	model.name = "Model"
+	model.scale = Vector3.ONE * data.model_scale
+	model.rotation.y = PI  # модели Quaternius смотрят в +Z, зомби — в -Z
+	visual.add_child(model)
 
 
 func _setup_agent() -> void:
