@@ -29,6 +29,9 @@ func _ready() -> void:
 	add_child(_death_label)
 	_death_label.set_anchors_preset(PRESET_FULL_RECT)
 
+	# Индикатор направления урона поверх красной вспышки
+	add_child(DamageIndicator.new())
+
 	_connect_player.call_deferred()
 
 

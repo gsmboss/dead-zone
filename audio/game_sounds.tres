@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="GameSounds" format=3]
+
+[ext_resource type="Script" path="res://audio/game_sounds.gd" id="1_snd"]
+[ext_resource type="AudioStream" path="res://audio/player/footstep_concrete_01.ogg" id="a1"]
+[ext_resource type="AudioStream" path="res://audio/player/footstep_concrete_02.ogg" id="a2"]
+[ext_resource type="AudioStream" path="res://audio/player/footstep_concrete_03.ogg" id="a3"]
+[ext_resource type="AudioStream" path="res://audio/player/footstep_concrete_04.ogg" id="a4"]
+[ext_resource type="AudioStream" path="res://audio/player/footstep_concrete_05.ogg" id="a5"]
+[ext_resource type="AudioStream" path="res://audio/player/hurt_hit_01.ogg" id="a6"]
+[ext_resource type="AudioStream" path="res://audio/player/hurt_hit_02.ogg" id="a7"]
+[ext_resource type="AudioStream" path="res://audio/player/hurt_hit_03.ogg" id="a8"]
+[ext_resource type="AudioStream" path="res://audio/impacts/flesh_01.ogg" id="a9"]
+[ext_resource type="AudioStream" path="res://audio/impacts/flesh_02.ogg" id="a10"]
+[ext_resource type="AudioStream" path="res://audio/impacts/flesh_03.ogg" id="a11"]
+[ext_resource type="AudioStream" path="res://audio/impacts/flesh_04.ogg" id="a12"]
+[ext_resource type="AudioStream" path="res://audio/impacts/flesh_05.ogg" id="a13"]
+[ext_resource type="AudioStream" path="res://audio/impacts/world_01.ogg" id="a14"]
+[ext_resource type="AudioStream" path="res://audio/impacts/world_02.ogg" id="a15"]
+[ext_resource type="AudioStream" path="res://audio/impacts/world_03.ogg" id="a16"]
+[ext_resource type="AudioStream" path="res://audio/impacts/world_04.ogg" id="a17"]
+[ext_resource type="AudioStream" path="res://audio/impacts/world_05.ogg" id="a18"]
+[ext_resource type="AudioStream" path="res://audio/impacts/metal_01.ogg" id="a19"]
+[ext_resource type="AudioStream" path="res://audio/impacts/metal_02.ogg" id="a20"]
+[ext_resource type="AudioStream" path="res://audio/impacts/metal_03.ogg" id="a21"]
+[ext_resource type="AudioStream" path="res://audio/impacts/metal_04.ogg" id="a22"]
+[ext_resource type="AudioStream" path="res://audio/impacts/metal_05.ogg" id="a23"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_01.ogg" id="a24"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_02.ogg" id="a25"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_03.ogg" id="a26"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_04.ogg" id="a27"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_05.ogg" id="a28"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_06.ogg" id="a29"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_07.ogg" id="a30"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_08.ogg" id="a31"]
+[ext_resource type="AudioStream" path="res://audio/zombies/moan_01.ogg" id="a32"]
+[ext_resource type="AudioStream" path="res://audio/zombies/moan_02.ogg" id="a33"]
+[ext_resource type="AudioStream" path="res://audio/zombies/moan_03.ogg" id="a34"]
+[ext_resource type="AudioStream" path="res://audio/zombies/moan_04.ogg" id="a35"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_09.ogg" id="a36"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_10.ogg" id="a37"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_11.ogg" id="a38"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_12.ogg" id="a39"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_13.ogg" id="a40"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_14.ogg" id="a41"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_15.ogg" id="a42"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_16.ogg" id="a43"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_17.ogg" id="a44"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_18.ogg" id="a45"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_19.ogg" id="a46"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_20.ogg" id="a47"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_21.ogg" id="a48"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_22.ogg" id="a49"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_23.ogg" id="a50"]
+[ext_resource type="AudioStream" path="res://audio/zombies/zombie_24.ogg" id="a51"]
+[ext_resource type="AudioStream" path="res://audio/ui/click.ogg" id="a52"]
+[ext_resource type="AudioStream" path="res://audio/ui/back.ogg" id="a53"]
+[ext_resource type="AudioStream" path="res://audio/ui/error.ogg" id="a54"]
+[ext_resource type="AudioStream" path="res://audio/ui/confirm.ogg" id="a55"]
+[ext_resource type="AudioStream" path="res://audio/ui/purchase.ogg" id="a56"]
+[ext_resource type="AudioStream" path="res://audio/ui/pickup.ogg" id="a57"]
+[ext_resource type="AudioStream" path="res://audio/ui/hitmarker.ogg" id="a58"]
+[ext_resource type="AudioStream" path="res://audio/weapons/dry_fire.ogg" id="a59"]
+
+[resource]
+script = ExtResource("1_snd")
+footsteps = Array[AudioStream]([ExtResource("a1"), ExtResource("a2"), ExtResource("a3"), ExtResource("a4"), ExtResource("a5")])
+player_hurt = Array[AudioStream]([ExtResource("a6"), ExtResource("a7"), ExtResource("a8")])
+flesh_hits = Array[AudioStream]([ExtResource("a9"), ExtResource("a10"), ExtResource("a11"), ExtResource("a12"), ExtResource("a13")])
+world_hits = Array[AudioStream]([ExtResource("a14"), ExtResource("a15"), ExtResource("a16"), ExtResource("a17"), ExtResource("a18")])
+metal_hits = Array[AudioStream]([ExtResource("a19"), ExtResource("a20"), ExtResource("a21"), ExtResource("a22"), ExtResource("a23")])
+zombie_idle = Array[AudioStream]([ExtResource("a24"), ExtResource("a25"), ExtResource("a26"), ExtResource("a27"), ExtResource("a28"), ExtResource("a29"), ExtResource("a30"), ExtResource("a31"), ExtResource("a32"), ExtResource("a33"), ExtResource("a34"), ExtResource("a35")])
+zombie_attack = Array[AudioStream]([ExtResource("a36"), ExtResource("a37"), ExtResource("a38"), ExtResource("a39"), ExtResource("a40"), ExtResource("a41")])
+zombie_hurt = Array[AudioStream]([ExtResource("a42"), ExtResource("a43"), ExtResource("a44"), ExtResource("a45"), ExtResource("a46"), ExtResource("a47")])
+zombie_death = Array[AudioStream]([ExtResource("a48"), ExtResource("a49"), ExtResource("a50"), ExtResource("a51")])
+ui_click = ExtResource("a52")
+ui_back = ExtResource("a53")
+ui_error = ExtResource("a54")
+ui_confirm = ExtResource("a55")
+purchase = ExtResource("a56")
+pickup = ExtResource("a57")
+hitmarker = ExtResource("a58")
+dry_fire = ExtResource("a59")

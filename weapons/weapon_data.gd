@@ -12,8 +12,16 @@ extends Resource
 @export_range(0.0, 15.0, 0.1) var spread_degrees: float = 1.0
 
 @export_group("Fire")
-## Выстрелов в секунду
+## Выстрелов (ударов) в секунду
 @export_range(0.5, 20.0, 0.1) var fire_rate: float = 4.0
+
+@export_group("Melee")
+## Оружие ближнего боя: без патронов, удар на max_range веером лучей
+@export var is_melee: bool = false
+## Ширина веера удара, градусы (лучи: центр и края)
+@export_range(0.0, 60.0, 1.0) var melee_arc_degrees: float = 30.0
+## Поворот модели при замахе, градусы
+@export var swing_rotation_degrees: Vector3 = Vector3(-55.0, 0.0, 25.0)
 
 @export_group("Ammo")
 @export_range(1, 200) var magazine_size: int = 12
@@ -28,6 +36,15 @@ extends Resource
 @export var recoil_yaw: float = 0.4
 ## Откат модели оружия назад, метры
 @export var gun_kick: float = 0.05
+
+@export_group("Audio")
+@export var fire_sound: AudioStream
+## Звук перезарядки (обрывается, если перезарядка закончилась раньше)
+@export var reload_sound: AudioStream
+## Звук в конце перезарядки (например, передёргивание дробовика)
+@export var reload_end_sound: AudioStream
+@export_range(-30.0, 10.0, 0.5) var fire_volume_db: float = -4.0
+@export_range(0.5, 2.0, 0.05) var fire_pitch: float = 1.0
 
 @export_group("View Model")
 ## Модель оружия в руках (.gltf / .tscn). Пусто → серый брусок Gun
@@ -59,7 +76,14 @@ func get_fire_interval() -> float:
 
 
 func has_infinite_reserve() -> bool:
-	return max_reserve_ammo < 0
+	return is_melee or max_reserve_ammo < 0
+
+
+## Какие улучшения доступны в оружейной (у ближнего боя только урон)
+func get_upgrade_stats() -> Array[String]:
+	if is_melee:
+		return ["damage"]
+	return ["damage", "magazine", "reload"]
 
 
 ## Цена следующего уровня; -1, если уровень максимальный

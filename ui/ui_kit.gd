@@ -27,6 +27,7 @@ static func button(text: String, font_size: int = 26, min_width: float = 0.0) ->
 	result.focus_mode = Control.FOCUS_NONE
 	result.custom_minimum_size = Vector2(min_width, BUTTON_HEIGHT)
 	result.add_theme_font_size_override(&"font_size", font_size)
+	result.pressed.connect(func() -> void: Sfx.click())
 	return result
 
 

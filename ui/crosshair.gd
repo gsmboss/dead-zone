@@ -1,5 +1,5 @@
 extends Label
-## Прицел: краснеет при наведении на цель, вспыхивает при попадании.
+## Прицел: краснеет при наведении на цель, при попадании — крестик и звук.
 
 const FLASH_TIME: float = 0.12
 
@@ -8,12 +8,17 @@ const FLASH_TIME: float = 0.12
 @export var target_color: Color = Color(1.0, 0.3, 0.3)
 @export var hit_color: Color = Color(1, 1, 1)
 @export var headshot_color: Color = Color(1.0, 0.8, 0.1)
+@export var kill_color: Color = Color(1.0, 0.25, 0.2)
+@export_range(-30.0, 6.0, 0.5) var hit_sound_volume_db: float = -8.0
 
 var _flash: float = 0.0
 var _flash_color: Color = Color.WHITE
+var _hit_marker: HitMarker
 
 
 func _ready() -> void:
+	_hit_marker = HitMarker.new()
+	add_child(_hit_marker)
 	resized.connect(_update_pivot)
 	_update_pivot()
 	_connect_manager.call_deferred()
@@ -43,7 +48,12 @@ func _process(delta: float) -> void:
 func _on_hit_landed(is_headshot: bool, killed: bool) -> void:
 	_flash = FLASH_TIME * (1.6 if killed else 1.0)
 	_flash_color = headshot_color if is_headshot else hit_color
+	var marker_color: Color = kill_color if killed else _flash_color
+	_hit_marker.show_hit(marker_color, killed)
+	Sfx.play_2d(Sfx.sounds.hitmarker, hit_sound_volume_db, 1.25 if killed else 1.0, 0.03)
 
 
 func _update_pivot() -> void:
 	pivot_offset = size * 0.5
+	if _hit_marker != null:
+		_hit_marker.position = size * 0.5

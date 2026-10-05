@@ -7,6 +7,8 @@ signal damaged(amount: float, hit_position: Vector3, is_headshot: bool)
 signal died
 
 @export var max_health: float = 100.0
+## Доля поглощаемого урона (броня), 0..0.9
+@export_range(0.0, 0.9, 0.01) var damage_reduction: float = 0.0
 
 var current: float = 0.0
 var is_dead: bool = false
@@ -22,6 +24,7 @@ func _ready() -> void:
 func take_damage(amount: float, hit_position: Vector3 = Vector3.ZERO, is_headshot: bool = false) -> void:
 	if is_dead or amount <= 0.0:
 		return
+	amount *= 1.0 - clampf(damage_reduction, 0.0, 0.9)
 	current = maxf(current - amount, 0.0)
 	damaged.emit(amount, hit_position, is_headshot)
 	health_changed.emit(current, max_health)

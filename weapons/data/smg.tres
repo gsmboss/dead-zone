@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_smg01"]
+[ext_resource type="PackedScene" uid="uid://bfapymd7uvxce" path="res://models/weapons/SMG.gltf" id="2_smg01"]
+[ext_resource type="AudioStream" path="res://audio/weapons/rifle_shot.ogg" id="s_fire"]
+[ext_resource type="AudioStream" path="res://audio/weapons/rifle_reload.ogg" id="s_reload"]
+
+[resource]
+script = ExtResource("1_smg01")
+display_name = "ПИСТОЛЕТ-ПУЛЕМЁТ"
+damage = 14.0
+max_range = 45.0
+spread_degrees = 3.0
+fire_rate = 12.0
+magazine_size = 35
+max_reserve_ammo = 210
+reload_time = 1.6
+recoil_pitch = 0.6
+recoil_yaw = 0.6
+gun_kick = 0.025
+fire_sound = ExtResource("s_fire")
+reload_sound = ExtResource("s_reload")
+fire_volume_db = -7.0
+fire_pitch = 1.25
+view_model = ExtResource("2_smg01")
+model_position = Vector3(0.15, -0.19, -0.42)
+model_rotation_degrees = Vector3(0, 183, 0)
+model_scale = 0.4
+muzzle_position = Vector3(0, 0.17, -0.6)
+id = "smg"
+price = 800
+upgrade_base_cost = 130
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

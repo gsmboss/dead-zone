@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 InputSetup="*uid://eeyph23ddjd2"
 Impacts="*uid://df11sgt7xyxlh"
 GameState="*uid://cy30ouli4lnvv"
+Sfx="*res://autoload/sfx.gd"
 
 [display]
 
