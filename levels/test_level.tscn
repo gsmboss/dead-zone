@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://dovqnlj1fo70i" path="res://missions/mission_manager.gd" id="11_o5yuq"]
 [ext_resource type="Resource" uid="uid://c725jtemdrvwt" path="res://missions/data/mission_waves.tres" id="12_wjuib"]
 [ext_resource type="Script" uid="uid://bxnfpultch60d" path="res://missions/zombie_spawner.gd" id="13_xag4j"]
+[ext_resource type="Script" uid="uid://bqofxke15edqw" path="res://ui/mission_hud.gd" id="14_mhud1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wndkh"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -179,9 +180,13 @@ script = ExtResource("8_paa45")
 
 [node name="MissionHUD" type="Control" parent="HUD" unique_id=433307376]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_mhud1")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1637263258]
 navigation_mesh = SubResource("NavigationMesh_avdwy")
