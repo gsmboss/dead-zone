@@ -13,7 +13,7 @@ extends CharacterBody3D
 
 signal died(zombie: Zombie)
 
-enum State { WANDER, CHASE, SEARCH, ATTACK, STAGGER, DEAD }
+enum State { WANDER, CHASE, SEARCH, ATTACK, STAGGER, DEAD, CHARGE, SLAM }
 
 const PATH_UPDATE_INTERVAL: float = 0.25
 const SENSE_INTERVAL: float = 0.2
@@ -38,10 +38,26 @@ const UNSTUCK_DURATION: float = 0.5
 const FLASH_TIME: float = 0.08
 const CORPSE_TIME: float = 4.0
 const SINK_TIME: float = 1.5
+## Пауза между рыками (случайная в этих пределах), сек
+const VOICE_INTERVAL_MIN: float = 3.0
+const VOICE_INTERVAL_MAX: float = 8.0
+const HURT_SOUND_COOLDOWN: float = 0.4
+const VOICE_HEIGHT: float = 1.5
+## Рывок прерывается, если зомби упёрся (скорость ниже этой доли)
+const CHARGE_BLOCKED_FACTOR: float = 0.25
+const CHARGE_HIT_DISTANCE: float = 1.6
+const SLAM_SHAKE: float = 0.8
+const CHARGE_SHAKE: float = 0.6
 ## Масштаб модели Visual/Model в zombie.tscn (под него настроены хитбоксы)
 const DEFAULT_MODEL_SCALE: float = 1.6
 
 @export var data: ZombieData
+
+## Сложность миссии: задаётся спавнером до add_child
+var health_multiplier: float = 1.0
+var damage_multiplier: float = 1.0
+## Убит выстрелом в голову (для заданий)
+var killed_by_headshot: bool = false
 
 @export_group("References (optional)")
 ## Пусто → дочерняя нода "Health"
@@ -112,6 +128,18 @@ var _hitboxes: Array[Hitbox] = []
 var _flash_material: StandardMaterial3D
 var _visual_base_position: Vector3 = Vector3.ZERO
 
+# Способности босса
+var _charge_cooldown: float = 0.0
+var _slam_cooldown: float = 0.0
+var _special_elapsed: float = 0.0
+var _special_hit_done: bool = false
+var _charge_direction: Vector3 = Vector3.ZERO
+var _last_hit_headshot: bool = false
+
+# Звук
+var _voice_timer: float = 0.0
+var _hurt_sound_cooldown: float = 0.0
+
 
 func _ready() -> void:
 	add_to_group(&"zombies")
@@ -127,7 +155,7 @@ func _ready() -> void:
 		set_process(false)
 		return
 
-	health.max_health = data.max_health
+	health.max_health = data.max_health * maxf(health_multiplier, 0.1)
 	health.reset()
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
@@ -139,6 +167,9 @@ func _ready() -> void:
 	_home_position = global_position
 	_wander_wait = _rng.randf_range(0.0, 2.0)
 	_sense_timer = _rng.randf() * SENSE_INTERVAL  # разносим проверки по разным кадрам
+	_voice_timer = _rng.randf_range(0.5, VOICE_INTERVAL_MAX)
+	_charge_cooldown = data.charge_cooldown * 0.5
+	_slam_cooldown = 0.0
 
 	_setup_agent()
 	_setup_visuals()
@@ -172,6 +203,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= _gravity * delta
 	_cooldown = maxf(_cooldown - delta, 0.0)
 	_stagger_cooldown = maxf(_stagger_cooldown - delta, 0.0)
+	_hurt_sound_cooldown = maxf(_hurt_sound_cooldown - delta, 0.0)
+	_charge_cooldown = maxf(_charge_cooldown - delta, 0.0)
+	_slam_cooldown = maxf(_slam_cooldown - delta, 0.0)
+	_update_voice(delta)
 
 	if _has_live_target():
 		_update_senses(delta)
@@ -185,6 +220,16 @@ func _physics_process(delta: float) -> void:
 		State.ATTACK:
 			if _has_live_target():
 				_process_attack(delta)
+				return
+			_set_state(State.WANDER)
+		State.CHARGE:
+			if _has_live_target():
+				_process_charge(delta)
+				return
+			_set_state(State.WANDER)
+		State.SLAM:
+			if _has_live_target():
+				_process_slam(delta)
 				return
 			_set_state(State.WANDER)
 
@@ -257,10 +302,17 @@ func _process_hunt(delta: float) -> void:
 	if can_see and distance <= data.attack_range:
 		_face(_flat(player_position - global_position), delta)
 		_set_desired_velocity(Vector3.ZERO)
-		if _cooldown <= 0.0:
+		if data.slam_enabled and _slam_cooldown <= 0.0:
+			_start_slam()
+		elif _cooldown <= 0.0:
 			_start_attack()
 		else:
 			_play_locomotion(0.0)
+		return
+
+	if can_see and data.charge_enabled and _charge_cooldown <= 0.0 \
+			and distance >= data.charge_min_distance and distance <= data.charge_max_distance:
+		_start_charge()
 		return
 
 	if can_see:
@@ -328,6 +380,7 @@ func _pick_wander_target() -> void:
 
 
 func _start_attack() -> void:
+	_voice(Sfx.sounds.zombie_attack, 2.0)
 	_set_state(State.ATTACK)
 	_attack_elapsed = 0.0
 	_attack_hit_done = false
@@ -344,11 +397,100 @@ func _process_attack(delta: float) -> void:
 		_attack_hit_done = true
 		# Игрок успел отбежать — промах
 		if to_player.length() <= data.attack_range * ATTACK_HIT_TOLERANCE:
-			_player_health.take_damage(data.attack_damage, global_position, false)
+			_player_health.take_damage(data.attack_damage * damage_multiplier, global_position, false)
 
 	if _attack_elapsed >= data.attack_windup + ATTACK_RECOVERY:
 		_cooldown = data.attack_cooldown
 		_set_state(State.CHASE)
+
+
+# ---------- Способности босса ----------
+
+func _start_charge() -> void:
+	_set_state(State.CHARGE)
+	_special_elapsed = 0.0
+	_special_hit_done = false
+	_charge_direction = _flat(_player.global_position - global_position).normalized()
+	_voice(Sfx.sounds.zombie_attack, 4.0)
+	_play(anim_idle, true)
+
+
+## Замах (стоит и смотрит на игрока) → рывок по прямой
+func _process_charge(delta: float) -> void:
+	_special_elapsed += delta
+	if _special_elapsed < data.charge_windup:
+		var to_player: Vector3 = _flat(_player.global_position - global_position)
+		_face(to_player, delta)
+		if to_player.length_squared() > 0.01:
+			_charge_direction = to_player.normalized()
+		_set_desired_velocity(Vector3.ZERO)
+		return
+
+	var dash_time: float = _special_elapsed - data.charge_windup
+	_face(_charge_direction, delta)
+	_apply_velocity(_charge_direction * data.charge_speed)
+	_play(anim_run, false, data.charge_speed / maxf(run_anim_speed, 0.1))
+
+	if not _special_hit_done and _flat_distance_to(_player.global_position) <= CHARGE_HIT_DISTANCE:
+		_special_hit_done = true
+		_player_health.take_damage(data.charge_damage * damage_multiplier, global_position, false)
+		_push_player(CHARGE_SHAKE)
+		_end_special(true)
+		return
+
+	var real: Vector3 = get_real_velocity()
+	var blocked: bool = dash_time > 0.25 \
+		and Vector2(real.x, real.z).length() < data.charge_speed * CHARGE_BLOCKED_FACTOR
+	if dash_time >= data.charge_duration or blocked:
+		_end_special(true)
+
+
+func _start_slam() -> void:
+	_set_state(State.SLAM)
+	_special_elapsed = 0.0
+	_special_hit_done = false
+	_voice(Sfx.sounds.zombie_attack, 4.0)
+	_play(anim_attack, true, 0.7)
+
+
+## Медленный замах → удар по всем вокруг в радиусе slam_radius
+func _process_slam(delta: float) -> void:
+	_special_elapsed += delta
+	_face(_flat(_player.global_position - global_position), delta)
+	_set_desired_velocity(Vector3.ZERO)
+	if not _special_hit_done and _special_elapsed >= data.slam_windup:
+		_special_hit_done = true
+		var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+		if impacts != null:
+			impacts.spawn(global_position + Vector3.UP * 0.1, Vector3.UP, false)
+		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), global_position, 4.0, 0.5)
+		if _flat_distance_to(_player.global_position) <= data.slam_radius:
+			_player_health.take_damage(data.slam_damage * damage_multiplier, global_position, false)
+			_push_player(SLAM_SHAKE)
+		elif _player != null:
+			_player.shake(SLAM_SHAKE * 0.4)  # земля дрожит и вдали
+	if _special_elapsed >= data.slam_windup + ATTACK_RECOVERY:
+		_end_special(false)
+
+
+func _end_special(was_charge: bool) -> void:
+	if was_charge:
+		_charge_cooldown = data.charge_cooldown
+	else:
+		_slam_cooldown = data.slam_cooldown
+	_cooldown = data.attack_cooldown
+	_set_desired_velocity(Vector3.ZERO)
+	_set_state(State.CHASE)
+
+
+func _push_player(shake_strength: float) -> void:
+	if _player == null:
+		return
+	var away: Vector3 = _flat(_player.global_position - global_position)
+	if away.length_squared() < 0.01:
+		away = -global_basis.z
+	_player.apply_knockback(away.normalized() * data.knockback + Vector3.UP * data.knockback * 0.3)
+	_player.shake(shake_strength)
 
 
 func _try_stagger(is_headshot: bool) -> void:
@@ -477,8 +619,12 @@ func _on_player_fired(_weapon: WeaponData) -> void:
 
 
 func _on_damaged(_amount: float, _hit_position: Vector3, is_headshot: bool) -> void:
+	_last_hit_headshot = is_headshot
 	_flash = FLASH_TIME
 	_set_flash(true)
+	if _hurt_sound_cooldown <= 0.0 and not health.is_dead:
+		_hurt_sound_cooldown = HURT_SOUND_COOLDOWN
+		_voice(Sfx.sounds.zombie_hurt)
 	if _player != null:
 		notify_target(_player.global_position, true)
 		_time_since_seen = 0.0  # знает, откуда стреляли
@@ -486,6 +632,7 @@ func _on_damaged(_amount: float, _hit_position: Vector3, is_headshot: bool) -> v
 
 
 func _on_died() -> void:
+	killed_by_headshot = _last_hit_headshot
 	state = State.DEAD
 	velocity = Vector3.ZERO
 	_set_flash(false)
@@ -496,6 +643,10 @@ func _on_died() -> void:
 		hitbox.set_deferred(&"collision_layer", 0)
 	if _agent != null:
 		_agent.avoidance_enabled = false
+	_voice(Sfx.sounds.zombie_death, 3.0)
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		impacts.spawn_blood(global_position)
 	died.emit(self)
 
 	if _has_anim(anim_death):
@@ -513,6 +664,32 @@ func _on_died() -> void:
 		sink.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
 		await sink.finished
 	queue_free()
+
+
+# ---------- Звук ----------
+
+## Рык время от времени (громче в погоне)
+func _update_voice(delta: float) -> void:
+	_voice_timer -= delta
+	if _voice_timer > 0.0:
+		return
+	_voice_timer = _rng.randf_range(VOICE_INTERVAL_MIN, VOICE_INTERVAL_MAX)
+	if state == State.WANDER:
+		_voice(Sfx.sounds.zombie_idle, -6.0)
+	elif state == State.CHASE or state == State.SEARCH:
+		_voice(Sfx.sounds.zombie_idle)
+
+
+func _voice(list: Array[AudioStream], extra_db: float = 0.0) -> void:
+	Sfx.play_3d(Sfx.pick(list), global_position + Vector3(0.0, VOICE_HEIGHT * _model_height_factor(), 0.0),
+		data.voice_volume_db + extra_db, data.voice_pitch)
+
+
+## Во сколько раз модель выше стандартной (для звука и хитбоксов)
+func _model_height_factor() -> float:
+	if data.model_scene == null:
+		return 1.0
+	return data.model_scale / DEFAULT_MODEL_SCALE
 
 
 # ---------- Анимация ----------
@@ -591,22 +768,32 @@ func _resolve_references() -> bool:
 	for child: Node in get_children():
 		if child is Hitbox:
 			_hitboxes.append(child)
-	_fit_head_hitboxes()
+	_fit_hitboxes()
 	return true
 
 
-## Своя модель другого масштаба: голова выше/ниже — сдвигаем хитбоксы головы
-func _fit_head_hitboxes() -> void:
-	if data.model_scene == null or is_equal_approx(data.model_scale, DEFAULT_MODEL_SCALE):
+## Своя модель другого масштаба: хитбоксы (тело и голова) растут вместе с ней.
+## Формы дублируются — они общие для всех зомби из zombie.tscn
+func _fit_hitboxes() -> void:
+	var factor: float = _model_height_factor()
+	if is_equal_approx(factor, 1.0):
 		return
-	var factor: float = data.model_scale / DEFAULT_MODEL_SCALE
 	for hitbox: Hitbox in _hitboxes:
-		if not hitbox.is_head:
-			continue
 		for shape_node: Node in hitbox.get_children():
-			var shape := shape_node as CollisionShape3D
-			if shape != null:
-				shape.position *= factor
+			var collision := shape_node as CollisionShape3D
+			if collision == null or collision.shape == null:
+				continue
+			collision.position *= factor
+			var shape: Shape3D = collision.shape.duplicate() as Shape3D
+			if shape is CapsuleShape3D:
+				var capsule := shape as CapsuleShape3D
+				capsule.radius *= factor
+				capsule.height *= factor
+			elif shape is SphereShape3D:
+				(shape as SphereShape3D).radius *= factor
+			elif shape is BoxShape3D:
+				(shape as BoxShape3D).size *= factor
+			collision.shape = shape
 
 
 ## Подменяет Visual/Model моделью типа из data.model_scene (если задана)

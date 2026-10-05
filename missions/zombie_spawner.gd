@@ -23,8 +23,9 @@ func _ready() -> void:
 		push_error("ZombieSpawner: не назначена zombie_scene")
 
 
-## Возвращает созданного зомби или null, если спавн невозможен
-func spawn(data: ZombieData) -> Zombie:
+## Возвращает созданного зомби или null, если спавн невозможен.
+## Множители — сложность миссии (уровень повтора)
+func spawn(data: ZombieData, health_multiplier: float = 1.0, damage_multiplier: float = 1.0) -> Zombie:
 	if zombie_scene == null:
 		return null
 
@@ -40,6 +41,8 @@ func spawn(data: ZombieData) -> Zombie:
 
 	# Данные и позицию задаём до add_child: они нужны зомби в _ready
 	zombie.data = data
+	zombie.health_multiplier = health_multiplier
+	zombie.damage_multiplier = damage_multiplier
 	var jitter := Vector3(
 		_rng.randf_range(-spawn_jitter, spawn_jitter), 0.0,
 		_rng.randf_range(-spawn_jitter, spawn_jitter))

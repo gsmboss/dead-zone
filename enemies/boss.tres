@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_boss1"]
+[ext_resource type="PackedScene" uid="uid://odbeiqagf5bi" path="res://models/zombies/Zombie_Chubby.gltf" id="2_boss1"]
+
+[resource]
+script = ExtResource("1_boss1")
+display_name = "ГРОМИЛА"
+max_health = 2500.0
+move_speed = 1.7
+turn_speed = 4.0
+speed_variation = 0.0
+attack_damage = 30.0
+attack_range = 2.4
+attack_windup = 0.7
+attack_cooldown = 1.1
+detection_radius = 40.0
+close_sense_radius = 8.0
+hearing_radius = 60.0
+alert_radius = 0.0
+lose_interest_time = 30.0
+wander_radius = 0.0
+stagger_time = 0.0
+body_color = Color(0.45, 0.2, 0.2, 1)
+model_scene = ExtResource("2_boss1")
+model_scale = 2.6
+is_boss = true
+charge_enabled = true
+slam_enabled = true
+voice_pitch = 0.55
+voice_volume_db = 4.0
+score = 300
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

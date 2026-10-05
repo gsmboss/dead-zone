@@ -1,5 +1,5 @@
 extends Control
-## HUD миссии: цель вверху, объявления по центру, экран результата.
+## HUD миссии: цель вверху, полоска босса, объявления по центру, экран результата.
 ## Все элементы создаются кодом — достаточно добавить пустой Control в HUD.
 
 const ANNOUNCE_HOLD: float = 1.2
@@ -17,6 +17,11 @@ var _announce_tween: Tween
 var _result: PanelContainer
 var _result_title: Label
 var _result_stats: Label
+var _result_stars: Label
+var _boss_box: VBoxContainer
+var _boss_name: Label
+var _boss_bar: ProgressBar
+var _boss: Zombie
 
 
 func _ready() -> void:
@@ -32,6 +37,32 @@ func _build_ui() -> void:
 	_objective.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
 	_objective.offset_top = 16.0
 	_objective.offset_bottom = 56.0
+
+	# Полоска здоровья босса под целью
+	_boss_box = VBoxContainer.new()
+	_boss_box.visible = false
+	_boss_box.mouse_filter = MOUSE_FILTER_IGNORE
+	add_child(_boss_box)
+	_boss_box.set_anchors_and_offsets_preset(PRESET_CENTER_TOP)
+	_boss_box.offset_left = -300.0
+	_boss_box.offset_right = 300.0
+	_boss_box.offset_top = 62.0
+	_boss_box.offset_bottom = 130.0
+	_boss_name = _make_label(_boss_box, 24)
+	_boss_name.modulate = LOSE_COLOR
+	_boss_bar = ProgressBar.new()
+	_boss_bar.mouse_filter = MOUSE_FILTER_IGNORE
+	_boss_bar.show_percentage = false
+	_boss_bar.custom_minimum_size = Vector2(600.0, 22.0)
+	var bar_bg := StyleBoxFlat.new()
+	bar_bg.bg_color = Color(0.0, 0.0, 0.0, 0.6)
+	bar_bg.set_corner_radius_all(6)
+	var bar_fill := StyleBoxFlat.new()
+	bar_fill.bg_color = Color(0.85, 0.12, 0.1)
+	bar_fill.set_corner_radius_all(6)
+	_boss_bar.add_theme_stylebox_override(&"background", bar_bg)
+	_boss_bar.add_theme_stylebox_override(&"fill", bar_fill)
+	_boss_box.add_child(_boss_bar)
 
 	# Крупные объявления чуть выше центра
 	_announce = _make_label(self, 56)
@@ -54,6 +85,8 @@ func _build_ui() -> void:
 	_result.add_child(box)
 
 	_result_title = _make_label(box, 48)
+	_result_stars = _make_label(box, 34)
+	_result_stars.modulate = Color(1.0, 0.85, 0.3)
 	_result_stats = _make_label(box, 26)
 
 	var buttons := HBoxContainer.new()
@@ -93,6 +126,7 @@ func _make_button(text: String) -> Button:
 	button.custom_minimum_size = Vector2(260.0, 80.0)
 	button.focus_mode = FOCUS_NONE
 	button.add_theme_font_size_override(&"font_size", 28)
+	button.pressed.connect(func() -> void: Sfx.click())
 	return button
 
 
@@ -105,11 +139,34 @@ func _connect_manager() -> void:
 	mission_manager.objective_changed.connect(_on_objective_changed)
 	mission_manager.announcement.connect(_show_announcement)
 	mission_manager.mission_finished.connect(_show_result)
+	mission_manager.boss_spawned.connect(_on_boss_spawned)
 	_objective.text = mission_manager.get_objective_text()
 
 
 func _on_objective_changed(text: String) -> void:
 	_objective.text = text
+
+
+func _on_boss_spawned(boss: Zombie) -> void:
+	if boss == null or boss.health == null:
+		return
+	_boss = boss
+	_boss_name.text = boss.data.display_name if boss.data != null else "БОСС"
+	_boss_bar.max_value = boss.health.max_health
+	_boss_bar.value = boss.health.current
+	_boss_box.visible = true
+	boss.health.health_changed.connect(_on_boss_health_changed)
+	boss.health.died.connect(_on_boss_died)
+
+
+func _on_boss_health_changed(current: float, max_value: float) -> void:
+	_boss_bar.max_value = max_value
+	_boss_bar.value = current
+
+
+func _on_boss_died() -> void:
+	_boss_box.visible = false
+	_boss = null
 
 
 func _show_announcement(text: String) -> void:
@@ -129,12 +186,20 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 
 	_result_title.text = "ПОБЕДА!" if won else "ВЫ ПОГИБЛИ"
 	_result_title.modulate = WIN_COLOR if won else LOSE_COLOR
+	_boss_box.visible = false
+
+	var stars: int = int(stats.get("stars", 0))
+	_result_stars.visible = won
+	_result_stars.text = "ЗВЁЗДЫ: %d / 3" % stars
 
 	var lines := PackedStringArray()
-	lines.append(str(stats.get("title", "")))
+	var level: int = int(stats.get("level", 1))
+	lines.append(str(stats.get("title", "")) + ("" if level <= 1 else "  •  уровень %d" % level))
 	lines.append("Убито зомби: %d" % int(stats.get("kills", 0)))
 	lines.append("Очки: %d" % int(stats.get("score", 0)))
 	lines.append("Время: %s" % MissionManager.format_time(float(stats.get("time", 0.0))))
+	lines.append("Точность: %d%%  •  Здоровье: %d%%" % [
+		roundi(float(stats.get("accuracy", 0.0)) * 100.0), roundi(float(stats.get("health_share", 0.0)) * 100.0)])
 	lines.append("Монеты: +%d (всего %d)" % [int(stats.get("coins", 0)), int(stats.get("total_coins", 0))])
 	_result_stats.text = "\n".join(lines)
 	_result.visible = true

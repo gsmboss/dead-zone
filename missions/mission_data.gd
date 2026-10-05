@@ -2,7 +2,8 @@ class_name MissionData
 extends Resource
 ## Описание миссии. Каждая миссия — отдельный .tres файл.
 
-enum Type { WAVES, KILL_COUNT, SURVIVE }
+## DEFEND — удерживать точку (DefendPoint), COLLECT — собрать ящики (ItemSpawnPoint)
+enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT }
 
 ## Уникальный id для сохранений, латиницей: waves, kill, survive
 @export var id: String = ""
@@ -19,6 +20,12 @@ enum Type { WAVES, KILL_COUNT, SURVIVE }
 @export_range(1, 500) var kill_target: int = 25
 ## SURVIVE: сколько секунд продержаться
 @export var survive_time: float = 90.0
+## DEFEND: сколько секунд нужно простоять на точке (время вне точки не считается)
+@export var defend_time: float = 60.0
+## DEFEND: радиус точки, метры
+@export var defend_radius: float = 5.0
+## COLLECT: сколько ящиков с припасами собрать
+@export_range(1, 20) var collect_target: int = 5
 
 @export_group("Zombie Types")
 @export var walker: ZombieData
@@ -30,6 +37,9 @@ enum Type { WAVES, KILL_COUNT, SURVIVE }
 ## Рост шансов за каждую волну (в других режимах — каждые 30 секунд)
 @export_range(0.0, 0.5, 0.01) var runner_chance_per_level: float = 0.08
 @export_range(0.0, 0.5, 0.01) var tank_chance_per_level: float = 0.04
+## Босс: в режиме волн появляется в начале последней волны, в остальных — через boss_delay
+@export var boss: ZombieData
+@export var boss_delay: float = 45.0
 
 @export_group("Spawning")
 @export var start_delay: float = 3.0
@@ -45,6 +55,19 @@ enum Type { WAVES, KILL_COUNT, SURVIVE }
 @export var min_spawn_interval: float = 0.5
 ## Зомби периодически узнают, где игрок (орда), вместо блуждания
 @export var horde_mode: bool = true
+
+@export_group("Drops")
+## Шанс выпадения патронов и аптечки из убитого зомби
+@export_range(0.0, 1.0, 0.01) var ammo_drop_chance: float = 0.12
+@export_range(0.0, 1.0, 0.01) var health_drop_chance: float = 0.07
+## Аптечка лечит столько очков
+@export var health_drop_amount: float = 30.0
+
+@export_group("Stars")
+## Вторая звезда: здоровье в конце не ниже этой доли
+@export_range(0.0, 1.0, 0.05) var star_health: float = 0.5
+## Третья звезда: точность не ниже этой доли
+@export_range(0.0, 1.0, 0.05) var star_accuracy: float = 0.5
 
 @export_group("Reward")
 ## Монеты за победу (плюс очки за каждого убитого зомби)

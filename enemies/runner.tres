@@ -18,5 +18,6 @@ hearing_radius = 35.0
 body_color = Color(0.54901963, 0.3529412, 0.2509804, 1)
 model_scene = ExtResource("2_arm01")
 model_scale = 1.6
+voice_pitch = 1.15
 score = 15
 metadata/_custom_type_script = "uid://bsomw8gt06pq4"

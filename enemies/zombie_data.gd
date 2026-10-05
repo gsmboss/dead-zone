@@ -51,6 +51,34 @@ extends Resource
 ## Масштаб своей модели (модель зомби в zombie.tscn — 1.6)
 @export var model_scale: float = 1.6
 
+@export_group("Boss")
+## Босс: полоска здоровья в HUD, задание «убить босса»
+@export var is_boss: bool = false
+## Рывок к игроку с дистанции
+@export var charge_enabled: bool = false
+@export var charge_speed: float = 9.0
+@export var charge_min_distance: float = 5.0
+@export var charge_max_distance: float = 16.0
+## Замах перед рывком (окно, чтобы отскочить), сек
+@export var charge_windup: float = 0.7
+@export var charge_duration: float = 1.3
+@export var charge_cooldown: float = 7.0
+@export var charge_damage: float = 30.0
+## Удар по площади вблизи (вместо обычного удара, когда готов)
+@export var slam_enabled: bool = false
+@export var slam_radius: float = 4.0
+@export var slam_windup: float = 0.9
+@export var slam_cooldown: float = 6.0
+@export var slam_damage: float = 30.0
+## Сила отбрасывания игрока рывком и ударом, м/с
+@export var knockback: float = 9.0
+
+@export_group("Audio")
+## Высота голоса: танк ниже, бегун выше
+@export_range(0.3, 2.0, 0.05) var voice_pitch: float = 1.0
+## Громкость голоса, дБ
+@export_range(-30.0, 10.0, 0.5) var voice_volume_db: float = 0.0
+
 @export_group("Reward")
 ## Очки за убийство (понадобится на этапе 4)
 @export var score: int = 10
