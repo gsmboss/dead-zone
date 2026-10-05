@@ -4,6 +4,11 @@ extends Control
 
 const ANNOUNCE_HOLD: float = 1.2
 const ANNOUNCE_FADE: float = 0.6
+## Объявление «впрыгивает»: стартовый масштаб и время
+const ANNOUNCE_POP_SCALE: float = 1.8
+const ANNOUNCE_POP_TIME: float = 0.35
+const COINS_COUNT_TIME: float = 1.2
+const RESULT_POP_TIME: float = 0.4
 const WIN_COLOR: Color = Color(0.55, 1.0, 0.55)
 const LOSE_COLOR: Color = Color(1.0, 0.4, 0.4)
 const HUB_SCENE: String = "res://hub/hub.tscn"
@@ -17,7 +22,9 @@ var _announce_tween: Tween
 var _result: PanelContainer
 var _result_title: Label
 var _result_stats: Label
-var _result_stars: Label
+var _result_stars: StarRating
+var _result_coins: Label
+var _result_tween: Tween
 var _boss_box: VBoxContainer
 var _boss_name: Label
 var _boss_bar: ProgressBar
@@ -85,9 +92,13 @@ func _build_ui() -> void:
 	_result.add_child(box)
 
 	_result_title = _make_label(box, 48)
-	_result_stars = _make_label(box, 34)
-	_result_stars.modulate = Color(1.0, 0.85, 0.3)
+	_result_stars = StarRating.new()
+	_result_stars.star_radius = 34.0
+	_result_stars.size_flags_horizontal = SIZE_SHRINK_CENTER
+	box.add_child(_result_stars)
 	_result_stats = _make_label(box, 26)
+	_result_coins = _make_label(box, 34)
+	_result_coins.modulate = Color(1.0, 0.85, 0.3)
 
 	var buttons := HBoxContainer.new()
 	buttons.add_theme_constant_override(&"separation", 16)
@@ -106,6 +117,7 @@ func _build_ui() -> void:
 	_result.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
 	_result.grow_horizontal = GROW_DIRECTION_BOTH
 	_result.grow_vertical = GROW_DIRECTION_BOTH
+	_result.resized.connect(func() -> void: _result.pivot_offset = _result.size * 0.5)
 
 
 func _make_label(parent: Control, font_size: int) -> Label:
@@ -173,8 +185,15 @@ func _show_announcement(text: String) -> void:
 	if _announce_tween != null and _announce_tween.is_valid():
 		_announce_tween.kill()
 	_announce.text = text
-	_announce.modulate.a = 1.0
+	_announce.modulate.a = 0.0
+	_announce.pivot_offset = _announce.size * 0.5
+	_announce.scale = Vector2.ONE * ANNOUNCE_POP_SCALE
 	_announce_tween = create_tween()
+	_announce_tween.set_parallel(true)
+	_announce_tween.tween_property(_announce, "scale", Vector2.ONE, ANNOUNCE_POP_TIME) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_announce_tween.tween_property(_announce, "modulate:a", 1.0, ANNOUNCE_POP_TIME * 0.6)
+	_announce_tween.set_parallel(false)
 	_announce_tween.tween_interval(ANNOUNCE_HOLD)
 	_announce_tween.tween_property(_announce, "modulate:a", 0.0, ANNOUNCE_FADE)
 
@@ -190,7 +209,8 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 
 	var stars: int = int(stats.get("stars", 0))
 	_result_stars.visible = won
-	_result_stars.text = "ЗВЁЗДЫ: %d / 3" % stars
+	if won:
+		_result_stars.play(stars)
 
 	var lines := PackedStringArray()
 	var level: int = int(stats.get("level", 1))
@@ -200,9 +220,26 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 	lines.append("Время: %s" % MissionManager.format_time(float(stats.get("time", 0.0))))
 	lines.append("Точность: %d%%  •  Здоровье: %d%%" % [
 		roundi(float(stats.get("accuracy", 0.0)) * 100.0), roundi(float(stats.get("health_share", 0.0)) * 100.0)])
-	lines.append("Монеты: +%d (всего %d)" % [int(stats.get("coins", 0)), int(stats.get("total_coins", 0))])
 	_result_stats.text = "\n".join(lines)
 	_result.visible = true
+
+	# Окно результата «впрыгивает», монеты считаются от нуля
+	_result.scale = Vector2.ONE * 0.6
+	_result.modulate.a = 0.0
+	if _result_tween != null and _result_tween.is_valid():
+		_result_tween.kill()
+	_result_tween = create_tween()
+	_result_tween.set_parallel(true)
+	_result_tween.tween_property(_result, "scale", Vector2.ONE, RESULT_POP_TIME) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_result_tween.tween_property(_result, "modulate:a", 1.0, RESULT_POP_TIME * 0.5)
+	_result_tween.set_parallel(false)
+	_result_tween.tween_method(_set_coins_text.bind(int(stats.get("total_coins", 0))),
+		0.0, float(stats.get("coins", 0)), COINS_COUNT_TIME)
+
+
+func _set_coins_text(value: float, total: int) -> void:
+	_result_coins.text = "МОНЕТЫ +%d  (ВСЕГО %d)" % [roundi(value), total]
 
 
 func _on_restart_pressed() -> void:

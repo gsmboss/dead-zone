@@ -40,6 +40,9 @@
 [ext_resource type="PackedScene" path="res://models/environment/Container_Red.gltf" id="m_Container_Red"]
 [ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck_Armored.gltf" id="m_Vehicle_Truck_Armored"]
 [ext_resource type="PackedScene" path="res://models/environment/Street_Straight.gltf" id="m_Street_Straight"]
+[ext_resource type="Script" path="res://hub/hologram.gd" id="40_holo1"]
+[ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="41_zmb01"]
+[ext_resource type="PackedScene" uid="uid://bsgnpeqcp580x" path="res://models/weapons/Rifle.gltf" id="42_rfl01"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub01"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -368,11 +371,16 @@ use_collision = true
 size = Vector3(2, 1, 1)
 material = SubResource("Mat_hubdesk")
 
-[node name="DeskItem" parent="MissionTerminal" unique_id=351917617 instance=ExtResource("m_Chest")]
-transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 0, 1, 0)
+[node name="Hologram" type="Node3D" parent="MissionTerminal" unique_id=1460371011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+script = ExtResource("40_holo1")
+model_scene = ExtResource("41_zmb01")
+model_scale = 0.4
+animation = &"Idle"
+spin_speed = 0.6
 
 [node name="Label3D" type="Label3D" parent="MissionTerminal" unique_id=824246358]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
 pixel_size = 0.004
 billboard = 1
 text = "МИССИИ"
@@ -395,11 +403,16 @@ use_collision = true
 size = Vector3(2, 1, 1)
 material = SubResource("Mat_hubdesk")
 
-[node name="DeskItem" parent="ShopTerminal" unique_id=287222683 instance=ExtResource("m_Chest_Special")]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0, 1, 0)
+[node name="Hologram" type="Node3D" parent="ShopTerminal" unique_id=1460371012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+script = ExtResource("40_holo1")
+model_scene = ExtResource("42_rfl01")
+model_scale = 0.55
+spin_speed = 1.0
+color = Color(1, 0.75, 0.25, 0.6)
 
 [node name="Label3D" type="Label3D" parent="ShopTerminal" unique_id=1975959397]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
 pixel_size = 0.004
 billboard = 1
 text = "ОРУЖЕЙНАЯ"

@@ -38,14 +38,28 @@ func _make_weapon_card(weapon: WeaponData) -> Control:
 	var owned: bool = GameState.owns(weapon.id)
 	var shown: WeaponData = GameState.get_upgraded(weapon) if owned else weapon
 
-	var title := UIKit.label(weapon.display_name, 32, box)
+	# Шапка: вращающаяся 3D-модель и название с характеристиками
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override(&"separation", 18)
+	box.add_child(header)
+	var preview := WeaponPreview.new()
+	header.add_child(preview)
+	preview.setup(weapon)
+	var texts := VBoxContainer.new()
+	texts.size_flags_horizontal = SIZE_EXPAND_FILL
+	texts.alignment = BoxContainer.ALIGNMENT_CENTER
+	header.add_child(texts)
+
+	var title := UIKit.label(weapon.display_name, 32, texts)
 	title.modulate = UIKit.GOOD if owned else Color.WHITE
 
 	var damage_text: String = "%d" % roundi(shown.damage)
 	if shown.pellets > 1:
 		damage_text = "%d×%d" % [roundi(shown.damage), shown.pellets]
-	var stats := UIKit.label("Урон %s  •  Магазин %d  •  Перезарядка %.1f с  •  %.1f выстр/с" % [
-		damage_text, shown.magazine_size, shown.reload_time, shown.fire_rate], 22, box)
+	var stats_text: String = "Урон %s  •  %.1f удара/с  •  ближний бой" % [damage_text, shown.fire_rate] \
+		if shown.is_melee else "Урон %s  •  Магазин %d  •  Перезарядка %.1f с  •  %.1f выстр/с" % [
+			damage_text, shown.magazine_size, shown.reload_time, shown.fire_rate]
+	var stats := UIKit.label(stats_text, 22, texts)
 	stats.modulate = UIKit.DIM
 
 	if not owned:

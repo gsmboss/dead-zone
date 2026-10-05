@@ -29,6 +29,15 @@ const DRY_FIRE_INTERVAL: float = 0.35
 ## Размер спрайта вспышки (до уменьшения вью-модели), метры
 const FLASH_SPRITE_SIZE: float = 0.32
 const HIT_SOUND_VOLUME_DB: float = -10.0
+# Анимация вью-модели (смещения — до уменьшения VIEW_MODEL_SHRINK)
+## Дыхание: амплитуда и частота покачивания на месте
+const IDLE_SWAY: Vector2 = Vector2(0.003, 0.004)
+const IDLE_SWAY_SPEED: float = 1.6
+## Покачивание при ходьбе (на полной скорости) и частота шагов
+const WALK_BOB: Vector2 = Vector2(0.014, 0.01)
+const WALK_BOB_SPEED: float = 9.0
+## Наклон модели в середине перезарядки, градусы
+const RELOAD_TILT_DEGREES: Vector3 = Vector3(-28.0, 12.0, 22.0)
 ## Длительность замаха и возврата модели ближнего боя (доли интервала удара)
 const SWING_OUT_SHARE: float = 0.35
 const SWING_BACK_SHARE: float = 0.5
@@ -69,6 +78,10 @@ var _reload_player: AudioStreamPlayer
 var _reload_stream: AudioStream
 var _hit_sound_played: bool = false
 var _swing_tween: Tween
+var _reload_total: float = 0.0
+var _model_base_rotation: Vector3 = Vector3.ZERO
+var _anim_time: float = 0.0
+var _bob_phase: float = 0.0
 # Здоровья, уже задетые текущим ударом (без аллокаций: очищается перед ударом)
 var _melee_hit: Array[Health] = []
 var _rng := RandomNumberGenerator.new()
@@ -79,6 +92,7 @@ var _view_instance: Node3D
 var _model_rest: Vector3 = Vector3.ZERO
 var _fallback_rest: Vector3 = Vector3.ZERO
 var _fallback_muzzle: Vector3 = Vector3.ZERO
+var _fallback_rotation: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
@@ -160,6 +174,7 @@ func reload() -> void:
 	if not weapon.has_infinite_reserve() and _reserve[_index] <= 0:
 		return
 	_reload_left = weapon.reload_time
+	_reload_total = weapon.reload_time
 	_reload_stream = weapon.reload_sound
 	_reload_player = Sfx.play_2d(weapon.reload_sound, -2.0, 1.0, 0.0)
 	reload_started.emit(weapon.reload_time)
@@ -226,9 +241,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	if _current_model != null and is_instance_valid(_current_model):
-		var target: Vector3 = _model_rest + (RELOAD_OFFSET * _offset_scale() if is_reloading() else Vector3.ZERO)
-		_current_model.position = _current_model.position.lerp(
-			target, clampf(GUN_RETURN_SPEED * delta, 0.0, 1.0))
+		_animate_model(delta)
 	if _flash_left > 0.0:
 		_flash_left -= delta
 		if _flash_left <= 0.0:
@@ -236,6 +249,32 @@ func _process(delta: float) -> void:
 				muzzle_flash.visible = false
 			if _flash_sprite != null:
 				_flash_sprite.visible = false
+
+
+## Дыхание, покачивание при ходьбе, наклон при перезарядке. Без аллокаций
+func _animate_model(delta: float) -> void:
+	var k: float = _offset_scale()
+	_anim_time += delta
+	var speed_ratio: float = 0.0
+	if player != null and player.is_on_floor() and player.move_speed > 0.0:
+		speed_ratio = clampf(Vector2(player.velocity.x, player.velocity.z).length() / player.move_speed, 0.0, 1.0)
+	_bob_phase += delta * WALK_BOB_SPEED * speed_ratio
+
+	var offset := Vector3(
+		sin(_anim_time * IDLE_SWAY_SPEED * 0.5) * IDLE_SWAY.x + sin(_bob_phase) * WALK_BOB.x * speed_ratio,
+		sin(_anim_time * IDLE_SWAY_SPEED) * IDLE_SWAY.y - absf(cos(_bob_phase)) * WALK_BOB.y * speed_ratio,
+		0.0)
+	var reload_weight: float = 0.0
+	if is_reloading() and _reload_total > 0.0:
+		var progress: float = 1.0 - _reload_left / _reload_total
+		reload_weight = sin(clampf(progress, 0.0, 1.0) * PI)
+		offset += RELOAD_OFFSET * reload_weight
+
+	var target: Vector3 = _model_rest + offset * k
+	_current_model.position = _current_model.position.lerp(target, clampf(GUN_RETURN_SPEED * delta, 0.0, 1.0))
+	# Поворот не трогаем во время замаха (им управляет твин)
+	if _swing_tween == null or not _swing_tween.is_running():
+		_current_model.rotation_degrees = _model_base_rotation + RELOAD_TILT_DEGREES * reload_weight
 
 
 # ---------- Модели оружия ----------
@@ -256,6 +295,7 @@ func _apply_view_model(weapon: WeaponData) -> void:
 			_view_instance = instance
 			_current_model = instance
 			_model_rest = instance.position
+			_model_base_rotation = weapon.model_rotation_degrees
 			if gun_model != null:
 				gun_model.visible = false
 			if muzzle_flash != null:
@@ -269,6 +309,7 @@ func _apply_view_model(weapon: WeaponData) -> void:
 		# Запасной вариант: серый брусок
 		_current_model = gun_model
 		_model_rest = _fallback_rest
+		_model_base_rotation = _fallback_rotation
 		if gun_model != null:
 			gun_model.visible = true
 		if muzzle_flash != null:
@@ -528,6 +569,7 @@ func _resolve_references() -> void:
 
 	if gun_model != null:
 		_fallback_rest = gun_model.position
+		_fallback_rotation = gun_model.rotation_degrees
 	if muzzle_flash != null:
 		# Вспышка должна жить отдельно от бруска: брусок прячется при наличии модели
 		if muzzle_flash.get_parent() != self:

@@ -35,10 +35,15 @@ func _make_mission_card(mission: MissionData) -> Control:
 	var reward: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
 	var info := "Награда: %d монет" % reward
 	if GameState.is_mission_completed(mission.id):
-		info += "  •  звёзды %d / 3  •  рекорд %d очков" % [
-			GameState.get_mission_stars(mission.id), GameState.get_best_score(mission.id)]
+		info += "  •  рекорд %d очков" % GameState.get_best_score(mission.id)
 	var info_label := UIKit.label(info, 22, box)
 	info_label.modulate = UIKit.GOOD if GameState.is_mission_completed(mission.id) else UIKit.ACCENT
+	if GameState.is_mission_completed(mission.id):
+		var stars := StarRating.new()
+		stars.star_radius = 18.0
+		stars.size_flags_horizontal = SIZE_SHRINK_BEGIN
+		stars.set_stars(GameState.get_mission_stars(mission.id))
+		box.add_child(stars)
 
 	var start := UIKit.button("НАЧАТЬ", 28)
 	start.pressed.connect(func() -> void: GameState.start_mission(mission))

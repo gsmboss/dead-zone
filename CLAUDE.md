@@ -84,7 +84,10 @@ MissionManager+ZombieSpawner, HUD.
 удар slam_*), полоска босса в MissionHUD; хитбоксы растут с model_scale; типы миссий DEFEND и COLLECT;
 звёзды (победа, здоровье ≥ star_health, точность ≥ star_accuracy); оружие smg.tres и axe.tres
 (WeaponData.is_melee — веер лучей, замах модели); окно «ЕЖЕДНЕВНО» (ui/hub/daily_panel.gd);
-карточка «ВЫЖИВШИЙ» в оружейной.
+карточка «ВЫЖИВШИЙ» в оружейной. Анимации: покачивание оружия при дыхании/ходьбе и наклон
+при перезарядке (WeaponManager._animate_model), звёзды ui/star_rating.gd (StarRating, play()),
+3D-превью оружия в оружейной ui/weapon_preview.gd (SubViewport с own_world_3d), «впрыгивающие»
+объявления и окно итогов, счёт монет.
 
 ## Правила кода
 - Статическая типизация везде, комментарии и тексты на русском, UI-надписи ЗАГЛАВНЫМИ.
@@ -114,9 +117,10 @@ MissionManager+ZombieSpawner, HUD.
 - Player: экземпляр player/player.tscn в (0, 0.1, 4), touch_controls → HUD/TouchControls.
 - MissionTerminal (Interactable) в (-4, 0, -5): prompt «МИССИИ», action_id &"missions";
   дети: CollisionShape3D BoxShape3D 3×2×3 (y = 1), стол CSGBox3D 2×1×1 (y = 0.5, use_collision),
-  Label3D «МИССИИ» (font_size 96, billboard enabled, y = 2.2).
+  Hologram (hub/hologram.gd: вращающийся полупрозрачный Zombie_Basic с анимацией Idle, y = 1.3),
+  Label3D «МИССИИ» (font_size 64, outline 16, pixel_size 0.004, billboard, y = 2.7).
 - ShopTerminal (Interactable) в (4, 0, -5): prompt «ОРУЖЕЙНАЯ», action_id &"shop", такие же дети,
-  Label3D «ОРУЖЕЙНАЯ».
+  Hologram с моделью Rifle (y = 1.75), Label3D «ОРУЖЕЙНАЯ».
 - HUD (CanvasLayer): TouchControls (скрипт touch_controls.gd, Full Rect, поле joystick → Joystick)
   с детьми Joystick (TouchJoystick, якоря 0,0,0.4,1, отступы 0) и JumpButton (TouchActionButton,
   action "jump", label "JUMP", якоря все 1, отступы -370,-170,-260,-60); последним ребёнком HUD —

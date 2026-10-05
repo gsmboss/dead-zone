@@ -70,6 +70,11 @@ func _connect_world() -> void:
 
 func _update_coins(coins: int) -> void:
 	_coins_label.text = "МОНЕТЫ: %d" % coins
+	# Счётчик «подпрыгивает» при изменении
+	_coins_label.pivot_offset = Vector2(_coins_label.size.x, _coins_label.size.y * 0.5)
+	_coins_label.scale = Vector2.ONE * 1.25
+	create_tween().tween_property(_coins_label, "scale", Vector2.ONE, 0.3) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 ## «!» на кнопке, если есть что забрать
