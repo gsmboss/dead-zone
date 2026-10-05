@@ -62,9 +62,9 @@ func set_weapon(weapon: WeaponData) -> void:
 		_weapon_model = null
 	for builtin: Node3D in _builtin_weapons.values():
 		builtin.visible = false
-	_armed = weapon != null and not weapon.is_melee
+	_armed = weapon != null and not weapon.is_melee and not skin.hide_weapon
 	_current_anim = &""  # сменить стойку сразу
-	if weapon == null or weapon.view_model == null:
+	if weapon == null or weapon.view_model == null or skin == null or skin.hide_weapon:
 		return
 	# Такой же ствол уже есть в модели и правильно лежит в руке — просто показываем его
 	var key: String = weapon.view_model.resource_path.get_file().get_basename()
@@ -77,9 +77,11 @@ func set_weapon(weapon: WeaponData) -> void:
 	if _weapon_model == null:
 		return
 	_hand.add_child(_weapon_model)
-	_weapon_model.position = skin.hand_offset
+	# Кость внутри отмасштабированной модели: метры переводим в её единицы
+	var model_scale: float = maxf(_model.scale.x, 0.001)
+	_weapon_model.position = skin.hand_offset / model_scale
 	_weapon_model.rotation_degrees = skin.hand_rotation_degrees
-	_fit_length(_weapon_model, skin.weapon_length)
+	_fit_length(_weapon_model, skin.weapon_length / model_scale)
 
 
 ## Анимация по движению: скорость по земле, на земле ли, жив ли
@@ -196,7 +198,7 @@ func _create_hand() -> void:
 	_flash.light_energy = 3.0
 	_flash.omni_range = 3.0
 	_flash.visible = false
-	_flash.position = skin.hand_offset + Vector3(0.0, skin.weapon_length, 0.0)
+	_flash.position = (skin.hand_offset + Vector3(0.0, skin.weapon_length, 0.0)) / maxf(_model.scale.x, 0.001)
 	_hand.add_child(_flash)
 
 

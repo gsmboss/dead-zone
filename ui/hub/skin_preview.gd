@@ -36,7 +36,7 @@ func _ready() -> void:
 	_viewport.add_child(light)
 
 	var camera := Camera3D.new()
-	camera.position = Vector3(0.0, 1.0, 3.6)
+	camera.position = Vector3(0.0, 1.05, 4.3)
 	camera.fov = 38.0
 	_viewport.add_child(camera)
 	camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)

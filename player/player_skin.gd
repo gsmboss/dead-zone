@@ -30,6 +30,8 @@ extends Resource
 @export var run_anim_speed: float = 4.5
 
 @export_group("Hand")
+## Не показывать оружие в руках (у блочных персонажей Kenney нет кисти — ствол висит криво)
+@export var hide_weapon: bool = false
 ## Кость, к которой крепится оружие (пусто — оружие не показывается)
 @export var hand_bone: StringName = &"LowerArm.R"
 ## Смещение и поворот оружия относительно кости (подгоняются в инспекторе)
