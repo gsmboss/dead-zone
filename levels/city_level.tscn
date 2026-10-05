@@ -18,6 +18,8 @@
 [ext_resource type="Resource" path="res://levels/city/city_config.tres" id="41_cfg01"]
 [ext_resource type="Script" path="res://vehicles/drive_controller.gd" id="42_drv01"]
 [ext_resource type="Script" path="res://ui/game_menus.gd" id="50_menu1"]
+[ext_resource type="Script" path="res://levels/day_night_cycle.gd" id="43_day01"]
+[ext_resource type="Script" path="res://levels/weather.gd" id="44_wth01"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Sky_mat"]
 sky_horizon_color = Color(0.62, 0.64, 0.66, 1)
@@ -243,3 +245,9 @@ dynamic_spawn = true
 
 [node name="DriveController" type="Node" parent="." unique_id=789317830]
 script = ExtResource("42_drv01")
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=1928374651]
+script = ExtResource("43_day01")
+
+[node name="Weather" type="Node3D" parent="." unique_id=1928374652]
+script = ExtResource("44_wth01")

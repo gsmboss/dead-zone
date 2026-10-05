@@ -10,6 +10,12 @@ const CHECK_INTERVAL: float = 0.15
 const BUTTON_SIZE: float = 130.0
 ## Выйти можно только почти на месте
 const MAX_EXIT_SPEED: float = 5.0
+## Стрельба из окна: пистолет по ближайшему зомби впереди
+const CAR_SHOT_INTERVAL: float = 0.25
+const CAR_SHOT_RANGE: float = 30.0
+const CAR_SHOT_CONE: float = 0.5  # косинус ~60°
+const CAR_SHOT_DAMAGE: float = 22.0
+const CAR_SHOT_SOUND: String = "res://audio/weapons/pistol_shot.ogg"
 
 var _player: Player
 var _touch_controls: TouchControls
@@ -22,6 +28,8 @@ var _check_timer: float = 0.0
 var _saved_layer: int = 0
 var _saved_mask: int = 0
 var _hidden_buttons: Array[TouchActionButton] = []
+var _shot_cooldown: float = 0.0
+var _shot_sound: AudioStream
 
 
 func _ready() -> void:
@@ -38,6 +46,8 @@ func _setup() -> void:
 	if _player.health != null:
 		_player.health.died.connect(_on_player_died)
 	_touch_controls = _player.touch_controls
+	if ResourceLoader.exists(CAR_SHOT_SOUND):
+		_shot_sound = load(CAR_SHOT_SOUND) as AudioStream
 	_hud_layer = CanvasLayer.new()
 	add_child(_hud_layer)
 	_build_speed_label()
@@ -79,7 +89,7 @@ func _process(delta: float) -> void:
 			_enter_car(_nearby)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _car == null or _player == null:
 		return
 	var input: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
@@ -88,6 +98,9 @@ func _physics_process(_delta: float) -> void:
 		if touch.length() > input.length():
 			input = touch
 	_car.set_input(input.x, -input.y)
+	_shot_cooldown = maxf(_shot_cooldown - delta, 0.0)
+	if Input.is_action_pressed(&"fire") and _shot_cooldown <= 0.0:
+		_shoot_from_car()
 	# Игрок едет на крыше (спрятан): зомби идут к машине и видят цель
 	_player.global_position = _car.global_position + Vector3.UP * _car.get_roof_height()
 
@@ -173,8 +186,8 @@ func _set_combat_buttons_visible(visible_state: bool) -> void:
 			var button := child as TouchActionButton
 			if button == null or button == _button or not button.visible:
 				continue
-			if button.action in [&"pause", &"inventory"]:
-				continue
+			if button.action in [&"pause", &"inventory", &"fire"]:
+				continue  # стрелять из окна машины можно
 			button.force_release()
 			button.visible = false
 			_hidden_buttons.append(button)
@@ -183,6 +196,43 @@ func _set_combat_buttons_visible(visible_state: bool) -> void:
 			if is_instance_valid(button):
 				button.visible = true
 		_hidden_buttons.clear()
+
+
+## Выстрел из окна: ближайший видимый зомби в конусе перед камерой машины
+func _shoot_from_car() -> void:
+	_shot_cooldown = CAR_SHOT_INTERVAL
+	var camera: Camera3D = _car.camera
+	if camera == null:
+		return
+	var origin: Vector3 = _car.global_position + Vector3.UP * _car.get_roof_height()
+	var forward: Vector3 = -camera.global_basis.z
+	forward.y = 0.0
+	forward = forward.normalized()
+	var best: Zombie
+	var best_distance: float = CAR_SHOT_RANGE
+	for node: Node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as Zombie
+		if zombie == null or zombie.health == null or zombie.health.is_dead:
+			continue
+		var offset: Vector3 = zombie.global_position - origin
+		offset.y = 0.0
+		var distance: float = offset.length()
+		if distance > best_distance or distance < 0.5 or forward.dot(offset / distance) < CAR_SHOT_CONE:
+			continue
+		best = zombie
+		best_distance = distance
+	Sfx.play_2d(_shot_sound, -6.0)
+	if best == null:
+		return
+	var target: Vector3 = best.global_position + Vector3.UP * 1.3
+	var query := PhysicsRayQueryParameters3D.create(origin, target, PhysicsLayers.WORLD)
+	query.exclude = [_car.get_rid()]
+	if not _car.get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+		return  # за стеной
+	best.health.take_damage(CAR_SHOT_DAMAGE, target, false)
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		impacts.spawn(target, (origin - target).normalized(), true)
 
 
 func _on_player_died() -> void:

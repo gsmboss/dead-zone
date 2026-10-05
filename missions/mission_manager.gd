@@ -20,6 +20,9 @@ const RESULT_DELAY: float = 1.5
 const MAX_TANK_CHANCE: float = 0.4
 const MAX_RUNNER_CHANCE: float = 0.6
 const MAX_SPECIAL_CHANCE: float = 0.35
+## Ночью: чаще спавн и больше живых зомби
+const NIGHT_SPAWN_BOOST: float = 0.7
+const NIGHT_EXTRA_ALIVE: int = 5
 const MAX_DROPS_ALIVE: int = 6
 const DROP_LIFETIME: float = 20.0
 const BOSS_RETRY_TIME: float = 2.0
@@ -182,7 +185,8 @@ func _start_wave(number: int) -> void:
 
 func _process_spawning(delta: float) -> void:
 	_spawn_timer -= delta
-	if _spawn_timer > 0.0 or _alive >= mission.max_alive:
+	var max_alive: int = mission.max_alive + roundi(DayNightCycle.night_amount * NIGHT_EXTRA_ALIVE)
+	if _spawn_timer > 0.0 or _alive >= max_alive:
 		return
 
 	match mission.type:
@@ -357,7 +361,9 @@ func _current_spawn_interval() -> float:
 	if _is_wave_mode():
 		return mission.spawn_interval
 	var t: float = clampf(elapsed / DIFFICULTY_RAMP_TIME, 0.0, 1.0)
-	return lerpf(mission.spawn_interval, mission.min_spawn_interval, t)
+	# Ночью (город) зомби приходят чаще
+	return lerpf(mission.spawn_interval, mission.min_spawn_interval, t) \
+		/ (1.0 + DayNightCycle.night_amount * NIGHT_SPAWN_BOOST)
 
 
 func _difficulty_level() -> int:

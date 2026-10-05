@@ -14,6 +14,11 @@ const HIT_COOLDOWN: float = 0.6
 const HIT_SLOWDOWN: float = 0.9
 ## Столкновение со стеной: скорость умножается на это
 const WALL_SLOWDOWN: float = 0.35
+## Гараж: двигатель +8% скорости, таран +25% урона и меньше потеря скорости за уровень
+const ENGINE_PER_LEVEL: float = 0.08
+const RAM_PER_LEVEL: float = 0.25
+## Фары включаются, когда темнее этого (DayNightCycle.night_amount)
+const HEADLIGHTS_NIGHT: float = 0.35
 
 @export var model_scene: PackedScene
 @export var model_rotation_y_degrees: float = 180.0
@@ -56,6 +61,8 @@ var _box_center: Vector3 = Vector3(0.0, 0.8, 0.0)
 ## instance_id зомби -> время последнего удара
 var _recent_hits: Dictionary = {}
 var _time: float = 0.0
+var _hit_slowdown: float = HIT_SLOWDOWN
+var _headlights: Array[SpotLight3D] = []
 
 
 func _ready() -> void:
@@ -67,6 +74,8 @@ func _ready() -> void:
 	_build_collision()
 	_build_bumper()
 	_build_camera()
+	_build_headlights()
+	_apply_garage()
 
 
 func is_driven() -> bool:
@@ -142,6 +151,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	var lights_on: bool = _driven and DayNightCycle.night_amount > HEADLIGHTS_NIGHT
+	if not _headlights.is_empty() and _headlights[0].visible != lights_on:
+		for light: SpotLight3D in _headlights:
+			light.visible = lights_on
 	if camera == null or not _driven:
 		return
 	var target: Vector3 = _camera_target()
@@ -174,7 +187,7 @@ func _run_over() -> void:
 		zombie.hit_by_vehicle(absf(speed) * run_over_damage_factor, push)
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.flesh_hits), zombie.global_position, 0.0, 0.8)
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), global_position, -6.0)
-		speed *= HIT_SLOWDOWN
+		speed *= _hit_slowdown
 	# Чистим старые записи, чтобы словарь не рос
 	if _recent_hits.size() > 32:
 		_recent_hits.clear()
@@ -235,6 +248,32 @@ func _build_bumper() -> void:
 	shape.position = _box_center
 	_bumper.add_child(shape)
 	add_child(_bumper)
+
+
+## Улучшения гаража из GameState
+func _apply_garage() -> void:
+	var engine: int = GameState.get_car_upgrade_level("engine")
+	var ram: int = GameState.get_car_upgrade_level("ram")
+	max_speed *= 1.0 + ENGINE_PER_LEVEL * engine
+	acceleration *= 1.0 + ENGINE_PER_LEVEL * engine
+	run_over_damage_factor *= 1.0 + RAM_PER_LEVEL * ram
+	_hit_slowdown = minf(HIT_SLOWDOWN + 0.015 * ram, 0.98)
+
+
+## Две фары спереди (горят ночью, пока машина за рулём)
+func _build_headlights() -> void:
+	for side: float in [-1.0, 1.0]:
+		var light := SpotLight3D.new()
+		light.light_color = Color(1.0, 0.95, 0.8)
+		light.light_energy = 3.0
+		light.spot_range = 30.0
+		light.spot_angle = 32.0
+		light.shadow_enabled = false
+		light.visible = false
+		light.position = Vector3(side * _box_size.x * 0.3, _box_center.y, _box_center.z - _box_size.z * 0.5)
+		light.rotation.x = deg_to_rad(-6.0)
+		add_child(light)
+		_headlights.append(light)
 
 
 func _build_camera() -> void:

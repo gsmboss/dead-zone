@@ -22,6 +22,10 @@ const BOUNDS_HEIGHT: float = 8.0
 const CROSSING_CLEARANCE: float = 7.0
 const POLE_BOX: Vector3 = Vector3(0.4, 6.6, 0.4)
 const GROUND_COLOR: Color = Color(0.32, 0.33, 0.31)
+## Плафон фонаря относительно модели StreetLights (плечо вдоль +Z)
+const LAMP_OFFSET: Vector3 = Vector3(0.0, 6.35, 2.55)
+const LAMP_RADIUS: float = 0.35
+const LAMP_COLOR: Color = Color(1.0, 0.85, 0.55)
 
 @export var config: CityConfig
 
@@ -39,6 +43,8 @@ var _instances: Dictionary = {}
 var _no_shadow: Dictionary = {}
 ## Центры дворов (пустая середина квартала) — для машин, подборов и мелочей
 var _courtyards: Array[Vector3] = []
+## Плафоны фонарей: светятся ночью (DayNightCycle, группа night_glow)
+var _lamps: Array[Transform3D] = []
 
 
 func _ready() -> void:
@@ -67,6 +73,7 @@ func _ready() -> void:
 	_build_wrecks()
 	_build_props()
 	_build_multimeshes()
+	_build_lamp_glow()
 	_spawn_drivable_cars()
 	_spawn_pickups()
 	_build_bounds()
@@ -211,11 +218,13 @@ func _build_street_lights() -> void:
 				continue
 			var side: float = 1.0 if (k + line_index) % 2 == 0 else -1.0
 			# Вдоль Z: фонарь сбоку по X, плечо — к дороге
-			_add_static(config.street_light,
-				_xform(Vector3(line + side * offset, 0.0, along), atan2(-side, 0.0), 1.0), POLE_BOX)
+			var light_z: Transform3D = _xform(Vector3(line + side * offset, 0.0, along), atan2(-side, 0.0), 1.0)
+			_add_static(config.street_light, light_z, POLE_BOX)
+			_lamps.append(light_z)
 			# Вдоль X: сбоку по Z
-			_add_static(config.street_light,
-				_xform(Vector3(along, 0.0, line + side * offset), atan2(0.0, -side), 1.0), POLE_BOX)
+			var light_x: Transform3D = _xform(Vector3(along, 0.0, line + side * offset), atan2(0.0, -side), 1.0)
+			_add_static(config.street_light, light_x, POLE_BOX)
+			_lamps.append(light_x)
 
 
 func _build_wrecks() -> void:
@@ -363,6 +372,35 @@ func _build_multimeshes() -> void:
 				else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			add_child(instance)
 	_instances.clear()
+
+
+## Светящиеся плафоны фонарей одним MultiMesh; яркость меняет DayNightCycle
+func _build_lamp_glow() -> void:
+	if _lamps.is_empty():
+		return
+	var material := StandardMaterial3D.new()
+	material.albedo_color = LAMP_COLOR
+	material.emission_enabled = true
+	material.emission = LAMP_COLOR
+	material.emission_energy_multiplier = 0.0
+	var sphere := SphereMesh.new()
+	sphere.radius = LAMP_RADIUS
+	sphere.height = LAMP_RADIUS * 2.0
+	sphere.radial_segments = 8
+	sphere.rings = 4
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = sphere
+	multimesh.instance_count = _lamps.size()
+	for i in _lamps.size():
+		multimesh.set_instance_transform(i, Transform3D(Basis.IDENTITY, _lamps[i] * LAMP_OFFSET))
+	var lamps := MultiMeshInstance3D.new()
+	lamps.name = "LampGlow"
+	lamps.multimesh = multimesh
+	lamps.material_override = material
+	lamps.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	lamps.add_to_group(&"night_glow")
+	add_child(lamps)
 
 
 ## Меши модели с трансформами относительно её корня (кэш на сцену)
