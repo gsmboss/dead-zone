@@ -25,7 +25,7 @@
 ## Архитектура (уже сделано)
 Автозагрузки:
 - InputSetup — autoload/input_setup.gd: действия move_*, jump, fire (F/Ctrl), reload (R),
-  switch_weapon (Q), interact (E).
+  switch_weapon (Q), interact (E), aim (Z / правая кнопка мыши).
 - Impacts — weapons/impacts.gd (class_name ImpactPool): пул CPUParticles3D искр попаданий и пул пятен
   крови spawn_blood() (Blood_1..3, контейнер внутри текущей сцены).
 - GameState — autoload/game_state.gd: монеты, купленное оружие, улучшения (damage/magazine/reload),
@@ -45,7 +45,10 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
   группа "player", поля touch_controls, weapon_manager, health, input_enabled.
 - ui/touch/: touch_controls.gd (TouchControls, мультитач по индексам пальцев),
   virtual_joystick.gd (class_name TouchJoystick — встроенный VirtualJoystick в 4.7 занимает имя),
-  touch_action_button.gd (TouchActionButton: поля action, label).
+  touch_action_button.gd (TouchActionButton: поля action, label; 3D-стиль: тень, боковина, блик,
+  вдавливание; цвет по действию ACTION_COLORS; show_aim_state подсвечивает кнопку прицела).
+  В уровнях кнопки FIRE, JUMP, R, ⇄ и AimButton (action "aim", «ПРИЦЕЛ»). Кнопки меню UIKit —
+  объёмные StyleBoxFlat (UIKit.apply_3d_style).
 - weapons/: weapon_data.gd (WeaponData + группа Shop: id, price, улучшения, make_upgraded()),
   weapon_catalog.gd (WeaponCatalog), weapon_manager.gd (WeaponManager: стволы из GameState.get_loadout()).
 - combat/: health.gd (Health), hitbox.gd (Hitbox), target_dummy.gd, target_dummy.tscn (тест).
@@ -57,7 +60,9 @@ HITBOX=4 (бит 8), SHOT_MASK = WORLD|HITBOX. Скрипты сами выст�
 - missions/: mission_data.gd (MissionData: WAVES/KILL_COUNT/SURVIVE, id, level_scene),
   spawn_point.gd (ZombieSpawnPoint, группа "zombie_spawn"), zombie_spawner.gd (ZombieSpawner),
   mission_manager.gd (MissionManager: берёт GameState.selected_mission, начисляет монеты).
-- ui/: ammo_display.gd, crosshair.gd, health_display.gd, damage_overlay.gd,
+- ui/: ammo_display.gd, crosshair.gd (рисованный динамический прицел: зазор = текущий разброс
+  WeaponManager.get_current_spread() с учётом FOV; прицеливание — WeaponManager.set_aiming(),
+  зум ads_fov_multiplier, разброс ads_spread_multiplier, расхождение bloom_per_shot в WeaponData), health_display.gd, damage_overlay.gd,
   mission_hud.gd (UI миссии создаётся кодом; кнопка «В УБЕЖИЩЕ» появляется, если есть res://hub/hub.tscn),
   ui_kit.gd (UIKit), ui/hub/: hub_window.gd (HubWindow), shop_panel.gd (ShopPanel),
   mission_board_panel.gd (MissionBoardPanel), hub_hud.gd (HubHUD: поле missions: Array[MissionData]).

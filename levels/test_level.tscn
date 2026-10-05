@@ -204,6 +204,24 @@ script = ExtResource("4_ur00s")
 action = &"switch_weapon"
 label = "⇄"
 
+[node name="AimButton" type="Control" parent="HUD/TouchControls" unique_id=724297885]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -300.0
+offset_right = -360.0
+offset_bottom = -180.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"aim"
+label = "ПРИЦЕЛ"
+show_aim_state = true
+
 [node name="AmmoLabel" type="Label" parent="HUD" unique_id=1137799918]
 anchors_preset = -1
 anchor_left = 1.0

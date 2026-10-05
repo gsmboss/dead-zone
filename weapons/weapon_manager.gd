@@ -12,6 +12,7 @@ signal reload_finished
 signal reload_cancelled
 signal fired(weapon: WeaponData)
 signal hit_landed(is_headshot: bool, killed: bool)
+signal aim_changed(aiming: bool)
 
 const SWITCH_DELAY: float = 0.25
 const MUZZLE_FLASH_TIME: float = 0.05
@@ -38,6 +39,17 @@ const WALK_BOB: Vector2 = Vector2(0.014, 0.01)
 const WALK_BOB_SPEED: float = 9.0
 ## Наклон модели в середине перезарядки, градусы
 const RELOAD_TILT_DEGREES: Vector3 = Vector3(-28.0, 12.0, 22.0)
+# Прицеливание
+## Скорость перехода в прицел и обратно (доля в секунду)
+const ADS_SPEED: float = 7.0
+## Оружие в прицеле: выше и ближе к камере (до уменьшения вью-модели)
+const ADS_RAISE: Vector3 = Vector3(0.0, 0.05, 0.06)
+## Покачивание в прицеле слабее
+const ADS_SWAY_FACTOR: float = 0.25
+## Затухание расхождения прицела, градусов в секунду
+const BLOOM_DECAY: float = 6.0
+## Доп. разброс при беге (доля от spread_degrees на полной скорости)
+const MOVE_SPREAD_FACTOR: float = 0.8
 ## Длительность замаха и возврата модели ближнего боя (доли интервала удара)
 const SWING_OUT_SHARE: float = 0.35
 const SWING_BACK_SHARE: float = 0.5
@@ -82,6 +94,11 @@ var _reload_total: float = 0.0
 var _model_base_rotation: Vector3 = Vector3.ZERO
 var _anim_time: float = 0.0
 var _bob_phase: float = 0.0
+var _speed_ratio: float = 0.0
+var _aiming: bool = false
+var _aim_weight: float = 0.0
+var _base_fov: float = 75.0
+var _bloom: float = 0.0
 # Здоровья, уже задетые текущим ударом (без аллокаций: очищается перед ударом)
 var _melee_hit: Array[Health] = []
 var _rng := RandomNumberGenerator.new()
@@ -105,6 +122,7 @@ func _ready() -> void:
 		set_physics_process(false)
 		set_process(false)
 		return
+	_base_fov = camera.fov
 
 	if use_game_state_loadout:
 		var loadout: Array[WeaponData] = GameState.get_loadout()
@@ -143,7 +161,40 @@ func is_target_in_sight() -> bool:
 
 
 func get_aim_slowdown() -> float:
-	return aim_assist_slowdown if _target_in_sight else 1.0
+	var slowdown: float = aim_assist_slowdown if _target_in_sight else 1.0
+	# В прицеле обзор медленнее пропорционально зуму
+	if camera != null and _base_fov > 0.0:
+		slowdown *= camera.fov / _base_fov
+	return slowdown
+
+
+func is_aiming() -> bool:
+	return _aiming
+
+
+## 0 — от бедра, 1 — полностью в прицеле
+func get_aim_weight() -> float:
+	return _aim_weight
+
+
+func set_aiming(enabled: bool) -> void:
+	var weapon: WeaponData = get_current_weapon()
+	if enabled and (weapon == null or weapon.is_melee):
+		enabled = false
+	if enabled == _aiming:
+		return
+	_aiming = enabled
+	aim_changed.emit(_aiming)
+
+
+## Текущий разброс в градусах: оружие, прицел, бег, расхождение от стрельбы
+func get_current_spread() -> float:
+	var weapon: WeaponData = get_current_weapon()
+	if weapon == null:
+		return 0.0
+	var base: float = weapon.spread_degrees * lerpf(1.0, weapon.ads_spread_multiplier, _aim_weight)
+	var moving: float = weapon.spread_degrees * MOVE_SPREAD_FACTOR * _speed_ratio * (1.0 - _aim_weight * 0.6)
+	return base + moving + _bloom
 
 
 func equip(index: int) -> void:
@@ -155,6 +206,8 @@ func equip(index: int) -> void:
 	_cancel_reload()
 	if _swing_tween != null and _swing_tween.is_valid():
 		_swing_tween.kill()
+	set_aiming(false)
+	_bloom = 0.0
 	_index = new_index
 	_cooldown = SWITCH_DELAY
 	_apply_view_model(weapons[_index])
@@ -175,6 +228,7 @@ func reload() -> void:
 		return
 	_reload_left = weapon.reload_time
 	_reload_total = weapon.reload_time
+	set_aiming(false)  # перезарядка — из прицела
 	_reload_stream = weapon.reload_sound
 	_reload_player = Sfx.play_2d(weapon.reload_sound, -2.0, 1.0, 0.0)
 	reload_started.emit(weapon.reload_time)
@@ -221,6 +275,10 @@ func _physics_process(delta: float) -> void:
 			weapon = get_current_weapon()
 		elif Input.is_action_just_pressed(&"reload"):
 			reload()
+		if Input.is_action_just_pressed(&"aim"):
+			set_aiming(not _aiming)
+	elif _aiming:
+		set_aiming(false)  # смерть, окно, пауза
 
 	_cooldown = maxf(_cooldown - delta, 0.0)
 	_update_target(weapon, delta)
@@ -240,6 +298,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	_update_aim(delta)
 	if _current_model != null and is_instance_valid(_current_model):
 		_animate_model(delta)
 	if _flash_left > 0.0:
@@ -251,18 +310,30 @@ func _process(delta: float) -> void:
 				_flash_sprite.visible = false
 
 
-## Дыхание, покачивание при ходьбе, наклон при перезарядке. Без аллокаций
+## Плавный зум камеры, скорость игрока, затухание расхождения прицела
+func _update_aim(delta: float) -> void:
+	_aim_weight = move_toward(_aim_weight, 1.0 if _aiming else 0.0, ADS_SPEED * delta)
+	if camera != null:
+		var weapon: WeaponData = get_current_weapon()
+		var zoom: float = weapon.ads_fov_multiplier if weapon != null else 1.0
+		camera.fov = lerpf(_base_fov, _base_fov * zoom, smoothstep(0.0, 1.0, _aim_weight))
+	_speed_ratio = 0.0
+	if player != null and player.is_on_floor() and player.move_speed > 0.0:
+		_speed_ratio = clampf(Vector2(player.velocity.x, player.velocity.z).length() / player.move_speed, 0.0, 1.0)
+	_bloom = maxf(_bloom - BLOOM_DECAY * delta, 0.0)
+
+
+## Дыхание, покачивание при ходьбе, наклон при перезарядке, прицел. Без аллокаций
 func _animate_model(delta: float) -> void:
 	var k: float = _offset_scale()
 	_anim_time += delta
-	var speed_ratio: float = 0.0
-	if player != null and player.is_on_floor() and player.move_speed > 0.0:
-		speed_ratio = clampf(Vector2(player.velocity.x, player.velocity.z).length() / player.move_speed, 0.0, 1.0)
-	_bob_phase += delta * WALK_BOB_SPEED * speed_ratio
+	var sway: float = lerpf(1.0, ADS_SWAY_FACTOR, _aim_weight)
+	var speed_ratio: float = _speed_ratio * sway
+	_bob_phase += delta * WALK_BOB_SPEED * _speed_ratio
 
 	var offset := Vector3(
-		sin(_anim_time * IDLE_SWAY_SPEED * 0.5) * IDLE_SWAY.x + sin(_bob_phase) * WALK_BOB.x * speed_ratio,
-		sin(_anim_time * IDLE_SWAY_SPEED) * IDLE_SWAY.y - absf(cos(_bob_phase)) * WALK_BOB.y * speed_ratio,
+		sin(_anim_time * IDLE_SWAY_SPEED * 0.5) * IDLE_SWAY.x * sway + sin(_bob_phase) * WALK_BOB.x * speed_ratio,
+		sin(_anim_time * IDLE_SWAY_SPEED) * IDLE_SWAY.y * sway - absf(cos(_bob_phase)) * WALK_BOB.y * speed_ratio,
 		0.0)
 	var reload_weight: float = 0.0
 	if is_reloading() and _reload_total > 0.0:
@@ -271,6 +342,10 @@ func _animate_model(delta: float) -> void:
 		offset += RELOAD_OFFSET * reload_weight
 
 	var target: Vector3 = _model_rest + offset * k
+	if _aim_weight > 0.0:
+		# В прицеле оружие уходит к центру экрана и поднимается
+		var ads_offset := Vector3(-_model_rest.x, 0.0, 0.0) + ADS_RAISE * k
+		target += ads_offset * smoothstep(0.0, 1.0, _aim_weight)
 	_current_model.position = _current_model.position.lerp(target, clampf(GUN_RETURN_SPEED * delta, 0.0, 1.0))
 	# Поворот не трогаем во время замаха (им управляет твин)
 	if _swing_tween == null or not _swing_tween.is_running():
@@ -368,6 +443,9 @@ func _fire(weapon: WeaponData) -> void:
 			headshot = headshot or result.get("head", false)
 			killed = killed or result.get("killed", false)
 
+	# Каждый выстрел раскрывает прицел (до max_bloom_factor × разброс)
+	_bloom = minf(_bloom + weapon.spread_degrees * weapon.bloom_per_shot,
+		weapon.spread_degrees * weapon.max_bloom_factor)
 	_apply_feedback(weapon)
 	fired.emit(weapon)
 	_emit_ammo()
@@ -422,7 +500,7 @@ func _play_swing(weapon: WeaponData, interval: float) -> void:
 
 
 func _fire_ray(weapon: WeaponData) -> Dictionary:
-	return _shoot_along(weapon, _spread_direction(weapon.spread_degrees))
+	return _shoot_along(weapon, _spread_direction(get_current_spread()))
 
 
 ## Луч из камеры в направлении direction на max_range: урон, искры, звук

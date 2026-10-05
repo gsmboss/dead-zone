@@ -29,6 +29,15 @@ extends Resource
 @export var max_reserve_ammo: int = -1
 @export_range(0.1, 5.0, 0.05) var reload_time: float = 1.2
 
+@export_group("Aim")
+## Приближение при прицеливании: FOV × множитель (меньше — сильнее зум)
+@export_range(0.3, 1.0, 0.05) var ads_fov_multiplier: float = 0.75
+## Разброс при прицеливании × множитель
+@export_range(0.0, 1.0, 0.05) var ads_spread_multiplier: float = 0.35
+## Расхождение прицела за выстрел (доля от spread_degrees) и максимум
+@export_range(0.0, 2.0, 0.05) var bloom_per_shot: float = 0.35
+@export_range(0.0, 5.0, 0.1) var max_bloom_factor: float = 2.0
+
 @export_group("Recoil")
 ## Подброс камеры вверх за выстрел, градусы
 @export var recoil_pitch: float = 1.5

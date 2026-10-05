@@ -6,6 +6,8 @@ const BUTTON_HEIGHT: float = 72.0
 const ACCENT: Color = Color(0.95, 0.75, 0.25)
 const DIM: Color = Color(0.75, 0.75, 0.75)
 const GOOD: Color = Color(0.55, 1.0, 0.55)
+## Цвет кнопок меню (3D-стиль)
+const BUTTON_COLOR: Color = Color(0.24, 0.27, 0.3)
 
 
 static func label(text: String, font_size: int = 26, parent: Node = null) -> Label:
@@ -27,8 +29,40 @@ static func button(text: String, font_size: int = 26, min_width: float = 0.0) ->
 	result.focus_mode = Control.FOCUS_NONE
 	result.custom_minimum_size = Vector2(min_width, BUTTON_HEIGHT)
 	result.add_theme_font_size_override(&"font_size", font_size)
+	apply_3d_style(result)
 	result.pressed.connect(func() -> void: Sfx.click())
 	return result
+
+
+## Объёмная кнопка: толстый нижний край (боковина), тень; при нажатии «вдавливается»
+static func apply_3d_style(button: Button) -> void:
+	button.add_theme_stylebox_override(&"normal", _button_box(BUTTON_COLOR, 7, 0))
+	button.add_theme_stylebox_override(&"hover", _button_box(BUTTON_COLOR.lightened(0.12), 7, 0))
+	button.add_theme_stylebox_override(&"pressed", _button_box(BUTTON_COLOR.darkened(0.1), 2, 5))
+	button.add_theme_stylebox_override(&"disabled", _button_box(BUTTON_COLOR.darkened(0.45), 4, 3))
+	button.add_theme_stylebox_override(&"focus", StyleBoxEmpty.new())
+	button.add_theme_color_override(&"font_disabled_color", Color(1.0, 1.0, 1.0, 0.35))
+	button.add_theme_constant_override(&"outline_size", 4)
+	button.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.6))
+
+
+## edge — высота боковины снизу, sink — насколько содержимое опущено (нажатие)
+static func _button_box(color: Color, edge: int, sink: int) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.set_corner_radius_all(14)
+	box.border_width_bottom = edge
+	box.border_width_top = sink
+	box.border_color = color.darkened(0.55)
+	box.border_blend = false
+	box.shadow_color = Color(0.0, 0.0, 0.0, 0.45)
+	box.shadow_size = 6 if sink == 0 else 2
+	box.shadow_offset = Vector2(0.0, 4.0 if sink == 0 else 1.0)
+	box.content_margin_left = 18.0
+	box.content_margin_right = 18.0
+	box.content_margin_top = 8.0 + sink
+	box.content_margin_bottom = 8.0
+	return box
 
 
 static func panel_style(color: Color = Color(0.08, 0.09, 0.1, 0.94),

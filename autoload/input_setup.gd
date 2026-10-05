@@ -12,6 +12,11 @@ const ACTIONS: Dictionary = {
 	&"reload": [KEY_R],
 	&"switch_weapon": [KEY_Q],
 	&"interact": [KEY_E],
+	&"aim": [KEY_Z],
+}
+## Дополнительно: прицеливание правой кнопкой мыши
+const MOUSE_ACTIONS: Dictionary = {
+	&"aim": MOUSE_BUTTON_RIGHT,
 }
 
 
@@ -24,3 +29,7 @@ func _enter_tree() -> void:
 			var event := InputEventKey.new()
 			event.physical_keycode = keycode
 			InputMap.action_add_event(action, event)
+		if MOUSE_ACTIONS.has(action):
+			var mouse_event := InputEventMouseButton.new()
+			mouse_event.button_index = MOUSE_ACTIONS[action]
+			InputMap.action_add_event(action, mouse_event)

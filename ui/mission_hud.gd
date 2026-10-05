@@ -138,6 +138,7 @@ func _make_button(text: String) -> Button:
 	button.custom_minimum_size = Vector2(260.0, 80.0)
 	button.focus_mode = FOCUS_NONE
 	button.add_theme_font_size_override(&"font_size", 28)
+	UIKit.apply_3d_style(button)
 	button.pressed.connect(func() -> void: Sfx.click())
 	return button
 
