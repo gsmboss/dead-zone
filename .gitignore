@@ -1,0 +1,10 @@
+# Кэш Godot и сборки
+.godot/
+*.tmp
+export/
+*.apk
+*.aab
+# Ключи подписи никогда не публиковать
+*.keystore
+*.jks
+.DS_Store

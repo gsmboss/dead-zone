@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://ct6h4tc3s40c6"]
+
+[ext_resource type="Script" uid="uid://b7h1ilftas4x2" path="res://enemies/zombie.gd" id="1_ujw3w"]
+[ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="2_c8iql"]
+[ext_resource type="Script" uid="uid://j2sx2hqkv66s" path="res://combat/health.gd" id="3_1p8ux"]
+[ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="3_xiyom"]
+[ext_resource type="Script" uid="uid://bxu58r6egtu0s" path="res://combat/hitbox.gd" id="4_xiyom"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_avdwy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rl3hw"]
+radius = 0.37
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_avdwy"]
+radius = 0.27
+
+[node name="Zombie" type="CharacterBody3D" unique_id=13671625]
+script = ExtResource("1_ujw3w")
+data = ExtResource("2_c8iql")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=73633674]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_avdwy")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1105362584]
+
+[node name="Model" parent="Visual" unique_id=1607446751 instance=ExtResource("3_xiyom")]
+transform = Transform3D(-1.6, 0, -1.3987645e-07, 0, 1.6, 0, 1.3987645e-07, 0, -1.6, 0, 0, 0)
+
+[node name="Health" type="Node" parent="." unique_id=791602821]
+script = ExtResource("3_1p8ux")
+
+[node name="BodyHitbox" type="Area3D" parent="." unique_id=2001211166]
+script = ExtResource("4_xiyom")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BodyHitbox" unique_id=472785915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_rl3hw")
+
+[node name="HeadHitbox" type="Area3D" parent="." unique_id=1449885586]
+script = ExtResource("4_xiyom")
+damage_multiplier = 2.5
+is_head = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HeadHitbox" unique_id=1551741835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018, 1.45, -0.339)
+shape = SubResource("SphereShape3D_avdwy")

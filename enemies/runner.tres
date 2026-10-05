@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3 uid="uid://bxalb3sauqja6"]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_q1qs2"]
+
+[resource]
+script = ExtResource("1_q1qs2")
+display_name = "RUNNER"
+max_health = 60.0
+move_speed = 4.2
+turn_speed = 10.0
+attack_damage = 8.0
+attack_range = 1.3
+attack_windup = 0.35
+attack_cooldown = 0.6
+detection_radius = 22.0
+hearing_radius = 35.0
+body_color = Color(0.54901963, 0.3529412, 0.2509804, 1)
+score = 15
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

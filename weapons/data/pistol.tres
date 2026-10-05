@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://cd2ejxtu8qqn4"]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_7cxau"]
+[ext_resource type="PackedScene" uid="uid://d3u8g1bb5mnt" path="res://models/weapons/Pistol.gltf" id="2_5q8fu"]
+
+[resource]
+script = ExtResource("1_7cxau")
+display_name = "pistol"
+damage = 25.0
+max_range = 50.0
+fire_rate = 3.0
+reload_time = 1.1
+gun_kick = 0.04
+view_model = ExtResource("2_5q8fu")
+model_position = Vector3(0.16, -0.17, -0.38)
+model_rotation_degrees = Vector3(0, 4, 0)
+model_scale = 0.3
+muzzle_position = Vector3(0, 0.17, -0.6)
+id = "pistol"
+upgrade_base_cost = 80
+upgrade_cost_growth = 1.5
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

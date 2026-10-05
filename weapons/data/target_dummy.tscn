@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://bf50v65q4ddb7"]
+
+[ext_resource type="Script" uid="uid://chcip2nl6ciin" path="res://combat/target_dummy.gd" id="1_8h2d6"]
+[ext_resource type="Script" uid="uid://j2sx2hqkv66s" path="res://combat/health.gd" id="2_xiae8"]
+[ext_resource type="Script" uid="uid://bxu58r6egtu0s" path="res://combat/hitbox.gd" id="3_s2m6d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_avdwy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_avdwy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_avdwy"]
+radius = 0.2
+height = 0.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rl3hw"]
+radius = 0.37
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_avdwy"]
+radius = 0.22
+
+[node name="TargetDummy" type="StaticBody3D" unique_id=664450602]
+script = ExtResource("1_8h2d6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2114708938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_avdwy")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=203344008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_avdwy")
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=482322835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+mesh = SubResource("SphereMesh_avdwy")
+
+[node name="Health" type="Node" parent="." unique_id=1962460829]
+script = ExtResource("2_xiae8")
+
+[node name="BodyHitbox" type="Area3D" parent="." unique_id=686574719]
+script = ExtResource("3_s2m6d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BodyHitbox" unique_id=154035510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_rl3hw")
+
+[node name="HeadHitbox" type="Area3D" parent="." unique_id=1056219349]
+script = ExtResource("3_s2m6d")
+damage_multiplier = 2.5
+is_head = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HeadHitbox" unique_id=1054561075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+shape = SubResource("SphereShape3D_avdwy")

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bsa2uk6rius6f"]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_nu4v8"]
+[ext_resource type="PackedScene" uid="uid://dnapdmhpr5881" path="res://models/weapons/Shotgun.gltf" id="2_khvsj"]
+
+[resource]
+script = ExtResource("1_nu4v8")
+damage = 12.0
+pellets = 8
+max_range = 25.0
+spread_degrees = 7.0
+fire_rate = 1.2
+magazine_size = 6
+max_reserve_ammo = 36
+reload_time = 2.0
+recoil_pitch = 4.0
+recoil_yaw = 1.2
+gun_kick = 0.09
+view_model = ExtResource("2_khvsj")
+model_position = Vector3(0.17, -0.2, -0.42)
+model_rotation_degrees = Vector3(0, 177, 0)
+model_scale = 0.5
+muzzle_position = Vector3(0, 0.12, 1)
+id = "shotgun"
+price = 500
+upgrade_base_cost = 120
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

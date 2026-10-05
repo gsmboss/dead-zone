@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://5jq04uokjeru"]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_1nbgd"]
+[ext_resource type="PackedScene" uid="uid://bfapymd7uvxce" path="res://models/weapons/SMG.gltf" id="2_vmvxp"]
+
+[resource]
+script = ExtResource("1_1nbgd")
+max_range = 70.0
+spread_degrees = 2.0
+fire_rate = 9.0
+magazine_size = 30
+max_reserve_ammo = 180
+reload_time = 1.8
+recoil_pitch = 0.9
+recoil_yaw = 0.5
+gun_kick = 0.03
+view_model = ExtResource("2_vmvxp")
+model_position = Vector3(0.15, -0.19, -0.42)
+model_rotation_degrees = Vector3(0, 183, 0)
+model_scale = 0.35000000000000003
+muzzle_position = Vector3(0, 0.17, -0.6)
+id = "rifle"
+price = 1200
+upgrade_base_cost = 150
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"
