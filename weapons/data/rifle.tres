@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_1nbgd")
+display_name = "ВИНТОВКА"
 max_range = 70.0
 spread_degrees = 2.0
 fire_rate = 9.0
