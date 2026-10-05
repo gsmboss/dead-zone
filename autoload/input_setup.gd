@@ -14,6 +14,9 @@ const ACTIONS: Dictionary = {
 	&"interact": [KEY_E],
 	&"aim": [KEY_Z],
 	&"inventory": [KEY_I],
+	&"throw": [KEY_G],
+	&"sprint": [KEY_SHIFT],
+	&"slide": [KEY_C],
 	&"pause": [KEY_ESCAPE, KEY_P],
 }
 ## Дополнительно: прицеливание правой кнопкой мыши

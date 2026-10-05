@@ -11,4 +11,5 @@ effect = 1
 amount = 0.35
 max_stack = 5
 price = 40
+craft_cost = 2
 icon_color = Color(0.55, 0.6, 0.25, 1)

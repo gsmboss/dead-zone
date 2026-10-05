@@ -1,8 +1,9 @@
 class_name ItemData
 extends Resource
-## Предмет инвентаря (аптечка, набор патронов). Каждый — отдельный .tres.
+## Предмет инвентаря (аптечка, патроны, граната, коктейль Молотова, лом). Каждый — отдельный .tres.
 
-enum Effect { HEAL, AMMO }
+## GRENADE/MOLOTOV бросаются кнопкой «ГРАНАТА», MATERIAL — сырьё для мастерской
+enum Effect { HEAL, AMMO, GRENADE, MOLOTOV, MATERIAL }
 
 ## Уникальный id для сохранений, латиницей
 @export var id: String = ""
@@ -15,6 +16,12 @@ enum Effect { HEAL, AMMO }
 ## Цена в оружейной (0 — не продаётся)
 @export var price: int = 50
 @export var icon_color: Color = Color(0.85, 0.15, 0.12)
+## Сборка в мастерской убежища: столько лома (0 — не собирается)
+@export var craft_cost: int = 0
+
+
+func is_throwable() -> bool:
+	return effect == Effect.GRENADE or effect == Effect.MOLOTOV
 
 
 ## Применить к игроку. false — предмет сейчас бесполезен (полное здоровье / патроны)

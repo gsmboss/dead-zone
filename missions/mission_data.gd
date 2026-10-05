@@ -67,6 +67,8 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 ## Шанс выпадения патронов и аптечки из убитого зомби
 @export_range(0.0, 1.0, 0.01) var ammo_drop_chance: float = 0.12
 @export_range(0.0, 1.0, 0.01) var health_drop_chance: float = 0.07
+## Шанс выпадения лома (для мастерской)
+@export_range(0.0, 1.0, 0.01) var scrap_drop_chance: float = 0.2
 ## Аптечка лечит столько очков
 @export var health_drop_amount: float = 30.0
 

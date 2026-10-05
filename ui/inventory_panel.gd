@@ -37,6 +37,13 @@ func _make_item_card(item: ItemData, count: int, player: Player) -> Control:
 	UIKit.label("%s  ×%d" % [item.title, count], 28, texts)
 	UIKit.label(item.description, 22, texts).modulate = UIKit.DIM
 
+	if item.is_throwable() or item.effect == ItemData.Effect.MATERIAL:
+		var hint := UIKit.label("КНОПКА ГРАНАТА" if item.is_throwable() else "ДЛЯ МАСТЕРСКОЙ", 22, row)
+		hint.modulate = UIKit.ACCENT
+		hint.custom_minimum_size = Vector2(260.0, 0.0)
+		hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		return card
+
 	var use := UIKit.button("ИСПОЛЬЗОВАТЬ", 24, 260.0)
 	use.disabled = player == null
 	use.pressed.connect(func() -> void:

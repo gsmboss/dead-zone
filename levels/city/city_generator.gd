@@ -299,8 +299,16 @@ func _spawn_pickups() -> void:
 				continue
 			at = spot["position"]
 		var pickup := Pickup.new()
-		pickup.kind = Pickup.Kind.HEALTH if _rng.randf() < 0.45 else Pickup.Kind.AMMO
-		pickup.amount = 30.0 if pickup.kind == Pickup.Kind.HEALTH else 0.35
+		var roll: float = _rng.randf()
+		if roll < 0.3:
+			pickup.kind = Pickup.Kind.SCRAP  # лом для мастерской
+			pickup.amount = 2.0
+		elif roll < 0.6:
+			pickup.kind = Pickup.Kind.HEALTH
+			pickup.amount = 30.0
+		else:
+			pickup.kind = Pickup.Kind.AMMO
+			pickup.amount = 0.35
 		pickup.position = at
 		add_child(pickup)
 

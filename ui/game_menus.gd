@@ -1,15 +1,21 @@
 class_name GameMenus
 extends Control
-## Меню уровня (создаётся кодом): кнопки «II» (пауза) и «СУМКА» на экране,
-## окно паузы (продолжить, сумка, настройки, заново, в убежище).
+## Меню уровня (создаётся кодом): кнопки «II» (пауза), «СУМКА» и «ГРАНАТА» на экране,
+## окно паузы (продолжить, сумка, настройки, заново, в убежище), бросок гранат и коктейлей.
 ## Достаточно пустого Control в HUD уровня с этим скриптом.
 
 const HUB_SCENE: String = "res://hub/hub.tscn"
 const BUTTON_SIZE: float = 90.0
+## Бросок: скорость вперёд и вверх, точка вылета перед камерой
+const THROW_SPEED: float = 15.0
+const THROW_LIFT: float = 3.5
+const THROW_COOLDOWN: float = 0.6
 
 var _touch_controls: TouchControls
 var _pause_button: TouchActionButton
 var _bag_button: TouchActionButton
+var _throw_button: TouchActionButton
+var _throw_cooldown: float = 0.0
 var _pause_panel: PanelContainer
 var _window: HubWindow
 ## Сумка открыта прямо из HUD (закрытие — сразу в игру, без окна паузы)
@@ -30,7 +36,10 @@ func _exit_tree() -> void:
 		get_tree().paused = false
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
+	if Input.is_action_just_pressed(&"throw") and not get_tree().paused:
+		_throw()
 	if Input.is_action_just_pressed(&"pause"):
 		if _window != null:
 			_window.close_window()
@@ -50,6 +59,10 @@ func _setup_buttons() -> void:
 	_touch_controls = player.touch_controls
 	_pause_button = _make_touch_button(&"pause", "II", Vector2(1.0, 0.0), Vector2(-120.0, 130.0))
 	_bag_button = _make_touch_button(&"inventory", "СУМКА", Vector2(0.0, 0.0), Vector2(24.0, 110.0))
+	_throw_button = _make_touch_button(&"throw", "", Vector2(1.0, 1.0), Vector2(-140.0, -500.0))
+	_throw_button.base_color = Color(0.3, 0.42, 0.22)
+	GameState.inventory_changed.connect(_update_throw_button)
+	_update_throw_button()
 
 
 func _make_touch_button(action: StringName, text: String, anchor: Vector2, offset: Vector2) -> TouchActionButton:
@@ -69,6 +82,41 @@ func _make_touch_button(action: StringName, text: String, anchor: Vector2, offse
 	button.offset_bottom = offset.y + BUTTON_SIZE
 	_touch_controls.register_button(button)
 	return button
+
+
+# ---------- Бросок ----------
+
+func _throw() -> void:
+	if _throw_cooldown > 0.0 or _is_player_dead():
+		return
+	var player := get_tree().get_first_node_in_group(&"player") as Player
+	if player == null or not player.input_enabled or player.camera == null:
+		return
+	var item: ItemData = GameState.get_throwable()
+	if item == null:
+		Sfx.error()
+		return
+	if not GameState.remove_item(item.id):
+		return
+	_throw_cooldown = THROW_COOLDOWN
+	var camera: Camera3D = player.camera
+	var forward: Vector3 = -camera.global_basis.z
+	var from: Vector3 = camera.global_position + forward * 0.6 - camera.global_basis.y * 0.15
+	var throw_velocity: Vector3 = forward * THROW_SPEED + Vector3.UP * THROW_LIFT \
+		+ Vector3(player.velocity.x, 0.0, player.velocity.z) * 0.5
+	ThrownItem.throw_item(get_tree().current_scene, item, from, throw_velocity)
+	Sfx.play_2d(Sfx.sounds.ui_back, -4.0, 0.7)
+
+
+## Подпись кнопки броска: что полетит и сколько всего
+func _update_throw_button() -> void:
+	if _throw_button == null:
+		return
+	var item: ItemData = GameState.get_throwable()
+	var count: int = GameState.get_throwable_count()
+	_throw_button.visible = count > 0
+	_throw_button.label = "%s %d" % ["МОЛОТОВ" if item != null and item.effect == ItemData.Effect.MOLOTOV else "ГРАНАТА", count]
+	_throw_button.queue_redraw()
 
 
 # ---------- Пауза ----------

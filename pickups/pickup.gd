@@ -6,10 +6,12 @@ extends Area3D
 
 signal collected(pickup: Pickup)
 
-enum Kind { AMMO, HEALTH, MISSION_ITEM }
+## SCRAP — лом для мастерской, всегда в сумку
+enum Kind { AMMO, HEALTH, MISSION_ITEM, SCRAP }
 
 const AMMO_MODEL: String = "res://models/environment/Chest.gltf"
 const ITEM_MODEL: String = "res://models/environment/Chest_Special.gltf"
+const SCRAP_MODEL: String = "res://models/environment/Wheel.gltf"
 const SPIN_SPEED: float = 1.6
 const BOB_HEIGHT: float = 0.12
 const BOB_SPEED: float = 2.5
@@ -93,6 +95,8 @@ func _apply(player: Player) -> bool:
 				return GameState.add_item(HEALTH_ITEM)  # здоровье полное — в сумку
 			player.health.heal(amount)
 			return true
+		Kind.SCRAP:
+			return GameState.add_item(GameState.SCRAP_ID, maxi(roundi(amount), 1))
 		Kind.MISSION_ITEM:
 			var manager := get_tree().get_first_node_in_group(&"mission_manager") as MissionManager
 			if manager != null:
@@ -129,6 +133,8 @@ func _ensure_visual() -> Node3D:
 			_add_beacon(visual)
 		Kind.HEALTH:
 			_build_medkit(visual)
+		Kind.SCRAP:
+			_add_model(visual, SCRAP_MODEL, 0.8)
 	return visual
 
 

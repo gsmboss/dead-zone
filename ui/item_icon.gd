@@ -30,6 +30,19 @@ func _draw() -> void:
 			var thick: float = r * 0.32
 			draw_rect(Rect2(center - Vector2(arm, thick * 0.5), Vector2(arm * 2.0, thick)), Color.WHITE)
 			draw_rect(Rect2(center - Vector2(thick * 0.5, arm), Vector2(thick, arm * 2.0)), Color.WHITE)
+		ItemData.Effect.GRENADE:
+			draw_circle(center + Vector2(0.0, r * 0.1), r * 0.42, Color(0.2, 0.28, 0.15))
+			draw_rect(Rect2(center + Vector2(-r * 0.12, -r * 0.5), Vector2(r * 0.24, r * 0.2)), Color(0.75, 0.75, 0.7))
+			draw_arc(center + Vector2(r * 0.22, -r * 0.45), r * 0.14, 0.0, TAU, 12, Color(0.85, 0.85, 0.8), 2.0, false)
+		ItemData.Effect.MOLOTOV:
+			draw_rect(Rect2(center + Vector2(-r * 0.2, -r * 0.1), Vector2(r * 0.4, r * 0.6)), Color(0.35, 0.55, 0.25, 0.9))
+			draw_rect(Rect2(center + Vector2(-r * 0.08, -r * 0.4), Vector2(r * 0.16, r * 0.32)), Color(0.35, 0.55, 0.25, 0.9))
+			draw_circle(center + Vector2(0.0, -r * 0.52), r * 0.16, Color(1.0, 0.75, 0.2))
+		ItemData.Effect.MATERIAL:
+			draw_arc(center, r * 0.35, 0.0, TAU, 16, Color(0.85, 0.85, 0.9), r * 0.16, false)
+			for i in 6:
+				var dir := Vector2.from_angle(i * TAU / 6.0)
+				draw_line(center + dir * r * 0.4, center + dir * r * 0.58, Color(0.85, 0.85, 0.9), r * 0.14)
 		ItemData.Effect.AMMO:
 			var width: float = r * 0.22
 			for i in 3:

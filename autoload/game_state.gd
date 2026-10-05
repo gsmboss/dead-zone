@@ -26,7 +26,19 @@ const REWARD_PER_CLEAR: float = 0.1
 const MAX_REWARD_MULTIPLIER: float = 2.0
 const SECONDS_PER_DAY: int = 86400
 ## Предметы инвентаря (порядок = порядок в сумке и оружейной)
-const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_pack.tres"]
+const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_pack.tres",
+	"res://items/grenade.tres", "res://items/molotov.tres", "res://items/scrap.tres"]
+const SCRAP_ID: String = "scrap"
+## Постройки базы (порядок = порядок в окне БАЗА и во дворе убежища)
+const BUILDING_PATHS: Array[String] = ["res://base/workshop.tres", "res://base/medbay.tres",
+	"res://base/armory.tres", "res://base/garage.tres"]
+## Улучшения машин (гараж): таран — урон сбивания, двигатель — скорость
+const CAR_UPGRADES: Array[String] = ["ram", "engine"]
+const CAR_UPGRADE_MAX: int = 5
+const CAR_UPGRADE_BASE_COST: int = 150
+const CAR_UPGRADE_GROWTH: float = 1.6
+## Бонус склада патронов к максимальному запасу
+const ARMORY_AMMO_BONUS: float = 0.3
 
 var coins: int = 0
 var catalog: WeaponCatalog
@@ -35,6 +47,7 @@ var selected_mission: MissionData
 var player_stats: PlayerStats
 var quest_pool: QuestPool
 var items: Array[ItemData] = []
+var buildings: Array[BuildingData] = []
 
 var _owned: Array[String] = []
 var _upgrades: Dictionary = {}     # id оружия -> {"damage": int, "magazine": int, "reload": int}
@@ -47,6 +60,8 @@ var _daily_streak: int = 0
 var _quest_day: int = -1
 var _quests: Array[Dictionary] = []  # {"id": String, "progress": int, "claimed": bool}
 var _inventory: Dictionary = {}  # id предмета -> количество
+var _buildings_owned: Array[String] = []
+var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
 
 
 func _ready() -> void:
@@ -71,6 +86,12 @@ func _ready() -> void:
 			push_warning("GameState: не найден предмет %s" % path)
 			continue
 		items.append(item)
+	for path: String in BUILDING_PATHS:
+		var building: BuildingData = load(path) as BuildingData if ResourceLoader.exists(path) else null
+		if building == null or building.id.is_empty():
+			push_warning("GameState: не найдена постройка %s" % path)
+			continue
+		buildings.append(building)
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -108,7 +129,10 @@ func get_upgrade_cost(weapon: WeaponData, stat: String) -> int:
 
 
 func get_upgraded(weapon: WeaponData) -> WeaponData:
-	return weapon.make_upgraded(_upgrades.get(weapon.id, {}))
+	var upgraded: WeaponData = weapon.make_upgraded(_upgrades.get(weapon.id, {}))
+	if upgraded.max_reserve_ammo > 0 and get_ammo_bonus() > 0.0:
+		upgraded.max_reserve_ammo = roundi(upgraded.max_reserve_ammo * (1.0 + get_ammo_bonus()))
+	return upgraded
 
 
 ## Купленные стволы с улучшениями, в порядке каталога
@@ -233,6 +257,43 @@ func use_item(item_id: String, player: Player) -> bool:
 	return true
 
 
+func remove_item(item_id: String, count: int = 1) -> bool:
+	if get_item_count(item_id) < count or count <= 0:
+		return false
+	_inventory[item_id] = get_item_count(item_id) - count
+	inventory_changed.emit()
+	return true
+
+
+## Первый имеющийся метательный предмет (сначала граната, потом коктейль)
+func get_throwable() -> ItemData:
+	for item: ItemData in items:
+		if item.is_throwable() and get_item_count(item.id) > 0:
+			return item
+	return null
+
+
+func get_throwable_count() -> int:
+	var total: int = 0
+	for item: ItemData in items:
+		if item.is_throwable():
+			total += get_item_count(item.id)
+	return total
+
+
+## Сборка в мастерской из лома
+func craft_item(item_id: String) -> bool:
+	var item: ItemData = get_item(item_id)
+	if item == null or item.craft_cost <= 0 or not has_building("workshop"):
+		return false
+	if get_item_count(SCRAP_ID) < item.craft_cost or get_item_count(item_id) >= item.max_stack:
+		return false
+	remove_item(SCRAP_ID, item.craft_cost)
+	add_item(item_id)
+	save_game()
+	return true
+
+
 func buy_item(item_id: String) -> bool:
 	var item: ItemData = get_item(item_id)
 	if item == null or item.price <= 0 or coins < item.price:
@@ -241,6 +302,66 @@ func buy_item(item_id: String) -> bool:
 		return false
 	coins -= item.price
 	coins_changed.emit(coins)
+	save_game()
+	return true
+
+
+# ---------- База и гараж ----------
+
+func has_building(building_id: String) -> bool:
+	return building_id in _buildings_owned
+
+
+func get_building(building_id: String) -> BuildingData:
+	for building: BuildingData in buildings:
+		if building.id == building_id:
+			return building
+	return null
+
+
+func buy_building(building_id: String) -> bool:
+	var building: BuildingData = get_building(building_id)
+	if building == null or has_building(building_id) or coins < building.price:
+		return false
+	coins -= building.price
+	_buildings_owned.append(building_id)
+	coins_changed.emit(coins)
+	progress_changed.emit()
+	save_game()
+	return true
+
+
+## Медпункт: аптечка перед миссией, если её нет. Вызывает MissionManager
+func on_mission_started() -> void:
+	if has_building("medbay") and get_item_count("medkit") <= 0:
+		add_item("medkit")
+
+
+func get_ammo_bonus() -> float:
+	return ARMORY_AMMO_BONUS if has_building("armory") else 0.0
+
+
+func get_car_upgrade_level(stat: String) -> int:
+	return int(_car_upgrades.get(stat, 0))
+
+
+func get_car_upgrade_cost(stat: String) -> int:
+	var level: int = get_car_upgrade_level(stat)
+	if level >= CAR_UPGRADE_MAX:
+		return -1
+	return roundi(CAR_UPGRADE_BASE_COST * pow(CAR_UPGRADE_GROWTH, level))
+
+
+func upgrade_car(stat: String) -> bool:
+	if not stat in CAR_UPGRADES or not has_building("garage"):
+		return false
+	var cost: int = get_car_upgrade_cost(stat)
+	if cost < 0 or coins < cost:
+		return false
+	coins -= cost
+	_car_upgrades[stat] = get_car_upgrade_level(stat) + 1
+	coins_changed.emit(coins)
+	progress_changed.emit()
 	save_game()
 	return true
 
@@ -420,6 +541,8 @@ func reset_progress() -> void:
 	_quest_day = -1
 	_quests.clear()
 	_inventory.clear()
+	_buildings_owned.clear()
+	_car_upgrades.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -443,6 +566,8 @@ func save_game() -> void:
 		"quest_day": _quest_day,
 		"quests": _quests,
 		"inventory": _inventory,
+		"buildings": _buildings_owned,
+		"car_upgrades": _car_upgrades,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -522,6 +647,18 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_buildings_owned.clear()
+	var owned_buildings: Variant = data.get("buildings", [])
+	if owned_buildings is Array:
+		for building_id: Variant in owned_buildings:
+			if get_building(str(building_id)) != null and not has_building(str(building_id)):
+				_buildings_owned.append(str(building_id))
+	_car_upgrades.clear()
+	var stored_car: Dictionary = _load_int_dictionary(data.get("car_upgrades", {}), 0, CAR_UPGRADE_MAX)
+	for stat: String in CAR_UPGRADES:
+		if stored_car.has(stat):
+			_car_upgrades[stat] = stored_car[stat]
 
 	_inventory.clear()
 	var stored: Dictionary = _load_int_dictionary(data.get("inventory", {}), 0, 99)

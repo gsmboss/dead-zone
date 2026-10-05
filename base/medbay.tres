@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+[ext_resource type="PackedScene" path="res://models/environment/Container_Red.gltf" id="2_mdl01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "medbay"
+title = "МЕДПУНКТ"
+description = "Перед каждой миссией в сумке появляется аптечка, если её нет"
+price = 600
+icon_color = Color(0.85, 0.2, 0.2, 1)
+hub_model = ExtResource("2_mdl01")

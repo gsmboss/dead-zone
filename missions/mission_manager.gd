@@ -117,6 +117,7 @@ func _start() -> void:
 		_player.weapon_manager.fired.connect(_on_player_fired)
 		_player.weapon_manager.hit_landed.connect(_on_player_hit)
 
+	GameState.on_mission_started()  # медпункт базы
 	match mission.type:
 		MissionData.Type.DEFEND:
 			_setup_defend_point()
@@ -317,6 +318,14 @@ func _try_drop(at: Vector3) -> void:
 			_drops.remove_at(i)
 	if _drops.size() >= MAX_DROPS_ALIVE:
 		return
+	if _rng.randf() < mission.scrap_drop_chance:
+		var scrap := Pickup.new()
+		scrap.kind = Pickup.Kind.SCRAP
+		scrap.amount = 1.0
+		scrap.lifetime = DROP_LIFETIME
+		get_tree().current_scene.add_child(scrap)
+		scrap.global_position = at + Vector3(0.6, 0.0, 0.0)
+		_drops.append(scrap)
 	var roll: float = _rng.randf()
 	var kind: Pickup.Kind
 	if roll < mission.health_drop_chance:
