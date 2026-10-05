@@ -11,15 +11,132 @@ var _status: String = ""
 var _ip_text: String = ""
 
 
+const RUST: Color = Color(0.85, 0.42, 0.12)
+const PANEL_BG: Color = Color(0.06, 0.055, 0.05, 0.88)
+const PANEL_WIDTH: float = 560.0
+const ROW_POP_DELAY: float = 0.035
+
+var _stage: LobbyStage3D
+var _panel: PanelContainer
+
+
 func _ready() -> void:
 	window_title = "ИГРА ПО СЕТИ"
+	# Своя разметка: 3D-лагерь на весь экран, панель слева, полоса сверху (как карта миссий)
+	mouse_filter = MOUSE_FILTER_STOP
+	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	add_theme_stylebox_override(&"panel", StyleBoxEmpty.new())
+	_build_layout()
 	Net.lobby_changed.connect(_refresh_soon)
 	Net.hosts_changed.connect(_refresh_soon)
 	Net.status_changed.connect(_on_status)
 	Net.disconnected.connect(_on_status)
 	if not Net.is_online():
 		Net.start_discovery()
-	super._ready()
+	refresh()
+	_play_intro()
+
+
+func _build_layout() -> void:
+	var root := Control.new()
+	root.mouse_filter = MOUSE_FILTER_IGNORE
+	add_child(root)
+	_stage = LobbyStage3D.new()
+	root.add_child(_stage)
+	_stage.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+
+	var top := VBoxContainer.new()
+	top.add_theme_constant_override(&"separation", 0)
+	root.add_child(top)
+	top.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
+	top.offset_bottom = 100.0
+	var stripe := HazardStripe.new()
+	stripe.custom_minimum_size = Vector2(0.0, 12.0)
+	top.add_child(stripe)
+	var bar := PanelContainer.new()
+	bar.add_theme_stylebox_override(&"panel", UIKit.panel_style(Color(0.04, 0.035, 0.03, 0.85), 0, 12.0))
+	top.add_child(bar)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override(&"separation", 20)
+	bar.add_child(header)
+	var title := UIKit.label("ИГРА ПО СЕТИ", 36, header)
+	title.modulate = RUST
+	title.size_flags_horizontal = SIZE_EXPAND_FILL
+	title.autowrap_mode = TextServer.AUTOWRAP_OFF
+	var close := UIKit.button("ЗАКРЫТЬ", 24, 200.0)
+	close.pressed.connect(close_window)
+	header.add_child(close)
+
+	_panel = PanelContainer.new()
+	var style := UIKit.panel_style(PANEL_BG, 6, 18.0)
+	style.border_color = RUST.darkened(0.3)
+	style.set_border_width_all(3)
+	_panel.add_theme_stylebox_override(&"panel", style)
+	root.add_child(_panel)
+	_panel.set_anchors_and_offsets_preset(PRESET_LEFT_WIDE)
+	_panel.offset_left = 20.0
+	_panel.offset_top = 112.0
+	_panel.offset_right = 20.0 + PANEL_WIDTH
+	_panel.offset_bottom = -20.0
+	_scroll = ScrollContainer.new()
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_panel.add_child(_scroll)
+	content = VBoxContainer.new()
+	content.size_flags_horizontal = SIZE_EXPAND_FILL
+	content.add_theme_constant_override(&"separation", 12)
+	_scroll.add_child(content)
+
+
+## Появление окна: панель выезжает слева, полоса сверху
+func _play_intro() -> void:
+	_panel.modulate.a = 0.0
+	var target: float = _panel.offset_left
+	_panel.offset_left = target - 120.0
+	_panel.offset_right = _panel.offset_left + PANEL_WIDTH
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(_panel, "modulate:a", 1.0, 0.3)
+	tween.tween_property(_panel, "offset_left", target, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_panel, "offset_right", target + PANEL_WIDTH, 0.4) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## Персонажи в 3D: игроки лобби или только свой (пока не в игре)
+func _update_stage() -> void:
+	if _stage == null:
+		return
+	var entries: Array = []
+	if Net.is_online() or Net.is_host():
+		var ids: Array = Net.players.keys()
+		ids.sort()
+		for peer_id: int in ids:
+			var info: Dictionary = Net.players[peer_id]
+			entries.append({"id": peer_id, "name": str(info.get("name", "?")), "skin": str(info.get("skin", "")),
+				"color": _player_color(peer_id)})
+	else:
+		var skin: PlayerSkin = GameState.get_selected_skin()
+		var my_name: String = Settings.player_name if not Settings.player_name.is_empty() else "ВЫЖИВШИЙ"
+		entries.append({"id": 0, "name": my_name, "skin": skin.id if skin != null else "", "color": UIKit.GOOD})
+	_stage.set_players(entries)
+
+
+func _player_color(peer_id: int) -> Color:
+	if Net.mode == Net.Mode.TEAMS:
+		return MatchManager.TEAM_COLORS[int(Net.players[peer_id].get("team", 0)) % 2]
+	return UIKit.GOOD if peer_id == Net.my_id() else MatchManager.FFA_COLOR
+
+
+## Строки панели появляются по очереди
+func _pop_rows() -> void:
+	var index: int = 0
+	for child: Node in content.get_children():
+		var row := child as CanvasItem
+		if row == null or row.is_queued_for_deletion():
+			continue
+		row.modulate.a = 0.0
+		var tween := create_tween()
+		tween.tween_interval(index * ROW_POP_DELAY)
+		tween.tween_property(row, "modulate:a", 1.0, 0.2)
+		index += 1
 
 
 func _exit_tree() -> void:
@@ -33,6 +150,8 @@ func _build_content() -> void:
 		_build_lobby()
 	else:
 		_build_menu()
+	_update_stage()
+	_pop_rows()
 
 
 # ---------- Не подключены ----------
@@ -44,7 +163,9 @@ func _build_menu() -> void:
 	UIKit.label("ИМЯ:", 26, name_row)
 	var name_edit := _line_edit(Settings.player_name, "ВВЕДИ ИМЯ")
 	name_edit.max_length = 16
-	name_edit.text_changed.connect(func(text: String) -> void: Settings.set_value(&"player_name", text))
+	name_edit.text_changed.connect(func(text: String) -> void:
+		Settings.set_value(&"player_name", text)
+		_update_stage())
 	name_row.add_child(name_edit)
 
 	var host := UIKit.button("СОЗДАТЬ ИГРУ", 30)
@@ -70,7 +191,7 @@ func _build_menu() -> void:
 		join.pressed.connect(func() -> void: Net.join_game(address))
 		row.add_child(join)
 
-	var hotspot := UIKit.button("ПОДКЛЮЧИТЬСЯ К ТОЧКЕ ДОСТУПА ДРУГА", 24)
+	var hotspot := UIKit.button("К ТОЧКЕ ДОСТУПА ДРУГА", 24)
 	hotspot.pressed.connect(Net.join_hotspot)
 	content.add_child(hotspot)
 
@@ -151,7 +272,7 @@ func _line_edit(text: String, placeholder: String) -> LineEdit:
 	var edit := LineEdit.new()
 	edit.text = text
 	edit.placeholder_text = placeholder
-	edit.custom_minimum_size = Vector2(360.0, UIKit.BUTTON_HEIGHT)
+	edit.custom_minimum_size = Vector2(200.0, UIKit.BUTTON_HEIGHT)
 	edit.size_flags_horizontal = SIZE_EXPAND_FILL
 	edit.add_theme_font_size_override(&"font_size", 26)
 	return edit

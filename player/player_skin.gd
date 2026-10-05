@@ -19,6 +19,8 @@ extends Resource
 @export var anim_death: StringName = &"Death"
 @export var anim_hit: StringName = &"HitReact"
 @export var anim_melee: StringName = &"Slash"
+## Приветствие в лобби
+@export var anim_emote: StringName = &"Wave"
 ## Скорость (м/с), при которой анимация ходьбы и бега выглядит естественно
 @export var walk_anim_speed: float = 1.6
 @export var run_anim_speed: float = 4.5

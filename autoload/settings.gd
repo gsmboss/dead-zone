@@ -227,8 +227,14 @@ func _build_fps_label() -> void:
 	_fps_layer.layer = 100
 	add_child(_fps_layer)
 	_fps_label = Label.new()
-	_fps_label.position = Vector2(12.0, 210.0)
-	_fps_label.add_theme_font_size_override(&"font_size", 22)
+	# Нижний левый угол, мелко: не перекрывает меню, здоровье и кнопки
+	_fps_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	_fps_label.offset_left = 8.0
+	_fps_label.offset_top = -30.0
+	_fps_label.offset_right = 140.0
+	_fps_label.offset_bottom = -4.0
+	_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fps_label.add_theme_font_size_override(&"font_size", 18)
 	_fps_label.add_theme_constant_override(&"outline_size", 6)
 	_fps_label.add_theme_color_override(&"font_outline_color", Color.BLACK)
 	_fps_label.modulate = Color(0.6, 1.0, 0.6)

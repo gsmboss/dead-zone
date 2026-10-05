@@ -16,6 +16,7 @@ anim_jump = &"jump"
 anim_death = &"die"
 anim_hit = &"emote-no"
 anim_melee = &"attack-melee-right"
+anim_emote = &"emote-yes"
 walk_anim_speed = 1.8
 run_anim_speed = 5.0
 hand_bone = &"arm-right"

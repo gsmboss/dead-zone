@@ -104,6 +104,12 @@ func on_fired(weapon: WeaponData) -> void:
 		_flash_left = FLASH_TIME
 
 
+## Приветствие (лобби): один раз, потом снова покой
+func play_emote() -> void:
+	if skin != null and not _dead:
+		_play_once(skin.anim_emote)
+
+
 func on_hit() -> void:
 	if skin != null and not _dead:
 		_play_once(skin.anim_hit)

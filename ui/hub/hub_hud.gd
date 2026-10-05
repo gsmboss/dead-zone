@@ -6,6 +6,7 @@ extends Control
 @export var missions: Array[MissionData] = []
 
 var _coins_label: Label
+var _menu_bar: HBoxContainer
 var _daily_button: Button
 var _settings_button: Button
 var _base_button: Button
@@ -28,44 +29,32 @@ func _process(_delta: float) -> void:
 
 
 func _build_ui() -> void:
-	_coins_label = UIKit.label("", 28, self)
+	# Меню — одной строкой сверху: не закрывает джойстик и кнопки слева, монеты справа
+	_menu_bar = HBoxContainer.new()
+	_menu_bar.add_theme_constant_override(&"separation", 10)
+	add_child(_menu_bar)
+	_menu_bar.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
+	_menu_bar.offset_left = 16.0
+	_menu_bar.offset_right = -16.0
+	_menu_bar.offset_top = 12.0
+	_menu_bar.offset_bottom = 12.0 + UIKit.BUTTON_HEIGHT
+
+	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", func() -> void: _open_window(DailyPanel.new()))
+	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
+	_base_button = _add_menu_button("БАЗА", func() -> void: _open_window(BasePanel.new()))
+	_add_menu_button("ПЕРСОНАЖ", func() -> void: _open_window(SkinPanel.new()))
+	var online := _add_menu_button("ПО СЕТИ", func() -> void: _open_window(LobbyPanel.new()))
+	online.modulate = Color(0.75, 0.95, 1.0)
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = SIZE_EXPAND_FILL
+	spacer.mouse_filter = MOUSE_FILTER_IGNORE
+	_menu_bar.add_child(spacer)
+	_coins_label = UIKit.label("", 26, _menu_bar)
 	_coins_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_coins_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_coins_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_coins_label.modulate = UIKit.ACCENT
-	_coins_label.set_anchors_and_offsets_preset(PRESET_TOP_RIGHT)
-	_coins_label.offset_left = -420.0
-	_coins_label.offset_right = -30.0
-	_coins_label.offset_top = 20.0
-	_coins_label.offset_bottom = 64.0
-
-	_daily_button = UIKit.button("ЕЖЕДНЕВНО", 26, 260.0)
-	_daily_button.pressed.connect(func() -> void: _open_window(DailyPanel.new()))
-	add_child(_daily_button)
-	_daily_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
-	_daily_button.offset_left = 30.0
-	_daily_button.offset_top = 20.0
-	_daily_button.offset_right = 290.0
-	_daily_button.offset_bottom = 20.0 + UIKit.BUTTON_HEIGHT
-
-	_settings_button = UIKit.button("НАСТРОЙКИ", 26, 260.0)
-	_settings_button.pressed.connect(func() -> void: _open_window(SettingsPanel.new()))
-	add_child(_settings_button)
-	_settings_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
-	_settings_button.offset_left = 30.0
-	_settings_button.offset_top = 36.0 + UIKit.BUTTON_HEIGHT
-	_settings_button.offset_right = 290.0
-	_settings_button.offset_bottom = 36.0 + UIKit.BUTTON_HEIGHT * 2.0
-
-	_base_button = UIKit.button("БАЗА", 26, 260.0)
-	_base_button.pressed.connect(func() -> void: _open_window(BasePanel.new()))
-	add_child(_base_button)
-	_base_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
-	_base_button.offset_left = 30.0
-	_base_button.offset_top = 52.0 + UIKit.BUTTON_HEIGHT * 2.0
-	_base_button.offset_right = 290.0
-	_base_button.offset_bottom = 52.0 + UIKit.BUTTON_HEIGHT * 3.0
-
-	_add_menu_button("ПЕРСОНАЖ", 3, func() -> void: _open_window(SkinPanel.new()))
-	_add_menu_button("ПО СЕТИ", 4, func() -> void: _open_window(LobbyPanel.new()))
 
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
@@ -78,16 +67,11 @@ func _build_ui() -> void:
 	_interact_button.offset_bottom = -50.0
 
 
-## Кнопка в левой колонке меню убежища (row — номер строки сверху, с 0)
-func _add_menu_button(text: String, row: int, callback: Callable) -> Button:
-	var button := UIKit.button(text, 26, 260.0)
+## Кнопка в верхней строке меню убежища
+func _add_menu_button(text: String, callback: Callable) -> Button:
+	var button := UIKit.button(text, 21)
 	button.pressed.connect(callback)
-	add_child(button)
-	button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
-	button.offset_left = 30.0
-	button.offset_top = 20.0 + 16.0 * row + UIKit.BUTTON_HEIGHT * row
-	button.offset_right = 290.0
-	button.offset_bottom = button.offset_top + UIKit.BUTTON_HEIGHT
+	_menu_bar.add_child(button)
 	return button
 
 
@@ -158,18 +142,20 @@ func _open_window(window: HubWindow) -> void:
 	window.closed.connect(_on_window_closed)
 	add_child(window)
 	_interact_button.visible = false
-	_daily_button.visible = false
-	_settings_button.visible = false
-	_base_button.visible = false
+	_menu_bar.visible = false
 	_set_player_controls(false)
 
 
 func _on_window_closed() -> void:
 	_window = null
 	_interact_button.visible = _current != null
-	_daily_button.visible = true
-	_settings_button.visible = true
-	_base_button.visible = true
+	_menu_bar.visible = true
+	# Меню «выезжает» сверху
+	_menu_bar.modulate.a = 0.0
+	_menu_bar.position.y = -40.0
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(_menu_bar, "modulate:a", 1.0, 0.25)
+	tween.tween_property(_menu_bar, "position:y", 12.0, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_set_player_controls(true)
 
 
