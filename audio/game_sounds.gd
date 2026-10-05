@@ -25,6 +25,10 @@ extends Resource
 @export var fire_loop: AudioStream
 @export var rain_loop: AudioStream
 
+@export_group("Music")
+@export var music_ambient: AudioStream
+@export var music_combat: AudioStream
+
 @export_group("UI")
 @export var ui_click: AudioStream
 @export var ui_back: AudioStream

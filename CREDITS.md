@@ -26,3 +26,11 @@
 - zombies/moan_01..04 — "Undead Moans" (antumdeluge), https://opengameart.org/content/undead-moans
 - impacts/, player/ — Kenney "Impact Sounds", https://kenney.nl/assets/impact-sounds
 - ui/, weapons/dry_fire — Kenney "Interface Sounds", https://kenney.nl/assets/interface-sounds
+- world/explosion_01 — "Chunky Explosion" (CC0), https://opengameart.org/content/chunky-explosion
+- world/explosion_02 — "Explosion" (CC0), https://opengameart.org/content/explosion-0
+- world/fire_loop — "Fire Crackling" (CC0), https://opengameart.org/content/fire-crackling
+- world/rain_loop — "AMB Rain Loop 1" (kresiek-the-furry, CC0), https://opengameart.org/content/amb-rain-loop-1
+
+## Музыка (audio/music/)
+- ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music
+- combat — "Fast fight / battle music (looped)" (CC0), https://opengameart.org/content/fast-fight-battle-music-looped

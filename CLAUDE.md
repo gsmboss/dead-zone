@@ -37,6 +37,8 @@
 - Settings — autoload/settings.gd: user://settings.cfg (чувствительность, инверсия Y, автоогонь,
   громкость, тени, разрешение 3D, FPS, тряска камеры), set_value(key, value, save), сигнал changed.
   Окно ui/settings_panel.gd (SettingsPanel) — в убежище (кнопка НАСТРОЙКИ) и в меню паузы.
+- Music — autoload/music.gd: фоновая и боевая музыка (боевая громче, когда рядом зомби в погоне),
+  громкость Settings.music_volume.
 - Sfx — autoload/sfx.gd: пулы AudioStreamPlayer/3D, play_2d/play_3d/pick, звуки в audio/game_sounds.tres
   (GameSounds); звуки оружия — поля fire_sound/reload_sound/reload_end_sound в WeaponData.
 
@@ -100,6 +102,14 @@ Zombie.hit_by_vehicle), vehicles/drive_controller.gd (кнопка СЕСТЬ/В
 Город: levels/city_level.tscn, levels/city/city_generator.gd + city_config.tres (CityConfig): кварталы,
 дороги и здания Kenney City Kit (models/city/commercial, suburban — у каждого своя Textures/colormap.png)
 через MultiMesh, коробки коллизий в одном StaticBody, навмеш cell_size 0.5.
+
+Расширение (код): типы зомби crawler/spitter/exploder/dog (ZombieData.behavior, anim_*, hitbox_lying,
+tint, specials в MissionData), effects/explosion.gd, effects/thrown_item.gd (граната/коктейль, кнопка
+ГРАНАТА и G), effects/fire_area.gd, огнемёт (WeaponData.is_flamethrower), лом и крафт (ItemData.craft_cost),
+база base/*.tres (BuildingData, окно ui/hub/base_panel.gd, hub/base_visuals.gd), гараж (таран, двигатель),
+стрельба из машины и фары, levels/day_night_cycle.gd (DayNightCycle.night_amount), levels/weather.gd,
+город: LootSpot, Survivor, EvacPoint; игрок: выносливость, бег, подкат (sprint/slide);
+события дня (DailyEventData в quest_pool.tres); музыка autoload/music.gd (Music, динамическая боевая).
 
 Этап 6 (код): вью-модель уменьшена в VIEW_MODEL_SHRINK=0.35 раз и придвинута к камере (не входит
 в стены; камера near=0.02), спрайт вспышки; хитмаркер (ui/hit_marker.gd), индикатор урона

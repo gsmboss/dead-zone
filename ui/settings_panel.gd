@@ -29,6 +29,8 @@ func _build_content() -> void:
 	_section("ЗВУК")
 	_slider("ГРОМКОСТЬ", &"master_volume", 0.0, 1.0, 0.05,
 		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
+	_slider("МУЗЫКА", &"music_volume", 0.0, 1.0, 0.05,
+		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
 
 	_section("ГРАФИКА")
 	_toggle("ТЕНИ", &"shadows")

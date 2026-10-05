@@ -22,6 +22,7 @@ Impacts="*uid://df11sgt7xyxlh"
 GameState="*uid://cy30ouli4lnvv"
 Sfx="*res://autoload/sfx.gd"
 Settings="*res://autoload/settings.gd"
+Music="*res://autoload/music.gd"
 
 [display]
 

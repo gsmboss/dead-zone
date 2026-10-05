@@ -16,6 +16,7 @@ var invert_y: bool = false
 var auto_fire: bool = true
 ## Громкость 0..1
 var master_volume: float = 1.0
+var music_volume: float = 0.7
 var shadows: bool = true
 ## Разрешение 3D (0.5..1): ниже — быстрее на слабых телефонах
 var render_scale: float = 1.0
@@ -80,6 +81,7 @@ func load_settings() -> void:
 	invert_y = bool(config.get_value(SECTION, "invert_y", invert_y))
 	auto_fire = bool(config.get_value(SECTION, "auto_fire", auto_fire))
 	master_volume = float(config.get_value(SECTION, "master_volume", master_volume))
+	music_volume = float(config.get_value(SECTION, "music_volume", music_volume))
 	shadows = bool(config.get_value(SECTION, "shadows", shadows))
 	render_scale = float(config.get_value(SECTION, "render_scale", render_scale))
 	show_fps = bool(config.get_value(SECTION, "show_fps", show_fps))
@@ -89,7 +91,7 @@ func load_settings() -> void:
 
 func save_settings() -> void:
 	var config := ConfigFile.new()
-	for key: String in ["look_sensitivity", "invert_y", "auto_fire", "master_volume",
+	for key: String in ["look_sensitivity", "invert_y", "auto_fire", "master_volume", "music_volume",
 			"shadows", "render_scale", "show_fps", "camera_shake"]:
 		config.set_value(SECTION, key, get(key))
 	var err: Error = config.save(PATH)
@@ -102,6 +104,7 @@ func reset_to_defaults() -> void:
 	invert_y = false
 	auto_fire = true
 	master_volume = 1.0
+	music_volume = 0.7
 	shadows = true
 	render_scale = 1.0
 	show_fps = false
@@ -114,6 +117,7 @@ func reset_to_defaults() -> void:
 func _clamp_values() -> void:
 	look_sensitivity = clampf(look_sensitivity, SENSITIVITY_MIN, SENSITIVITY_MAX)
 	master_volume = clampf(master_volume, 0.0, 1.0)
+	music_volume = clampf(music_volume, 0.0, 1.0)
 	render_scale = clampf(render_scale, 0.5, 1.0)
 	camera_shake = clampf(camera_shake, 0.0, 1.0)
 
