@@ -23,7 +23,6 @@ shape = SubResource("CapsuleShape3D_rl3hw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=711744397]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85144174, 0, -0.6711168)
 
 [node name="WeaponManager" type="Node3D" parent="Head/Camera3D" unique_id=823534231]
 script = ExtResource("2_g6k8r")
@@ -31,7 +30,6 @@ weapons = Array[ExtResource("3_boad6")]([ExtResource("4_rgyib"), ExtResource("5_
 
 [node name="Gun" type="CSGBox3D" parent="Head/Camera3D/WeaponManager" unique_id=775422360]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.2, -0.45)
-top_level = true
 size = Vector3(0.08, 0.12, 0.45)
 
 [node name="MuzzleFlash" type="OmniLight3D" parent="Head/Camera3D/WeaponManager/Gun" unique_id=1517374245]
