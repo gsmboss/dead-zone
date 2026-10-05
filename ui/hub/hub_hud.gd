@@ -6,6 +6,7 @@ extends Control
 @export var missions: Array[MissionData] = []
 
 var _coins_label: Label
+var _daily_button: Button
 var _interact_button: Button
 var _current: Interactable
 var _window: HubWindow
@@ -34,6 +35,15 @@ func _build_ui() -> void:
 	_coins_label.offset_top = 20.0
 	_coins_label.offset_bottom = 64.0
 
+	_daily_button = UIKit.button("ЕЖЕДНЕВНО", 26, 260.0)
+	_daily_button.pressed.connect(func() -> void: _open_window(DailyPanel.new()))
+	add_child(_daily_button)
+	_daily_button.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
+	_daily_button.offset_left = 30.0
+	_daily_button.offset_top = 20.0
+	_daily_button.offset_right = 290.0
+	_daily_button.offset_bottom = 20.0 + UIKit.BUTTON_HEIGHT
+
 	_interact_button = UIKit.button("", 30, 380.0)
 	_interact_button.visible = false
 	_interact_button.pressed.connect(_interact)
@@ -48,7 +58,9 @@ func _build_ui() -> void:
 func _connect_world() -> void:
 	_player = get_tree().get_first_node_in_group(&"player") as Player
 	GameState.coins_changed.connect(_update_coins)
+	GameState.progress_changed.connect(_update_daily_badge)
 	_update_coins(GameState.coins)
+	_update_daily_badge()
 	for node: Node in get_tree().get_nodes_in_group(&"interactables"):
 		var interactable := node as Interactable
 		if interactable != null:
@@ -58,6 +70,13 @@ func _connect_world() -> void:
 
 func _update_coins(coins: int) -> void:
 	_coins_label.text = "МОНЕТЫ: %d" % coins
+
+
+## «!» на кнопке, если есть что забрать
+func _update_daily_badge() -> void:
+	var has_rewards: bool = GameState.has_unclaimed_rewards()
+	_daily_button.text = "ЕЖЕДНЕВНО  !" if has_rewards else "ЕЖЕДНЕВНО"
+	_daily_button.modulate = UIKit.ACCENT if has_rewards else Color.WHITE
 
 
 func _on_player_entered(interactable: Interactable) -> void:
@@ -87,16 +106,21 @@ func _interact() -> void:
 
 
 func _open_window(window: HubWindow) -> void:
+	if _window != null:
+		window.free()
+		return
 	_window = window
 	window.closed.connect(_on_window_closed)
 	add_child(window)
 	_interact_button.visible = false
+	_daily_button.visible = false
 	_set_player_controls(false)
 
 
 func _on_window_closed() -> void:
 	_window = null
 	_interact_button.visible = _current != null
+	_daily_button.visible = true
 	_set_player_controls(true)
 
 

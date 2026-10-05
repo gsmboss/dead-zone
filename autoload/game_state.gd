@@ -1,9 +1,12 @@
 extends Node
-## Автозагрузка "GameState": монеты, купленное оружие, улучшения, рекорды миссий.
+## Автозагрузка "GameState": монеты, купленное оружие, улучшения, рекорды и звёзды миссий,
+## улучшения игрока, ежедневная награда и задания.
 ## Сохраняется в user://save.json, запись атомарная через временный файл.
 
 signal coins_changed(coins: int)
 signal weapons_changed
+## Изменились задания, ежедневная награда или улучшения игрока
+signal progress_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -12,15 +15,33 @@ const SAVE_VERSION: int = 1
 const CATALOG_PATH: String = "res://weapons/data/weapon_catalog.tres"
 const UPGRADE_STATS: Array[String] = ["damage", "magazine", "reload"]
 const DEBUG_COINS: int = 1000
+const PLAYER_STATS_PATH: String = "res://player/player_stats.tres"
+const QUEST_POOL_PATH: String = "res://quests/quest_pool.tres"
+const PLAYER_UPGRADES: Array[String] = ["health", "armor"]
+## Каждое прохождение миссии: зомби сильнее на 15% (до x3), награда больше на 10% (до x2)
+const DIFFICULTY_PER_CLEAR: float = 0.15
+const MAX_DIFFICULTY: float = 3.0
+const REWARD_PER_CLEAR: float = 0.1
+const MAX_REWARD_MULTIPLIER: float = 2.0
+const SECONDS_PER_DAY: int = 86400
 
 var coins: int = 0
 var catalog: WeaponCatalog
 ## Миссия, выбранная в убежище (её читает MissionManager)
 var selected_mission: MissionData
+var player_stats: PlayerStats
+var quest_pool: QuestPool
 
 var _owned: Array[String] = []
 var _upgrades: Dictionary = {}     # id оружия -> {"damage": int, "magazine": int, "reload": int}
 var _best_scores: Dictionary = {}  # id миссии -> лучший счёт (наличие ключа = пройдена)
+var _mission_stars: Dictionary = {}  # id миссии -> лучшие звёзды (1..3)
+var _mission_clears: Dictionary = {}  # id миссии -> число побед
+var _player_upgrades: Dictionary = {}  # "health"/"armor" -> уровень
+var _daily_last_day: int = -1
+var _daily_streak: int = 0
+var _quest_day: int = -1
+var _quests: Array[Dictionary] = []  # {"id": String, "progress": int, "claimed": bool}
 
 
 func _ready() -> void:
@@ -29,6 +50,16 @@ func _ready() -> void:
 	if catalog == null:
 		push_error("GameState: не найден каталог оружия %s" % CATALOG_PATH)
 		catalog = WeaponCatalog.new()
+	if ResourceLoader.exists(PLAYER_STATS_PATH):
+		player_stats = load(PLAYER_STATS_PATH) as PlayerStats
+	if player_stats == null:
+		push_warning("GameState: не найден %s, параметры игрока по умолчанию" % PLAYER_STATS_PATH)
+		player_stats = PlayerStats.new()
+	if ResourceLoader.exists(QUEST_POOL_PATH):
+		quest_pool = load(QUEST_POOL_PATH) as QuestPool
+	if quest_pool == null:
+		push_warning("GameState: не найден %s, заданий не будет" % QUEST_POOL_PATH)
+		quest_pool = QuestPool.new()
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -115,13 +146,176 @@ func add_coins(amount: int) -> void:
 	save_game()
 
 
-func complete_mission(mission: MissionData, score: int) -> void:
+func complete_mission(mission: MissionData, score: int, stars: int = 1) -> void:
 	if mission == null or mission.id.is_empty():
 		return
 	var best: int = int(_best_scores.get(mission.id, -1))
 	if score > best:
 		_best_scores[mission.id] = maxi(score, 0)
-		save_game()
+	_mission_stars[mission.id] = maxi(int(_mission_stars.get(mission.id, 0)), clampi(stars, 1, 3))
+	_mission_clears[mission.id] = int(_mission_clears.get(mission.id, 0)) + 1
+	save_game()
+
+
+func get_mission_stars(mission_id: String) -> int:
+	return int(_mission_stars.get(mission_id, 0))
+
+
+## Уровень миссии = число побед + 1 (с ним растут сложность и награда)
+func get_mission_level(mission_id: String) -> int:
+	return int(_mission_clears.get(mission_id, 0)) + 1
+
+
+func get_difficulty_multiplier(mission_id: String) -> float:
+	return minf(1.0 + DIFFICULTY_PER_CLEAR * (get_mission_level(mission_id) - 1), MAX_DIFFICULTY)
+
+
+func get_reward_multiplier(mission_id: String) -> float:
+	return minf(1.0 + REWARD_PER_CLEAR * (get_mission_level(mission_id) - 1), MAX_REWARD_MULTIPLIER)
+
+
+# ---------- Улучшения игрока ----------
+
+func get_player_upgrade_level(stat: String) -> int:
+	return int(_player_upgrades.get(stat, 0))
+
+
+func get_player_upgrade_cost(stat: String) -> int:
+	return player_stats.get_cost(stat, get_player_upgrade_level(stat))
+
+
+func upgrade_player(stat: String) -> bool:
+	if not stat in PLAYER_UPGRADES:
+		return false
+	var cost: int = get_player_upgrade_cost(stat)
+	if cost < 0 or coins < cost:
+		return false
+	coins -= cost
+	_player_upgrades[stat] = get_player_upgrade_level(stat) + 1
+	coins_changed.emit(coins)
+	progress_changed.emit()
+	save_game()
+	return true
+
+
+func get_player_max_health() -> float:
+	return player_stats.get_max_health(get_player_upgrade_level("health"))
+
+
+func get_player_armor() -> float:
+	return player_stats.get_armor(get_player_upgrade_level("armor"))
+
+
+# ---------- Ежедневная награда ----------
+
+func get_today() -> int:
+	return floori(Time.get_unix_time_from_system() / SECONDS_PER_DAY)
+
+
+func can_claim_daily() -> bool:
+	return _daily_last_day != get_today()
+
+
+## День серии, который будет засчитан при получении награды сегодня
+func get_next_streak() -> int:
+	var today: int = get_today()
+	if _daily_last_day == today:
+		return _daily_streak
+	if _daily_last_day == today - 1:
+		return mini(_daily_streak + 1, quest_pool.max_streak)
+	return 1
+
+
+func get_daily_reward() -> int:
+	return quest_pool.daily_reward_base * get_next_streak()
+
+
+## Возвращает выданные монеты (0 — сегодня уже получено)
+func claim_daily() -> int:
+	if not can_claim_daily():
+		return 0
+	var reward: int = get_daily_reward()
+	_daily_streak = get_next_streak()
+	_daily_last_day = get_today()
+	coins += reward
+	coins_changed.emit(coins)
+	progress_changed.emit()
+	save_game()
+	return reward
+
+
+# ---------- Ежедневные задания ----------
+
+## Задания на сегодня (при смене дня выбираются новые)
+func get_quests() -> Array[Dictionary]:
+	_ensure_today_quests()
+	return _quests
+
+
+## Событие для заданий: kill, headshot_kill, tank_kill, boss_kill, mission_win, item_collect.
+## Не сохраняет сразу (вызывается часто) — сохранение в конце миссии
+func report_event(event: StringName, amount: int = 1) -> void:
+	_ensure_today_quests()
+	for entry: Dictionary in _quests:
+		if bool(entry.get("claimed", false)):
+			continue
+		var quest: QuestData = quest_pool.find(str(entry.get("id", "")))
+		if quest == null or quest.event != event:
+			continue
+		entry["progress"] = mini(int(entry.get("progress", 0)) + amount, quest.target)
+
+
+func is_quest_complete(entry: Dictionary) -> bool:
+	var quest: QuestData = quest_pool.find(str(entry.get("id", "")))
+	return quest != null and int(entry.get("progress", 0)) >= quest.target
+
+
+func claim_quest(index: int) -> bool:
+	_ensure_today_quests()
+	if index < 0 or index >= _quests.size():
+		return false
+	var entry: Dictionary = _quests[index]
+	if bool(entry.get("claimed", false)) or not is_quest_complete(entry):
+		return false
+	var quest: QuestData = quest_pool.find(str(entry.get("id", "")))
+	entry["claimed"] = true
+	coins += quest.reward_coins
+	coins_changed.emit(coins)
+	progress_changed.emit()
+	save_game()
+	return true
+
+
+## Есть что забрать (для значка на кнопке в убежище)
+func has_unclaimed_rewards() -> bool:
+	if can_claim_daily():
+		return true
+	for entry: Dictionary in get_quests():
+		if not bool(entry.get("claimed", false)) and is_quest_complete(entry):
+			return true
+	return false
+
+
+func _ensure_today_quests() -> void:
+	var today: int = get_today()
+	if _quest_day == today and not _quests.is_empty():
+		return
+	_quest_day = today
+	_quests.clear()
+	var pool: Array[QuestData] = []
+	for quest: QuestData in quest_pool.quests:
+		if quest != null and not quest.id.is_empty():
+			pool.append(quest)
+	# Одинаковый набор на весь день: генератор с зерном от номера дня
+	var rng := RandomNumberGenerator.new()
+	rng.seed = today
+	for i in range(pool.size() - 1, 0, -1):
+		var j: int = rng.randi_range(0, i)
+		var tmp: QuestData = pool[i]
+		pool[i] = pool[j]
+		pool[j] = tmp
+	for i in mini(quest_pool.daily_count, pool.size()):
+		_quests.append({"id": pool[i].id, "progress": 0, "claimed": false})
 
 
 func is_mission_completed(mission_id: String) -> bool:
@@ -147,6 +341,13 @@ func reset_progress() -> void:
 	_owned.clear()
 	_upgrades.clear()
 	_best_scores.clear()
+	_mission_stars.clear()
+	_mission_clears.clear()
+	_player_upgrades.clear()
+	_daily_last_day = -1
+	_daily_streak = 0
+	_quest_day = -1
+	_quests.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -162,6 +363,13 @@ func save_game() -> void:
 		"owned": _owned,
 		"upgrades": _upgrades,
 		"best_scores": _best_scores,
+		"mission_stars": _mission_stars,
+		"mission_clears": _mission_clears,
+		"player_upgrades": _player_upgrades,
+		"daily_last_day": _daily_last_day,
+		"daily_streak": _daily_streak,
+		"quest_day": _quest_day,
+		"quests": _quests,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -215,6 +423,41 @@ func load_game() -> void:
 	if scores is Dictionary:
 		for mission_id: Variant in scores:
 			_best_scores[str(mission_id)] = int(scores[mission_id])
+
+	_mission_stars = _load_int_dictionary(data.get("mission_stars", {}), 0, 3)
+	_mission_clears = _load_int_dictionary(data.get("mission_clears", {}), 0, 100000)
+	_player_upgrades.clear()
+	var upgrades_player: Dictionary = _load_int_dictionary(data.get("player_upgrades", {}), 0, player_stats.max_level)
+	for stat: String in PLAYER_UPGRADES:
+		if upgrades_player.has(stat):
+			_player_upgrades[stat] = upgrades_player[stat]
+
+	_daily_last_day = int(data.get("daily_last_day", -1))
+	_daily_streak = clampi(int(data.get("daily_streak", 0)), 0, quest_pool.max_streak)
+	_quest_day = int(data.get("quest_day", -1))
+	_quests.clear()
+	var quests: Variant = data.get("quests", [])
+	if quests is Array:
+		for entry: Variant in quests:
+			if not entry is Dictionary:
+				continue
+			var quest_id: String = str((entry as Dictionary).get("id", ""))
+			if quest_pool.find(quest_id) == null:
+				continue
+			_quests.append({
+				"id": quest_id,
+				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
+				"claimed": bool((entry as Dictionary).get("claimed", false)),
+			})
+
+
+## Словарь {строка: int} из JSON с ограничением значений
+func _load_int_dictionary(source: Variant, min_value: int, max_value: int) -> Dictionary:
+	var result: Dictionary = {}
+	if source is Dictionary:
+		for key: Variant in source:
+			result[str(key)] = clampi(int((source as Dictionary)[key]), min_value, max_value)
+	return result
 
 
 ## Выдаёт бесплатные стволы (price = 0). Возвращает true, если что-то выдано

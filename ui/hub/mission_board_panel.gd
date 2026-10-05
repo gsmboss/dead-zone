@@ -1,6 +1,6 @@
 class_name MissionBoardPanel
 extends HubWindow
-## Доска миссий: описание, награда, рекорд, кнопка «НАЧАТЬ».
+## Доска миссий: описание, уровень, награда, звёзды, рекорд, кнопка «НАЧАТЬ».
 
 var missions: Array[MissionData] = []
 
@@ -27,13 +27,16 @@ func _make_mission_card(mission: MissionData) -> Control:
 	box.add_theme_constant_override(&"separation", 10)
 	card.add_child(box)
 
-	UIKit.label(mission.title, 32, box)
+	var level: int = GameState.get_mission_level(mission.id)
+	UIKit.label(mission.title if level <= 1 else "%s  •  УРОВЕНЬ %d" % [mission.title, level], 32, box)
 	if not mission.description.is_empty():
 		UIKit.label(mission.description, 22, box).modulate = UIKit.DIM
 
-	var info := "Награда: %d монет" % mission.reward_coins
+	var reward: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
+	var info := "Награда: %d монет" % reward
 	if GameState.is_mission_completed(mission.id):
-		info += "  •  ПРОЙДЕНА, рекорд %d очков" % GameState.get_best_score(mission.id)
+		info += "  •  звёзды %d / 3  •  рекорд %d очков" % [
+			GameState.get_mission_stars(mission.id), GameState.get_best_score(mission.id)]
 	var info_label := UIKit.label(info, 22, box)
 	info_label.modulate = UIKit.GOOD if GameState.is_mission_completed(mission.id) else UIKit.ACCENT
 

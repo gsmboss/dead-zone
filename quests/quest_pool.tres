@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="QuestPool" format=3]
+
+[ext_resource type="Script" path="res://quests/quest_pool.gd" id="1_qpl01"]
+[ext_resource type="Script" path="res://quests/quest_data.gd" id="2_qdt01"]
+
+[sub_resource type="Resource" id="Quest_kill_40"]
+script = ExtResource("2_qdt01")
+id = "kill_40"
+title = "УБЕЙ 40 ЗОМБИ"
+event = &"kill"
+target = 40
+reward_coins = 120
+
+[sub_resource type="Resource" id="Quest_kill_100"]
+script = ExtResource("2_qdt01")
+id = "kill_100"
+title = "УБЕЙ 100 ЗОМБИ"
+event = &"kill"
+target = 100
+reward_coins = 250
+
+[sub_resource type="Resource" id="Quest_head_15"]
+script = ExtResource("2_qdt01")
+id = "head_15"
+title = "15 УБИЙСТВ В ГОЛОВУ"
+event = &"headshot_kill"
+target = 15
+reward_coins = 150
+
+[sub_resource type="Resource" id="Quest_head_40"]
+script = ExtResource("2_qdt01")
+id = "head_40"
+title = "40 УБИЙСТВ В ГОЛОВУ"
+event = &"headshot_kill"
+target = 40
+reward_coins = 300
+
+[sub_resource type="Resource" id="Quest_tank_5"]
+script = ExtResource("2_qdt01")
+id = "tank_5"
+title = "УБЕЙ 5 ТАНКОВ"
+event = &"tank_kill"
+target = 5
+reward_coins = 180
+
+[sub_resource type="Resource" id="Quest_boss_1"]
+script = ExtResource("2_qdt01")
+id = "boss_1"
+title = "ПОБЕДИ ГРОМИЛУ"
+event = &"boss_kill"
+target = 1
+reward_coins = 350
+
+[sub_resource type="Resource" id="Quest_win_2"]
+script = ExtResource("2_qdt01")
+id = "win_2"
+title = "ВЫПОЛНИ 2 МИССИИ"
+event = &"mission_win"
+target = 2
+reward_coins = 150
+
+[sub_resource type="Resource" id="Quest_win_4"]
+script = ExtResource("2_qdt01")
+id = "win_4"
+title = "ВЫПОЛНИ 4 МИССИИ"
+event = &"mission_win"
+target = 4
+reward_coins = 300
+
+[sub_resource type="Resource" id="Quest_items_5"]
+script = ExtResource("2_qdt01")
+id = "items_5"
+title = "СОБЕРИ 5 ЯЩИКОВ С ПРИПАСАМИ"
+event = &"item_collect"
+target = 5
+reward_coins = 150
+
+[resource]
+script = ExtResource("1_qpl01")
+quests = Array[ExtResource("2_qdt01")]([SubResource("Quest_kill_40"), SubResource("Quest_kill_100"), SubResource("Quest_head_15"), SubResource("Quest_head_40"), SubResource("Quest_tank_5"), SubResource("Quest_boss_1"), SubResource("Quest_win_2"), SubResource("Quest_win_4"), SubResource("Quest_items_5")])

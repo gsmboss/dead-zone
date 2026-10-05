@@ -1,11 +1,16 @@
 class_name ShopPanel
 extends HubWindow
-## Оружейная: покупка стволов и улучшение урона, магазина и перезарядки.
+## Оружейная: улучшения выжившего (здоровье, броня), покупка стволов
+## и улучшение урона, магазина и перезарядки.
 
 const STAT_NAMES: Dictionary = {
 	"damage": "Урон",
 	"magazine": "Магазин",
 	"reload": "Перезарядка",
+}
+const PLAYER_STAT_NAMES: Dictionary = {
+	"health": "Здоровье",
+	"armor": "Броня",
 }
 
 
@@ -18,6 +23,7 @@ func _ready() -> void:
 func _build_content() -> void:
 	var coins := UIKit.label("Монеты: %d" % GameState.coins, 30, content)
 	coins.modulate = UIKit.ACCENT
+	content.add_child(_make_survivor_card())
 	for weapon: WeaponData in GameState.catalog.weapons:
 		if weapon != null and not weapon.id.is_empty():
 			content.add_child(_make_weapon_card(weapon))
@@ -45,11 +51,11 @@ func _make_weapon_card(weapon: WeaponData) -> Control:
 	if not owned:
 		var buy := UIKit.button("КУПИТЬ — %d" % weapon.price, 28)
 		buy.disabled = GameState.coins < weapon.price
-		buy.pressed.connect(func() -> void: GameState.buy_weapon(weapon))
+		buy.pressed.connect(func() -> void: _play_result(GameState.buy_weapon(weapon)))
 		box.add_child(buy)
 		return card
 
-	for stat: String in GameState.UPGRADE_STATS:
+	for stat: String in weapon.get_upgrade_stats():
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override(&"separation", 16)
 		box.add_child(row)
@@ -61,9 +67,44 @@ func _make_weapon_card(weapon: WeaponData) -> Control:
 		var cost: int = GameState.get_upgrade_cost(weapon, stat)
 		var upgrade := UIKit.button("МАКС" if cost < 0 else "+  %d" % cost, 24, 200.0)
 		upgrade.disabled = cost < 0 or GameState.coins < cost
-		upgrade.pressed.connect(func() -> void: GameState.upgrade_weapon(weapon, stat))
+		upgrade.pressed.connect(func() -> void: _play_result(GameState.upgrade_weapon(weapon, stat)))
 		row.add_child(upgrade)
 	return card
+
+
+## Карточка «ВЫЖИВШИЙ»: здоровье и броня игрока
+func _make_survivor_card() -> Control:
+	var card := UIKit.card()
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 10)
+	card.add_child(box)
+
+	UIKit.label("ВЫЖИВШИЙ", 32, box).modulate = UIKit.GOOD
+	UIKit.label("Здоровье %d  •  Броня %d%%" % [
+		roundi(GameState.get_player_max_health()), roundi(GameState.get_player_armor() * 100.0)],
+		22, box).modulate = UIKit.DIM
+
+	for stat: String in GameState.PLAYER_UPGRADES:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override(&"separation", 16)
+		box.add_child(row)
+		var level: int = GameState.get_player_upgrade_level(stat)
+		var name_label := UIKit.label("%s: %d / %d" % [
+			PLAYER_STAT_NAMES[stat], level, GameState.player_stats.max_level], 24, row)
+		name_label.size_flags_horizontal = SIZE_EXPAND_FILL
+		var cost: int = GameState.get_player_upgrade_cost(stat)
+		var upgrade := UIKit.button("МАКС" if cost < 0 else "+  %d" % cost, 24, 200.0)
+		upgrade.disabled = cost < 0 or GameState.coins < cost
+		upgrade.pressed.connect(func() -> void: _play_result(GameState.upgrade_player(stat)))
+		row.add_child(upgrade)
+	return card
+
+
+func _play_result(success: bool) -> void:
+	if success:
+		Sfx.play_2d(Sfx.sounds.purchase, -4.0, 1.0, 0.0)
+	else:
+		Sfx.error()
 
 
 func _on_coins_changed(_coins: int) -> void:
