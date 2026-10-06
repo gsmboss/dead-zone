@@ -22,8 +22,6 @@
 
 extends Node
 
-const MockAdMobFactory := preload("res://addons/admob/internal/mock/mock_admob_factory.gd")
-
 signal on_ad_clicked(uid: int)
 signal on_ad_closed(uid: int)
 signal on_ad_failed_to_load(uid: int, error_dictionary: Dictionary)
@@ -117,7 +115,7 @@ func create(ad_view_dictionary: Dictionary) -> int:
 	}
 
 	var canvas := CanvasLayer.new()
-	canvas.layer = MockAdMobFactory.LAYER_OVERLAY
+	canvas.layer = 100
 	canvas.add_child(ui)
 	add_child(canvas)
 
@@ -134,9 +132,7 @@ func load_ad(uid: int, _ad_request_dictionary: Dictionary, _keywords: Array) -> 
 			_ads[uid]["toggle_btn"].show()
 
 	var timer := (Engine.get_main_loop() as SceneTree).create_timer(0.5)
-	timer.timeout.connect(func() -> void:
-		if not _ads.has(uid):
-			return
+	timer.timeout.connect(func():
 		on_ad_loaded.emit(uid)
 		var ad: Dictionary = _ads[uid]
 		if not ad.get("is_hidden", false) and is_instance_valid(ad["ui"]):

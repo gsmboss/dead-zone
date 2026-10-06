@@ -22,7 +22,6 @@
 
 extends Node
 
-const MockAdMobFactory := preload("res://addons/admob/internal/mock/mock_admob_factory.gd")
 const _FLOOD_IT_ICON := preload("res://addons/admob/assets/flood_it_icon.svg")
 
 signal on_native_overlay_ad_loaded(uid: int)
@@ -73,7 +72,7 @@ func create() -> int:
 	}
 
 	var canvas := CanvasLayer.new()
-	canvas.layer = MockAdMobFactory.LAYER_OVERLAY
+	canvas.layer = 100
 	canvas.add_child(ui)
 	add_child(canvas)
 
@@ -89,9 +88,7 @@ func load(ad_unit_id: String, _ad_request_dictionary: Dictionary, _keywords: Arr
 	_ads[uid]["video_aspect_ratio"] = 1.777
 
 	var timer := (Engine.get_main_loop() as SceneTree).create_timer(0.5)
-	timer.timeout.connect(func() -> void:
-		if not _ads.has(uid):
-			return
+	timer.timeout.connect(func():
 		emit_signal("on_native_overlay_ad_loaded", uid)
 		var ad: Dictionary = _ads[uid]
 		if not ad.get("is_hidden", false) and is_instance_valid(ad["ui"]):

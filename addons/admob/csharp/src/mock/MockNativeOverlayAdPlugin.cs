@@ -103,7 +103,7 @@ namespace PoingStudios.AdMob.Core
 
 			var canvas = new CanvasLayer
 			{
-				Layer = MockAdMobFactory.LayerOverlay
+				Layer = 100
 			};
 			canvas.AddChild(ui);
 			AddChild(canvas);
@@ -125,7 +125,6 @@ namespace PoingStudios.AdMob.Core
 			var timer = ((SceneTree)Engine.GetMainLoop()).CreateTimer(0.5f);
 			timer.Connect(SceneTreeTimer.SignalName.Timeout, Callable.From(() => 
 			{
-				if (!_ads.ContainsKey(uid)) return;
 				EmitSignal(SignalName.on_native_overlay_ad_loaded, uid);
 				if (!ad.IsHidden && ad.Ui != null && IsInstanceValid(ad.Ui))
 				{

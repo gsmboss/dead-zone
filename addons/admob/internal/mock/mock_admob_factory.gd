@@ -22,9 +22,6 @@
 
 extends RefCounted
 
-const LAYER_OVERLAY := 100
-const LAYER_FULLSCREEN := 1000
-
 static var _mocks: Dictionary = {}
 
 static func get_mock_plugin(plugin_name: String) -> Object:

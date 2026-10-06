@@ -22,7 +22,6 @@
 
 extends Node
 
-const MockAdMobFactory := preload("res://addons/admob/internal/mock/mock_admob_factory.gd")
 const _FORMAT_INTERSTITIAL := preload("res://addons/admob/assets/format-interstitial.svg")
 
 signal on_interstitial_ad_clicked(uid: int)
@@ -61,7 +60,7 @@ func create() -> int:
 	}
 
 	var canvas := CanvasLayer.new()
-	canvas.layer = MockAdMobFactory.LAYER_FULLSCREEN
+	canvas.layer = 100
 	canvas.add_child(ui)
 	add_child(canvas)
 
@@ -74,8 +73,6 @@ func load(ad_unit_id: String, _ad_request_dictionary: Dictionary, _keywords: Arr
 	_ads[uid]["ad_unit_id"] = ad_unit_id
 	var timer := (Engine.get_main_loop() as SceneTree).create_timer(0.5)
 	timer.timeout.connect(func() -> void:
-		if not _ads.has(uid):
-			return
 		on_interstitial_ad_loaded.emit(uid)
 	)
 

@@ -223,7 +223,7 @@ player.tscn с is_remote (без WeaponManager, группа remote_player, PvP-
 TEAMS, LAST_STANDING (AUTO по числу игроков). Интерфейс ui/match_hud.gd. Для Android в экспорте нужны
 разрешения INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CHANGE_WIFI_MULTICAST_STATE.
 
-Реклама (этап 7): плагин Poing Studios AdMob 5.2 в addons/admob (включён в editor_plugins; Android-бинарники
+Реклама (этап 7): плагин Poing Studios AdMob 5.1.0 (стабильная; у 5.2 нет Android-библиотек) в addons/admob (включён в editor_plugins; Android-бинарники
 скачивает сам при включении → addons/admob/android/bin, в .gitignore). Нужна сборка Gradle (export_presets:
 use_gradle_build=true, Project → Install Android Build Template, папка android/ в .gitignore).
 App ID ca-app-pub-5010684167263731~1270406484 — project.godot [admob] general/android/app_id. Автозагрузка Ads (autoload/ads.gd): UMP-согласие,
