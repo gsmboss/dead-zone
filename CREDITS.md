@@ -38,6 +38,10 @@
 - world/fire_loop — "Fire Crackling" (CC0), https://opengameart.org/content/fire-crackling
 - world/rain_loop — "AMB Rain Loop 1" (kresiek-the-furry, CC0), https://opengameart.org/content/amb-rain-loop-1
 
+## Машины для сюжетных фильмов (models/vehicles/kenney/)
+- Kenney "Car Kit" 3.1 (CC0): полиция, скорая, такси, седаны, внедорожники, фургоны, мусоровоз, обломки,
+  https://kenney.nl/assets/car-kit
+
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music
 - combat — "Fast fight / battle music (looped)" (CC0), https://opengameart.org/content/fast-fight-battle-music-looped

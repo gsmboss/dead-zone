@@ -303,3 +303,15 @@ rpc_car_seats), водитель шлёт rpc_car_state 20/с, у остальн
 по сети — «PlayerCar_<peer_id>» у каждого игрока в ближних дворах.
 Лагерь: hub/camp_chatter.tres — 36 диалогов, шутки игрока jokes_*, факты facts_*, ask_*; зона «ПОГОВОРИТЬ»
 у костра (HubCamp: меню ПОШУТИТЬ / УЗНАТЬ ФАКТ, реплика игрока субтитром, ответ ближайшего выжившего).
+Фары: кроме SpotLight — пятно света на асфальте и лучи (аддитивные сетки DrivableCar._build_light_pool), видны на телефоне.
+Бандиты: ZombieData.Behavior.GUNNER + группа Gunner (human, held_weapon — встроенный ствол модели Characters_*,
+burst_shots, accuracy, preferred_distance, gun_sound, taunts_ru/en — крики над головой); enemies/bandit*.tres,
+baron.tres (босс). Миссии story_bandits (стоянка), story_baron (улица, босс Барон); бандиты и в story_5/6.
+Сюжетное кино: story/film/ — StoryFilm/StoryShot (mood LIVING/OUTBREAK/DEAD/BANDITS/HOPE/BLACK, camera — заготовка
+StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StoryStage (диорама улицы: дома, светофоры,
+жители Kenney/Quaternius — StageActor, машины Kenney Car Kit — StageCar), StoryCinema.play(tree, film) — SubViewport
+со своим миром, основной 3D на время выключен. Фильмы story/films/*.tres генерировались скриптом (правки — прямо в .tres).
+Кампания 9 глав (story/campaign.tres): пролог (живой город, день ноль, гибель мамы, брат Тёма пропал), главы с
+фильмами intro_film/outro_film (ChapterData), «Стервятники», «Логово Барона» (Тёма найден), эпилог. Фильм-пролог —
+при первом входе в убежище (hub.gd), фильм главы — при первом старте (CampaignPanel._play_film), повтор — ИСТОРИЯ/ПРОЛОГ.
+Герои: мама, Тёма, Марина и Денис, Вера, Лев, дядя Гоша с кофемашиной, Шнырь-бухгалтер, Барон (охранник Генка).
