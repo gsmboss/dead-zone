@@ -54,3 +54,7 @@ textures/vram_compression/import_etc2_astc=true
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/admob/plugin.cfg")
+
+[admob]
+
+general/android/app_id="ca-app-pub-5010684167263731~1270406484"
