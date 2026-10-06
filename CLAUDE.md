@@ -256,4 +256,18 @@ Settings: damage_direction, damage_flash, hit_shake, attacker_marker (вклад
 TouchControls.input_blocked — меню по сети блокирует касания. HubWindow.refresh() — отложенный, раз за кадр.
 Ads: реклама грузится только после колбэка MobileAds.initialize (иначе краш на Android); hide_banner уничтожает AdView.
 
+Взрывные бочки: effects/explosive_barrel.gd (ExplosiveBarrel — компонент StaticProp: Health, Hitbox flesh=false,
+auto_target=false, шипение, Explosion + FireArea, цепная реакция через группу explosive_barrel, по сети
+Net.rpc_barrel_explode по пути узла). StaticProp с Barrel.gltf взрывной сам (не в убежище), ExplosiveBarrel.spawn —
+в городе, промзоне, лесу. Explosion.damage_zombies=false у клиента по сети.
+Факел: Settings.torch_auto — Player._update_auto_torch зажигает ночью (DayNightCycle.night_amount ≥ 0.5),
+гасит ≤ 0.3; превью ui/torch_preview.gd в оружейной.
+Стройка в убежище (как в Minecraft): base/build_piece.gd (BuildPiece: BLOCK — куб с пиксельной текстурой
+по Pattern, MODEL — модель survival в клетке; цена монеты + лом, solid, свет), base/build_catalog.tres
+(BuildCatalog), GameState: _blocks "x,y,z" → [id, поворот], place_block/remove_block (возврат 50%),
+MAX_BLOCKS 500, сигнал blocks_changed. hub/base_builder.gd (BaseBuilder, группа base_builder: MultiMesh на вид
+блока, коробки в StaticBody WORLD, свет ≤ 8, can_place: границы ±7, терминалы, лагерь, игрок, предметы, деньги).
+ui/hub/build_mode.gd (BuildMode: прицел, призрак, палитра справа, ПОСТАВИТЬ/УБРАТЬ/ПОВЕРНУТЬ/ГОТОВО,
+F/R/Q на ПК), кнопка СТРОЙКА в HubHUD. TouchControls.blocked_areas — касания по панелям не управляют игроком.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.
