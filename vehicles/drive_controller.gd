@@ -159,6 +159,17 @@ func _exit_car() -> void:
 	var car: DrivableCar = _car
 	_car = null
 	car.exit()
+	_restore_player(car)
+	if _player.health == null or not _player.health.is_dead:
+		_player.input_enabled = true
+	if _touch_controls != null:
+		_touch_controls.consume_look_delta()  # свайпы за рулём не крутят камеру после выхода
+	_nearby = car
+	_update_button()
+
+
+## Вернуть игрока из машины: обработка, коллизии, видимость, камера, кнопки
+func _restore_player(car: DrivableCar) -> void:
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	_player.global_position = car.get_exit_position()
 	_player.set_safe_position(_player.global_position)
@@ -167,14 +178,8 @@ func _exit_car() -> void:
 	_player.collision_mask = _saved_mask
 	_player.visible = true
 	_player.camera.make_current()
-	if _player.health == null or not _player.health.is_dead:
-		_player.input_enabled = true
 	_set_combat_buttons_visible(true)
-	if _touch_controls != null:
-		_touch_controls.consume_look_delta()  # свайпы за рулём не крутят камеру после выхода
 	_speed_label.visible = false
-	_nearby = car
-	_update_button()
 
 
 ## Кнопки стрельбы, прыжка и т.п. в машине не нужны
@@ -239,11 +244,12 @@ func _shoot_from_car() -> void:
 func _on_player_died() -> void:
 	if _car == null:
 		return
-	# Погиб за рулём: машина катится дальше, камера остаётся на ней
+	# Погиб за рулём: игрок «выпадает» рядом с машиной — иначе после воскрешения за рекламу
+	# он остался бы выключенным, невидимым и без коллизий
 	var car: DrivableCar = _car
 	_car = null
 	car.exit()
-	_speed_label.visible = false
+	_restore_player(car)
 	if _button != null:
 		_button.visible = false
 

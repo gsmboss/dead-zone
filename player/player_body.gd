@@ -62,7 +62,7 @@ func set_weapon(weapon: WeaponData) -> void:
 		_weapon_model = null
 	for builtin: Node3D in _builtin_weapons.values():
 		builtin.visible = false
-	_armed = weapon != null and not weapon.is_melee and not skin.hide_weapon
+	_armed = weapon != null and not weapon.is_melee and (skin == null or not skin.hide_weapon)
 	_current_anim = &""  # сменить стойку сразу
 	if weapon == null or weapon.view_model == null or skin == null or skin.hide_weapon:
 		return

@@ -754,6 +754,12 @@ func reset_progress() -> void:
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
+	# Открытые окна и HUD обновляются сразу
+	progress_changed.emit()
+	inventory_changed.emit()
+	gear_changed.emit()
+	campaign_changed.emit()
+	skin_changed.emit(get_selected_skin())
 	save_game()
 
 

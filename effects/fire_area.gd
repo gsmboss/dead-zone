@@ -48,7 +48,13 @@ func _ready() -> void:
 	if _sound.stream != null:
 		_sound.finished.connect(_sound.play)  # петля, даже если импорт без loop
 		_sound.play()
-	Sfx.play_3d(Sfx.pick(Sfx.sounds.explosions), global_position, -4.0, 1.6)
+	# Позицию create() ставит после add_child — звук в точке поджога
+	_play_ignite_sound.call_deferred()
+
+
+func _play_ignite_sound() -> void:
+	if is_inside_tree():
+		Sfx.play_3d(Sfx.pick(Sfx.sounds.explosions), global_position, -4.0, 1.6)
 
 
 func _physics_process(delta: float) -> void:

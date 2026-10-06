@@ -30,6 +30,13 @@ static func create(parent: Node, at: Vector3, blast_radius: float, blast_damage:
 
 
 func _ready() -> void:
+	# create() ставит позицию после add_child — урон и звук считаем, когда она уже задана
+	_start.call_deferred()
+
+
+func _start() -> void:
+	if not is_inside_tree():
+		return
 	_apply_damage()
 	_spawn_effects()
 	_play_sound()

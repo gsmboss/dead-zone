@@ -793,7 +793,8 @@ func _explode() -> void:
 
 
 func _try_stagger(is_headshot: bool) -> void:
-	if data.stagger_time <= 0.0 or _stagger_cooldown > 0.0 or state == State.DEAD:
+	# Взрывник с запалом не сбивается выстрелом (иначе остаётся раздутым и не взрывается)
+	if data.stagger_time <= 0.0 or _stagger_cooldown > 0.0 or state == State.DEAD or state == State.FUSE:
 		return
 	_stagger_left = data.stagger_time * (HEADSHOT_STAGGER_MULTIPLIER if is_headshot else 1.0)
 	_release_token()
@@ -1064,14 +1065,12 @@ func _on_died() -> void:
 		fall.tween_property(visual, "rotation:x", deg_to_rad(90.0), 0.45) \
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
-	await get_tree().create_timer(CORPSE_TIME).timeout
-	if not is_inside_tree():
-		return
+	# Твин принадлежит зомби: умирает вместе с ним при смене сцены и стоит на паузе
+	var corpse := create_tween()
+	corpse.tween_interval(CORPSE_TIME)
 	if visual != null:
-		var sink := create_tween()
-		sink.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
-		await sink.finished
-	queue_free()
+		corpse.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
+	corpse.tween_callback(queue_free)
 
 
 # ---------- Мультиплеер ----------
@@ -1158,6 +1157,11 @@ func hit_by_vehicle(damage: float, push: Vector3) -> void:
 
 
 ## Урон с отбрасыванием (машина, взрыв); погибший отлетает по дуге
+## Обезвредить взрывника: смерть без взрыва (воскрешение игрока рядом)
+func defuse() -> void:
+	_exploded = true
+
+
 func apply_blast(damage: float, push: Vector3) -> void:
 	if state == State.DEAD or health == null:
 		return

@@ -652,13 +652,21 @@ func _play_hit_sound(list: Array[AudioStream], at: Vector3) -> void:
 	Sfx.play_3d(Sfx.pick(list), at, HIT_SOUND_VOLUME_DB)
 
 
+## Один запрос на все лучи (прицел-помощник стреляет лучом каждый физический кадр — без аллокаций)
+var _ray_query: PhysicsRayQueryParameters3D
+
+
 func _raycast(from: Vector3, to: Vector3) -> Dictionary:
-	var query := PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.SHOT_MASK)
-	query.collide_with_areas = true
-	query.collide_with_bodies = true
-	if player != null:
-		query.exclude = [player.get_rid()]
-	return get_world_3d().direct_space_state.intersect_ray(query)
+	if _ray_query == null:
+		_ray_query = PhysicsRayQueryParameters3D.new()
+		_ray_query.collision_mask = PhysicsLayers.SHOT_MASK
+		_ray_query.collide_with_areas = true
+		_ray_query.collide_with_bodies = true
+		if player != null:
+			_ray_query.exclude = [player.get_rid()]
+	_ray_query.from = from
+	_ray_query.to = to
+	return get_world_3d().direct_space_state.intersect_ray(_ray_query)
 
 
 func _spread_direction(spread_deg: float) -> Vector3:

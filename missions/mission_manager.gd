@@ -79,6 +79,8 @@ const REVIVE_CLEAR_RADIUS: float = 6.0
 var _revive_used: bool = false
 var _revive_pending: bool = false
 var _revive_left: float = 0.0
+const OBJECTIVE_INTERVAL: float = 0.2
+var _objective_timer: float = 0.0
 
 
 func _ready() -> void:
@@ -245,7 +247,11 @@ func _process(delta: float) -> void:
 			_process_defend(delta)
 			_ping_horde(delta)
 			_check_goal()
-	_update_objective()
+	# Текст цели — 5 раз в секунду, не каждый кадр (форматирование строк)
+	_objective_timer -= delta
+	if _objective_timer <= 0.0:
+		_objective_timer = OBJECTIVE_INTERVAL
+		_update_objective()
 
 
 func _begin() -> void:
@@ -342,7 +348,7 @@ func _spawn_boss() -> void:
 
 
 func _retry_boss_later() -> void:
-	await get_tree().create_timer(BOSS_RETRY_TIME).timeout
+	await create_tween().tween_interval(BOSS_RETRY_TIME).finished  # твин умирает вместе с узлом
 	if is_inside_tree() and state == State.RUNNING and not _boss_spawned:
 		_spawn_boss()
 
@@ -650,6 +656,7 @@ func revive() -> void:
 		var offset: Vector3 = zombie.global_position - at
 		if offset.length() <= REVIVE_CLEAR_RADIUS:
 			offset.y = 0.0
+			zombie.defuse()  # взрывник рядом не должен ранить только что воскресшего
 			zombie.apply_blast(zombie.health.current + 1.0 if zombie.health != null else 9999.0,
 				offset.normalized() * 10.0)
 	_player.respawn(at)
@@ -710,7 +717,7 @@ func _finish(won: bool) -> void:
 		"waves": _waves_cleared,
 		"endless": mission.type == MissionData.Type.ENDLESS,
 	}
-	await get_tree().create_timer(RESULT_DELAY).timeout
+	await create_tween().tween_interval(RESULT_DELAY).finished  # твин умирает вместе с узлом
 	if not is_inside_tree():
 		return
 	mission_finished.emit(won, stats)
