@@ -11,6 +11,8 @@ look_from = Vector3(0, 1, 0)
 look_to = Vector3(0, 1, 0)
 duration = 4.5
 subtitle = "2031 ГОД. ВИРУС ПРЕВРАТИЛ ГОРОДА В КЛАДБИЩА."
+voice_ru = "Две тысячи тридцать первый год. Вирус. Зомби. И ни одной нормальной чашки кофе на сто километров."
+voice_en = "Twenty thirty one. A virus. Zombies. And not a single decent cup of coffee for a hundred miles."
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
@@ -20,6 +22,8 @@ look_from = Vector3(0, 1.5, -5)
 look_to = Vector3(0, 1.5, -5)
 duration = 4.0
 subtitle = "МЫ ПОСТРОИЛИ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ И ЖЕЛЕЗА."
+voice_ru = "Мы построили убежище из контейнеров. Дизайнер интерьера не выжил. Это заметно."
+voice_en = "We built a shelter out of shipping containers. The interior designer didn't make it. It shows."
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
@@ -30,6 +34,8 @@ look_to = Vector3(4, 1.5, -5)
 duration = 5.0
 subtitle = "ТЕРМИНАЛ МИССИЙ — ВЫЛАЗКИ ЗА ПРИПАСАМИ.
 ОРУЖЕЙНАЯ — СТВОЛЫ И УЛУЧШЕНИЯ."
+voice_ru = "Слева — вылазки за припасами. Справа — оружие. Посередине — я, рассказчик. Без зарплаты."
+voice_en = "Missions on the left. Guns on the right. And me in the middle, narrating for free."
 
 [sub_resource type="Resource" id="Shot_4"]
 script = ExtResource("2_shot")
@@ -39,6 +45,8 @@ look_from = Vector3(4, 1.5, -5)
 look_to = Vector3(0, 1.5, -5)
 duration = 3.0
 subtitle = "ВЫЖИВИ. ЗАЧИСТИ. ВЕРНИСЬ."
+voice_ru = "Правила простые: выжить, зачистить, вернуться. И не кормить зомби с руки."
+voice_en = "The rules are simple: survive, clean up, come back. And don't feed the zombies."
 
 [resource]
 script = ExtResource("1_data")

@@ -170,6 +170,14 @@ func _build_graphics() -> void:
 
 func _build_story() -> void:
 	_toggle("ПОКАЗЫВАТЬ КАТ-СЦЕНЫ", &"cutscenes")
+	_toggle("ОЗВУЧКА КАТ-СЦЕН", &"voice_cutscenes")
+	_toggle("ГОЛОСА ВЫЖИВШИХ В УБЕЖИЩЕ", &"voice_camp")
+	_slider("ГРОМКОСТЬ ГОЛОСОВ", &"voice_volume", 0.0, 1.0, 0.05, _percent)
+	var language: String = "РУССКИЙ" if VoiceOver.is_russian() else "АНГЛИЙСКИЙ"
+	var voice_hint := UIKit.label("ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s" % [language,
+		"" if VoiceOver.is_available() else " • ГОЛОС НЕ НАЙДЕН: УСТАНОВИ СИНТЕЗ РЕЧИ GOOGLE"], 20, content)
+	voice_hint.modulate = UIKit.DIM
+	voice_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var replay := UIKit.button("ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА", 22)
 	replay.pressed.connect(func() -> void:
 		GameState.reset_cutscenes()

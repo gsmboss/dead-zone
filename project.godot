@@ -18,6 +18,10 @@ boot_splash/bg_color=Color(0.02, 0.02, 0.03, 1)
 boot_splash/show_image=false
 config/quit_on_go_back=false
 
+[audio]
+
+general/text_to_speech=true
+
 [autoload]
 
 InputSetup="*uid://eeyph23ddjd2"

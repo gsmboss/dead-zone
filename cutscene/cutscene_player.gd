@@ -19,6 +19,12 @@ static func is_blocking_input() -> bool:
 const BAR_SHARE: float = 0.11
 const BAR_TIME: float = 0.4
 const SUBTITLE_FADE: float = 0.3
+## Голос рассказчика: чуть ниже и медленнее обычного — «трейлерный» и от этого смешной
+const NARRATOR_PITCH: float = 0.85
+const NARRATOR_RATE: float = 1.0
+## План ждёт конца фразы, но не дольше этого сверх своей длительности
+const MAX_VOICE_EXTRA: float = 4.0
+const VOICE_COLOR: Color = Color(1.0, 0.86, 0.45)
 
 var data: CutsceneData
 var anchor: Node3D
@@ -30,6 +36,8 @@ var _hidden_hud: CanvasLayer
 var _top_bar: ColorRect
 var _bottom_bar: ColorRect
 var _subtitle: Label
+var _voice_label: Label
+var _shot_extra: float = 0.0
 var _shot_index: int = -1
 var _shot_time: float = 0.0
 var _finishing: bool = false
@@ -73,7 +81,7 @@ func _process(delta: float) -> void:
 	_camera.global_position = position_now
 	if position_now.distance_squared_to(look_now) > 0.01:
 		_camera.look_at(look_now, Vector3.UP)
-	if _shot_time >= shot.duration:
+	if _shot_time >= shot.duration + _shot_extra:
 		_next_shot()
 
 
@@ -93,10 +101,24 @@ func _point(shot: CutsceneShot, value: Vector3) -> Vector3:
 func _next_shot() -> void:
 	_shot_index += 1
 	_shot_time = 0.0
+	_shot_extra = 0.0
 	if _shot_index >= data.shots.size():
 		_finish()
 		return
-	_show_subtitle(data.shots[_shot_index].subtitle)
+	var shot: CutsceneShot = data.shots[_shot_index]
+	_show_subtitle(shot.subtitle)
+	_play_voice(shot)
+
+
+## Реплика рассказчика: текст сверху и голос (язык — как в телефоне)
+func _play_voice(shot: CutsceneShot) -> void:
+	var line: String = VoiceOver.pick(shot.voice_ru, shot.voice_en)
+	if _voice_label != null:
+		_voice_label.text = "«%s»" % line if not line.is_empty() else ""
+	if line.is_empty() or not Settings.voice_cutscenes or not VoiceOver.is_available():
+		return
+	VoiceOver.speak(line, NARRATOR_PITCH, NARRATOR_RATE)
+	_shot_extra = clampf(VoiceOver.estimate_duration(line, NARRATOR_RATE) - shot.duration, 0.0, MAX_VOICE_EXTRA)
 
 
 func _take_control() -> void:
@@ -122,12 +144,14 @@ func _take_control() -> void:
 func _exit_tree() -> void:
 	# Сцену сменили посреди ролика (старт матча по сети, выход) — общее состояние не должно залипнуть
 	if not _finishing:
+		VoiceOver.stop()
 		Engine.time_scale = 1.0
 		active = false
 		_ended_frame = Engine.get_process_frames()
 
 
 func _release_control() -> void:
+	VoiceOver.stop()
 	Engine.time_scale = 1.0
 	active = false
 	_ended_frame = Engine.get_process_frames()
@@ -156,6 +180,7 @@ func _finish() -> void:
 		tween.tween_property(_top_bar, "anchor_bottom", 0.0, BAR_TIME)
 		tween.tween_property(_bottom_bar, "anchor_top", 1.0, BAR_TIME)
 		tween.tween_property(_subtitle, "modulate:a", 0.0, BAR_TIME)
+		tween.tween_property(_voice_label, "modulate:a", 0.0, BAR_TIME)
 		tween.chain().tween_callback(_done)
 	else:
 		_done()
@@ -189,6 +214,17 @@ func _build_ui() -> void:
 	_subtitle.anchor_top = 1.0 - BAR_SHARE - 0.12
 	_subtitle.anchor_bottom = 1.0 - BAR_SHARE * 0.2
 	_subtitle.modulate.a = 0.0
+
+	# Реплика рассказчика — под верхней полосой
+	_voice_label = UIKit.label("", 26)
+	_voice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_voice_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_voice_label.modulate = VOICE_COLOR
+	add_child(_voice_label)
+	_voice_label.anchor_left = 0.08
+	_voice_label.anchor_right = 0.78
+	_voice_label.anchor_top = BAR_SHARE + 0.02
+	_voice_label.anchor_bottom = BAR_SHARE + 0.2
 
 	var skip_button := UIKit.button("ПРОПУСТИТЬ  ▸", 22, 240.0)
 	skip_button.pressed.connect(skip)

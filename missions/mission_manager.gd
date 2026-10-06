@@ -80,6 +80,7 @@ var _revive_used: bool = false
 var _revive_pending: bool = false
 var _revive_left: float = 0.0
 const OBJECTIVE_INTERVAL: float = 0.2
+const VOICE_LINES_PATH: String = "res://cutscene/voice_lines.tres"
 var _objective_timer: float = 0.0
 
 
@@ -184,6 +185,7 @@ func _play_intro() -> void:
 		head, head, 3.0, "ЦЕЛЬ: %s" % mission.get_goal_text().to_upper()))
 	intro.shots.append(_shot(p - forward * 3.0 + Vector3.UP * 2.5, p + Vector3.UP * 1.6,
 		head + forward * 10.0, head + forward * 10.0, 1.8, "В БОЙ!"))
+	_add_intro_voices(intro)
 	set_process(false)  # отсчёт start_delay — после сцены
 	await CutscenePlayer.play(get_tree(), intro).finished
 	if is_inside_tree():
@@ -208,8 +210,39 @@ func _play_boss_intro(boss: Zombie) -> void:
 	var shot := _shot(forward * 7.0 + Vector3.UP * 1.2, forward * 4.0 + Vector3.UP * 2.6 + forward.cross(Vector3.UP) * 1.5,
 		face, face, 2.4, mission.boss.display_name.to_upper())
 	shot.relative_to = CutsceneShot.Space.ANCHOR
+	var lines: VoiceLines = _voice_lines()
+	if lines != null:
+		_set_voice(shot, VoiceLines.pick_pair(lines.boss_ru, lines.boss_en,
+			{"boss": _spoken(mission.boss.display_name)}))
 	intro.shots.append(shot)
 	CutscenePlayer.play(get_tree(), intro, boss)
+
+
+## Смешные реплики рассказчика для интро миссии (по плану: обзор, цель, в бой)
+func _add_intro_voices(intro: CutsceneData) -> void:
+	var lines: VoiceLines = _voice_lines()
+	if lines == null or intro.shots.size() < 3:
+		return
+	var values: Dictionary = {"location": _spoken(mission.get_location_name()), "mission": _spoken(mission.title)}
+	_set_voice(intro.shots[0], VoiceLines.pick_pair(lines.location_ru, lines.location_en, values))
+	_set_voice(intro.shots[1], VoiceLines.pick_pair(lines.goal_ru, lines.goal_en, values))
+	_set_voice(intro.shots[2], VoiceLines.pick_pair(lines.fight_ru, lines.fight_en, values))
+
+
+func _voice_lines() -> VoiceLines:
+	return load(VOICE_LINES_PATH) as VoiceLines if ResourceLoader.exists(VOICE_LINES_PATH) else null
+
+
+func _set_voice(shot: CutsceneShot, pair: PackedStringArray) -> void:
+	if pair.size() >= 2:
+		shot.voice_ru = pair[0]
+		shot.voice_en = pair[1]
+
+
+## Название для голоса: не капсом (синтезатор читает КАПС по буквам)
+static func _spoken(text: String) -> String:
+	var lower: String = text.strip_edges().to_lower()
+	return lower.substr(0, 1).to_upper() + lower.substr(1) if not lower.is_empty() else lower
 
 
 func _shot(from: Vector3, to: Vector3, look_from: Vector3, look_to: Vector3, duration: float, subtitle: String) -> CutsceneShot:

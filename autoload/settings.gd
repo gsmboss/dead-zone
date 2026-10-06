@@ -33,7 +33,7 @@ const DEFAULTS: Dictionary = {
 	"camera_mode": 0, "camera_distance": 2.6, "player_name": "",
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
-	"torch_auto": true,
+	"torch_auto": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
 }
 
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -96,6 +96,11 @@ var hit_shake: float = 1.0
 var attacker_marker: bool = true
 ## Факел сам зажигается ночью и гаснет на рассвете
 var torch_auto: bool = true
+# Озвучка (синтез речи устройства, язык — как в системе)
+var voice_cutscenes: bool = true
+## Голоса выживших у костра, когда подходишь ближе
+var voice_camp: bool = true
+var voice_volume: float = 0.8
 
 var _fps_layer: CanvasLayer
 var _fps_label: Label
@@ -205,6 +210,7 @@ func _clamp_values() -> void:
 	gyro_smoothing = clampf(gyro_smoothing, 0.0, 0.9)
 	damage_flash = clampf(damage_flash, 0.0, 1.0)
 	hit_shake = clampf(hit_shake, 0.0, 1.0)
+	voice_volume = clampf(voice_volume, 0.0, 1.0)
 	if not gyro_rate in GYRO_RATES:
 		gyro_rate = 60
 

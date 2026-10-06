@@ -12,3 +12,6 @@ enum Space { WORLD, ANCHOR }
 @export var look_to: Vector3 = Vector3.ZERO
 @export var duration: float = 3.0
 @export_multiline var subtitle: String = ""
+## Смешная озвучка плана (синтез речи; язык — как в телефоне). Пусто — без голоса
+@export_multiline var voice_ru: String = ""
+@export_multiline var voice_en: String = ""
