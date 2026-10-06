@@ -78,6 +78,10 @@ func _setup_buttons() -> void:
 	# Переключение вида 1-е / 3-е лицо (Player ловит действие camera_view)
 	var view_button := _make_touch_button(&"camera_view", "ВИД", Vector2(1.0, 0.0), Vector2(-230.0, 130.0))
 	view_button.base_color = Color(0.4, 0.35, 0.55)
+	# Факел — только если куплен
+	if GameState.owns_gear("torch"):
+		var torch_button := _make_touch_button(&"torch", "ФАКЕЛ", Vector2(1.0, 0.0), Vector2(-340.0, 130.0))
+		torch_button.base_color = Color(0.75, 0.42, 0.12)
 	_bag_button = _make_touch_button(&"inventory", "СУМКА", Vector2(0.0, 0.0), Vector2(24.0, 110.0))
 	var slide_button := _make_touch_button(&"slide", "ПОДКАТ", Vector2(1.0, 1.0), Vector2(-500.0, -160.0))
 	slide_button.base_color = Color(0.25, 0.45, 0.65)

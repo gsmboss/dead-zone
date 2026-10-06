@@ -109,6 +109,8 @@ var _spring: SpringArm3D
 var _camera_pivot: Node3D
 var _camera_fps_position: Vector3 = Vector3.ZERO
 var _weapons_enabled: bool = true
+## Факел (если куплен в оружейной)
+var torch: Torch
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -143,6 +145,7 @@ func _ready() -> void:
 	_head_base_y = head.position.y
 	_setup_body()
 	_setup_spring_arm()
+	_setup_torch()
 	_rng.randomize()
 	_apply_settings()
 	Settings.changed.connect(_apply_settings)
@@ -159,6 +162,8 @@ func _process(delta: float) -> void:
 		if input_enabled and look != Vector2.ZERO:
 			_apply_look(look)
 	_process_gyro(delta)
+	if input_enabled and torch != null and Input.is_action_just_pressed(&"torch"):
+		torch.toggle()
 	if input_enabled and Input.is_action_just_pressed(&"camera_view"):
 		Settings.set_value(&"camera_mode", 1 - Settings.camera_mode)
 	_update_recoil(delta)
@@ -323,6 +328,18 @@ func _setup_body() -> void:
 	if health != null:
 		health.damaged.connect(func(_a: float, _p: Vector3, _h: bool) -> void: body.on_hit())
 		health.died.connect(body.on_died)
+
+
+func _setup_torch() -> void:
+	GameState.gear_changed.connect(_on_gear_changed)
+	_on_gear_changed()
+
+
+func _on_gear_changed() -> void:
+	if torch == null and GameState.owns_gear("torch"):
+		torch = Torch.new()
+		torch.name = "Torch"
+		head.add_child(torch)
 
 
 func _setup_spring_arm() -> void:

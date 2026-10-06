@@ -9,6 +9,7 @@ signal weapons_changed
 signal progress_changed
 signal inventory_changed
 signal skin_changed(skin: PlayerSkin)
+signal gear_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -31,6 +32,8 @@ const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_
 	"res://items/grenade.tres", "res://items/molotov.tres", "res://items/scrap.tres"]
 const SCRAP_ID: String = "scrap"
 ## Постройки базы (порядок = порядок в окне БАЗА и во дворе убежища)
+## Снаряжение (покупается один раз)
+const GEAR_PATHS: Array[String] = ["res://items/torch.tres"]
 ## Скины игрока (вид от 3-го лица и мультиплеер). Первый — по умолчанию
 const SKIN_PATHS: Array[String] = [
 	"res://player/skins/shaun.tres", "res://player/skins/lis.tres", "res://player/skins/matt.tres",
@@ -73,6 +76,8 @@ var _buildings_owned: Array[String] = []
 var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
 var _cutscenes_seen: Array[String] = []
 var skins: Array[PlayerSkin] = []
+var gear: Array[GearData] = []
+var _gear_owned: Array[String] = []
 var _skins_owned: Array[String] = []
 var _skin_id: String = ""
 
@@ -105,6 +110,12 @@ func _ready() -> void:
 			push_warning("GameState: не найдена постройка %s" % path)
 			continue
 		buildings.append(building)
+	for path: String in GEAR_PATHS:
+		var gear_item: GearData = load(path) as GearData if ResourceLoader.exists(path) else null
+		if gear_item == null or gear_item.id.is_empty():
+			push_warning("GameState: не найдено снаряжение %s" % path)
+			continue
+		gear.append(gear_item)
 	for path: String in SKIN_PATHS:
 		var skin: PlayerSkin = load(path) as PlayerSkin if ResourceLoader.exists(path) else null
 		if skin == null or skin.id.is_empty():
@@ -321,6 +332,31 @@ func buy_item(item_id: String) -> bool:
 		return false
 	coins -= item.price
 	coins_changed.emit(coins)
+	save_game()
+	return true
+
+
+# ---------- Снаряжение ----------
+
+func get_gear(gear_id: String) -> GearData:
+	for item: GearData in gear:
+		if item.id == gear_id:
+			return item
+	return null
+
+
+func owns_gear(gear_id: String) -> bool:
+	return gear_id in _gear_owned
+
+
+func buy_gear(gear_id: String) -> bool:
+	var item: GearData = get_gear(gear_id)
+	if item == null or owns_gear(gear_id) or coins < item.price:
+		return false
+	coins -= item.price
+	_gear_owned.append(gear_id)
+	coins_changed.emit(coins)
+	gear_changed.emit()
 	save_game()
 	return true
 
@@ -633,6 +669,7 @@ func reset_progress() -> void:
 	_car_upgrades.clear()
 	_skins_owned.clear()
 	_skin_id = ""
+	_gear_owned.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -660,6 +697,7 @@ func save_game() -> void:
 		"car_upgrades": _car_upgrades,
 		"cutscenes_seen": _cutscenes_seen,
 		"skins_owned": _skins_owned,
+		"gear": _gear_owned,
 		"skin": _skin_id,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
@@ -740,6 +778,13 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_gear_owned.clear()
+	var stored_gear: Variant = data.get("gear", [])
+	if stored_gear is Array:
+		for gear_id: Variant in stored_gear:
+			if get_gear(str(gear_id)) != null and not str(gear_id) in _gear_owned:
+				_gear_owned.append(str(gear_id))
 
 	_skins_owned.clear()
 	var stored_skins: Variant = data.get("skins_owned", [])

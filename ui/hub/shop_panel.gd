@@ -25,6 +25,7 @@ func _build_content() -> void:
 	coins.modulate = UIKit.ACCENT
 	content.add_child(_make_survivor_card())
 	content.add_child(_make_supplies_card())
+	content.add_child(_make_gear_card())
 	for weapon: WeaponData in GameState.catalog.weapons:
 		if weapon != null and not weapon.id.is_empty():
 			content.add_child(_make_weapon_card(weapon))
@@ -137,6 +138,32 @@ func _make_supplies_card() -> Control:
 		buy.disabled = full or GameState.coins < item.price
 		buy.pressed.connect(func() -> void:
 			_play_result(GameState.buy_item(item.id))
+			refresh())
+		row.add_child(buy)
+	return card
+
+
+## Снаряжение: покупается один раз (факел)
+func _make_gear_card() -> Control:
+	var card := UIKit.card()
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 10)
+	card.add_child(box)
+	UIKit.label("СНАРЯЖЕНИЕ", 32, box).modulate = UIKit.GOOD
+	for item: GearData in GameState.gear:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override(&"separation", 16)
+		box.add_child(row)
+		var texts := VBoxContainer.new()
+		texts.size_flags_horizontal = SIZE_EXPAND_FILL
+		row.add_child(texts)
+		UIKit.label(item.title, 26, texts)
+		UIKit.label(item.description, 20, texts).modulate = UIKit.DIM
+		var owned: bool = GameState.owns_gear(item.id)
+		var buy := UIKit.button("ЕСТЬ" if owned else "КУПИТЬ %d" % item.price, 24, 220.0)
+		buy.disabled = owned or GameState.coins < item.price
+		buy.pressed.connect(func() -> void:
+			_play_result(GameState.buy_gear(item.id))
 			refresh())
 		row.add_child(buy)
 	return card
