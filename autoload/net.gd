@@ -47,6 +47,8 @@ var in_match: bool = false
 var hosts: Dictionary = {}
 ## Текущий матч (ставит себя сам)
 var match_manager: Node
+## Старт матча пришёл раньше, чем загрузился уровень (MatchManager заберёт при появлении); <0 — нет
+var pending_go: float = -1.0
 
 var _peer: ENetMultiplayerPeer
 var _announcer: PacketPeerUDP
@@ -397,6 +399,8 @@ func _rpc_begin_match(new_players: Dictionary, new_mode: int, new_map: int) -> v
 	match_mode = new_mode
 	map_index = new_map
 	in_match = true
+	pending_go = -1.0
+	match_manager = null
 	get_tree().paused = false
 	get_tree().change_scene_to_file(MAPS[clampi(new_map, 0, MAPS.size() - 1)])
 
@@ -410,11 +414,18 @@ func _forward(method: StringName, args: Array) -> void:
 
 @rpc("any_peer", "call_remote", "reliable")
 func rpc_loaded() -> void:
-	_forward(&"net_loaded", [multiplayer.get_remote_sender_id()])
+	var sender: int = multiplayer.get_remote_sender_id()
+	# Хост мог ещё грузить уровень (MatchManager нет) — отметку не теряем
+	if is_host() and players.has(sender):
+		players[sender]["loaded"] = true
+	_forward(&"net_loaded", [sender])
 
 
 @rpc("authority", "call_local", "reliable")
 func rpc_go(time_limit: float) -> void:
+	if match_manager == null or not is_instance_valid(match_manager):
+		pending_go = time_limit  # уровень ещё грузится — старт применится при его готовности
+		return
 	_forward(&"net_go", [time_limit])
 
 

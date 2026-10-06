@@ -14,6 +14,10 @@ var _feed_box: VBoxContainer
 var _announce: Label
 var _respawn: Label
 var _results: PanelContainer
+var _attacker: Label
+var _attacker_left: float = 0.0
+var _waiting_time: float = 0.0
+var _leave_button: Button
 var _announce_left: float = 0.0
 var _feed_times: Array[float] = []
 var _last_second: int = -1
@@ -67,6 +71,27 @@ func _ready() -> void:
 	_announce.offset_bottom = -130.0
 	_announce.modulate = UIKit.ACCENT
 
+	_attacker = UIKit.label("", 28, self)
+	_attacker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_attacker.set_anchors_and_offsets_preset(PRESET_CENTER_TOP)
+	_attacker.offset_left = -400.0
+	_attacker.offset_right = 400.0
+	_attacker.offset_top = 56.0
+	_attacker.offset_bottom = 96.0
+	_attacker.modulate = MatchManager.ATTACKER_COLOR
+
+	# Если старт не приходит — можно уйти (не застрять на экране ожидания)
+	_leave_button = UIKit.button("В УБЕЖИЩЕ", 26, 300.0)
+	_leave_button.visible = false
+	_leave_button.pressed.connect(func() -> void:
+		Net.leave()
+		Net.return_to_lobby())
+	add_child(_leave_button)
+	_leave_button.set_anchors_and_offsets_preset(PRESET_CENTER_BOTTOM, PRESET_MODE_MINSIZE)
+	_leave_button.offset_top -= 140.0
+	_leave_button.offset_bottom -= 140.0
+	_leave_button.grow_horizontal = GROW_DIRECTION_BOTH
+
 	_respawn = UIKit.label("", 34, self)
 	_respawn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_respawn.set_anchors_and_offsets_preset(PRESET_CENTER)
@@ -89,6 +114,16 @@ func _process(delta: float) -> void:
 	if _announce_left > 0.0:
 		_announce_left -= delta
 		_announce.modulate.a = clampf(_announce_left / 0.5, 0.0, 1.0)
+	if _attacker_left > 0.0:
+		_attacker_left -= delta
+		_attacker.modulate.a = clampf(_attacker_left / 0.5, 0.0, 1.0)
+	if _match.is_waiting():
+		_waiting_time += delta
+		_respawn.text = "ЖДЁМ ИГРОКОВ…  %d" % floori(_waiting_time)
+		# Долго нет старта — даём выйти
+		_leave_button.visible = _waiting_time > MatchManager.LOAD_TIMEOUT + 5.0
+		return
+	_leave_button.visible = false
 	var respawn_left: float = _match.get_respawn_left()
 	_respawn.text = "ВОЗРОЖДЕНИЕ ЧЕРЕЗ %d" % ceili(respawn_left) if respawn_left > 0.0 else ""
 	for i in range(_feed_times.size() - 1, -1, -1):
@@ -104,6 +139,15 @@ func announce(text: String) -> void:
 	_announce.text = text
 	_announce_left = ANNOUNCE_TIME
 	_announce.modulate.a = 1.0
+
+
+## «В ВАС СТРЕЛЯЕТ: ИМЯ» под таймером
+func show_attacker(attacker_name: String) -> void:
+	if _attacker == null:
+		return
+	_attacker.text = "▼ В ВАС СТРЕЛЯЕТ: %s" % attacker_name
+	_attacker_left = 2.5
+	_attacker.modulate.a = 1.0
 
 
 func feed(text: String) -> void:

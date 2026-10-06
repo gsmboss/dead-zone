@@ -11,7 +11,7 @@ const STATE_INTERVAL: float = 0.05
 const ZOMBIE_INTERVAL: float = 0.1
 const SCORES_INTERVAL: float = 0.5
 ## Ждём загрузки всех игроков не дольше этого
-const LOAD_TIMEOUT: float = 10.0
+const LOAD_TIMEOUT: float = 20.0
 const RESPAWN_TIME: float = 5.0
 const TIME_LIMIT: float = 300.0
 const FFA_KILL_LIMIT: int = 10
@@ -27,6 +27,9 @@ const ATTACKER_MEMORY: float = 5.0
 ## Поля пакета состояния игрока
 const STATE_SIZE: int = 12
 const ZOMBIE_STATE_SIZE: int = 7
+## Метка над тем, кто в вас стреляет, секунды
+const ATTACKER_MARK_TIME: float = 4.0
+const ATTACKER_COLOR: Color = Color(1.0, 0.15, 0.1)
 const TEAM_COLORS: Array[Color] = [Color(0.35, 0.65, 1.0), Color(1.0, 0.4, 0.3)]
 const FFA_COLOR: Color = Color(1.0, 0.85, 0.4)
 
@@ -107,6 +110,11 @@ func _ready() -> void:
 		net_loaded(Net.my_id())
 	else:
 		Net.rpc_loaded.rpc_id(1)
+		# Хост уже дал старт, пока мы грузились
+		if Net.pending_go >= 0.0:
+			var limit: float = Net.pending_go
+			Net.pending_go = -1.0
+			net_go(limit)
 
 
 func _exit_tree() -> void:
@@ -133,6 +141,11 @@ func get_mode() -> int:
 	return Net.match_mode
 
 
+## Матч ещё не начался (ждём загрузки игроков)
+func is_waiting() -> bool:
+	return not _started and not _finished
+
+
 func color_for(peer_id: int) -> Color:
 	if Net.match_mode == Net.Mode.TEAMS:
 		return TEAM_COLORS[Net.get_team(peer_id) % TEAM_COLORS.size()]
@@ -150,6 +163,7 @@ func _physics_process(delta: float) -> void:
 			if _load_timer >= LOAD_TIMEOUT:
 				_go_all()
 		return
+	_update_attacker_marks(delta)
 	if _finished:
 		return
 	_elapsed += delta
@@ -181,10 +195,15 @@ func _host_process(delta: float) -> void:
 # ---------- Загрузка и старт ----------
 
 func net_loaded(peer_id: int) -> void:
-	if not Net.is_host() or _started:
+	if not Net.is_host():
 		return
 	if Net.players.has(peer_id):
 		Net.players[peer_id]["loaded"] = true
+	if _started:
+		# Опоздал (грузился дольше таймаута) — старт только ему
+		if peer_id != Net.my_id():
+			Net.rpc_go.rpc_id(peer_id, _time_left if Net.match_mode != Net.Mode.LAST_STANDING else 0.0)
+		return
 	for id: int in Net.players:
 		if not bool(Net.players[id].get("loaded", false)):
 			return
@@ -199,6 +218,8 @@ func _go_all() -> void:
 
 
 func net_go(time_limit: float) -> void:
+	if _started:
+		return
 	_started = true
 	_time_left = time_limit
 	_player.input_enabled = true
@@ -241,10 +262,20 @@ func _weapon_index() -> int:
 func net_damage_player(amount: float, attacker: int, is_head: bool, from_position: Vector3) -> void:
 	if not _started or _finished or _player.health == null or _player.health.is_dead:
 		return
+	var source: Player = null
+	var source_name: String = ""
 	if attacker > 0:
 		_last_attacker = attacker
 		_last_attacker_time = _elapsed
-	_player.health.take_damage(amount, from_position, is_head)
+		source = _proxies.get(attacker) as Player
+		if source != null and not is_instance_valid(source):
+			source = null
+		source_name = Net.get_player_name(attacker)
+		if source != null:
+			from_position = source.global_position  # стрелка — на стрелявшего, не в точку попадания
+			_mark_attacker(source)
+	var kind: int = Health.Kind.BULLET if attacker > 0 else Health.Kind.MELEE
+	_player.health.take_damage_from(amount, from_position, is_head, kind, source_name, source)
 
 
 func _on_local_died() -> void:
@@ -330,7 +361,61 @@ func _add_name_tag(proxy: Player, peer_id: int) -> void:
 	tag.no_depth_test = true
 	tag.modulate = color_for(peer_id)
 	tag.position = Vector3(0.0, 2.15, 0.0)
+	tag.name = "NameTag"
 	proxy.add_child(tag)
+	# Метка «стреляет в вас»: видна сквозь стены, мигает
+	var marker := Label3D.new()
+	marker.name = "AttackerMarker"
+	marker.text = "▼"
+	marker.font_size = 110
+	marker.outline_size = 18
+	marker.pixel_size = 0.006
+	marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	marker.no_depth_test = true
+	marker.fixed_size = true
+	marker.modulate = ATTACKER_COLOR
+	marker.position = Vector3(0.0, 2.6, 0.0)
+	marker.visible = false
+	proxy.add_child(marker)
+	proxy.set_meta(&"mark_left", 0.0)
+
+
+## Подсветить того, кто в нас стреляет: красная метка и имя
+func _mark_attacker(proxy: Player) -> void:
+	if not Settings.attacker_marker:
+		return
+	proxy.set_meta(&"mark_left", ATTACKER_MARK_TIME)
+	var marker := proxy.get_node_or_null(^"AttackerMarker") as Label3D
+	if marker != null:
+		marker.visible = true
+	var tag := proxy.get_node_or_null(^"NameTag") as Label3D
+	if tag != null:
+		tag.modulate = ATTACKER_COLOR
+	if _hud != null:
+		_hud.show_attacker(Net.get_player_name(proxy.peer_id))
+
+
+func _update_attacker_marks(delta: float) -> void:
+	for peer_id: int in _proxies:
+		var proxy: Player = _proxies[peer_id] as Player
+		if proxy == null or not is_instance_valid(proxy):
+			continue
+		var left: float = float(proxy.get_meta(&"mark_left", 0.0))
+		if left <= 0.0:
+			continue
+		left -= delta
+		proxy.set_meta(&"mark_left", left)
+		var marker := proxy.get_node_or_null(^"AttackerMarker") as Label3D
+		if left <= 0.0:
+			if marker != null:
+				marker.visible = false
+			var tag := proxy.get_node_or_null(^"NameTag") as Label3D
+			if tag != null:
+				tag.modulate = color_for(peer_id)
+		elif marker != null:
+			# Мигание и лёгкое покачивание
+			marker.modulate.a = 0.55 + 0.45 * absf(sin(left * 9.0))
+			marker.position.y = 2.6 + 0.08 * sin(left * 6.0)
 
 
 func net_player_state(peer_id: int, state: PackedFloat32Array) -> void:
@@ -372,7 +457,9 @@ func _on_proxy_damaged(amount: float, hit_position: Vector3, is_head: bool, peer
 		return
 	if attacker != 0 and not Net.is_enemy(peer_id):
 		return
-	Net.rpc_damage_player.rpc_id(peer_id, amount, attacker, is_head, hit_position)
+	# Выстрел: жертве нужна точка стрелка (откуда стреляли), удар зомби — его позиция
+	var from_position: Vector3 = _player.global_position if attacker != 0 else hit_position
+	Net.rpc_damage_player.rpc_id(peer_id, amount, attacker, is_head, from_position)
 
 
 func on_peer_left(peer_id: int) -> void:
