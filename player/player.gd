@@ -92,6 +92,14 @@ const SAFE_POSITION_INTERVAL: float = 0.3
 var _camera_base_y: float = 0.0
 var _camera_base_x: float = 0.0
 var _shake: float = 0.0
+# Толчок камеры при уроне
+const HIT_SHAKE_DAMAGE: float = 35.0
+const HIT_SHAKE_AMOUNT: float = 0.55
+const HIT_ROLL_DEGREES: float = 6.0
+const HIT_PITCH_DEGREES: float = 3.0
+const HIT_KICK_RECOVERY: float = 7.0
+var _hit_roll: float = 0.0
+var _hit_pitch: float = 0.0
 var _rng := RandomNumberGenerator.new()
 # Гироскоп: опрос с частотой Settings.gyro_rate, сглаженная скорость поворота (рад/с)
 var _gyro_timer: float = 0.0
@@ -168,6 +176,7 @@ func _process(delta: float) -> void:
 		Settings.set_value(&"camera_mode", 1 - Settings.camera_mode)
 	_update_recoil(delta)
 	_update_shake(delta)
+	_update_hit_kick(delta)
 	if third_person:
 		_update_third_person_camera()
 
@@ -277,6 +286,9 @@ func respawn(at: Vector3) -> void:
 	input_enabled = true
 	head.position.y = _head_base_y
 	head.rotation.z = 0.0
+	_hit_roll = 0.0
+	_hit_pitch = 0.0
+	camera.rotation = Vector3.ZERO
 	if touch_controls != null:
 		touch_controls.show()
 	if body != null:
@@ -469,8 +481,38 @@ func _process_slide(delta: float) -> void:
 		camera.position.y = _camera_base_y
 
 
-func _on_damaged(_amount: float, _hit_position: Vector3, _is_headshot: bool) -> void:
+func _on_damaged(amount: float, hit_position: Vector3, _is_headshot: bool) -> void:
 	Sfx.play_2d(Sfx.pick(Sfx.sounds.player_hurt), -2.0)
+	if health != null and health.is_dead:
+		return
+	# Камера вздрагивает: тряска по силе удара и толчок в сторону от атакующего
+	var strength: float = clampf(amount / HIT_SHAKE_DAMAGE, 0.15, 1.0) * Settings.hit_shake
+	if strength <= 0.0:
+		return
+	_shake = clampf(_shake + strength * HIT_SHAKE_AMOUNT, 0.0, 1.0)
+	var side: float = 0.0
+	if hit_position != Vector3.ZERO:
+		var local: Vector3 = global_basis.inverse() * (hit_position - global_position)
+		side = clampf(local.x / maxf(Vector2(local.x, local.z).length(), 0.01), -1.0, 1.0)
+	# Удар справа валит голову влево и наоборот; удар — ещё и кивок вниз
+	_hit_roll = clampf(_hit_roll - side * deg_to_rad(HIT_ROLL_DEGREES) * strength,
+		-deg_to_rad(HIT_ROLL_DEGREES * 1.5), deg_to_rad(HIT_ROLL_DEGREES * 1.5))
+	_hit_pitch = clampf(_hit_pitch - deg_to_rad(HIT_PITCH_DEGREES) * strength,
+		-deg_to_rad(HIT_PITCH_DEGREES * 1.5), 0.0)
+
+
+## Толчок камеры от удара плавно возвращается (поворот самой камеры, не головы)
+func _update_hit_kick(delta: float) -> void:
+	if _hit_roll == 0.0 and _hit_pitch == 0.0:
+		return
+	var weight: float = clampf(HIT_KICK_RECOVERY * delta, 0.0, 1.0)
+	_hit_roll = lerpf(_hit_roll, 0.0, weight)
+	_hit_pitch = lerpf(_hit_pitch, 0.0, weight)
+	if absf(_hit_roll) < 0.0005 and absf(_hit_pitch) < 0.0005:
+		_hit_roll = 0.0
+		_hit_pitch = 0.0
+	camera.rotation.z = _hit_roll
+	camera.rotation.x = _hit_pitch
 
 
 func _on_died() -> void:

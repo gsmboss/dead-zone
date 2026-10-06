@@ -63,7 +63,8 @@ func _apply_damage() -> void:
 	var player_distance: float = to_player.length()
 	if player_distance <= radius:
 		var player_falloff: float = 1.0 - player_distance / radius
-		player.health.take_damage(damage * player_damage_scale * player_falloff, global_position, false)
+		player.health.take_damage_from(damage * player_damage_scale * player_falloff, global_position, false,
+			Health.Kind.EXPLOSION)
 		if player_distance > 0.01:
 			player.apply_knockback(to_player.normalized() * 8.0 * player_falloff + Vector3.UP * 3.0 * player_falloff)
 	if player_distance <= radius * 4.0:

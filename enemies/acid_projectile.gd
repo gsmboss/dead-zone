@@ -56,7 +56,7 @@ func _physics_process(delta: float) -> void:
 func _on_body_entered(body: Node3D) -> void:
 	var player := body as Player
 	if player != null and player.health != null:
-		player.health.take_damage(damage, global_position, false)
+		player.health.take_damage_from(damage, global_position, false, Health.Kind.ACID)
 	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
 	if impacts != null:
 		impacts.spawn(global_position, -_velocity.normalized(), true)

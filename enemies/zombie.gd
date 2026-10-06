@@ -623,7 +623,8 @@ func _process_attack(delta: float) -> void:
 		_attack_hit_done = true
 		# Игрок успел отбежать — промах
 		if to_player.length() <= data.attack_range * ATTACK_HIT_TOLERANCE:
-			_player_health.take_damage(data.attack_damage * damage_multiplier, global_position, false)
+			_player_health.take_damage_from(data.attack_damage * damage_multiplier, global_position, false,
+			Health.Kind.MELEE, "", self)
 
 	if _attack_elapsed >= data.attack_windup + ATTACK_RECOVERY:
 		_cooldown = data.attack_cooldown
@@ -661,7 +662,8 @@ func _process_charge(delta: float) -> void:
 
 	if not _special_hit_done and _flat_distance_to(_player.global_position) <= CHARGE_HIT_DISTANCE:
 		_special_hit_done = true
-		_player_health.take_damage(data.charge_damage * damage_multiplier, global_position, false)
+		_player_health.take_damage_from(data.charge_damage * damage_multiplier, global_position, false,
+			Health.Kind.MELEE, "", self)
 		_push_player(CHARGE_SHAKE)
 		_end_special(true)
 		return
@@ -693,7 +695,8 @@ func _process_slam(delta: float) -> void:
 			impacts.spawn(global_position + Vector3.UP * 0.1, Vector3.UP, false)
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), global_position, 4.0, 0.5)
 		if _flat_distance_to(_player.global_position) <= data.slam_radius:
-			_player_health.take_damage(data.slam_damage * damage_multiplier, global_position, false)
+			_player_health.take_damage_from(data.slam_damage * damage_multiplier, global_position, false,
+			Health.Kind.MELEE, "", self)
 			_push_player(SLAM_SHAKE)
 		elif _player != null:
 			_player.shake(SLAM_SHAKE * 0.4)  # земля дрожит и вдали

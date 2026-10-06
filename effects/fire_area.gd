@@ -71,7 +71,7 @@ func _physics_process(delta: float) -> void:
 			continue
 		var player := body as Player
 		if player != null and player.health != null:
-			player.health.take_damage(amount * PLAYER_DAMAGE_SCALE, global_position, false)
+			player.health.take_damage_from(amount * PLAYER_DAMAGE_SCALE, global_position, false, Health.Kind.FIRE)
 
 
 func _build_flames() -> void:
