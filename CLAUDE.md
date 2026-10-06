@@ -168,7 +168,9 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
 - project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.png или 3D-зомби,
   3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn). Промпт картинки — ui/splash/PROMPT.md.
 - Иконка: res://icon.png (1024, углы залиты фоном, оригинал icons/icon_source.png); для экспорта Android —
-  icons/icon_192.png, adaptive_foreground_432.png, adaptive_background_432.png. Заставка Godot выключена.
+  icons/icon_192.png, adaptive_foreground_432.png, adaptive_background_432.png (прописаны в export_presets.cfg,
+  пресет «Android»: arm64, com.salamanderlab.deadzone, разрешения сети). Заставка Godot выключена.
+  import_etc2_astc=true — сжатие текстур для Android (не GPU-сжатие, правило выше не нарушает).
 
 ## Статус и план
 Готово: этапы 1–4 и код этапа 5 (GameState, магазин, доска миссий, HUD убежища).

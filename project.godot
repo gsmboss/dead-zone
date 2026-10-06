@@ -47,3 +47,4 @@ sensors/enable_gyroscope=true
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 textures/vram_compression/compress_with_gpu=false
+textures/vram_compression/import_etc2_astc=true
