@@ -119,6 +119,10 @@ var _camera_fps_position: Vector3 = Vector3.ZERO
 var _weapons_enabled: bool = true
 ## Факел (если куплен в оружейной)
 var torch: Torch
+## Ночь по мнению автофакела (с запасом: зажигается после NIGHT_ON, гаснет до NIGHT_OFF)
+const TORCH_NIGHT_ON: float = 0.5
+const TORCH_NIGHT_OFF: float = 0.3
+var _torch_night: bool = false
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -172,6 +176,7 @@ func _process(delta: float) -> void:
 	_process_gyro(delta)
 	if input_enabled and torch != null and Input.is_action_just_pressed(&"torch"):
 		torch.toggle()
+	_update_auto_torch()
 	if input_enabled and Input.is_action_just_pressed(&"camera_view"):
 		Settings.set_value(&"camera_mode", 1 - Settings.camera_mode)
 	_update_recoil(delta)
@@ -340,6 +345,21 @@ func _setup_body() -> void:
 	if health != null:
 		health.damaged.connect(func(_a: float, _p: Vector3, _h: bool) -> void: body.on_hit())
 		health.died.connect(body.on_died)
+
+
+## Ночью факел загорается сам, на рассвете гаснет (между этим — как включил игрок)
+func _update_auto_torch() -> void:
+	if torch == null or not Settings.torch_auto:
+		return
+	var night: float = DayNightCycle.night_amount
+	if not _torch_night and night >= TORCH_NIGHT_ON:
+		_torch_night = true
+		if not torch.lit:
+			torch.set_lit(true)
+	elif _torch_night and night <= TORCH_NIGHT_OFF:
+		_torch_night = false
+		if torch.lit:
+			torch.set_lit(false)
 
 
 func _setup_torch() -> void:

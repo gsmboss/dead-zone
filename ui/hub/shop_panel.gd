@@ -23,9 +23,10 @@ func _ready() -> void:
 func _build_content() -> void:
 	var coins := UIKit.label("Монеты: %d" % GameState.coins, 30, content)
 	coins.modulate = UIKit.ACCENT
+	# Снаряжение (факел) — сразу под монетами, чтобы его было видно
+	content.add_child(_make_gear_card())
 	content.add_child(_make_survivor_card())
 	content.add_child(_make_supplies_card())
-	content.add_child(_make_gear_card())
 	for weapon: WeaponData in GameState.catalog.weapons:
 		if weapon != null and not weapon.id.is_empty():
 			content.add_child(_make_weapon_card(weapon))
@@ -154,12 +155,17 @@ func _make_gear_card() -> Control:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override(&"separation", 16)
 		box.add_child(row)
+		if item.id == "torch":
+			row.add_child(TorchPreview.new())
 		var texts := VBoxContainer.new()
 		texts.size_flags_horizontal = SIZE_EXPAND_FILL
 		row.add_child(texts)
-		UIKit.label(item.title, 26, texts)
+		UIKit.label(item.title, 30, texts).modulate = UIKit.ACCENT
 		UIKit.label(item.description, 20, texts).modulate = UIKit.DIM
 		var owned: bool = GameState.owns_gear(item.id)
+		if owned and item.id == "torch":
+			UIKit.label("КУПЛЕН • %s" % ("ЗАЖИГАЕТСЯ САМ НОЧЬЮ" if Settings.torch_auto else "ЗАЖИГАТЬ КНОПКОЙ ФАКЕЛ"),
+				20, texts).modulate = UIKit.GOOD
 		var buy := UIKit.button("ЕСТЬ" if owned else "КУПИТЬ %d" % item.price, 24, 220.0)
 		buy.disabled = owned or GameState.coins < item.price
 		buy.pressed.connect(func() -> void:

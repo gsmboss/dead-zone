@@ -104,6 +104,7 @@ func _build_controls() -> void:
 		Settings.SENSITIVITY_MAX, 5.0, func(v: float) -> String: return "%d" % roundi(v))
 	_toggle("ИНВЕРСИЯ ОСИ Y", &"invert_y")
 	_toggle("АВТООГОНЬ ПРИ НАВЕДЕНИИ", &"auto_fire")
+	_toggle("ФАКЕЛ САМ ЗАЖИГАЕТСЯ НОЧЬЮ", &"torch_auto")
 
 
 func _build_camera() -> void:
