@@ -32,10 +32,17 @@ const TUNE_STEER: float = 0.06
 const TUNE_GRIP: float = 0.08
 const TUNE_RAM: float = 0.25
 ## Фары: днём светят слабо, ночью — вовсю (DayNightCycle.night_amount)
-const HEADLIGHT_DAY_ENERGY: float = 1.2
-const HEADLIGHT_NIGHT_ENERGY: float = 6.0
-const HEADLIGHT_RANGE: float = 42.0
-const HEADLIGHT_ANGLE: float = 38.0
+const HEADLIGHT_DAY_ENERGY: float = 1.5
+const HEADLIGHT_NIGHT_ENERGY: float = 12.0
+const HEADLIGHT_RANGE: float = 48.0
+const HEADLIGHT_ANGLE: float = 40.0
+## Пятно света на асфальте и лучи фар — сетки с аддитивным смешиванием. Видны в любом рендере
+## (на телефоне свет фар по огромным плоскостям земли и дорог почти не заметен)
+const LIGHT_POOL_SIZE: Vector2 = Vector2(11.0, 26.0)
+const LIGHT_POOL_HEIGHT: float = 0.15
+const LIGHT_POOL_NIGHT_ALPHA: float = 0.75
+const BEAM_LENGTH: float = 16.0
+const BEAM_NIGHT_ALPHA: float = 0.07
 ## Рассеянный свет перед капотом — освещает тротуары по бокам
 const FILL_LIGHT_RANGE: float = 11.0
 const FILL_LIGHT_NIGHT_ENERGY: float = 1.6
@@ -119,6 +126,11 @@ var _hit_slowdown: float = HIT_SLOWDOWN
 var _safe_position: Vector3 = Vector3.ZERO
 var _headlights: Array[SpotLight3D] = []
 var _fill_light: OmniLight3D
+var _light_pool: MeshInstance3D
+var _light_pool_material: StandardMaterial3D
+var _beam_material: StandardMaterial3D
+var _beams: Array[MeshInstance3D] = []
+var _shown_night: float = -1.0
 var _brake_light: OmniLight3D
 var _neon_light: OmniLight3D
 var _headlight_material: StandardMaterial3D
@@ -441,6 +453,19 @@ func _update_lights() -> void:
 			_neon_light.visible = occupied
 		if _headlight_material != null:
 			_headlight_material.emission_energy_multiplier = 3.0 if occupied else 0.0
+		if _light_pool != null:
+			_light_pool.visible = occupied
+		for beam: MeshInstance3D in _beams:
+			beam.visible = occupied
+		_shown_night = -1.0
+	if occupied and absf(night - _shown_night) > 0.01:
+		_shown_night = night
+		# Пятно на дороге видно и в сумерках, ночью — ярко; днём почти незаметно
+		var glow: float = smoothstep(0.1, 0.8, night)
+		if _light_pool_material != null:
+			_light_pool_material.albedo_color.a = LIGHT_POOL_NIGHT_ALPHA * glow
+		if _beam_material != null:
+			_beam_material.albedo_color.a = BEAM_NIGHT_ALPHA * glow
 	if occupied:
 		var energy: float = lerpf(HEADLIGHT_DAY_ENERGY, HEADLIGHT_NIGHT_ENERGY, night)
 		if not _headlights.is_empty() and not is_equal_approx(_headlights[0].light_energy, energy):
@@ -671,6 +696,7 @@ func _build_headlights() -> void:
 	_fill_light.visible = false
 	_fill_light.position = Vector3(0.0, 2.2, front_z - 5.0)
 	add_child(_fill_light)
+	_build_light_pool(front_z)
 	_brake_light = OmniLight3D.new()
 	_brake_light.light_color = BRAKE_COLOR
 	_brake_light.light_energy = 1.2
@@ -679,6 +705,78 @@ func _build_headlights() -> void:
 	_brake_light.visible = false
 	_brake_light.position = Vector3(0.0, _box_center.y, _box_center.z + _box_size.z * 0.5 + 0.4)
 	add_child(_brake_light)
+
+
+## Пятно света на асфальте перед машиной (радиальный градиент, аддитивно) и два конуса лучей
+func _build_light_pool(front_z: float) -> void:
+	var fade := Gradient.new()
+	fade.set_color(0, Color(1.0, 0.95, 0.8, 1.0))
+	fade.set_color(1, Color(1.0, 0.9, 0.7, 0.0))
+	fade.add_point(0.45, Color(1.0, 0.93, 0.75, 0.55))
+	var texture := GradientTexture2D.new()
+	texture.gradient = fade
+	texture.fill = GradientTexture2D.FILL_RADIAL
+	# Ярче у капота (край плоскости со стороны машины — +Z, v = 1), к дальнему краю гаснет
+	texture.fill_from = Vector2(0.5, 0.92)
+	texture.fill_to = Vector2(0.5, 0.0)
+	texture.width = 64
+	texture.height = 128
+	_light_pool_material = _additive_material()
+	_light_pool_material.albedo_texture = texture
+	_light_pool_material.albedo_color = Color(1.0, 1.0, 1.0, 0.0)
+	var plane := PlaneMesh.new()
+	plane.size = LIGHT_POOL_SIZE
+	_light_pool = MeshInstance3D.new()
+	_light_pool.name = "HeadlightPool"
+	_light_pool.mesh = plane
+	_light_pool.material_override = _light_pool_material
+	_light_pool.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_light_pool.position = Vector3(0.0, LIGHT_POOL_HEIGHT, front_z - LIGHT_POOL_SIZE.y * 0.5 + 0.5)
+	_light_pool.visible = false
+	add_child(_light_pool)
+
+	var beam_fade := Gradient.new()
+	beam_fade.set_color(0, Color(1.0, 0.95, 0.8, 1.0))
+	beam_fade.set_color(1, Color(1.0, 0.95, 0.8, 0.0))
+	var beam_texture := GradientTexture2D.new()
+	beam_texture.gradient = beam_fade
+	beam_texture.fill_from = Vector2(0.0, 0.0)
+	beam_texture.fill_to = Vector2(0.0, 1.0)
+	beam_texture.width = 4
+	beam_texture.height = 64
+	_beam_material = _additive_material()
+	_beam_material.albedo_texture = beam_texture
+	_beam_material.albedo_color = Color(1.0, 1.0, 1.0, 0.0)
+	_beam_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var cone := CylinderMesh.new()
+	cone.top_radius = 0.12
+	cone.bottom_radius = 2.4
+	cone.height = BEAM_LENGTH
+	cone.radial_segments = 10
+	cone.rings = 1
+	cone.cap_top = false
+	cone.cap_bottom = false
+	for side: float in [-1.0, 1.0]:
+		var beam := MeshInstance3D.new()
+		beam.mesh = cone
+		beam.material_override = _beam_material
+		beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		# Ось цилиндра — Y: узкий верх к фаре (+Z), широкий низ вперёд (-Z) и чуть вниз
+		beam.rotation = Vector3(deg_to_rad(86.0), 0.0, 0.0)
+		beam.position = Vector3(side * _box_size.x * 0.3, _box_center.y, front_z - BEAM_LENGTH * 0.5)
+		beam.visible = false
+		add_child(beam)
+		_beams.append(beam)
+
+
+func _additive_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_DISABLED
+	material.disable_fog = true
+	return material
 
 
 ## Дым из-под задних колёс в заносе
