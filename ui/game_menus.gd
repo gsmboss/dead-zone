@@ -60,6 +60,9 @@ func _notification(what: int) -> void:
 			# На ПК потеря фокуса окна (клик в редактор) паузу не ставит — только на телефоне
 			if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not OS.has_feature("mobile"):
 				return
+			# Реклама на весь экран тоже «сворачивает» игру — это не повод для паузы
+			if Ads.is_showing_fullscreen():
+				return
 			if is_inside_tree() and _pause_panel != null and _window == null and not _pause_panel.visible \
 					and not CutscenePlayer.is_blocking_input():
 				_pause()

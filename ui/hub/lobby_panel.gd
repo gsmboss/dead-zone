@@ -81,6 +81,7 @@ func _build_layout() -> void:
 	_scroll = ScrollContainer.new()
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_panel.add_child(_scroll)
+	TouchScroll.attach(_scroll)
 	content = VBoxContainer.new()
 	content.size_flags_horizontal = SIZE_EXPAND_FILL
 	content.add_theme_constant_override(&"separation", 12)

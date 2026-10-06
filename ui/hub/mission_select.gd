@@ -83,6 +83,7 @@ func _build() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	list_panel.add_child(scroll)
+	TouchScroll.attach(scroll)
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = SIZE_EXPAND_FILL
 	list.add_theme_constant_override(&"separation", 10)
@@ -102,6 +103,7 @@ func _build() -> void:
 	var dossier_scroll := ScrollContainer.new()
 	dossier_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	dossier_panel.add_child(dossier_scroll)
+	TouchScroll.attach(dossier_scroll)
 	_dossier = VBoxContainer.new()
 	_dossier.size_flags_horizontal = SIZE_EXPAND_FILL
 	_dossier.add_theme_constant_override(&"separation", 12)

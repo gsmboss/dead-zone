@@ -83,6 +83,12 @@ func _build_content() -> void:
 	reset.pressed.connect(_on_reset)
 	content.add_child(reset)
 
+	if Ads.privacy_options_required():
+		_section("РЕКЛАМА")
+		var privacy := UIKit.button("НАСТРОЙКИ КОНФИДЕНЦИАЛЬНОСТИ", 22)
+		privacy.pressed.connect(Ads.show_privacy_options)
+		content.add_child(privacy)
+
 	_section("SALAMANDERLAB")
 	var links := HBoxContainer.new()
 	links.add_theme_constant_override(&"separation", 16)

@@ -29,6 +29,11 @@ var _boss_box: VBoxContainer
 var _boss_name: Label
 var _boss_bar: ProgressBar
 var _boss: Zombie
+# Реклама: x2 монеты на экране итогов, воскрешение после смерти
+var _double_button: Button
+var _earned_coins: int = 0
+var _revive_panel: PanelContainer
+var _revive_timer: Label
 
 
 func _ready() -> void:
@@ -100,6 +105,12 @@ func _build_ui() -> void:
 	_result_coins = _make_label(box, 34)
 	_result_coins.modulate = Color(1.0, 0.85, 0.3)
 
+	_double_button = _make_button("x2 МОНЕТЫ  ▶ РЕКЛАМА")
+	_double_button.modulate = Color(1.0, 0.9, 0.45)
+	_double_button.visible = false
+	_double_button.pressed.connect(_on_double_pressed)
+	box.add_child(_double_button)
+
 	var buttons := HBoxContainer.new()
 	buttons.add_theme_constant_override(&"separation", 16)
 	box.add_child(buttons)
@@ -118,6 +129,71 @@ func _build_ui() -> void:
 	_result.grow_horizontal = GROW_DIRECTION_BOTH
 	_result.grow_vertical = GROW_DIRECTION_BOTH
 	_result.resized.connect(func() -> void: _result.pivot_offset = _result.size * 0.5)
+	_build_revive_panel()
+
+
+## «ВОСКРЕСНУТЬ?» после смерти: реклама за второй шанс или поражение
+func _build_revive_panel() -> void:
+	_revive_panel = PanelContainer.new()
+	_revive_panel.visible = false
+	_revive_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style(Color(0.05, 0.0, 0.0, 0.85)))
+	add_child(_revive_panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 16)
+	_revive_panel.add_child(box)
+	var title := _make_label(box, 48)
+	title.text = "ВЫ ПОГИБЛИ"
+	title.modulate = LOSE_COLOR
+	_revive_timer = _make_label(box, 30)
+	var revive := _make_button("ВОСКРЕСНУТЬ  ▶ РЕКЛАМА")
+	revive.modulate = Color(0.6, 1.0, 0.6)
+	revive.pressed.connect(_on_revive_pressed)
+	box.add_child(revive)
+	var give_up := _make_button("СДАТЬСЯ")
+	give_up.pressed.connect(func() -> void:
+		_revive_panel.visible = false
+		if mission_manager != null:
+			mission_manager.decline_revive())
+	box.add_child(give_up)
+	_revive_panel.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
+	_revive_panel.grow_horizontal = GROW_DIRECTION_BOTH
+	_revive_panel.grow_vertical = GROW_DIRECTION_BOTH
+
+
+func _process(_delta: float) -> void:
+	if _revive_panel == null or not _revive_panel.visible or mission_manager == null:
+		return
+	var left: float = mission_manager.get_revive_left()
+	if left <= 0.0:
+		_revive_panel.visible = false
+		return
+	_revive_timer.text = "ВТОРОЙ ШАНС: %d" % ceili(left)
+
+
+func _on_revive_offered(_seconds: float) -> void:
+	_revive_panel.visible = true
+
+
+func _on_revive_pressed() -> void:
+	_revive_panel.visible = false
+	var shown: bool = Ads.show_rewarded(
+		func() -> void: mission_manager.revive(),
+		func() -> void: mission_manager.decline_revive())
+	if not shown:
+		mission_manager.decline_revive()
+
+
+func _on_double_pressed() -> void:
+	_double_button.disabled = true
+	var shown: bool = Ads.show_rewarded(func() -> void:
+		GameState.add_coins(_earned_coins)
+		GameState.save_game()
+		_double_button.visible = false
+		_set_coins_text(float(_earned_coins * 2), GameState.coins)
+		Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0),
+		func() -> void: _double_button.disabled = false)
+	if not shown:
+		_double_button.visible = false
 
 
 func _make_label(parent: Control, font_size: int) -> Label:
@@ -153,6 +229,7 @@ func _connect_manager() -> void:
 	mission_manager.announcement.connect(_show_announcement)
 	mission_manager.mission_finished.connect(_show_result)
 	mission_manager.boss_spawned.connect(_on_boss_spawned)
+	mission_manager.revive_offered.connect(_on_revive_offered)
 	_objective.text = mission_manager.get_objective_text()
 
 
@@ -225,6 +302,10 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 		roundi(float(stats.get("accuracy", 0.0)) * 100.0), roundi(float(stats.get("health_share", 0.0)) * 100.0)])
 	_result_stats.text = "\n".join(lines)
 	_result.visible = true
+	_revive_panel.visible = false
+	_earned_coins = int(stats.get("coins", 0))
+	_double_button.disabled = false
+	_double_button.visible = _earned_coins > 0 and Ads.is_rewarded_ready()
 
 	# Окно результата «впрыгивает», монеты считаются от нуля
 	_result.scale = Vector2.ONE * 0.6
@@ -245,9 +326,10 @@ func _set_coins_text(value: float, total: int) -> void:
 	_result_coins.text = "МОНЕТЫ +%d  (ВСЕГО %d)" % [roundi(value), total]
 
 
+## После миссии — межстраничная реклама (если пора), затем переход
 func _on_restart_pressed() -> void:
-	get_tree().reload_current_scene()
+	Ads.after_mission(func() -> void: get_tree().reload_current_scene())
 
 
 func _on_hub_pressed() -> void:
-	get_tree().change_scene_to_file(HUB_SCENE)
+	Ads.after_mission(func() -> void: get_tree().change_scene_to_file(HUB_SCENE))

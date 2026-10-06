@@ -8,3 +8,7 @@ export/
 *.keystore
 *.jks
 .DS_Store
+# Android: шаблон Gradle (Project → Install Android Build Template) и бинарники AdMob скачиваются локально
+/android/
+/addons/admob/android/bin/
+/addons/admob/ios/bin/

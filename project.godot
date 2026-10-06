@@ -27,6 +27,7 @@ Sfx="*res://autoload/sfx.gd"
 Settings="*res://autoload/settings.gd"
 Music="*res://autoload/music.gd"
 Net="*res://autoload/net.gd"
+Ads="*res://autoload/ads.gd"
 
 [display]
 
@@ -49,3 +50,7 @@ rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 textures/vram_compression/compress_with_gpu=false
 textures/vram_compression/import_etc2_astc=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/admob/plugin.cfg")

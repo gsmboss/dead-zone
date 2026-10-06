@@ -223,4 +223,13 @@ player.tscn с is_remote (без WeaponManager, группа remote_player, PvP-
 TEAMS, LAST_STANDING (AUTO по числу игроков). Интерфейс ui/match_hud.gd. Для Android в экспорте нужны
 разрешения INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CHANGE_WIFI_MULTICAST_STATE.
 
+Реклама (этап 7): плагин Poing Studios AdMob 5.2 в addons/admob (включён в editor_plugins; Android-бинарники
+скачивает сам при включении → addons/admob/android/bin, в .gitignore). Нужна сборка Gradle (export_presets:
+use_gradle_build=true, Project → Install Android Build Template, папка android/ в .gitignore).
+App ID — Project Settings → admob/general/android/app_id. Автозагрузка Ads (autoload/ads.gd): UMP-согласие,
+баннер вверху только в убежище (HubHUD, меню сдвинуто на BANNER_RESERVE), межстраничная после миссии
+(Ads.after_mission: каждая 2-я, не чаще 120 с), с наградой — воскрешение (MissionManager.revive_offered/revive)
+и x2 монеты на экране итогов. В debug-сборке тестовые блоки Google. GameMenus не ставит паузу во время рекламы.
+Прокрутка окон пальцем: ui/touch_scroll.gd (TouchScroll.attach(scroll), кнопка под свайпом отключается).
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

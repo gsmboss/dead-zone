@@ -42,6 +42,7 @@ func _ready() -> void:
 	_scroll.size_flags_vertical = SIZE_EXPAND_FILL
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	root.add_child(_scroll)
+	TouchScroll.attach(_scroll)  # листать пальцем, даже если он лёг на кнопку
 
 	content = VBoxContainer.new()
 	content.size_flags_horizontal = SIZE_EXPAND_FILL

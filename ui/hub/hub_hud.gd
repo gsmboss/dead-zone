@@ -22,6 +22,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_build_ui()
 	_connect_world.call_deferred()
+	Ads.show_banner()
 
 
 func _process(_delta: float) -> void:
@@ -82,8 +83,9 @@ func _build_ui() -> void:
 	_menu_bar.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
 	_menu_bar.offset_left = 16.0
 	_menu_bar.offset_right = -16.0
-	_menu_bar.offset_top = 12.0
-	_menu_bar.offset_bottom = 12.0 + UIKit.BUTTON_HEIGHT
+	# Сверху по центру — баннер рекламы (только на телефоне): меню под ним
+	_menu_bar.offset_top = _menu_top()
+	_menu_bar.offset_bottom = _menu_top() + UIKit.BUTTON_HEIGHT
 
 	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", func() -> void: _open_window(DailyPanel.new()))
 	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
@@ -180,6 +182,14 @@ func _interact() -> void:
 			_current.interact()
 
 
+func _menu_top() -> float:
+	return 12.0 + (Ads.BANNER_RESERVE if Ads.is_supported() else 0.0)
+
+
+func _exit_tree() -> void:
+	Ads.hide_banner()
+
+
 func _open_window(window: HubWindow) -> void:
 	if _window != null:
 		window.free()
@@ -189,6 +199,7 @@ func _open_window(window: HubWindow) -> void:
 	add_child(window)
 	_interact_button.visible = false
 	_menu_bar.visible = false
+	Ads.hide_banner()  # окна на весь экран — баннер не перекрывает кнопки
 	_set_player_controls(false)
 
 
@@ -196,12 +207,13 @@ func _on_window_closed() -> void:
 	_window = null
 	_interact_button.visible = _current != null
 	_menu_bar.visible = true
+	Ads.show_banner()
 	# Меню «выезжает» сверху
 	_menu_bar.modulate.a = 0.0
 	_menu_bar.position.y = -40.0
 	var tween := create_tween().set_parallel(true)
 	tween.tween_property(_menu_bar, "modulate:a", 1.0, 0.25)
-	tween.tween_property(_menu_bar, "position:y", 12.0, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_menu_bar, "position:y", _menu_top(), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_set_player_controls(true)
 
 

@@ -8,6 +8,8 @@ signal objective_changed(text: String)
 signal announcement(text: String)
 signal mission_finished(won: bool, stats: Dictionary)
 signal boss_spawned(boss: Zombie)
+## Игрок погиб: можно воскреснуть за рекламу (секунд на решение)
+signal revive_offered(seconds: float)
 
 enum State { STARTING, RUNNING, BETWEEN_WAVES, WON, LOST }
 
@@ -71,6 +73,12 @@ var _waves_cleared: int = 0
 var _survivors_total: int = 0
 var _event: DailyEventData
 var _survivors_rescued: int = 0
+# Воскрешение за рекламу (один раз за миссию)
+const REVIVE_DECISION_TIME: float = 8.0
+const REVIVE_CLEAR_RADIUS: float = 6.0
+var _revive_used: bool = false
+var _revive_pending: bool = false
+var _revive_left: float = 0.0
 
 
 func _ready() -> void:
@@ -214,6 +222,13 @@ func _shot(from: Vector3, to: Vector3, look_from: Vector3, look_to: Vector3, dur
 
 
 func _process(delta: float) -> void:
+	if _revive_pending:
+		# Пока идёт реклама, время на решение не тратится
+		if not Ads.is_showing_fullscreen():
+			_revive_left -= delta
+			if _revive_left <= 0.0:
+				decline_revive()
+		return
 	match state:
 		State.STARTING:
 			_phase_timer -= delta
@@ -606,8 +621,46 @@ func _on_zombie_died(zombie: Zombie) -> void:
 
 
 func _on_player_died() -> void:
-	if state == State.WON or state == State.LOST:
+	if state == State.WON or state == State.LOST or _revive_pending:
 		return
+	if not _revive_used and Ads.is_rewarded_ready():
+		_revive_pending = true
+		_revive_left = REVIVE_DECISION_TIME
+		revive_offered.emit(REVIVE_DECISION_TIME)
+		return
+	_finish(false)
+
+
+## Секунды на решение «воскреснуть?» (для HUD)
+func get_revive_left() -> float:
+	return _revive_left if _revive_pending else 0.0
+
+
+## Досмотрел рекламу: встаёт на том же месте, зомби рядом отбрасывает и убивает
+func revive() -> void:
+	if not _revive_pending or _player == null:
+		return
+	_revive_pending = false
+	_revive_used = true
+	var at: Vector3 = _player.global_position
+	for node: Node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as Zombie
+		if zombie == null or zombie.state == Zombie.State.DEAD or (zombie.data != null and zombie.data.is_boss):
+			continue
+		var offset: Vector3 = zombie.global_position - at
+		if offset.length() <= REVIVE_CLEAR_RADIUS:
+			offset.y = 0.0
+			zombie.apply_blast(zombie.health.current + 1.0 if zombie.health != null else 9999.0,
+				offset.normalized() * 10.0)
+	_player.respawn(at)
+	announcement.emit("ВТОРОЙ ШАНС!")
+
+
+## Отказался или не досмотрел — поражение
+func decline_revive() -> void:
+	if not _revive_pending:
+		return
+	_revive_pending = false
 	_finish(false)
 
 
