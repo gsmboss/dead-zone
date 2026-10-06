@@ -29,6 +29,7 @@ const DESPAWN_CHECK_INTERVAL: float = 1.0
 const NAV_SNAP_TOLERANCE: float = 3.0
 
 var _despawn_timer: float = 0.0
+var _players: Array[Node3D] = []
 
 var _rng := RandomNumberGenerator.new()
 var _warned_no_points: bool = false
@@ -47,6 +48,11 @@ func spawn(data: ZombieData, health_multiplier: float = 1.0, damage_multiplier: 
 		return null
 
 	var player := get_tree().get_first_node_in_group(&"player") as Node3D
+	# По сети в открытом мире — вокруг случайного игрока (иначе у друзей далеко от хоста пусто)
+	if dynamic_spawn and Net.in_match:
+		_collect_players()
+		if not _players.is_empty():
+			player = _players[_rng.randi() % _players.size()]
 	var point: Variant = _pick_dynamic_point(player) if dynamic_spawn else _pick_point(player)
 	if point == null:
 		return null
@@ -80,13 +86,30 @@ func _process(delta: float) -> void:
 	if _despawn_timer > 0.0:
 		return
 	_despawn_timer = DESPAWN_CHECK_INTERVAL
-	var player := get_tree().get_first_node_in_group(&"player") as Node3D
-	if player == null:
+	_collect_players()
+	if _players.is_empty():
 		return
 	for child: Node in get_children():
 		var zombie := child as Zombie
-		if zombie != null and zombie.global_position.distance_to(player.global_position) > despawn_distance:
+		if zombie != null and _distance_to_nearest_player(zombie.global_position) > despawn_distance:
 			zombie.despawn()
+
+
+## Живые игроки: свой и (по сети) копии друзей. Массив переиспользуется
+func _collect_players() -> void:
+	_players.clear()
+	for group: StringName in [&"player", &"remote_player"]:
+		for node: Node in get_tree().get_nodes_in_group(group):
+			var body := node as Player
+			if body != null and (body.health == null or not body.health.is_dead):
+				_players.append(body)
+
+
+func _distance_to_nearest_player(point: Vector3) -> float:
+	var nearest: float = INF
+	for body: Node3D in _players:
+		nearest = minf(nearest, point.distance_to(body.global_position))
+	return nearest
 
 
 ## Случайная точка на навмеше в кольце вокруг игрока, по возможности вне поля зрения

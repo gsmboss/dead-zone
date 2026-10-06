@@ -273,4 +273,13 @@ voice_camp, voice_volume (вкладка СЮЖЕТ).
 ru/en, по очереди двух людей, solo для одного), Label3D над головой, поворот друг к другу, голос со своим тоном
 (VOICE_PITCHES), если игрок ближе 6 м.
 
+Хедшот: enemies/head_pop_modifier.gd (HeadPopModifier — SkeletonModifier3D сжимает кость Head), Zombie._headshot_death
+(кровь из шеи на BoneAttachment3D Neck, брызги, откидывание), ui/headshot_popup.gd (череп, ХЕДШОТ ×N, миг
+замедления — Settings.headshot_slowmo, не по сети). AWM: weapons/data/awm.tres (Rifle.gltf, WeaponData.has_scope,
+bolt_sound), ui/scope_overlay.gd (оптика на весь экран; WeaponManager.is_scoped прячет модель и прицел).
+Crosshair кладёт ХЕДШОТ и оптику в CanvasLayer HUD (прицел лежит в CenterContainer).
+Город по сети: Net.MAPS + city_level («ГОРОД»), CityGenerator по сети ставит Marker3D группы mp_spawn (дворы)
+вместо выживших/эвакуации, MatchManager берёт mp_spawn раньше item_spawn, ZombieSpawner в открытом мире
+спавнит вокруг случайного игрока и убирает зомби далеко от всех, DriveController по сети выключен.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

@@ -21,8 +21,8 @@ const MODE_HINTS: PackedStringArray = [
 	"ВОЛНЫ ВСЁ СИЛЬНЕЕ, БЕЗ ВОЗРОЖДЕНИЯ — ПОБЕЖДАЕТ ПОСЛЕДНИЙ ЖИВОЙ",
 ]
 const MAPS: Array[String] = ["res://levels/yard_level.tscn", "res://levels/street_level.tscn",
-	"res://levels/graveyard_level.tscn", "res://levels/test_level.tscn"]
-const MAP_NAMES: PackedStringArray = ["СТОЯНКА", "УЛИЦА", "КЛАДБИЩЕ", "ПОЛИГОН"]
+	"res://levels/graveyard_level.tscn", "res://levels/test_level.tscn", "res://levels/city_level.tscn"]
+const MAP_NAMES: PackedStringArray = ["СТОЯНКА", "УЛИЦА", "КЛАДБИЩЕ", "ПОЛИГОН", "ГОРОД"]
 const HUB_SCENE: String = "res://hub/hub.tscn"
 
 const PORT: int = 24680

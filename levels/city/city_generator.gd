@@ -9,6 +9,8 @@ extends Node3D
 
 ## Коллизия дерева — только ствол (коробка по всей кроне перекрывала двор)
 const TREE_TRUNK: Vector3 = Vector3(0.7, 4.0, 0.7)
+## Точек появления игроков по сети (ближайшие к центру дворы)
+const MATCH_SPAWNS: int = 8
 ## Взрывных бочек у дорог
 const EXPLOSIVE_BARRELS: int = 14
 const ROAD_TILE: float = 8.0
@@ -83,7 +85,11 @@ func _ready() -> void:
 	_spawn_pickups()
 	for spot: LootSpot in _loot_spots:
 		add_child(spot)
-	_spawn_survivors()
+	# По сети: выживших и эвакуации нет (это задание одиночной игры), игроки появляются во дворах
+	if Net.in_match:
+		_add_match_spawns()
+	else:
+		_spawn_survivors()
 	_build_bounds()
 
 
@@ -370,6 +376,18 @@ func _spawn_survivors() -> void:
 	evac.name = "EvacPoint"
 	evac.position = _closest_courtyard(Vector3.ZERO) + Vector3(0.0, 0.0, -2.0)
 	add_child(evac)
+
+
+## Точки появления игроков по сети (группа mp_spawn): дворы по порядку — одинаково у всех
+func _add_match_spawns() -> void:
+	var yards: Array[Vector3] = _courtyards.duplicate()
+	yards.sort_custom(func(a: Vector3, b: Vector3) -> bool: return a.length() < b.length())
+	for i in mini(yards.size(), MATCH_SPAWNS):
+		var marker := Marker3D.new()
+		marker.name = "MatchSpawn%d" % i
+		marker.position = yards[i] + Vector3.UP * 0.2
+		marker.add_to_group(&"mp_spawn")
+		add_child(marker)
 
 
 # ---------- MultiMesh и коллизии ----------

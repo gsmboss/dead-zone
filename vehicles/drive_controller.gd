@@ -37,6 +37,11 @@ func _ready() -> void:
 
 
 func _setup() -> void:
+	# По сети машины не синхронизируются — за руль только в одиночной игре
+	if Net.in_match:
+		set_process(false)
+		set_physics_process(false)
+		return
 	_player = get_tree().get_first_node_in_group(&"player") as Player
 	if _player == null:
 		push_warning("DriveController: игрок не найден")

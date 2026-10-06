@@ -618,7 +618,9 @@ func net_match_end(table: Dictionary, winner_text: String) -> void:
 
 func _collect_spawn_points() -> void:
 	_start_position = _player.global_position
-	for node: Node in get_tree().get_nodes_in_group(&"item_spawn"):
+	# Свои точки карты (город) важнее точек ящиков
+	var group: StringName = &"mp_spawn" if get_tree().has_group(&"mp_spawn") else &"item_spawn"
+	for node: Node in get_tree().get_nodes_in_group(group):
 		var node_3d := node as Node3D
 		if node_3d != null:
 			_spawn_points.append(node_3d.global_position + Vector3.UP * 0.2)
