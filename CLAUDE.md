@@ -264,4 +264,13 @@ Net.rpc_barrel_explode по пути узла). StaticProp с Barrel.gltf взр
 гасит ≤ 0.3; превью ui/torch_preview.gd в оружейной.
 Стройки в убежище нет (была и убрана по просьбе): в старых сохранениях ключ "blocks" игнорируется.
 
+Озвучка: ui/voice_over.gd (VoiceOver — синтез речи устройства DisplayServer TTS, язык ru/en по
+OS.get_locale_language и наличию голоса; project.godot audio/general/text_to_speech=true). CutsceneShot.voice_ru/
+voice_en — смешные реплики рассказчика (hub_intro.tres; интро миссии и босс — случайные из
+cutscene/voice_lines.tres, VoiceLines), текст реплики сверху, план ждёт конца фразы. Settings: voice_cutscenes,
+voice_camp, voice_volume (вкладка СЮЖЕТ).
+Разговоры у костра: hub/hub_camp.gd — у костра минимум 2 человека, диалоги hub/camp_chatter.tres (CampChatter:
+ru/en, по очереди двух людей, solo для одного), Label3D над головой, поворот друг к другу, голос со своим тоном
+(VOICE_PITCHES), если игрок ближе 6 м.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.
