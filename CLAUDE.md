@@ -245,4 +245,15 @@ get_campaign_progress (процент), get_rescued_count, get_house_count, get_
 «СНАРЯЖЕНИЕ» в оружейной, player/torch.gd (Torch на Head), кнопка «ФАКЕЛ» / T.
 Оружие по умолчанию: нож (бесплатно, первый в каталоге), пистолет (бесплатно, второй), остальное — покупка.
 
+Настройки по вкладкам (ui/settings_panel.gd: колонка вкладок слева, SettingsPanel._tab запоминается).
+Эффекты урона: Health.take_damage_from(amount, pos, head, Health.Kind, source_name, source) — тип урона
+(MELEE/BULLET/EXPLOSION/FIRE/ACID) и источник; ui/damage_indicator.gd — свечение края, дуга, шеврон, значок,
+имя стрелявшего, стрелка следит за атакующим; Player — толчок камеры (camera.rotation, _hit_roll/_hit_pitch).
+Settings: damage_direction, damage_flash, hit_shake, attacker_marker (вкладка ЭФФЕКТЫ).
+Сеть: карта матча грузится в фоне (Net._load_map, экран ЗАГРУЗКА КАРТЫ, снимает MatchManager), ENet timeout
+30–60 с, Net.pending_go/loaded не теряются, опоздавшему досылаются зомби; метка ▼ над тем, кто стреляет
+(MatchManager._mark_attacker), MatchHUD.show_attacker, кнопка В УБЕЖИЩЕ при долгом ожидании.
+TouchControls.input_blocked — меню по сети блокирует касания. HubWindow.refresh() — отложенный, раз за кадр.
+Ads: реклама грузится только после колбэка MobileAds.initialize (иначе краш на Android); hide_banner уничтожает AdView.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.
