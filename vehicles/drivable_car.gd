@@ -554,15 +554,34 @@ func _build_model() -> void:
 	_setup_materials(model)
 
 
-## Покраска кузова и светящиеся фары/стоп-сигналы (материалы Atlas, Headlights, BrakeLight моделей Quaternius)
-func _setup_materials(model: Node3D) -> void:
+## Покраска кузова модели Quaternius: меш с несколькими материалами — кузов (колёса — один материал, их не красим).
+## Атлас текстуры умножается на цвет; белый — заводской цвет
+static func paint_body(model: Node3D, paint_color: Color) -> void:
+	if model == null or paint_color == Color.WHITE:
+		return
 	var painted: StandardMaterial3D
+	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() < 2:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var material := mesh_instance.get_active_material(i) as StandardMaterial3D
+			if material == null or material.resource_name in ["Headlights", "BrakeLight"]:
+				continue
+			if painted == null:
+				painted = material.duplicate() as StandardMaterial3D
+				painted.albedo_color = material.albedo_color * paint_color
+			mesh_instance.set_surface_override_material(i, painted)
+
+
+## Покраска кузова и светящиеся фары/стоп-сигналы (материалы Headlights, BrakeLight моделей Quaternius)
+func _setup_materials(model: Node3D) -> void:
+	paint_body(model, paint)
 	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null:
 			continue
-		var surfaces: int = mesh_instance.mesh.get_surface_count()
-		for i in surfaces:
+		for i in mesh_instance.mesh.get_surface_count():
 			var material := mesh_instance.get_active_material(i) as StandardMaterial3D
 			if material == null:
 				continue
@@ -581,13 +600,6 @@ func _setup_materials(model: Node3D) -> void:
 						_brake_material.emission = BRAKE_COLOR
 						_brake_material.emission_energy_multiplier = 0.6
 					mesh_instance.set_surface_override_material(i, _brake_material)
-				_:
-					# Кузов — меш с несколькими материалами; колёса (один материал) не красим
-					if surfaces > 1 and paint != Color.WHITE:
-						if painted == null:
-							painted = material.duplicate() as StandardMaterial3D
-							painted.albedo_color = material.albedo_color * paint
-						mesh_instance.set_surface_override_material(i, painted)
 
 
 func _build_collision() -> void:

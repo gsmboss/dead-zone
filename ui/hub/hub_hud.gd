@@ -93,6 +93,8 @@ func _build_ui() -> void:
 	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
 	_base_button = _add_menu_button("БАЗА", func() -> void: _open_window(BasePanel.new()))
 	_add_menu_button("ПЕРСОНАЖ", func() -> void: _open_window(SkinPanel.new()))
+	var cars := _add_menu_button("МАШИНЫ", func() -> void: _open_window(CarPanel.new()))
+	cars.modulate = Color(0.8, 1.0, 0.8)
 	var online := _add_menu_button("ПО СЕТИ", func() -> void: _open_window(LobbyPanel.new()))
 	online.modulate = Color(0.75, 0.95, 1.0)
 
