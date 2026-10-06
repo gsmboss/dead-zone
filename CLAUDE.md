@@ -282,4 +282,8 @@ Crosshair кладёт ХЕДШОТ и оптику в CanvasLayer HUD (приц
 вместо выживших/эвакуации, MatchManager берёт mp_spawn раньше item_spawn, ZombieSpawner в открытом мире
 спавнит вокруг случайного игрока и убирает зомби далеко от всех, DriveController по сети выключен.
 
+Модели оружия: ВИНТОВКА — models/weapons/AssaultRifle.glb, AWM — SniperRifle.glb (Quaternius Ultimate Gun Pack,
+перегнаны в оси старых моделей: ствол +Z, кончик ствола как у SMG.gltf — подгонка rifle.tres сохранена).
+Конвертер OBJ→GLB был скриптом trimesh (оси, масштаб по кончику ствола, цвета MTL ×2.5).
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

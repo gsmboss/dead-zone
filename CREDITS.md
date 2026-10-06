@@ -15,6 +15,9 @@
 - models/graveyard/ — Kenney, Graveyard Kit 5.0: https://kenney.nl/assets/graveyard-kit
 - models/survival/ — Kenney, Survival Kit: https://kenney.nl/assets/survival-kit
 - models/industrial/ — Kenney, City Kit (Industrial) 2.0: https://kenney.nl/assets/city-kit-industrial
+- models/weapons/AssaultRifle.glb (AssaultRifle2_1), SniperRifle.glb (SniperRifle_3) — Quaternius,
+  Ultimate Gun Pack (CC0): https://opengameart.org/content/low-poly-guns-pack — OBJ перегнан в GLB:
+  ствол по +Z, верх +Y, масштаб под старые модели набора Zombie Kit, цвета MTL ×2.5 светлее.
 
 ## Звуки (audio/, перекодировано в OGG mono 44.1 kHz)
 - weapons/pistol_shot, rifle_shot, shotgun_shot — "Gunshot Sounds" (tabasco),

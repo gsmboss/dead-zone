@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://5jq04uokjeru"]
 
 [ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_1nbgd"]
-[ext_resource type="PackedScene" uid="uid://bfapymd7uvxce" path="res://models/weapons/SMG.gltf" id="2_vmvxp"]
+[ext_resource type="PackedScene" path="res://models/weapons/AssaultRifle.glb" id="2_vmvxp"]
 [ext_resource type="AudioStream" path="res://audio/weapons/rifle_shot.ogg" id="s_fire"]
 [ext_resource type="AudioStream" path="res://audio/weapons/rifle_reload.ogg" id="s_reload"]
 
