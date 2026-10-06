@@ -57,6 +57,7 @@ func _build_location() -> void:
 
 	# Деревья внутри, камни, пни, ящики лагеря
 	_scatter(PINES, 22, Vector2(KENNEY_SCALE * 1.1, KENNEY_SCALE * 1.6), 2.4, true, PINE_TRUNK, 5.0)
+	_explosive_barrels(3)
 	_scatter(ROCKS, 16, Vector2(KENNEY_SCALE, KENNEY_SCALE * 1.5), 1.6)
 	_scatter(CAMP_PROPS, 12, Vector2(SURVIVAL_SCALE, SURVIVAL_SCALE), 1.2)
 	_scatter([ENV + "Pallet_Broken.gltf", ENV + "TrashBag_1.gltf", ENV + "Wheel.gltf"], 6, Vector2(1.0, 1.0), 1.0, false)

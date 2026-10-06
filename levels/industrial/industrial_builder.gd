@@ -73,6 +73,7 @@ func _build_location() -> void:
 	_scatter(COVER, 24, Vector2(1.0, 1.3), 1.8)
 	_scatter(WRECKS, 3, Vector2(1.0, 1.0), 4.0)
 	_scatter([IND + "detail-tank.glb"], 4, Vector2(KIT_SCALE * 0.6, KIT_SCALE * 0.7), 2.5)
+	_explosive_barrels(7)
 	# Бочки с огнём — свет в смоге
 	for i in 4:
 		var at := Vector3(_rng.randf_range(-20.0, 20.0), 0.0, _rng.randf_range(-20.0, 20.0))

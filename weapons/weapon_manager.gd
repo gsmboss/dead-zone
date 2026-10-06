@@ -635,8 +635,8 @@ func _shoot_along(weapon: WeaponData, direction: Vector3) -> Dictionary:
 	if not hitbox.apply_hit(weapon.damage, hit_position):
 		return {}
 	if _impacts != null:
-		_impacts.spawn(hit_position, hit_normal, true)
-	_play_hit_sound(Sfx.sounds.flesh_hits, hit_position)
+		_impacts.spawn(hit_position, hit_normal, hitbox.flesh)
+	_play_hit_sound(Sfx.sounds.flesh_hits if hitbox.flesh else Sfx.sounds.metal_hits, hit_position)
 	return {
 		"hit": true,
 		"head": hitbox.is_head,
@@ -685,7 +685,8 @@ func _update_target(weapon: WeaponData, delta: float) -> void:
 	var origin: Vector3 = camera.global_position
 	var result: Dictionary = _raycast(origin, origin - camera.global_basis.z * weapon.max_range)
 	var hitbox := result.get("collider") as Hitbox
-	_target_in_sight = hitbox != null and hitbox.health != null and not hitbox.health.is_dead
+	_target_in_sight = hitbox != null and hitbox.auto_target and hitbox.health != null \
+		and not hitbox.health.is_dead
 	_target_time = _target_time + delta if _target_in_sight else 0.0
 
 

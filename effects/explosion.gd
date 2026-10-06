@@ -10,6 +10,8 @@ var radius: float = 4.5
 var damage: float = 60.0
 ## Доля урона по игроку (своя граната бьёт слабее)
 var player_damage_scale: float = 0.5
+## Урон зомби (по сети у клиента — нет: зомби ведёт хост, он считает тот же взрыв сам)
+var damage_zombies: bool = true
 
 var _light: OmniLight3D
 var _time: float = 0.0
@@ -51,6 +53,17 @@ func _process(delta: float) -> void:
 
 
 func _apply_damage() -> void:
+	# Цепная реакция: бочки рядом взрываются следом (ближние — раньше)
+	for node: Node in get_tree().get_nodes_in_group(ExplosiveBarrel.GROUP):
+		var barrel := node as ExplosiveBarrel
+		if barrel == null:
+			continue
+		var barrel_distance: float = barrel.get_center().distance_to(global_position)
+		if barrel_distance <= radius * 0.9:
+			barrel.ignite(0.12 + barrel_distance * 0.05)
+	if not damage_zombies:
+		_damage_player()
+		return
 	for node: Node in get_tree().get_nodes_in_group(&"zombies"):
 		var zombie := node as Zombie
 		if zombie == null or zombie.state == Zombie.State.DEAD:
@@ -62,7 +75,10 @@ func _apply_damage() -> void:
 		var falloff: float = 1.0 - distance / radius
 		var push: Vector3 = offset.normalized() * 14.0 * falloff if distance > 0.01 else Vector3.UP
 		zombie.apply_blast(damage * (0.35 + 0.65 * falloff), push)
+	_damage_player()
 
+
+func _damage_player() -> void:
 	var player := get_tree().get_first_node_in_group(&"player") as Player
 	if player == null or player.health == null or player.health.is_dead:
 		return

@@ -12,6 +12,11 @@ extends StaticBody3D
 @export var custom_center: Vector3 = Vector3.ZERO
 ## Минимальная толщина авто-коробки, чтобы плоские объекты не проваливались
 @export var min_thickness: float = 0.1
+## Взрывается от выстрела. Бочки Barrel.gltf взрывные сами (кроме убежища)
+@export var explosive: bool = false
+
+const EXPLOSIVE_MODELS: PackedStringArray = ["res://models/environment/Barrel.gltf"]
+const HUB_SCENE: String = "res://hub/hub.tscn"
 
 
 func _ready() -> void:
@@ -39,6 +44,24 @@ func _ready() -> void:
 	collision.shape = shape
 	collision.position = box_center
 	add_child(collision)
+	_setup_explosive.call_deferred(AABB(box_center - box_size * 0.5, box_size))
+
+
+## Взрывная бочка (после загрузки сцены: в убежище не взрываем)
+func _setup_explosive(bounds: AABB) -> void:
+	if not is_inside_tree():
+		return
+	var scene: Node = get_tree().current_scene
+	if scene != null and scene.scene_file_path == HUB_SCENE:
+		return
+	var is_barrel: bool = explosive
+	if not is_barrel:
+		for child: Node in get_children():
+			if child.scene_file_path in EXPLOSIVE_MODELS:
+				is_barrel = true
+				break
+	if is_barrel:
+		ExplosiveBarrel.attach(self, bounds)
 
 
 ## Габариты всех MeshInstance3D-потомков в локальных координатах этого тела

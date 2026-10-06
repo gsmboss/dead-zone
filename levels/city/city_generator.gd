@@ -9,6 +9,8 @@ extends Node3D
 
 ## Коллизия дерева — только ствол (коробка по всей кроне перекрывала двор)
 const TREE_TRUNK: Vector3 = Vector3(0.7, 4.0, 0.7)
+## Взрывных бочек у дорог
+const EXPLOSIVE_BARRELS: int = 14
 const ROAD_TILE: float = 8.0
 const ROAD_HALF_WIDTH: float = 4.0
 ## Отступ построек от края дороги (тротуар)
@@ -267,6 +269,11 @@ func _build_props() -> void:
 		var scene: PackedScene = _pick(config.props)
 		_no_shadow[scene] = true
 		_add_static(scene, _xform(at, _rng.randf() * TAU, 1.0))
+	# Взрывные бочки у дорог
+	for i in EXPLOSIVE_BARRELS:
+		var spot: Dictionary = _random_road_spot(ROAD_HALF_WIDTH + 0.9)
+		if not spot.is_empty() and (spot["position"] as Vector3).length() > 6.0:
+			ExplosiveBarrel.spawn(self, spot["position"], i)
 
 
 ## Случайная точка на дороге (не у перекрёстка), сдвинутая от оси на lateral метров

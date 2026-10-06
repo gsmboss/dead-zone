@@ -7,6 +7,10 @@ extends Area3D
 @export_range(0.1, 10.0, 0.1) var damage_multiplier: float = 1.0
 ## Попадание в эту зону считается хедшотом
 @export var is_head: bool = false
+## Живая цель: кровь и звук попадания по телу. false — искры и звук металла (бочка)
+@export var flesh: bool = true
+## Помощь прицеливания и автоогонь считают это целью (бочку — нет, иначе автоогонь взорвёт её рядом)
+@export var auto_target: bool = true
 
 ## Сейчас идёт урон от выстрела через хитбокс (мультиплеер: отличить выстрел от удара зомби)
 static var applying: bool = false

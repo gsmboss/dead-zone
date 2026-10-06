@@ -582,6 +582,15 @@ func rpc_zombie_remove(net_id: int) -> void:
 	_forward(&"net_zombie_remove", [net_id])
 
 
+## Взрывная бочка взорвалась у кого-то из игроков — взрываем её у всех
+@rpc("any_peer", "call_remote", "reliable")
+func rpc_barrel_explode(prop_path: NodePath) -> void:
+	var prop: Node = get_tree().root.get_node_or_null(prop_path)
+	var barrel := prop.get_node_or_null(^"ExplosiveBarrel") as ExplosiveBarrel if prop != null else null
+	if barrel != null:
+		barrel.explode_remote()
+
+
 @rpc("any_peer", "call_remote", "reliable")
 func rpc_zombie_damage(net_id: int, amount: float, is_head: bool) -> void:
 	_forward(&"net_zombie_damage", [multiplayer.get_remote_sender_id(), net_id, amount, is_head])

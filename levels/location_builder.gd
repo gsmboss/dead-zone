@@ -95,6 +95,21 @@ func _ring(path: String, step: float, scale_value: float, offset: float = 1.0, y
 			_place(path, at, yaw + yaw_offset, scale_value, false)
 
 
+## Взрывные бочки (красные) по свободным местам
+func _explosive_barrels(count: int) -> void:
+	var placed: int = 0
+	var attempts: int = 0
+	while placed < count and attempts < count * 15:
+		attempts += 1
+		var at := Vector3(_rng.randf_range(-half_size + 4.0, half_size - 4.0), 0.0,
+			_rng.randf_range(-half_size + 4.0, half_size - 4.0))
+		if not _is_free(at, 1.2):
+			continue
+		ExplosiveBarrel.spawn(self, at, placed)
+		_keep_clear.append(at)
+		placed += 1
+
+
 ## Огонь с живым светом (костры, бочки с огнём)
 func _fire(at: Vector3, height: float = 0.4, light_range: float = 8.0) -> void:
 	var light := OmniLight3D.new()
