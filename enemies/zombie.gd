@@ -45,6 +45,14 @@ const WALL_FOLLOW_TIME: float = 0.35
 const MAX_UNSTUCK_TRIES: int = 4
 ## Дальше этого от навмеша зомби считается «выпавшим» с него
 const OFF_MESH_DISTANCE: float = 0.8
+## Мягкое расталкивание толпы: радиус, сила и как часто пересчитывать
+const SEPARATION_RADIUS: float = 1.1
+const SEPARATION_WEIGHT: float = 1.2
+const SEPARATION_INTERVAL: float = 0.1
+## Все живые зомби (для расталкивания без поиска по группе)
+static var _all: Array[Zombie] = []
+var _separation: Vector3 = Vector3.ZERO
+var _separation_timer: float = 0.0
 const FLASH_TIME: float = 0.08
 const CORPSE_TIME: float = 4.0
 const SINK_TIME: float = 1.5
@@ -233,8 +241,11 @@ var _hurt_sound_cooldown: float = 0.0
 
 func _ready() -> void:
 	add_to_group(&"zombies")
+	_all.append(self)
 	collision_layer = PhysicsLayers.ENEMY
-	collision_mask = PhysicsLayers.WORLD | PhysicsLayers.ENEMY | PhysicsLayers.PLAYER
+	# Друг с другом не сталкиваются (толпа запирала сама себя в проходах) — держат дистанцию
+	# мягким расталкиванием (_update_separation)
+	collision_mask = PhysicsLayers.WORLD | PhysicsLayers.PLAYER
 
 	if data == null:
 		push_warning("Zombie '%s': data не назначена, используются значения по умолчанию" % name)
@@ -252,6 +263,7 @@ func _ready() -> void:
 
 	# Индивидуальность каждого зомби
 	_rng.randomize()
+	_separation_timer = _rng.randf() * SEPARATION_INTERVAL  # не все зомби в один кадр
 	_speed_multiplier = 1.0 + _rng.randf_range(-data.speed_variation, data.speed_variation)
 	# Сектора по золотому углу: каждый новый зомби заходит со своей стороны
 	_flank_angle = fmod(_flank_counter * GOLDEN_ANGLE, TAU)
@@ -504,6 +516,7 @@ func _pick_search_point() -> bool:
 
 func _exit_tree() -> void:
 	_release_token()
+	_all.erase(self)
 
 
 func _try_take_token() -> void:
@@ -832,6 +845,11 @@ func _move_to(target: Vector3, speed: float, delta: float) -> void:
 		if next_point.length_squared() > 0.01:
 			direction = next_point
 
+	# Расходимся с соседями: толпа обтекает друг друга, а не слипается в одну точку
+	_update_separation(delta)
+	if _separation.length_squared() > 0.0001 and direction.length_squared() > 0.0001:
+		direction = direction.normalized() + _separation * SEPARATION_WEIGHT
+
 	if _unstuck_left > 0.0:
 		_unstuck_left -= delta
 		direction = _unstuck_direction
@@ -848,6 +866,32 @@ func _move_to(target: Vector3, speed: float, delta: float) -> void:
 	_set_desired_velocity(direction * speed)
 	_play_locomotion(speed)
 	_check_stuck(speed, delta)
+
+
+## Отталкивание от живых зомби рядом (раз в SEPARATION_INTERVAL, без аллокаций)
+func _update_separation(delta: float) -> void:
+	_separation_timer -= delta
+	if _separation_timer > 0.0:
+		return
+	_separation_timer = SEPARATION_INTERVAL
+	_separation = Vector3.ZERO
+	var radius_sq: float = SEPARATION_RADIUS * SEPARATION_RADIUS
+	for other: Zombie in _all:
+		if other == self or not is_instance_valid(other) or other.state == State.DEAD:
+			continue
+		var offset: Vector3 = global_position - other.global_position
+		offset.y = 0.0
+		var distance_sq: float = offset.length_squared()
+		if distance_sq >= radius_sq:
+			continue
+		if distance_sq < 0.0001:
+			# Стоят в одной точке — расходимся в случайную сторону
+			offset = Vector3(_rng.randf_range(-1.0, 1.0), 0.0, _rng.randf_range(-1.0, 1.0))
+			distance_sq = maxf(offset.length_squared(), 0.0001)
+		var distance: float = sqrt(distance_sq)
+		_separation += offset / distance * (1.0 - distance / SEPARATION_RADIUS)
+	if _separation.length_squared() > 1.0:
+		_separation = _separation.normalized()
 
 
 func _check_stuck(speed: float, delta: float) -> void:
