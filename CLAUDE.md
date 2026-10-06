@@ -262,12 +262,6 @@ Net.rpc_barrel_explode по пути узла). StaticProp с Barrel.gltf взр
 в городе, промзоне, лесу. Explosion.damage_zombies=false у клиента по сети.
 Факел: Settings.torch_auto — Player._update_auto_torch зажигает ночью (DayNightCycle.night_amount ≥ 0.5),
 гасит ≤ 0.3; превью ui/torch_preview.gd в оружейной.
-Стройка в убежище (как в Minecraft): base/build_piece.gd (BuildPiece: BLOCK — куб с пиксельной текстурой
-по Pattern, MODEL — модель survival в клетке; цена монеты + лом, solid, свет), base/build_catalog.tres
-(BuildCatalog), GameState: _blocks "x,y,z" → [id, поворот], place_block/remove_block (возврат 50%),
-MAX_BLOCKS 500, сигнал blocks_changed. hub/base_builder.gd (BaseBuilder, группа base_builder: MultiMesh на вид
-блока, коробки в StaticBody WORLD, свет ≤ 8, can_place: границы ±7, терминалы, лагерь, игрок, предметы, деньги).
-ui/hub/build_mode.gd (BuildMode: прицел, призрак, палитра справа, ПОСТАВИТЬ/УБРАТЬ/ПОВЕРНУТЬ/ГОТОВО,
-F/R/Q на ПК), кнопка СТРОЙКА в HubHUD. TouchControls.blocked_areas — касания по панелям не управляют игроком.
+Стройки в убежище нет (была и убрана по просьбе): в старых сохранениях ключ "blocks" игнорируется.
 
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

@@ -14,8 +14,6 @@ var input_blocked: bool = false:
 		input_blocked = value
 		if value:
 			reset_all()
-## Панели поверх управления (палитра стройки и т.п.): касание в них не двигает игрока и камеру
-var blocked_areas: Array[Control] = []
 var _button_touches: Dictionary = {}  # индекс пальца -> TouchActionButton
 var _joystick_index: int = -1
 var _look_index: int = -1
@@ -106,10 +104,6 @@ func _input(event: InputEvent) -> void:
 func _on_touch_pressed(index: int, pos: Vector2) -> void:
 	# Защита от повторного press с тем же индексом без release
 	_on_touch_released(index)
-
-	for area: Control in blocked_areas:
-		if is_instance_valid(area) and area.is_visible_in_tree() and area.get_global_rect().has_point(pos):
-			return
 
 	for button: TouchActionButton in _buttons:
 		if is_instance_valid(button) and button.is_visible_in_tree() \

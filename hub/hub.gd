@@ -11,10 +11,6 @@ func _ready() -> void:
 	var camp := HubCamp.new()
 	camp.name = "Camp"
 	add_child(camp)
-	# Постройки игрока (стройка как в Minecraft — режим СТРОЙКА в меню)
-	var builder := BaseBuilder.new()
-	builder.name = "Builder"
-	add_child(builder)
 	_play_intro.call_deferred()
 
 

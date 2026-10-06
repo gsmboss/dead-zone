@@ -11,8 +11,6 @@ signal inventory_changed
 signal skin_changed(skin: PlayerSkin)
 signal gear_changed
 signal campaign_changed
-## Стройка в убежище: поставлен или убран блок (cell), Vector3i.MAX — перестроить всё
-signal blocks_changed(cell: Vector3i)
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -24,11 +22,6 @@ const DEBUG_COINS: int = 1000
 const PLAYER_STATS_PATH: String = "res://player/player_stats.tres"
 const QUEST_POOL_PATH: String = "res://quests/quest_pool.tres"
 const CAMPAIGN_PATH: String = "res://story/campaign.tres"
-const BUILD_CATALOG_PATH: String = "res://base/build_catalog.tres"
-## Сколько блоков можно поставить в убежище (производительность телефона)
-const MAX_BLOCKS: int = 500
-## Доля цены, возвращаемая при разборке
-const BLOCK_REFUND: float = 0.5
 const PLAYER_UPGRADES: Array[String] = ["health", "armor"]
 ## Каждое прохождение миссии: зомби сильнее на 15% (до x3), награда больше на 10% (до x2)
 const DIFFICULTY_PER_CLEAR: float = 0.15
@@ -90,9 +83,6 @@ var campaign: CampaignData
 var _chapters_done: Array[String] = []
 ## Рассказ, который покажется в убежище: id главы (концовка) или "epilogue"
 var _pending_story: String = ""
-## Каталог стройки и постройки игрока: "x,y,z" → [id блока, поворот 0..3]
-var build_catalog: BuildCatalog
-var _blocks: Dictionary = {}
 var _gear_owned: Array[String] = []
 var _skins_owned: Array[String] = []
 var _skin_id: String = ""
@@ -126,11 +116,6 @@ func _ready() -> void:
 			push_warning("GameState: не найдена постройка %s" % path)
 			continue
 		buildings.append(building)
-	if ResourceLoader.exists(BUILD_CATALOG_PATH):
-		build_catalog = load(BUILD_CATALOG_PATH) as BuildCatalog
-	if build_catalog == null:
-		push_warning("GameState: не найден каталог стройки %s" % BUILD_CATALOG_PATH)
-		build_catalog = BuildCatalog.new()
 	if ResourceLoader.exists(CAMPAIGN_PATH):
 		campaign = load(CAMPAIGN_PATH) as CampaignData
 	if campaign == null:
@@ -766,7 +751,6 @@ func reset_progress() -> void:
 	_gear_owned.clear()
 	_chapters_done.clear()
 	_pending_story = ""
-	_blocks.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -776,73 +760,7 @@ func reset_progress() -> void:
 	gear_changed.emit()
 	campaign_changed.emit()
 	skin_changed.emit(get_selected_skin())
-	blocks_changed.emit(Vector3i.MAX)
 	save_game()
-
-
-# ---------- Стройка в убежище ----------
-
-static func cell_key(cell: Vector3i) -> String:
-	return "%d,%d,%d" % [cell.x, cell.y, cell.z]
-
-
-## Клетка из ключа "x,y,z"; Vector3i.MAX — ключ испорчен
-static func parse_cell(key: String) -> Vector3i:
-	var parts: PackedStringArray = key.split(",")
-	if parts.size() != 3 or not parts[0].is_valid_int() or not parts[1].is_valid_int() \
-			or not parts[2].is_valid_int():
-		return Vector3i.MAX
-	return Vector3i(int(parts[0]), int(parts[1]), int(parts[2]))
-
-
-## Все постройки: "x,y,z" → [id, поворот]. Не менять снаружи
-func get_blocks() -> Dictionary:
-	return _blocks
-
-
-func get_block(cell: Vector3i) -> Array:
-	return _blocks.get(cell_key(cell), [])
-
-
-func get_block_count() -> int:
-	return _blocks.size()
-
-
-func can_afford_piece(piece: BuildPiece) -> bool:
-	return piece != null and coins >= piece.price and get_item_count(SCRAP_ID) >= piece.scrap
-
-
-## Поставить блок (оплата монетами и ломом). Проверку места делает BaseBuilder
-func place_block(cell: Vector3i, piece_id: String, rotation_step: int) -> bool:
-	var piece: BuildPiece = build_catalog.find(piece_id)
-	if piece == null or _blocks.has(cell_key(cell)) or _blocks.size() >= MAX_BLOCKS or not can_afford_piece(piece):
-		return false
-	coins -= piece.price
-	if piece.scrap > 0:
-		remove_item(SCRAP_ID, piece.scrap)
-	_blocks[cell_key(cell)] = [piece_id, posmod(rotation_step, 4)]
-	coins_changed.emit(coins)
-	blocks_changed.emit(cell)
-	save_game()
-	return true
-
-
-## Разобрать блок: половина цены возвращается. Возвращает разобранный блок или null
-func remove_block(cell: Vector3i) -> BuildPiece:
-	var key: String = cell_key(cell)
-	if not _blocks.has(key):
-		return null
-	var piece: BuildPiece = build_catalog.find(str((_blocks[key] as Array)[0]))
-	_blocks.erase(key)
-	if piece != null:
-		coins += floori(piece.price * BLOCK_REFUND)
-		var scrap_back: int = floori(piece.scrap * BLOCK_REFUND)
-		if scrap_back > 0:
-			add_item(SCRAP_ID, scrap_back)
-		coins_changed.emit(coins)
-	blocks_changed.emit(cell)
-	save_game()
-	return piece
 
 
 # ---------- Сохранение ----------
@@ -870,7 +788,6 @@ func save_game() -> void:
 		"chapters_done": _chapters_done,
 		"pending_story": _pending_story,
 		"skin": _skin_id,
-		"blocks": _blocks,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -979,18 +896,6 @@ func load_game() -> void:
 	if seen is Array:
 		for cutscene_id: Variant in seen:
 			_cutscenes_seen.append(str(cutscene_id))
-
-	_blocks.clear()
-	var stored_blocks: Variant = data.get("blocks", {})
-	if stored_blocks is Dictionary:
-		for key: Variant in stored_blocks:
-			var entry: Variant = stored_blocks[key]
-			var cell: Vector3i = parse_cell(str(key))
-			if not entry is Array or (entry as Array).size() < 2 or cell == Vector3i.MAX:
-				continue
-			var piece_id: String = str((entry as Array)[0])
-			if build_catalog.find(piece_id) != null and _blocks.size() < MAX_BLOCKS:
-				_blocks[cell_key(cell)] = [piece_id, posmod(int((entry as Array)[1]), 4)]
 
 	_buildings_owned.clear()
 	var owned_buildings: Variant = data.get("buildings", [])

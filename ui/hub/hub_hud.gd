@@ -15,7 +15,6 @@ var _interact_button: Button
 var _current: Interactable
 var _window: HubWindow
 var _player: Player
-var _build_mode: BuildMode
 
 
 func _ready() -> void:
@@ -36,9 +35,6 @@ func _process(_delta: float) -> void:
 
 ## «Назад» в убежище: закрыть окно, иначе спросить про выход
 func _on_back() -> void:
-	if _build_mode != null:
-		_build_mode.close()
-		return
 	if _exit_panel != null:
 		_exit_panel.queue_free()
 		_exit_panel = null
@@ -96,8 +92,6 @@ func _build_ui() -> void:
 	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", func() -> void: _open_window(DailyPanel.new()))
 	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
 	_base_button = _add_menu_button("БАЗА", func() -> void: _open_window(BasePanel.new()))
-	var build := _add_menu_button("СТРОЙКА", _open_build_mode)
-	build.modulate = Color(0.7, 1.0, 0.6)
 	_add_menu_button("ПЕРСОНАЖ", func() -> void: _open_window(SkinPanel.new()))
 	var online := _add_menu_button("ПО СЕТИ", func() -> void: _open_window(LobbyPanel.new()))
 	online.modulate = Color(0.75, 0.95, 1.0)
@@ -202,7 +196,7 @@ func _update_daily_badge() -> void:
 func _on_player_entered(interactable: Interactable) -> void:
 	_current = interactable
 	_interact_button.text = interactable.prompt
-	_interact_button.visible = _window == null and _build_mode == null
+	_interact_button.visible = _window == null
 
 
 func _on_player_exited(interactable: Interactable) -> void:
@@ -212,7 +206,7 @@ func _on_player_exited(interactable: Interactable) -> void:
 
 
 func _interact() -> void:
-	if _current == null or _window != null or _build_mode != null:
+	if _current == null or _window != null:
 		return
 	match _current.action_id:
 		&"missions":
@@ -224,25 +218,6 @@ func _interact() -> void:
 			_open_window(ShopPanel.new())
 		_:
 			_current.interact()
-
-
-## Режим стройки: игрок ходит, меню и баннер спрятаны, справа палитра блоков
-func _open_build_mode() -> void:
-	if _window != null or _build_mode != null:
-		return
-	_build_mode = BuildMode.new()
-	_build_mode.closed.connect(_on_build_mode_closed)
-	add_child(_build_mode)
-	_menu_bar.visible = false
-	_interact_button.visible = false
-	Ads.hide_banner()
-
-
-func _on_build_mode_closed() -> void:
-	_build_mode = null
-	_menu_bar.visible = true
-	_interact_button.visible = _current != null
-	Ads.show_banner()
 
 
 func _menu_top() -> float:
