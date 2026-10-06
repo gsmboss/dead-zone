@@ -280,10 +280,26 @@ bolt_sound), ui/scope_overlay.gd (оптика на весь экран; WeaponM
 Crosshair кладёт ХЕДШОТ и оптику в CanvasLayer HUD (прицел лежит в CenterContainer).
 Город по сети: Net.MAPS + city_level («ГОРОД»), CityGenerator по сети ставит Marker3D группы mp_spawn (дворы)
 вместо выживших/эвакуации, MatchManager берёт mp_spawn раньше item_spawn, ZombieSpawner в открытом мире
-спавнит вокруг случайного игрока и убирает зомби далеко от всех, DriveController по сети выключен.
+спавнит вокруг случайного игрока и убирает зомби далеко от всех.
 
 Модели оружия: ВИНТОВКА — models/weapons/AssaultRifle.glb, AWM — SniperRifle.glb (Quaternius Ultimate Gun Pack,
 перегнаны в оси старых моделей: ствол +Z, кончик ствола как у SMG.gltf — подгонка rifle.tres сохранена).
 Конвертер OBJ→GLB был скриптом trimesh (оси, масштаб по кончику ствола, цвета MTL ×2.5).
 
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.
+
+Машины: DrivableCar — фары и рассеянный свет, пока в машине кто-то есть (ночью ярче), стоп-сигналы (материалы
+Headlights/BrakeLight моделей), занос (speed вдоль + lateral вбок, grip/drift_grip, ручник — кнопка прыжка
+становится «ДРИФТ», Space), дым шин, очки дрифта и монеты (DriveController, только одиночная игра).
+Автосалон: vehicles/car_data.gd (CarData: класс D/C/B/A, цена, ходовые), vehicles/cars/*.tres, GameState.cars,
+owns_car (бесплатная, купленная или модель из сюжета), select_car, тюнинг CAR_TUNING engine/turbo/handling/ram,
+покраска CAR_PAINTS (DrivableCar.paint_body умножает атлас кузова), неон CAR_NEONS (-1 — куплен, выключен);
+окно ui/hub/car_panel.gd (CarPanel, кнопка «МАШИНЫ»), превью ui/hub/car_preview.gd. Гараж базы — общий бонус.
+Машины по сети: места DrivableCar.seats (водитель + 3 пассажира) раздаёт хост (Net.request_car_seat,
+rpc_car_seats), водитель шлёт rpc_car_state 20/с, у остальных машина — копия; копии игроков в машинах
+прячет MatchManager.set_proxy_in_car. В Net.players[*]["car"] — GameState.get_car_net_info(), Net.PROTOCOL = 2.
+Город: 7×7 кварталов по 48 м, проспекты 24 м (кольцо и бульвар вокруг центра, асфальт + разметка MultiMesh),
+дрифт-площадь за бульваром (CityConfig.wide_avenues/drift_plaza), своя машина «MyCar» у старта,
+по сети — «PlayerCar_<peer_id>» у каждого игрока в ближних дворах.
+Лагерь: hub/camp_chatter.tres — 36 диалогов, шутки игрока jokes_*, факты facts_*, ask_*; зона «ПОГОВОРИТЬ»
+у костра (HubCamp: меню ПОШУТИТЬ / УЗНАТЬ ФАКТ, реплика игрока субтитром, ответ ближайшего выжившего).
