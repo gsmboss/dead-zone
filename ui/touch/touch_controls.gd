@@ -8,6 +8,12 @@ extends Control
 @export var hide_without_touchscreen: bool = false
 
 var _buttons: Array[TouchActionButton] = []
+## Открыто меню поверх игры (по сети игра не на паузе): касания не управляют игроком
+var input_blocked: bool = false:
+	set(value):
+		input_blocked = value
+		if value:
+			reset_all()
 var _button_touches: Dictionary = {}  # индекс пальца -> TouchActionButton
 var _joystick_index: int = -1
 var _look_index: int = -1
@@ -82,7 +88,7 @@ func reset_all() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not is_visible_in_tree():
+	if not is_visible_in_tree() or input_blocked:
 		return
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch

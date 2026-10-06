@@ -7,6 +7,8 @@ extends Node3D
 ## коллизии — коробки в одном StaticBody3D (по ним строится навмеш RuntimeNavRegion).
 ## Должен быть дочерним узлом NavigationRegion3D со скриптом runtime_nav_region.gd.
 
+## Коллизия дерева — только ствол (коробка по всей кроне перекрывала двор)
+const TREE_TRUNK: Vector3 = Vector3(0.7, 4.0, 0.7)
 const ROAD_TILE: float = 8.0
 const ROAD_HALF_WIDTH: float = 4.0
 ## Отступ построек от края дороги (тротуар)
@@ -201,14 +203,14 @@ func _place_building(lot_center: Vector3, lot: float, ix: int, iz: int, downtown
 	# У домов — дерево во дворе
 	if not downtown and not config.trees.is_empty() and _rng.randf() < 0.5:
 		var tree_offset: Vector3 = -facing * lot * 0.42 + Vector3(_rng.randf_range(-2.0, 2.0), 0.0, _rng.randf_range(-2.0, 2.0))
-		_add_static(_pick(config.trees), _xform(lot_center + tree_offset, _rng.randf() * TAU, config.tree_scale))
+		_add_static(_pick(config.trees), _xform(lot_center + tree_offset, _rng.randf() * TAU, config.tree_scale), TREE_TRUNK)
 
 
 func _decorate_empty_lot(lot_center: Vector3, lot: float, downtown: bool) -> void:
 	if not downtown and not config.trees.is_empty():
 		for i in 2:
 			var offset := Vector3(_rng.randf_range(-lot, lot) * 0.35, 0.0, _rng.randf_range(-lot, lot) * 0.35)
-			_add_static(_pick(config.trees), _xform(lot_center + offset, _rng.randf() * TAU, config.tree_scale))
+			_add_static(_pick(config.trees), _xform(lot_center + offset, _rng.randf() * TAU, config.tree_scale), TREE_TRUNK)
 	else:
 		_courtyards.append(lot_center)  # пустырь в центре — как двор
 
@@ -373,10 +375,17 @@ func _add_static(scene: PackedScene, xform: Transform3D, custom_box: Vector3 = V
 	if custom_box != Vector3.ZERO:
 		_add_box_collision(xform.origin + Vector3.UP * custom_box.y * 0.5, custom_box)
 		return
-	var bounds: AABB = xform * _scene_bounds(scene)
-	if bounds.size.x < 0.05 or bounds.size.z < 0.05:
+	# Коробка повёрнута вместе с моделью (AABB повёрнутой модели заметно шире)
+	var local: AABB = _scene_bounds(scene)
+	var box_size: Vector3 = local.size * xform.basis.get_scale().abs()
+	if box_size.x < 0.05 or box_size.z < 0.05:
 		return
-	_add_box_collision(bounds.get_center(), bounds.size)
+	var box := BoxShape3D.new()
+	box.size = box_size.max(Vector3.ONE * 0.1)
+	var shape := CollisionShape3D.new()
+	shape.shape = box
+	shape.transform = Transform3D(xform.basis.orthonormalized(), xform * local.get_center())
+	_body.add_child(shape)
 
 
 func _add_instance(scene: PackedScene, xform: Transform3D) -> void:

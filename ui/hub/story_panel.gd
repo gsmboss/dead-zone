@@ -8,6 +8,8 @@ signal finished
 
 ## Рассказ открыт: «Назад» закрывает его, а не окна под ним
 static var is_open: bool = false
+## Сколько рассказов открыто (эпилог открывается из finished главы — флаг одного окна сбрасывался)
+static var _open_count: int = 0
 
 const CHARS_PER_SECOND: float = 42.0
 const RUST: Color = Color(0.85, 0.42, 0.12)
@@ -37,6 +39,7 @@ static func open(tree: SceneTree, title: String, pages: PackedStringArray,
 
 func _ready() -> void:
 	layer = 70
+	_open_count += 1
 	is_open = true
 	process_mode = PROCESS_MODE_ALWAYS
 	_build()
@@ -150,7 +153,8 @@ func _on_next() -> void:
 
 
 func _exit_tree() -> void:
-	is_open = false
+	_open_count = maxi(_open_count - 1, 0)
+	is_open = _open_count > 0
 
 
 func _finish() -> void:

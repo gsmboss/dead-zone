@@ -36,10 +36,22 @@ func add(scene: PackedScene, xform: Transform3D, collide: bool = true, custom_bo
 	if custom_box != Vector3.ZERO:
 		add_box(xform.origin + Vector3.UP * custom_box.y * 0.5, custom_box)
 		return
-	var bounds: AABB = xform * get_bounds(scene)
-	if bounds.size.x < 0.05 or bounds.size.z < 0.05:
+	add_oriented_box(xform, get_bounds(scene))
+
+
+## Коробка, повёрнутая вместе с моделью (AABB повёрнутой модели была до 1.4 раза шире —
+## невидимые стены у контейнеров и машин, дыры в навмеше)
+func add_oriented_box(xform: Transform3D, local: AABB) -> void:
+	var scale_value: Vector3 = xform.basis.get_scale().abs()
+	var box_size: Vector3 = local.size * scale_value
+	if box_size.x < 0.05 or box_size.z < 0.05:
 		return
-	add_box(bounds.get_center(), bounds.size)
+	var box := BoxShape3D.new()
+	box.size = box_size.max(Vector3.ONE * 0.1)
+	var shape := CollisionShape3D.new()
+	shape.shape = box
+	shape.transform = Transform3D(xform.basis.orthonormalized(), xform * local.get_center())
+	_body.add_child(shape)
 
 
 func add_box(center: Vector3, box_size: Vector3) -> void:

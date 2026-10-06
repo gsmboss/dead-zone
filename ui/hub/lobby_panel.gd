@@ -164,9 +164,12 @@ func _build_menu() -> void:
 	UIKit.label("ИМЯ:", 26, name_row)
 	var name_edit := _line_edit(Settings.player_name, "ВВЕДИ ИМЯ")
 	name_edit.max_length = 16
+	# Пока печатают — только значение (без записи на диск и пересчёта кнопок), сохранение по выходу из поля
 	name_edit.text_changed.connect(func(text: String) -> void:
-		Settings.set_value(&"player_name", text)
+		Settings.player_name = text
 		_update_stage())
+	name_edit.text_submitted.connect(func(_text: String) -> void: Settings.save_settings())
+	name_edit.focus_exited.connect(Settings.save_settings)
 	name_row.add_child(name_edit)
 
 	var host := UIKit.button("СОЗДАТЬ ИГРУ", 30)

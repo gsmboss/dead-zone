@@ -11,6 +11,7 @@ var window_title: String = ""
 var content: VBoxContainer
 
 var _scroll: ScrollContainer
+var _refresh_pending: bool = false
 
 
 func _ready() -> void:
@@ -52,9 +53,18 @@ func _ready() -> void:
 	refresh()
 
 
-## Перестроить содержимое, сохранив позицию прокрутки
+## Перестроить содержимое, сохранив позицию прокрутки. Несколько вызовов за кадр
+## (покупка: монеты + оружие + своя кнопка) перестраивают окно один раз
 func refresh() -> void:
-	if content == null:
+	if content == null or _refresh_pending:
+		return
+	_refresh_pending = true
+	_rebuild.call_deferred()
+
+
+func _rebuild() -> void:
+	_refresh_pending = false
+	if content == null or not is_instance_valid(content):
 		return
 	var scroll_position: int = _scroll.scroll_vertical
 	for child: Node in content.get_children():

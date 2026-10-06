@@ -40,7 +40,8 @@ func _process(delta: float) -> void:
 	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
 	if CutscenePlayer.is_blocking_input() or ControlLayoutEditor.is_open:
 		return  # кат-сцена и редактор кнопок сами обрабатывают «назад»
-	if Input.is_action_just_pressed(&"throw") and not get_tree().paused:
+	if Input.is_action_just_pressed(&"throw") and not get_tree().paused and not _pause_panel.visible \
+			and _window == null:
 		_throw()
 	if Input.is_action_just_pressed(&"pause"):
 		if _window != null:
@@ -50,7 +51,8 @@ func _process(delta: float) -> void:
 		else:
 			_pause()
 	elif Input.is_action_just_pressed(&"inventory") and _window == null and not _is_player_dead():
-		_open_window(InventoryPanel.new(), not get_tree().paused)
+		# По сети дерево не на паузе — смотрим на само меню
+		_open_window(InventoryPanel.new(), not _pause_panel.visible)
 
 
 ## Игру свернули (кнопка «Домой», звонок) — сразу пауза: вернулся, а миссия ждёт
@@ -85,7 +87,7 @@ func _setup_buttons() -> void:
 	_bag_button = _make_touch_button(&"inventory", "СУМКА", Vector2(0.0, 0.0), Vector2(24.0, 110.0))
 	var slide_button := _make_touch_button(&"slide", "ПОДКАТ", Vector2(1.0, 1.0), Vector2(-500.0, -160.0))
 	slide_button.base_color = Color(0.25, 0.45, 0.65)
-	_throw_button = _make_touch_button(&"throw", "", Vector2(1.0, 1.0), Vector2(-140.0, -500.0))
+	_throw_button = _make_touch_button(&"throw", "", Vector2(1.0, 1.0), Vector2(-465.0, -420.0))
 	_throw_button.base_color = Color(0.3, 0.42, 0.22)
 	GameState.inventory_changed.connect(_update_throw_button)
 	_update_throw_button()
@@ -150,9 +152,9 @@ func _update_throw_button() -> void:
 func _pause() -> void:
 	if _is_player_dead():
 		return
-	if _touch_controls != null:
-		_touch_controls.reset_all()
-	# По сети игру не останавливаем: остальные продолжают играть
+	# По сети игру не останавливаем: остальные продолжают играть, но касания по меню
+	# не должны стрелять и двигать игрока
+	_block_touch(true)
 	get_tree().paused = not Net.in_match
 	_pause_panel.visible = true
 
@@ -160,6 +162,12 @@ func _pause() -> void:
 func _resume() -> void:
 	_pause_panel.visible = false
 	get_tree().paused = false
+	_block_touch(false)
+
+
+func _block_touch(blocked: bool) -> void:
+	if _touch_controls != null:
+		_touch_controls.input_blocked = blocked
 
 
 func _build_pause_panel() -> void:
@@ -200,8 +208,7 @@ func _open_window(window: HubWindow, from_hud: bool) -> void:
 		window.free()
 		return
 	if from_hud:
-		if _touch_controls != null:
-			_touch_controls.reset_all()
+		_block_touch(true)
 		get_tree().paused = not Net.in_match
 	_window_from_hud = from_hud
 	_window = window

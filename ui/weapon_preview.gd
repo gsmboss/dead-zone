@@ -10,6 +10,7 @@ const SWING_DEGREES: float = 35.0
 const SWING_SPEED: float = 0.9
 
 var _pivot: Node3D
+var _viewport: SubViewport
 var _time: float = 0.0
 
 
@@ -29,6 +30,7 @@ func setup(weapon: WeaponData) -> void:
 	viewport.transparent_bg = true
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	add_child(viewport)
+	_viewport = viewport
 
 	var environment := Environment.new()
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
@@ -59,6 +61,13 @@ func setup(weapon: WeaponData) -> void:
 
 func _process(delta: float) -> void:
 	if _pivot == null:
+		return
+	# Рисуем только карточки на экране (в оружейной их десяток, каждая — отдельный 3D-кадр)
+	var on_screen: bool = is_visible_in_tree() and get_global_rect().intersects(get_viewport_rect())
+	var mode: int = SubViewport.UPDATE_ALWAYS if on_screen else SubViewport.UPDATE_DISABLED
+	if _viewport.render_target_update_mode != mode:
+		_viewport.render_target_update_mode = mode
+	if not on_screen:
 		return
 	_time += delta
 	# Вид сбоку с покачиванием, чтобы оружие было узнаваемо

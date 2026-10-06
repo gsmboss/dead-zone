@@ -101,7 +101,8 @@ func _process(delta: float) -> void:
 	queue_redraw()
 	# Останавливаемся, когда всё догнало значение и не нужно мигать
 	var settled: bool = absf(_shown - target) < 0.001 and absf(_trail - _shown) < 0.001
-	if settled and _heal_flash <= 0.0 and target > low_threshold:
+	# После смерти (0 HP) мигать нечему — тоже останавливаемся
+	if settled and _heal_flash <= 0.0 and (target > low_threshold or target <= 0.0):
 		_shown = target
 		set_process(false)
 

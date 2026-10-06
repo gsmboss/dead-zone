@@ -12,7 +12,7 @@ const DEFAULTS: Dictionary = {
 	&"reload": [Vector2(1.0, 1.0), Vector2(-150.0, -330.0), 100.0, "R"],
 	&"switch_weapon": [Vector2(1.0, 1.0), Vector2(-280.0, -330.0), 100.0, "⇄"],
 	&"slide": [Vector2(1.0, 1.0), Vector2(-455.0, -115.0), 90.0, "ПОДКАТ"],
-	&"throw": [Vector2(1.0, 1.0), Vector2(-95.0, -455.0), 90.0, "ГРАНАТА"],
+	&"throw": [Vector2(1.0, 1.0), Vector2(-420.0, -375.0), 90.0, "ГРАНАТА"],
 	&"interact": [Vector2(1.0, 0.5), Vector2(-105.0, -40.0), 130.0, "СЕСТЬ"],
 	&"pause": [Vector2(1.0, 0.0), Vector2(-75.0, 175.0), 90.0, "II"],
 	&"camera_view": [Vector2(1.0, 0.0), Vector2(-185.0, 175.0), 90.0, "ВИД"],
@@ -57,7 +57,8 @@ static func apply_to_button(button: TouchActionButton, screen: Vector2) -> void:
 	var custom: Vector2 = Settings.get_button_position(button.action)
 	if custom.is_finite():
 		center = custom * screen
-	var new_size: Vector2 = base_size * Settings.button_scale
+	# Не меньше 72 px — иначе на маленьком размере кнопки трудно нажать
+	var new_size: Vector2 = (base_size * Settings.button_scale).max(Vector2(72.0, 72.0))
 	# Не даём кнопке уйти за край экрана
 	center.x = clampf(center.x, new_size.x * 0.5, maxf(new_size.x * 0.5, screen.x - new_size.x * 0.5))
 	center.y = clampf(center.y, new_size.y * 0.5, maxf(new_size.y * 0.5, screen.y - new_size.y * 0.5))

@@ -136,10 +136,20 @@ func _show_pending_story() -> void:
 	var pages: PackedStringArray = chapter.outro_pages.duplicate()
 	if not rewards.is_empty():
 		pages.append("\n".join(rewards) + "\n\nПРОЙДЕНО %d%% СЮЖЕТА" % roundi(GameState.get_campaign_progress() * 100.0))
+	# Пока идёт рассказ, игрок за ним не ходит и не прыгает (ДАЛЕЕ над кнопкой прыжка)
+	_set_player_controls(false)
 	var panel := StoryPanel.open(get_tree(), "ГЛАВА ПРОЙДЕНА  •  %s" % chapter.title, pages, "В ЛАГЕРЬ")
 	if parts.size() > 1 and parts[1] == "epilogue":
 		panel.finished.connect(func() -> void:
-			StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ"))
+			var epilogue := StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ")
+			epilogue.finished.connect(_on_story_closed))
+	else:
+		panel.finished.connect(_on_story_closed)
+
+
+func _on_story_closed() -> void:
+	if _window == null:
+		_set_player_controls(true)
 
 
 ## Кнопка в верхней строке меню убежища
