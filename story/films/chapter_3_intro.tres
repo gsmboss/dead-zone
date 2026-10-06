@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 5.0
+caption = "ЗА ТРАССОЙ"
+voice_ru = "Из леса поднимается дым. Где дым — там костёр. Где костёр — там люди. Или очень умные зомби."
+voice_en = "Smoke is rising from the forest. Smoke means fire. Fire means people. Or very clever zombies."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "road_low"
+duration = 5.0
+voice_ru = "Мы разведчики, нас четверо. Мальчик с красным рюкзаком? Был. Ушёл три дня назад. Не один."
+voice_en = "We're scouts, four of us. A boy with a red backpack? He was here. Left three days ago. Not alone."
+speaker = "ВЕРА"
+pitch = 1.1
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 5.0
+voice_ru = "Ночью мёртвые идут на огонь, как мотыльки. Только мотыльки не кусаются."
+voice_en = "At night the dead come to the fire like moths. Except moths don't bite."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 3\nЛЕСНОЙ ЛАГЕРЬ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_3_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

@@ -12,6 +12,9 @@ extends Resource
 ## Страницы рассказа перед главой и после победы
 @export_multiline var intro_pages: PackedStringArray = []
 @export_multiline var outro_pages: PackedStringArray = []
+## Сюжетные фильмы (StoryCinema): перед главой и после победы
+@export var intro_film: StoryFilm
+@export var outro_film: StoryFilm
 
 @export_group("Rewards")
 ## Сколько людей спасено в главе (живут в лагере)

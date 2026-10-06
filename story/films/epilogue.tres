@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ЭПИЛОГ"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 6.0
+caption = "СЕВЕР-9. ВЕСНА"
+voice_ru = "Гнездо сгорело. Мёртвые ещё бродят, но их всё меньше, а нас — всё больше."
+voice_en = "The nest burned down. The dead still wander, but there are fewer of them, and more of us."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "aerial"
+duration = 6.0
+voice_ru = "Дядя Гоша открыл кофейню прямо в лагере. Называется «Последняя капля». Очередь — как до апокалипсиса."
+voice_en = "Uncle Gosha opened a coffee shop right in the camp. It's called The Last Drop. The line is as long as before the apocalypse."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sky_up"
+duration = 6.0
+voice_ru = "Шнырь ведёт бухгалтерию лагеря. Барон моет посуду и говорит, что это его новое королевство."
+voice_en = "Weasel keeps the camp's books. The Baron washes dishes and says it's his new kingdom."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "crossroad"
+duration = 6.5
+caption = "ПАМЯТЬ"
+voice_ru = "Иногда мне снится город таким, каким он был. Мама берёт кофе, Тёма спорит, светофор горит зелёным."
+voice_en = "Sometimes I dream of the city the way it used to be. Mom getting coffee, Tyoma arguing, the traffic light glowing green."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.5
+voice_ru = "Эй! Хватит спать. Денис говорит, что починил тот спорткар. Поехали дрифтить!"
+voice_en = "Hey! Stop daydreaming. Denis says he fixed that sports car. Let's go drifting!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_7"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 5.0
+voice_ru = "Мы ещё вернём этот город. Улица за улицей."
+voice_en = "We'll take this city back. Street by street."
+title = "КОНЕЦ.\nНО ГОРОД ЕЩЁ ЖДЁТ"
+
+[resource]
+script = ExtResource("1_film")
+id = "epilogue"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6"), SubResource("Shot_7")])

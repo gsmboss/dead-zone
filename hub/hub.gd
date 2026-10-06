@@ -27,7 +27,14 @@ func _disable_player_weapons() -> void:
 
 
 func _play_intro() -> void:
-	if not Settings.cutscenes or GameState.has_seen_cutscene("hub_intro"):
+	if not Settings.cutscenes:
+		return
+	# Первый вход: сначала фильм-пролог «каким был город и что с ним стало»
+	var prologue: StoryFilm = GameState.campaign.prologue_film
+	if prologue != null and not GameState.has_seen_cutscene("film_" + prologue.id):
+		GameState.mark_cutscene_seen("film_" + prologue.id)
+		await StoryCinema.play(get_tree(), prologue).finished
+	if GameState.has_seen_cutscene("hub_intro"):
 		return
 	var intro := load(INTRO_PATH) as CutsceneData if ResourceLoader.exists(INTRO_PATH) else null
 	if intro == null:

@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "aerial"
+duration = 5.0
+caption = "ЦЕНТР ГОРОДА. ГОД НАЗАД"
+voice_ru = "Центр города. Здесь был фонтан, кино и самый вкусный шаурмист области."
+voice_en = "Downtown. There was a fountain, a cinema and the best kebab guy in the region."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 4.5
+caption = "СЕЙЧАС"
+voice_ru = "Фонтан на месте. Остальное — нет."
+voice_en = "The fountain is still here. Everything else isn't."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 5.5
+voice_ru = "Восемь человек, двое детей и кофемашина! Без кофемашины не поеду, даже не проси!"
+voice_en = "Eight people, two kids and a coffee machine! I'm not leaving without the coffee machine, don't even ask!"
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "crossroad"
+duration = 5.0
+voice_ru = "Дядя Гоша. Живой. С кофемашиной. Апокалипсис его не сломал — его вообще ничего не сломает."
+voice_en = "Uncle Gosha. Alive. With his coffee machine. The apocalypse didn't break him. Nothing ever will."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 7\nЭВАКУАЦИЯ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_6_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

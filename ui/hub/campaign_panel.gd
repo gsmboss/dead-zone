@@ -25,7 +25,7 @@ func _ready() -> void:
 	_build()
 	_select(_selected)
 	if not GameState.has_seen_cutscene(PROLOGUE_ID):
-		_show_prologue.call_deferred()
+		_show_prologue.call_deferred(false)
 
 
 func _build() -> void:
@@ -75,7 +75,7 @@ func _build() -> void:
 	_progress_bar.add_theme_stylebox_override(&"fill", bar_fill)
 	progress_box.add_child(_progress_bar)
 	var prologue := UIKit.button("ПРОЛОГ", 22, 160.0)
-	prologue.pressed.connect(_show_prologue)
+	prologue.pressed.connect(_show_prologue.bind(true))
 	header.add_child(prologue)
 	var close := UIKit.button("ЗАКРЫТЬ", 22, 180.0)
 	close.pressed.connect(close_window)
@@ -175,6 +175,7 @@ func _fill_dossier() -> void:
 	if unlocked:
 		var story := UIKit.button("ИСТОРИЯ", 22, 150.0)
 		story.pressed.connect(func() -> void:
+			await _play_film(chapter.intro_film, true)
 			StoryPanel.open(get_tree(), chapter.title, chapter.intro_pages, "ПОНЯТНО"))
 		row.add_child(story)
 		var start := UIKit.button("ПЕРЕИГРАТЬ" if done else "НАЧАТЬ ГЛАВУ", 24)
@@ -185,19 +186,33 @@ func _fill_dossier() -> void:
 		row.add_child(start)
 
 
-## Рассказ перед главой, затем миссия
+## Фильм (первый раз), рассказ перед главой, затем миссия
 func _start_chapter(chapter: ChapterData) -> void:
 	if chapter.mission == null:
 		push_warning("CampaignPanel: у главы '%s' нет миссии" % chapter.id)
 		return
+	await _play_film(chapter.intro_film, false)
 	var panel := StoryPanel.open(get_tree(), "ГЛАВА %d  •  %s" % [_selected + 1, chapter.title],
 		chapter.intro_pages, "В БОЙ")
 	panel.finished.connect(func() -> void: GameState.start_mission(chapter.mission))
 
 
-func _show_prologue() -> void:
+## Пролог: фильм (при первом открытии — если его ещё не показали в убежище) и рассказ
+func _show_prologue(always: bool = true) -> void:
 	GameState.mark_cutscene_seen(PROLOGUE_ID)
+	await _play_film(GameState.campaign.prologue_film, always)
 	StoryPanel.open(get_tree(), "КАК ВСЁ НАЧАЛОСЬ", GameState.campaign.prologue_pages, "К КАРТЕ")
+
+
+## Сюжетный фильм: always — показать и повторно (кнопки ИСТОРИЯ/ПРОЛОГ), иначе только первый раз
+func _play_film(film: StoryFilm, always: bool) -> void:
+	if film == null or not Settings.cutscenes:
+		return
+	var seen_id: String = "film_" + film.id
+	if not always and GameState.has_seen_cutscene(seen_id):
+		return
+	GameState.mark_cutscene_seen(seen_id)
+	await StoryCinema.play(get_tree(), film).finished
 
 
 ## Первая непройденная открытая глава (или последняя)

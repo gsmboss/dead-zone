@@ -6,6 +6,9 @@ extends Resource
 @export_multiline var prologue_pages: PackedStringArray = []
 ## Финал после последней главы
 @export_multiline var epilogue_pages: PackedStringArray = []
+## Фильмы пролога («каким был город, что случилось») и финала
+@export var prologue_film: StoryFilm
+@export var epilogue_film: StoryFilm
 @export var chapters: Array[ChapterData] = []
 
 

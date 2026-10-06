@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 6.0
+voice_ru = "Восемь человек едут в лагерь. Дядя Гоша варит кофе прямо в кузове. На ходу. Это опасно, но очень вкусно."
+voice_en = "Eight people riding to the camp. Uncle Gosha is brewing coffee right in the truck bed. While moving. Dangerous, but delicious."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.5
+voice_ru = "Барон? Да это же Генка, охранник из универмага! Он раньше на парковке штрафы выписывал!"
+voice_en = "The Baron? That's Gena, the security guard from the department store! He used to write parking tickets!"
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_6_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2")])

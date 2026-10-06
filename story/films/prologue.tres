@@ -1,0 +1,170 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.5
+title = "SALAMANDERLAB\nПРЕДСТАВЛЯЕТ"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "aerial"
+duration = 6.0
+caption = "СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО"
+voice_ru = "Это Север-9. Город, где светофоры работали, автобусы ходили по расписанию, а самой страшной бедой была пробка на проспекте."
+voice_en = "This is Sever-9. A city where traffic lights worked, buses ran on time, and the worst disaster was rush hour."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "sidewalk"
+duration = 6.0
+voice_ru = "Здесь жили мы: мама, я и мой младший брат Тёма. Двенадцать лет, сорок килограммов упрямства и вечно разряженный телефон."
+voice_en = "We lived here: Mom, me, and my little brother Tyoma. Twelve years old, ninety pounds of stubbornness and a phone that was always dead."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "close_up"
+duration = 4.0
+voice_ru = "Тёма, шапку надень! И слушайся брата!"
+voice_en = "Tyoma, put your hat on! And listen to your brother!"
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "close_up"
+duration = 3.5
+voice_ru = "Мам, мне двенадцать, а не пять!"
+voice_en = "Mom, I'm twelve, not five!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "crossroad"
+duration = 6.0
+voice_ru = "По утрам мама брала кофе у дяди Гоши. А дядя Гоша клялся, что лаборатория «Геном» за рекой вот-вот изобретёт лекарство от старости."
+voice_en = "Every morning Mom got coffee from Uncle Gosha. And Uncle Gosha swore the Genome lab across the river was about to cure old age."
+
+[sub_resource type="Resource" id="Shot_7"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "road_low"
+duration = 5.0
+voice_ru = "Лекарство они изобрели. Только старость оно не лечило. Оно отменяло смерть. Совсем."
+voice_en = "They did invent a cure. Only it didn't cure old age. It cancelled death. Completely."
+
+[sub_resource type="Resource" id="Shot_8"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ДЕНЬ НОЛЬ"
+
+[sub_resource type="Resource" id="Shot_9"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "chase"
+duration = 6.0
+caption = "СЕВЕР-9. ДЕНЬ НОЛЬ, 18:40"
+voice_ru = "В тот вечер в «Геноме» случился пожар. Через час по улицам бежали люди. Через два — за ними бежали те, кто людьми уже не был."
+voice_en = "That evening there was a fire at Genome. An hour later people were running through the streets. Two hours later, the ones chasing them were no longer people."
+effect = "flash"
+
+[sub_resource type="Resource" id="Shot_10"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "crossroad"
+duration = 4.5
+voice_ru = "Полиция приехала быстро. Уехала ещё быстрее."
+voice_en = "The police arrived fast. They left even faster."
+
+[sub_resource type="Resource" id="Shot_11"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "fire_wreck"
+duration = 4.0
+voice_ru = "Бегите к мосту! Тёма, держи брата за руку! Я догоню!"
+voice_en = "Run to the bridge! Tyoma, hold your brother's hand! I'll catch up!"
+speaker = "МАМА"
+pitch = 1.2
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_12"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "window"
+duration = 7.0
+voice_ru = "Она не догнала. Она осталась, чтобы мы успели. А потом толпа разорвала нас с Тёмой, как бумагу. Я звал его до хрипоты."
+voice_en = "She never caught up. She stayed behind so we could make it. Then the crowd tore Tyoma and me apart like paper. I shouted his name until I lost my voice."
+
+[sub_resource type="Resource" id="Shot_13"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.5
+title = "ТРИ МЕСЯЦА СПУСТЯ"
+
+[sub_resource type="Resource" id="Shot_14"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 6.5
+caption = "СЕВЕР-9. СЕЙЧАС"
+voice_ru = "Теперь здесь тихо. Светофор на перекрёстке всё ещё мигает жёлтым — единственный в городе, кто не бросил работу."
+voice_en = "It's quiet here now. The traffic light at the crossing still blinks yellow. The only one in town who didn't quit his job."
+
+[sub_resource type="Resource" id="Shot_15"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 5.0
+voice_ru = "Мёртвые ходят медленно. Но их много, и свободного времени у них — целая вечность."
+voice_en = "The dead walk slowly. But there are a lot of them, and they have all the time in the world."
+
+[sub_resource type="Resource" id="Shot_16"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 6.0
+voice_ru = "Гениев среди них нет. Вон тот третий день выходит из магазина через стену. Я за него болею."
+voice_en = "None of them are geniuses. That one has been trying to leave the shop through the wall for three days. I'm rooting for him."
+
+[sub_resource type="Resource" id="Shot_17"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "sky_up"
+duration = 7.0
+voice_ru = "Маму я похоронил у старой часовни на кладбище. Тёму не нашёл. Ни следа. А раз следа нет — значит, он жив. Я так решил."
+voice_en = "I buried Mom by the old chapel in the cemetery. I never found Tyoma. Not a trace. And no trace means he's alive. I decided so."
+
+[sub_resource type="Resource" id="Shot_18"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "crossroad"
+duration = 6.5
+voice_ru = "У меня есть убежище из контейнеров, нож, пистолет и правила выживания. Правило номер один: всегда проверяй заднее сиденье."
+voice_en = "I've got a shelter made of shipping containers, a knife, a pistol and survival rules. Rule number one: always check the back seat."
+
+[sub_resource type="Resource" id="Shot_19"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 5.0
+voice_ru = "Я найду брата. И всех, кто ещё дышит."
+voice_en = "I will find my brother. And everyone who's still breathing."
+title = "ХРОНИКИ\nМЁРТВОЙ ЗОНЫ"
+
+[resource]
+script = ExtResource("1_film")
+id = "prologue"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6"), SubResource("Shot_7"), SubResource("Shot_8"), SubResource("Shot_9"), SubResource("Shot_10"), SubResource("Shot_11"), SubResource("Shot_12"), SubResource("Shot_13"), SubResource("Shot_14"), SubResource("Shot_15"), SubResource("Shot_16"), SubResource("Shot_17"), SubResource("Shot_18"), SubResource("Shot_19")])

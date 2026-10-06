@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 5.0
+caption = "ЦЕХА «ГЕНОМ»"
+voice_ru = "Цеха «Генома». Здесь всё началось. Здесь должно и закончиться."
+voice_en = "The Genome factory. This is where it all began. This is where it should end."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "road_low"
+duration = 5.0
+caption = "ДЕНЬ НОЛЬ"
+voice_ru = "В день ноль отсюда выехал грузовик с образцами «Гнили-7». До моста он не доехал."
+voice_en = "On day zero a truck carrying samples of Rot-7 left this place. It never made it to the bridge."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 5.5
+voice_ru = "Я иду с тобой. Нет, не спорь. Мама сказала слушаться брата, а брат идёт туда. Значит, и я."
+voice_en = "I'm coming with you. No, don't argue. Mom said to listen to my brother, and my brother is going there. So am I."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "crossroad"
+duration = 5.0
+voice_ru = "Пять волн, а потом Громила — первый заражённый. Правило последнее: возвращайся домой."
+voice_en = "Five waves, then the Brute, the first infected. Final rule: come back home."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 9\nИСТОЧНИК"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_7_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

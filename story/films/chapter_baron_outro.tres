@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.0
+voice_ru = "Ладно, ладно! Сдаюсь! Забирай пацана! Только пусть он больше не трогает мою рацию!"
+voice_en = "Okay, okay! I give up! Take the kid! Just don't let him touch my radio ever again!"
+speaker = "БАРОН"
+pitch = 0.6
+effect = "flash"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 6.0
+voice_ru = "Из толпы пленных выходит худой мальчишка с красным рюкзаком. Грязный, лохматый, с отвёрткой в руке."
+voice_en = "A skinny boy with a red backpack steps out of the crowd of prisoners. Dirty, shaggy, a screwdriver in his hand."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 4.0
+voice_ru = "Ты чего так долго? Я тут уже всем рации починил!"
+voice_en = "What took you so long? I've already fixed everybody's radios!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sky_up"
+duration = 7.0
+voice_ru = "Я обнял его так, что он пискнул. Сто двадцать дней. Мама была права: мы искали друг друга — и нашлись."
+voice_en = "I hugged him so hard he squeaked. One hundred and twenty days. Mom was right. We looked for each other, and we found each other."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.5
+voice_ru = "Слушай, у учёных Барона есть карта цехов «Генома». Там гнездо. Я подслушал."
+voice_en = "Hey, the Baron's scientists have a map of the Genome factory. That's where the nest is. I overheard."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_baron_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

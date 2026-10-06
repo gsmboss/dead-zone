@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 5.0
+caption = "ПРОМЗОНА"
+voice_ru = "Промзона. Раньше здесь делали трубы, бетон и ругательства на трёх языках."
+voice_en = "The industrial zone. They used to make pipes, concrete and swear words in three languages here."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 5.5
+voice_ru = "Пятеро рабочих держат заправку. Им нужно топливо, нам — склад Барона за забором. Совместим приятное с полезным."
+voice_en = "Five workers are holding a gas station. They need fuel, and we need the Baron's depot behind the fence. Business and pleasure."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 4.5
+voice_ru = "Стервятники уже здесь. И взрывные зомби тоже. Не перепутай, в кого стрелять первым."
+voice_en = "The Vultures are already here. So are the exploding zombies. Don't mix up who to shoot first."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 6\nПРОМЗОНА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_5_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

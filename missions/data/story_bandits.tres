@@ -5,26 +5,25 @@
 [ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="z_walker"]
 [ext_resource type="Resource" uid="uid://bxalb3sauqja6" path="res://enemies/runner.tres" id="z_runner"]
 [ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="z_tank"]
-[ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
-[ext_resource type="Resource" path="res://enemies/spitter.tres" id="z_spitter"]
-[ext_resource type="Resource" path="res://enemies/dog.tres" id="z_dog"]
 [ext_resource type="Resource" path="res://enemies/bandit.tres" id="z_bandit"]
 [ext_resource type="Resource" path="res://enemies/bandit_shotgun.tres" id="z_bandit_sg"]
 [ext_resource type="Resource" path="res://enemies/bandit_rifle.tres" id="z_bandit_rf"]
 
 [resource]
 script = ExtResource("1_mdt")
-id = "story_5"
-title = "ПРОМЗОНА"
-description = "Нужно топливо для генераторов. Удержи заправочную точку 90 секунд"
-type = 3
-level_scene = "res://levels/industrial_level.tscn"
-defend_time = 90.0
-defend_radius = 6.0
+id = "story_bandits"
+title = "СТЕРВЯТНИКИ"
+description = "Банда Барона грабит колонну выживших на стоянке контейнеров. Отбей колонну — убей 25 бандитов и зомби"
+type = 1
+level_scene = "res://levels/yard_level.tscn"
+kill_target = 25
 walker = ExtResource("z_walker")
 runner = ExtResource("z_runner")
-tank = ExtResource("z_tank")
-tank_chance = 0.08
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_exploder"), ExtResource("z_spitter"), ExtResource("z_dog"), ExtResource("z_bandit"), ExtResource("z_bandit_rf")])
-reward_coins = 380
+runner_chance = 0.1
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_bandit"), ExtResource("z_bandit"), ExtResource("z_bandit_sg"), ExtResource("z_bandit_rf")])
+special_chance = 0.6
+max_alive = 9
+health_drop_chance = 0.12
+ammo_drop_chance = 0.2
+reward_coins = 360
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

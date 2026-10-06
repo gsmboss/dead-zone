@@ -140,9 +140,16 @@ func _show_pending_story() -> void:
 		pages.append("\n".join(rewards) + "\n\nПРОЙДЕНО %d%% СЮЖЕТА" % roundi(GameState.get_campaign_progress() * 100.0))
 	# Пока идёт рассказ, игрок за ним не ходит и не прыгает (ДАЛЕЕ над кнопкой прыжка)
 	_set_player_controls(false)
+	if chapter.outro_film != null and Settings.cutscenes:
+		await StoryCinema.play(get_tree(), chapter.outro_film).finished
+		_set_player_controls(false)
 	var panel := StoryPanel.open(get_tree(), "ГЛАВА ПРОЙДЕНА  •  %s" % chapter.title, pages, "В ЛАГЕРЬ")
 	if parts.size() > 1 and parts[1] == "epilogue":
 		panel.finished.connect(func() -> void:
+			var film: StoryFilm = GameState.campaign.epilogue_film
+			if film != null and Settings.cutscenes:
+				await StoryCinema.play(get_tree(), film).finished
+				_set_player_controls(false)
 			var epilogue := StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ")
 			epilogue.finished.connect(_on_story_closed))
 	else:

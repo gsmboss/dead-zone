@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "aerial"
+duration = 5.5
+caption = "УНИВЕРМАГ «ЮБИЛЕЙНЫЙ»"
+voice_ru = "Логово Барона — старый универмаг. Охраняют его те, кто раньше охранял его от школьников."
+voice_en = "The Baron's lair is the old department store. It's guarded by the guys who used to guard it from schoolkids."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.5
+voice_ru = "Ты пришёл за мальчишкой? Он мой лучший мастер! И мой худший кошмар. Он съел всю мою тушёнку!"
+voice_en = "You came for the boy? He's my best mechanic! And my worst nightmare. He ate all my canned meat!"
+speaker = "БАРОН"
+pitch = 0.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 5.5
+voice_ru = "Четыре волны бандитов, а потом сам Барон. Правило номер двенадцать: не дерись честно с тем, кто нечестен."
+voice_en = "Four waves of bandits, then the Baron himself. Rule number twelve: never fight fair with someone who doesn't."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 8\nЛОГОВО БАРОНА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_baron_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])
