@@ -103,6 +103,8 @@ const LOCATIONS: Dictionary = {
 	"yard_level": "СТОЯНКА КОНТЕЙНЕРОВ",
 	"city_level": "ГОРОД",
 	"graveyard_level": "КЛАДБИЩЕ",
+	"forest_level": "ЛЕСНОЙ ЛАГЕРЬ",
+	"industrial_level": "ПРОМЗОНА",
 }
 
 

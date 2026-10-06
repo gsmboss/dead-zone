@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="CampaignData" format=3]
+
+[ext_resource type="Script" path="res://story/campaign_data.gd" id="1_camp"]
+[ext_resource type="Script" path="res://story/chapter_data.gd" id="2_chap"]
+[ext_resource type="Resource" path="res://missions/data/story_1.tres" id="m_1"]
+[ext_resource type="Resource" path="res://missions/data/story_2.tres" id="m_2"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup_Armored.gltf" id="car_2"]
+[ext_resource type="Resource" path="res://missions/data/story_3.tres" id="m_3"]
+[ext_resource type="Resource" path="res://missions/data/story_4.tres" id="m_4"]
+[ext_resource type="Resource" path="res://missions/data/story_5.tres" id="m_5"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck_Armored.gltf" id="car_5"]
+[ext_resource type="Resource" path="res://missions/data/story_6.tres" id="m_6"]
+[ext_resource type="Resource" path="res://missions/data/story_7.tres" id="m_7"]
+
+[sub_resource type="Resource" id="Chapter_1"]
+script = ExtResource("2_chap")
+id = "chapter_1"
+title = "ПЕРВЫЙ ДЕНЬ"
+location_name = "СТОЯНКА КОНТЕЙНЕРОВ"
+map_position = Vector2(0.18, 0.78)
+mission = ExtResource("m_1")
+intro_pages = PackedStringArray("ПО РАЦИИ — КРИК: «МЫ НА СТОЯНКЕ У ТРАССЫ, НАС ДВОЕ, ОДИН РАНЕН!»", "СТОЯНКА В ДВУХ КИЛОМЕТРАХ. ЗОМБИ УЖЕ ТАМ. БЕРИ НОЖ И ПИСТОЛЕТ — ВРЕМЕНИ НЕТ.")
+outro_pages = PackedStringArray("МАРИНА И ЕЁ БРАТ ДЕНИС ТЕПЕРЬ В УБЕЖИЩЕ. ДЕНИС — МЕХАНИК: ОН ОБЕЩАЕТ ПОЧИНИТЬ ЛЮБУЮ МАШИНУ.", "МАРИНА СЛЫШАЛА О СЕМЬЕ, ЗАПЕРТОЙ В МАГАЗИНЕ НА УЛИЦЕ МОЛЧАНИЯ.")
+rescued = 2
+
+[sub_resource type="Resource" id="Chapter_2"]
+script = ExtResource("2_chap")
+id = "chapter_2"
+title = "УЛИЦА МОЛЧАНИЯ"
+location_name = "УЛИЦА"
+map_position = Vector2(0.34, 0.56)
+mission = ExtResource("m_2")
+intro_pages = PackedStringArray("ТРОЕ — ОТЕЦ И ДВОЕ ДЕТЕЙ — ПЯТЫЙ ДЕНЬ СИДЯТ В МАГАЗИНЕ. ЕДА КОНЧАЕТСЯ.", "ВСЯ УЛИЦА ЗАБИТА МЁРТВЫМИ. РАСЧИСТИ ЕЁ — И ВЫВЕДИ ЛЮДЕЙ.")
+outro_pages = PackedStringArray("СЕМЬЯ СПАСЕНА. ВО ДВОРЕ МАГАЗИНА ДЕНИС НАШЁЛ ПИКАП — ПОСЛЕ РЕМОНТА ЭТО БРОНЕПИКАП.", "ТВОЯ ПЕРВАЯ МАШИНА. В ГОРОДЕ ОНА БУДЕТ ЖДАТЬ ТЕБЯ У СТАРТА.")
+rescued = 3
+unlock_car = ExtResource("car_2")
+unlock_car_name = "БРОНЕПИКАП"
+
+[sub_resource type="Resource" id="Chapter_3"]
+script = ExtResource("2_chap")
+id = "chapter_3"
+title = "ЛЕСНОЙ ЛАГЕРЬ"
+location_name = "ЛЕС"
+map_position = Vector2(0.14, 0.28)
+mission = ExtResource("m_3")
+intro_pages = PackedStringArray("В ЛЕСУ ЗА ТРАССОЙ — ДЫМ КОСТРОВ. ЭТО РАЗВЕДЧИКИ: ЧЕТВЕРО, С ПАЛАТКАМИ И ИНСТРУМЕНТАМИ.", "НОЧЬЮ ЗОМБИ ИДУТ НА ОГОНЬ. ДЕРЖИСЬ, ПОКА ОНИ СОБИРАЮТ ЛАГЕРЬ. ФАКЕЛ БУДЕТ КСТАТИ.")
+outro_pages = PackedStringArray("РАЗВЕДЧИКИ ПЕРЕБРАЛИСЬ К НАМ И ПОСТРОИЛИ ПЕРВЫЙ ДОМ В ЛАГЕРЕ.", "ИХ СТАРШАЯ, ВЕРА, СЛЫШАЛА В ЭФИРЕ ЧУЖОЙ ПОЗЫВНОЙ — СИГНАЛ ИДЁТ СО СТАРОГО КЛАДБИЩА.")
+rescued = 4
+unlock_house = true
+
+[sub_resource type="Resource" id="Chapter_4"]
+script = ExtResource("2_chap")
+id = "chapter_4"
+title = "НОЧЬ НА КЛАДБИЩЕ"
+location_name = "КЛАДБИЩЕ"
+map_position = Vector2(0.48, 0.22)
+mission = ExtResource("m_4")
+intro_pages = PackedStringArray("В СКЛЕПЕ ПРЯЧЕТСЯ РАДИСТ ЛЕВ С ДОЧЕРЬЮ. ЕГО РАЦИЯ РАЗБИТА, ДЕТАЛИ РАЗБРОСАНЫ СРЕДИ МОГИЛ.", "МЁРТВЫЕ ВСТАЮТ ИЗ ЗЕМЛИ. СОБЕРИ ДЕТАЛИ — ЛЕВ ЗНАЕТ, ГДЕ ИСКАТЬ ОСТАЛЬНЫХ.")
+outro_pages = PackedStringArray("ЛЕВ СОБРАЛ РАЦИЮ. В ЭФИРЕ — ГОЛОСА ИЗ ПРОМЗОНЫ: ТАМ ЛЮДИ, НО НЕТ ТОПЛИВА ДЛЯ ГЕНЕРАТОРОВ.", "И ЕЩЁ ОДНО: ВСЕ ЗАРАЖЁННЫЕ ИДУТ С ОДНОЙ СТОРОНЫ. ОТТУДА, ГДЕ ЦЕХА.")
+rescued = 2
+
+[sub_resource type="Resource" id="Chapter_5"]
+script = ExtResource("2_chap")
+id = "chapter_5"
+title = "ПРОМЗОНА"
+location_name = "ПРОМЗОНА"
+map_position = Vector2(0.7, 0.42)
+mission = ExtResource("m_5")
+intro_pages = PackedStringArray("ПЯТЕРО РАБОЧИХ ДЕРЖАТ ЗАПРАВКУ ПОСРЕДИ ПРОМЗОНЫ. БЕЗ ТОПЛИВА ИХ ГЕНЕРАТОРЫ ВСТАНУТ.", "УДЕРЖИ ТОЧКУ, ПОКА ОНИ ЗАЛИВАЮТ БОЧКИ. ВЗРЫВНЫЕ ЗОМБИ — ДЕРЖИСЬ ОТ НИХ ПОДАЛЬШЕ.")
+outro_pages = PackedStringArray("РАБОЧИЕ С НАМИ. ОНИ ПРИГНАЛИ БРОНЕГРУЗОВИК И ПОСТРОИЛИ ВТОРОЙ ДОМ.", "ГЛАВНЫЙ ИНЖЕНЕР ПОКАЗАЛ НА КАРТЕ: ГНЕЗДО — В СТАРЫХ ЦЕХАХ. НО СНАЧАЛА НАДО ВЫВЕЗТИ ЛЮДЕЙ ИЗ ГОРОДА.")
+rescued = 5
+unlock_house = true
+unlock_car = ExtResource("car_5")
+unlock_car_name = "БРОНЕГРУЗОВИК"
+
+[sub_resource type="Resource" id="Chapter_6"]
+script = ExtResource("2_chap")
+id = "chapter_6"
+title = "ЭВАКУАЦИЯ"
+location_name = "ГОРОД"
+map_position = Vector2(0.56, 0.7)
+mission = ExtResource("m_6")
+intro_pages = PackedStringArray("В ЦЕНТРЕ ГОРОДА — ГРУППА ВЫЖИВШИХ. ВОСЕМЬ ЧЕЛОВЕК, ДВОЕ ДЕТЕЙ.", "ГОРОД ОГРОМНЫЙ И ЖИВЁТ МЁРТВЫМИ. ВОЗЬМИ МАШИНУ — БАМПЕР ТОЖЕ ОРУЖИЕ.")
+outro_pages = PackedStringArray("ВСЕ ВОСЕМЬ В ЛАГЕРЕ. ТЕПЕРЬ НАС ДОСТАТОЧНО, ЧТОБЫ УДАРИТЬ ПО ИСТОЧНИКУ.", "ДЕНИС ГОТОВИТ ВЗРЫВЧАТКУ. ЛЕВ ВЕДЁТ РАЗВЕДКУ ПО РАЦИИ. ОСТАЛСЯ ПОСЛЕДНИЙ БОЙ.")
+rescued = 8
+
+[sub_resource type="Resource" id="Chapter_7"]
+script = ExtResource("2_chap")
+id = "chapter_7"
+title = "ИСТОЧНИК"
+location_name = "ЦЕХА «ГЕНОМ»"
+map_position = Vector2(0.84, 0.18)
+mission = ExtResource("m_7")
+intro_pages = PackedStringArray("СТАРЫЕ ЦЕХА «ГЕНОМА». ЗДЕСЬ ДЕРЖАЛИ ОБРАЗЦЫ «ГНИЛИ-7» — И ЗДЕСЬ РОДИЛОСЬ ГНЕЗДО.", "ПЯТЬ ВОЛН, ПОТОМ ПРИДЁТ ОН — ГРОМИЛА, ПЕРВЫЙ ЗАРАЖЁННЫЙ. УБЕЙ ЕГО, И ЗАРАЗА ОСЛАБНЕТ.")
+outro_pages = PackedStringArray("ГРОМИЛА МЁРТВ. В ПОДВАЛЕ ЦЕХА — ТРОЕ УЧЁНЫХ «ГЕНОМА», ЖИВЫЕ. ОНИ ЗНАЮТ, КАК СДЕЛАТЬ ВАКЦИНУ.", "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ.")
+rescued = 3
+unlock_house = true
+
+[resource]
+script = ExtResource("1_camp")
+prologue_pages = PackedStringArray("2031 ГОД. НАУКОГРАД «СЕВЕР-9». ЛАБОРАТОРИЯ «ГЕНОМ» ИЩЕТ ЛЕКАРСТВО, КОТОРОЕ ЗАСТАВИТ КЛЕТКИ ВОССТАНАВЛИВАТЬСЯ ВЕЧНО.", "ОБРАЗЕЦ «ГНИЛЬ-7» ВЫРЫВАЕТСЯ НАРУЖУ ВО ВРЕМЯ ПОЖАРА. ЗА ТРИ ДНЯ ГОРОД ЗАМОЛКАЕТ. ЗА НЕДЕЛЮ — ВСЯ ОБЛАСТЬ.", "МЁРТВЫЕ НЕ ЛЕЖАТ. ОНИ ХОДЯТ, СЛЫШАТ ВЫСТРЕЛЫ И ИДУТ НА ШУМ. ЭВАКУАЦИЯ ПРОВАЛИЛАСЬ: ПОСЛЕДНИЙ ВЕРТОЛЁТ УЛЕТЕЛ ПУСТЫМ.", "ТЫ ВЫЖИЛ. ИЗ КОНТЕЙНЕРОВ И ЖЕЛЕЗА ТЫ ПОСТРОИЛ УБЕЖИЩЕ У СТАРОЙ ТРАССЫ.", "ГДЕ-ТО ЕЩЁ ЕСТЬ ЛЮДИ. ЕСЛИ ИХ НАЙТИ — У НАС БУДЕТ ЛАГЕРЬ, ДОМА, МАШИНЫ. И, МОЖЕТ БЫТЬ, ШАНС УНИЧТОЖИТЬ ИСТОЧНИК ЗАРАЗЫ.")
+epilogue_pages = PackedStringArray("ГНЕЗДО В ЦЕХАХ ГОРИТ. ВПЕРВЫЕ ЗА МЕСЯЦЫ НОЧЬ ТИХАЯ.", "В ЛАГЕРЕ ДЫМЯТ ПЕЧИ, РАДИСТ ЛОВИТ ГОЛОСА С ЮГА: ТАМ ТОЖЕ ВЫЖИЛИ.", "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ.", "КАМПАНИЯ ПРОЙДЕНА. БЕСКОНЕЧНАЯ ОБОРОНА, ГОРОД И ИГРА С ДРУЗЬЯМИ ЖДУТ.")
+chapters = Array[ExtResource("2_chap")]([SubResource("Chapter_1"), SubResource("Chapter_2"), SubResource("Chapter_3"), SubResource("Chapter_4"), SubResource("Chapter_5"), SubResource("Chapter_6"), SubResource("Chapter_7")])

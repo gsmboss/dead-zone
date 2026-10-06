@@ -232,4 +232,17 @@ App ID ca-app-pub-5010684167263731~1270406484 — project.godot [admob] general/
 и x2 монеты на экране итогов. В debug-сборке тестовые блоки Google. GameMenus не ставит паузу во время рекламы.
 Прокрутка окон пальцем: ui/touch_scroll.gd (TouchScroll.attach(scroll), кнопка под свайпом отключается).
 
+Сюжет: story/campaign.tres (CampaignData: пролог, эпилог, 7 глав ChapterData — место на карте, миссия
+missions/data/story_1..7.tres, тексты до/после, награды: люди, дом, машина). GameState: _chapters_done,
+get_campaign_progress (процент), get_rescued_count, get_house_count, get_owned_cars, pop_pending_story
+(концовка главы показывается в убежище). Окно «СЮЖЕТ» ui/hub/campaign_panel.gd: карта ui/hub/campaign_map.gd,
+лагерь в 3D ui/hub/camp_diorama_3d.gd, рассказы ui/hub/story_panel.gd (StoryPanel.open). Люди у костра в
+убежище — hub/hub_camp.gd; своя машина — первая у старта в городе (city_generator).
+Новые локации: levels/forest_level.tscn (ForestBuilder), levels/industrial_level.tscn (IndustrialBuilder) —
+база levels/location_builder.gd (LocationBuilder: PropBatch, свободные места, видимая ограда, туман, земля
+за краем); стены Bounds ±28 из шаблона уровня. Модели промзоны: models/industrial (Kenney).
+Факел: items/torch.tres (GearData, items/gear_data.gd), GameState.gear/owns_gear/buy_gear, карточка
+«СНАРЯЖЕНИЕ» в оружейной, player/torch.gd (Torch на Head), кнопка «ФАКЕЛ» / T.
+Оружие по умолчанию: нож (бесплатно, первый в каталоге), пистолет (бесплатно, второй), остальное — покупка.
+
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.

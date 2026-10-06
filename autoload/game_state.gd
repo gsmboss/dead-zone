@@ -10,6 +10,7 @@ signal progress_changed
 signal inventory_changed
 signal skin_changed(skin: PlayerSkin)
 signal gear_changed
+signal campaign_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -20,6 +21,7 @@ const UPGRADE_STATS: Array[String] = ["damage", "magazine", "reload"]
 const DEBUG_COINS: int = 1000
 const PLAYER_STATS_PATH: String = "res://player/player_stats.tres"
 const QUEST_POOL_PATH: String = "res://quests/quest_pool.tres"
+const CAMPAIGN_PATH: String = "res://story/campaign.tres"
 const PLAYER_UPGRADES: Array[String] = ["health", "armor"]
 ## Каждое прохождение миссии: зомби сильнее на 15% (до x3), награда больше на 10% (до x2)
 const DIFFICULTY_PER_CLEAR: float = 0.15
@@ -77,6 +79,10 @@ var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
 var _cutscenes_seen: Array[String] = []
 var skins: Array[PlayerSkin] = []
 var gear: Array[GearData] = []
+var campaign: CampaignData
+var _chapters_done: Array[String] = []
+## Рассказ, который покажется в убежище: id главы (концовка) или "epilogue"
+var _pending_story: String = ""
 var _gear_owned: Array[String] = []
 var _skins_owned: Array[String] = []
 var _skin_id: String = ""
@@ -110,6 +116,11 @@ func _ready() -> void:
 			push_warning("GameState: не найдена постройка %s" % path)
 			continue
 		buildings.append(building)
+	if ResourceLoader.exists(CAMPAIGN_PATH):
+		campaign = load(CAMPAIGN_PATH) as CampaignData
+	if campaign == null:
+		push_warning("GameState: не найдена кампания %s" % CAMPAIGN_PATH)
+		campaign = CampaignData.new()
 	for path: String in GEAR_PATHS:
 		var gear_item: GearData = load(path) as GearData if ResourceLoader.exists(path) else null
 		if gear_item == null or gear_item.id.is_empty():
@@ -219,6 +230,7 @@ func complete_mission(mission: MissionData, score: int, stars: int = 1) -> void:
 		_best_scores[mission.id] = maxi(score, 0)
 	_mission_stars[mission.id] = maxi(int(_mission_stars.get(mission.id, 0)), clampi(stars, 1, 3))
 	_mission_clears[mission.id] = int(_mission_clears.get(mission.id, 0)) + 1
+	_on_story_mission_won(mission)
 	save_game()
 
 
@@ -334,6 +346,73 @@ func buy_item(item_id: String) -> bool:
 	coins_changed.emit(coins)
 	save_game()
 	return true
+
+
+# ---------- Сюжетная кампания ----------
+
+func is_chapter_done(chapter_id: String) -> bool:
+	return chapter_id in _chapters_done
+
+
+## Глава открыта, если пройдена предыдущая
+func is_chapter_unlocked(index: int) -> bool:
+	if index <= 0:
+		return true
+	if index >= campaign.chapters.size():
+		return false
+	var previous: ChapterData = campaign.chapters[index - 1]
+	return previous != null and is_chapter_done(previous.id)
+
+
+## Доля пройденных глав 0..1
+func get_campaign_progress() -> float:
+	var total: int = campaign.chapters.size()
+	return float(_chapters_done.size()) / float(total) if total > 0 else 0.0
+
+
+func get_rescued_count() -> int:
+	var total: int = 0
+	for chapter: ChapterData in campaign.chapters:
+		if chapter != null and is_chapter_done(chapter.id):
+			total += chapter.rescued
+	return total
+
+
+func get_house_count() -> int:
+	var total: int = 0
+	for chapter: ChapterData in campaign.chapters:
+		if chapter != null and chapter.unlock_house and is_chapter_done(chapter.id):
+			total += 1
+	return total
+
+
+## Свои машины (модели), полученные в главах
+func get_owned_cars() -> Array[PackedScene]:
+	var result: Array[PackedScene] = []
+	for chapter: ChapterData in campaign.chapters:
+		if chapter != null and chapter.unlock_car != null and is_chapter_done(chapter.id):
+			result.append(chapter.unlock_car)
+	return result
+
+
+## Рассказ для показа в убежище (и сбросить его)
+func pop_pending_story() -> String:
+	var story: String = _pending_story
+	_pending_story = ""
+	if not story.is_empty():
+		save_game()
+	return story
+
+
+func _on_story_mission_won(mission: MissionData) -> void:
+	var chapter: ChapterData = campaign.find_by_mission(mission.id)
+	if chapter == null or is_chapter_done(chapter.id):
+		return
+	_chapters_done.append(chapter.id)
+	_pending_story = chapter.id
+	if _chapters_done.size() >= campaign.chapters.size():
+		_pending_story = chapter.id + "|epilogue"
+	campaign_changed.emit()
 
 
 # ---------- Снаряжение ----------
@@ -670,6 +749,8 @@ func reset_progress() -> void:
 	_skins_owned.clear()
 	_skin_id = ""
 	_gear_owned.clear()
+	_chapters_done.clear()
+	_pending_story = ""
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -698,6 +779,8 @@ func save_game() -> void:
 		"cutscenes_seen": _cutscenes_seen,
 		"skins_owned": _skins_owned,
 		"gear": _gear_owned,
+		"chapters_done": _chapters_done,
+		"pending_story": _pending_story,
 		"skin": _skin_id,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
@@ -778,6 +861,14 @@ func load_game() -> void:
 				"progress": maxi(int((entry as Dictionary).get("progress", 0)), 0),
 				"claimed": bool((entry as Dictionary).get("claimed", false)),
 			})
+
+	_chapters_done.clear()
+	var stored_chapters: Variant = data.get("chapters_done", [])
+	if stored_chapters is Array:
+		for chapter_id: Variant in stored_chapters:
+			if campaign.find(str(chapter_id)) != null and not str(chapter_id) in _chapters_done:
+				_chapters_done.append(str(chapter_id))
+	_pending_story = str(data.get("pending_story", ""))
 
 	_gear_owned.clear()
 	var stored_gear: Variant = data.get("gear", [])

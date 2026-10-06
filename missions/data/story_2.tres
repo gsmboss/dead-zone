@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MissionData" format=3]
+
+[ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="1_mdt"]
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="z_walker"]
+[ext_resource type="Resource" uid="uid://bxalb3sauqja6" path="res://enemies/runner.tres" id="z_runner"]
+[ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="z_tank"]
+[ext_resource type="Resource" path="res://enemies/crawler.tres" id="z_crawler"]
+
+[resource]
+script = ExtResource("1_mdt")
+id = "story_2"
+title = "УЛИЦА МОЛЧАНИЯ"
+description = "Семья заперлась в магазине. Расчисти улицу — убей 30 зомби"
+type = 1
+level_scene = "res://levels/street_level.tscn"
+kill_target = 30
+walker = ExtResource("z_walker")
+runner = ExtResource("z_runner")
+tank = ExtResource("z_tank")
+tank_chance = 0.08
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_crawler")])
+reward_coins = 220
+metadata/_custom_type_script = "uid://dp7avtsfoxban"

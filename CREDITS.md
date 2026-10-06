@@ -14,6 +14,7 @@
 - models/characters/kenney/ — Kenney, Mini Characters: https://kenney.nl/assets/mini-characters
 - models/graveyard/ — Kenney, Graveyard Kit 5.0: https://kenney.nl/assets/graveyard-kit
 - models/survival/ — Kenney, Survival Kit: https://kenney.nl/assets/survival-kit
+- models/industrial/ — Kenney, City Kit (Industrial) 2.0: https://kenney.nl/assets/city-kit-industrial
 
 ## Звуки (audio/, перекодировано в OGG mono 44.1 kHz)
 - weapons/pistol_shot, rifle_shot, shotgun_shot — "Gunshot Sounds" (tabasco),

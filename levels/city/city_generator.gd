@@ -302,6 +302,10 @@ func _spawn_drivable_cars() -> void:
 		var car := DrivableCar.new()
 		car.name = "Car%d" % (i + 1)
 		car.model_scene = config.drivable_cars[i % config.drivable_cars.size()]
+		# Своя машина из сюжета ждёт у старта
+		var owned: Array[PackedScene] = GameState.get_owned_cars()
+		if i == 0 and not owned.is_empty():
+			car.model_scene = owned[owned.size() - 1]
 		car.position = at + Vector3.UP * 0.3
 		car.rotation.y = yaw
 		add_child(car)

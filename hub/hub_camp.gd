@@ -38,6 +38,40 @@ func _ready() -> void:
 		batch.add(scene, xform, bool(entry[3]))
 	batch.build()
 	_build_fire(Vector3(-4.6, 0.0, 1.3))
+	_build_survivors(Vector3(-4.6, 0.0, 1.3))
+
+
+## Спасённые в сюжете люди греются у костра (до MAX_SURVIVORS фигур)
+const MAX_SURVIVORS: int = 6
+var _survivors: Array[PlayerBody] = []
+
+
+func _build_survivors(fire: Vector3) -> void:
+	var count: int = mini(GameState.get_rescued_count(), MAX_SURVIVORS)
+	if count <= 0:
+		return
+	var skins: Array[PlayerSkin] = []
+	for skin: PlayerSkin in GameState.skins:
+		if skin.hide_weapon:
+			skins.append(skin)
+	if skins.is_empty():
+		return
+	for i in count:
+		# Полукруг с восточной стороны костра (с запада — палатка)
+		var angle: float = lerpf(-1.2, 1.2, float(i) / maxf(count - 1, 1.0))
+		var at: Vector3 = fire + Vector3(cos(angle), 0.0, sin(angle)) * 1.9
+		var body := PlayerBody.new()
+		add_child(body)
+		body.set_skin(skins[i % skins.size()])
+		body.position = at
+		body.rotation.y = atan2(at.x - fire.x, at.z - fire.z)  # лицом к огню
+		_survivors.append(body)
+	set_process(true)
+
+
+func _process(delta: float) -> void:
+	for body: PlayerBody in _survivors:
+		body.update_motion(0.0, true, delta)
 
 
 func _build_fire(at: Vector3) -> void:

@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"interact"):
 		_interact()
 	if Input.is_action_just_pressed(&"pause") and not CutscenePlayer.is_blocking_input() \
-			and not ControlLayoutEditor.is_open:
+			and not ControlLayoutEditor.is_open and not StoryPanel.is_open:
 		_on_back()
 
 
@@ -87,6 +87,8 @@ func _build_ui() -> void:
 	_menu_bar.offset_top = _menu_top()
 	_menu_bar.offset_bottom = _menu_top() + UIKit.BUTTON_HEIGHT
 
+	var story := _add_menu_button("СЮЖЕТ", func() -> void: _open_window(CampaignPanel.new()))
+	story.modulate = Color(1.0, 0.75, 0.45)
 	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", func() -> void: _open_window(DailyPanel.new()))
 	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
 	_base_button = _add_menu_button("БАЗА", func() -> void: _open_window(BasePanel.new()))
@@ -115,15 +117,41 @@ func _build_ui() -> void:
 	_interact_button.offset_bottom = -50.0
 
 
+## Победа в главе: в убежище — её концовка (после последней — и эпилог)
+func _show_pending_story() -> void:
+	var pending: String = GameState.pop_pending_story()
+	if pending.is_empty():
+		return
+	var parts: PackedStringArray = pending.split("|")
+	var chapter: ChapterData = GameState.campaign.find(parts[0])
+	if chapter == null:
+		return
+	var rewards := PackedStringArray()
+	if chapter.rescued > 0:
+		rewards.append("СПАСЕНО ЛЮДЕЙ: %d" % chapter.rescued)
+	if chapter.unlock_house:
+		rewards.append("В ЛАГЕРЕ НОВЫЙ ДОМ")
+	if chapter.unlock_car != null:
+		rewards.append("НОВАЯ МАШИНА: %s" % chapter.unlock_car_name)
+	var pages: PackedStringArray = chapter.outro_pages.duplicate()
+	if not rewards.is_empty():
+		pages.append("\n".join(rewards) + "\n\nПРОЙДЕНО %d%% СЮЖЕТА" % roundi(GameState.get_campaign_progress() * 100.0))
+	var panel := StoryPanel.open(get_tree(), "ГЛАВА ПРОЙДЕНА  •  %s" % chapter.title, pages, "В ЛАГЕРЬ")
+	if parts.size() > 1 and parts[1] == "epilogue":
+		panel.finished.connect(func() -> void:
+			StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ"))
+
+
 ## Кнопка в верхней строке меню убежища
 func _add_menu_button(text: String, callback: Callable) -> Button:
-	var button := UIKit.button(text, 21)
+	var button := UIKit.button(text, 19)
 	button.pressed.connect(callback)
 	_menu_bar.add_child(button)
 	return button
 
 
 func _connect_world() -> void:
+	_show_pending_story.call_deferred()
 	# Вернулись из матча по сети — сразу в лобби
 	if Net.is_online():
 		_open_window.call_deferred(LobbyPanel.new())
