@@ -57,7 +57,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var on_screen: bool = is_visible_in_tree() and get_global_rect().intersects(get_viewport_rect())
-	var mode: int = SubViewport.UPDATE_ALWAYS if on_screen else SubViewport.UPDATE_DISABLED
+	var mode: SubViewport.UpdateMode = SubViewport.UPDATE_ALWAYS if on_screen else SubViewport.UPDATE_DISABLED
 	if _viewport.render_target_update_mode != mode:
 		_viewport.render_target_update_mode = mode
 	if not on_screen:
