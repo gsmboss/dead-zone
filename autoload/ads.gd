@@ -24,7 +24,10 @@ const CONSENT_TIMEOUT: float = 8.0
 ## Место под баннер сверху в убежище (в пикселях интерфейса)
 const BANNER_RESERVE: float = 92.0
 
+## SDK готов (пришёл ответ MobileAds.initialize) — только после этого можно грузить рекламу
 var _initialized: bool = false
+## initialize() уже вызван, ждём ответа SDK
+var _init_started: bool = false
 var _banner: AdView
 var _banner_wanted: bool = false
 var _interstitial: InterstitialAd
@@ -218,10 +221,22 @@ func _on_consent_updated() -> void:
 
 
 func _init_ads() -> void:
+	if _init_started:
+		return
+	_init_started = true
+	# Загрузка объявлений до окончания инициализации роняет приложение на Android
+	# (IllegalStateException: MobileAds.initialize must be called before using the SDK) —
+	# грузим только в колбэке завершения
+	var listener := OnInitializationCompleteListener.new()
+	listener.on_initialization_complete = func(_status: InitializationStatus) -> void:
+		_on_sdk_ready.call_deferred()
+	MobileAds.initialize(listener)
+
+
+func _on_sdk_ready() -> void:
 	if _initialized:
 		return
 	_initialized = true
-	MobileAds.initialize()
 	_load_interstitial()
 	_load_rewarded()
 	if _banner_wanted:
