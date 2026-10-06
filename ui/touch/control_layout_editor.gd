@@ -6,6 +6,9 @@ extends CanvasLayer
 
 signal closed
 
+## Редактор открыт: «Назад»/пауза закрывает его, а не окна под ним
+static var is_open: bool = false
+
 const BACKGROUND: Color = Color(0.03, 0.035, 0.04, 0.9)
 const ZONE_COLOR: Color = Color(0.25, 0.5, 0.9, 0.18)
 const ZONE_BORDER: Color = Color(0.45, 0.7, 1.0, 0.7)
@@ -34,6 +37,7 @@ static func open(tree: SceneTree) -> ControlLayoutEditor:
 
 
 func _ready() -> void:
+	is_open = true
 	layer = 60
 	process_mode = PROCESS_MODE_ALWAYS  # работает и на паузе
 	_joystick_right = Settings.joystick_right
@@ -245,7 +249,18 @@ func _save() -> void:
 	_close()
 
 
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed(&"pause"):
+		_close()
+
+
+func _exit_tree() -> void:
+	is_open = false
+
+
 func _close() -> void:
+	if is_queued_for_deletion():
+		return
 	closed.emit()
 	queue_free()
 

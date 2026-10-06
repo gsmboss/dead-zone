@@ -7,6 +7,7 @@ extends Control
 
 var _coins_label: Label
 var _menu_bar: HBoxContainer
+var _exit_panel: PanelContainer
 var _daily_button: Button
 var _settings_button: Button
 var _base_button: Button
@@ -26,6 +27,51 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"interact"):
 		_interact()
+	if Input.is_action_just_pressed(&"pause") and not CutscenePlayer.is_blocking_input() \
+			and not ControlLayoutEditor.is_open:
+		_on_back()
+
+
+## «Назад» в убежище: закрыть окно, иначе спросить про выход
+func _on_back() -> void:
+	if _exit_panel != null:
+		_exit_panel.queue_free()
+		_exit_panel = null
+		return
+	if _window != null:
+		_window.close_window()
+		return
+	_show_exit_confirm()
+
+
+func _show_exit_confirm() -> void:
+	_exit_panel = PanelContainer.new()
+	_exit_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())
+	add_child(_exit_panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 16)
+	_exit_panel.add_child(box)
+	var title := UIKit.label("ВЫЙТИ ИЗ ИГРЫ?", 40, box)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.modulate = UIKit.ACCENT
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override(&"separation", 16)
+	box.add_child(row)
+	var stay := UIKit.button("ОСТАТЬСЯ", 28, 240.0)
+	stay.pressed.connect(_on_back)
+	row.add_child(stay)
+	var quit := UIKit.button("ВЫЙТИ", 28, 240.0)
+	quit.pressed.connect(func() -> void:
+		GameState.save_game()
+		get_tree().quit())
+	row.add_child(quit)
+	_exit_panel.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
+	_exit_panel.grow_horizontal = GROW_DIRECTION_BOTH
+	_exit_panel.grow_vertical = GROW_DIRECTION_BOTH
+	_exit_panel.scale = Vector2.ONE * 0.8
+	_exit_panel.pivot_offset = _exit_panel.get_combined_minimum_size() * 0.5
+	create_tween().tween_property(_exit_panel, "scale", Vector2.ONE, 0.2) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _build_ui() -> void:

@@ -38,8 +38,8 @@ func _exit_tree() -> void:
 
 func _process(delta: float) -> void:
 	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
-	if CutscenePlayer.is_blocking_input():
-		return  # кат-сцена сама обрабатывает «пропуск»
+	if CutscenePlayer.is_blocking_input() or ControlLayoutEditor.is_open:
+		return  # кат-сцена и редактор кнопок сами обрабатывают «назад»
 	if Input.is_action_just_pressed(&"throw") and not get_tree().paused:
 		_throw()
 	if Input.is_action_just_pressed(&"pause"):
@@ -51,6 +51,18 @@ func _process(delta: float) -> void:
 			_pause()
 	elif Input.is_action_just_pressed(&"inventory") and _window == null and not _is_player_dead():
 		_open_window(InventoryPanel.new(), not get_tree().paused)
+
+
+## Игру свернули (кнопка «Домой», звонок) — сразу пауза: вернулся, а миссия ждёт
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT:
+			# На ПК потеря фокуса окна (клик в редактор) паузу не ставит — только на телефоне
+			if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not OS.has_feature("mobile"):
+				return
+			if is_inside_tree() and _pause_panel != null and _window == null and not _pause_panel.visible \
+					and not CutscenePlayer.is_blocking_input():
+				_pause()
 
 
 func _setup_buttons() -> void:
