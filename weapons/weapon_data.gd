@@ -36,12 +36,14 @@ extends Resource
 
 @export_group("Aim")
 ## Приближение при прицеливании: FOV × множитель (меньше — сильнее зум)
-@export_range(0.3, 1.0, 0.05) var ads_fov_multiplier: float = 0.75
+@export_range(0.1, 1.0, 0.05) var ads_fov_multiplier: float = 0.75
 ## Разброс при прицеливании × множитель
 @export_range(0.0, 1.0, 0.05) var ads_spread_multiplier: float = 0.35
 ## Расхождение прицела за выстрел (доля от spread_degrees) и максимум
 @export_range(0.0, 2.0, 0.05) var bloom_per_shot: float = 0.35
 @export_range(0.0, 5.0, 0.1) var max_bloom_factor: float = 2.0
+## Оптический прицел (снайперская): в прицеле — круг оптики на весь экран, модель оружия скрыта
+@export var has_scope: bool = false
 
 @export_group("Recoil")
 ## Подброс камеры вверх за выстрел, градусы
@@ -57,6 +59,9 @@ extends Resource
 @export var reload_sound: AudioStream
 ## Звук в конце перезарядки (например, передёргивание дробовика)
 @export var reload_end_sound: AudioStream
+## Затвор после каждого выстрела (болтовая винтовка): звучит через bolt_delay секунд
+@export var bolt_sound: AudioStream
+@export_range(0.0, 2.0, 0.05) var bolt_delay: float = 0.35
 @export_range(-30.0, 10.0, 0.5) var fire_volume_db: float = -4.0
 @export_range(0.5, 2.0, 0.05) var fire_pitch: float = 1.0
 

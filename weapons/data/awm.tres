@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_awm"]
+[ext_resource type="PackedScene" uid="uid://bsgnpeqcp580x" path="res://models/weapons/Rifle.gltf" id="2_model"]
+[ext_resource type="AudioStream" path="res://audio/weapons/rifle_shot.ogg" id="s_fire"]
+[ext_resource type="AudioStream" path="res://audio/weapons/rifle_reload.ogg" id="s_reload"]
+[ext_resource type="AudioStream" path="res://audio/weapons/shotgun_pump.ogg" id="s_bolt"]
+
+[resource]
+script = ExtResource("1_awm")
+display_name = "AWM"
+damage = 160.0
+max_range = 150.0
+spread_degrees = 6.0
+fire_rate = 0.8
+magazine_size = 5
+max_reserve_ammo = 30
+reload_time = 2.6
+ads_fov_multiplier = 0.22
+ads_spread_multiplier = 0.0
+bloom_per_shot = 1.0
+max_bloom_factor = 2.0
+has_scope = true
+recoil_pitch = 6.0
+recoil_yaw = 1.0
+gun_kick = 0.08
+fire_sound = ExtResource("s_fire")
+reload_sound = ExtResource("s_reload")
+bolt_sound = ExtResource("s_bolt")
+bolt_delay = 0.35
+fire_volume_db = 1.0
+fire_pitch = 0.72
+view_model = ExtResource("2_model")
+model_position = Vector3(0.15, -0.19, -0.42)
+model_rotation_degrees = Vector3(0, 183, 0)
+model_scale = 0.3
+muzzle_position = Vector3(0, 0.15, -0.8)
+id = "awm"
+price = 2500
+upgrade_base_cost = 250
+damage_per_level = 0.1
+magazine_per_level = 0.2
+reload_per_level = 0.06
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

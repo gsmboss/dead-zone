@@ -100,6 +100,8 @@ var _model_base_rotation: Vector3 = Vector3.ZERO
 var _anim_time: float = 0.0
 var _bob_phase: float = 0.0
 var _speed_ratio: float = 0.0
+## Доля прицеливания, после которой снайпер смотрит в оптику
+const SCOPE_THRESHOLD: float = 0.85
 var _aiming: bool = false
 var _aim_weight: float = 0.0
 var _base_fov: float = 75.0
@@ -181,6 +183,12 @@ func get_aim_slowdown() -> float:
 
 func is_aiming() -> bool:
 	return _aiming
+
+
+## Смотрим в оптику (снайперская винтовка почти в прицеле): круг оптики, модель скрыта
+func is_scoped() -> bool:
+	var weapon: WeaponData = get_current_weapon()
+	return weapon != null and weapon.has_scope and _aim_weight >= SCOPE_THRESHOLD
 
 
 ## 0 — от бедра, 1 — полностью в прицеле
@@ -313,6 +321,9 @@ func _process(delta: float) -> void:
 	_update_flame(delta)
 	if _current_model != null and is_instance_valid(_current_model):
 		_animate_model(delta)
+		var show_model: bool = not is_scoped()
+		if _current_model.visible != show_model:
+			_current_model.visible = show_model
 	if _flash_left > 0.0:
 		_flash_left -= delta
 		if _flash_left <= 0.0:
@@ -447,6 +458,10 @@ func _fire(weapon: WeaponData) -> void:
 		_flame_burst(weapon)
 		return
 	Sfx.play_2d(weapon.fire_sound, weapon.fire_volume_db, weapon.fire_pitch)
+	if weapon.bolt_sound != null:
+		var bolt: AudioStream = weapon.bolt_sound
+		get_tree().create_timer(weapon.bolt_delay, false).timeout.connect(func() -> void:
+			Sfx.play_2d(bolt, -3.0, 1.15, 0.0))
 
 	var any_hit: bool = false
 	var headshot: bool = false

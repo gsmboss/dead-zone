@@ -26,6 +26,7 @@ var _flash: float = 0.0
 var _flash_color: Color = Color.WHITE
 var _hit_marker: HitMarker
 var _headshot_popup: HeadshotPopup
+var _scope: ScopeOverlay
 var _gap: float = MIN_GAP
 var _melee: bool = false
 
@@ -51,6 +52,11 @@ func _connect_manager() -> void:
 	if get_parent() != null:
 		_headshot_popup = HeadshotPopup.new()
 		get_parent().add_child(_headshot_popup)
+		# Оптика снайперской — под всеми кнопками HUD
+		_scope = ScopeOverlay.new()
+		_scope.weapon_manager = weapon_manager
+		get_parent().add_child(_scope)
+		get_parent().move_child(_scope, 0)
 	weapon_manager.weapon_changed.connect(_on_weapon_changed)
 	var weapon: WeaponData = weapon_manager.get_current_weapon()
 	_melee = weapon != null and weapon.is_melee
@@ -59,6 +65,10 @@ func _connect_manager() -> void:
 func _process(delta: float) -> void:
 	if weapon_manager == null:
 		return
+	# В оптике свой прицел — обычный прячем
+	var scoped: bool = weapon_manager.is_scoped()
+	if visible == scoped:
+		visible = not scoped
 	_flash = maxf(_flash - delta, 0.0)
 	if _flash > 0.0:
 		modulate = _flash_color
