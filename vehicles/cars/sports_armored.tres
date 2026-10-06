@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CarData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://vehicles/car_data.gd" id="1_car"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Sports_Armored.gltf" id="2_model"]
+
+[resource]
+script = ExtResource("1_car")
+id = "sports_armored"
+title = "БРОНЕСПОРТ"
+car_class = 3
+description = "Лучшее, что осталось в городе: скорость спорткара и бронированный бампер."
+price = 8000
+model_scene = ExtResource("2_model")
+max_speed = 32.0
+acceleration = 15.0
+steer_rate = 2.4
+grip = 7.5
+drift_grip = 1.7
+run_over_damage_factor = 20.0
+tuning_base_cost = 520

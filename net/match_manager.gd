@@ -468,6 +468,13 @@ func _on_proxy_damaged(amount: float, hit_position: Vector3, is_head: bool, peer
 	Net.rpc_damage_player.rpc_id(peer_id, amount, attacker, is_head, from_position)
 
 
+## Игрок сел в машину (его копию прячем — он «внутри») или вышел
+func set_proxy_in_car(peer_id: int, in_car: bool) -> void:
+	var proxy: Player = _proxies.get(peer_id) as Player
+	if proxy != null and is_instance_valid(proxy) and proxy.visible == in_car:
+		proxy.visible = not in_car
+
+
 func on_peer_left(peer_id: int) -> void:
 	var proxy: Player = _proxies.get(peer_id) as Player
 	if proxy != null and is_instance_valid(proxy):

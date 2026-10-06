@@ -1,8 +1,9 @@
 class_name CityGenerator
 extends Node3D
 ## Большой город, который строится при запуске уровня по CityConfig:
-## сетка дорог, кварталы (в центре — деловой район и небоскрёбы, по краям — дома и деревья),
-## фонари, брошенные машины, мусор, машины для езды, подборы.
+## сетка дорог, широкие проспекты (кольцо по краю и бульвар вокруг центра — простор для дрифта),
+## дрифт-площадь, кварталы (в центре — деловой район и небоскрёбы, по краям — дома и деревья),
+## фонари, брошенные машины, мусор, машины для езды (своя — у старта, по сети — у каждого игрока), подборы.
 ## Одинаковые модели рисуются через MultiMesh (мало вызовов отрисовки на телефоне),
 ## коллизии — коробки в одном StaticBody3D (по ним строится навмеш RuntimeNavRegion).
 ## Должен быть дочерним узлом NavigationRegion3D со скриптом runtime_nav_region.gd.
@@ -12,9 +13,20 @@ const TREE_TRUNK: Vector3 = Vector3(0.7, 4.0, 0.7)
 ## Точек появления игроков по сети (ближайшие к центру дворы)
 const MATCH_SPAWNS: int = 8
 ## Взрывных бочек у дорог
-const EXPLOSIVE_BARRELS: int = 14
+const EXPLOSIVE_BARRELS: int = 20
 const ROAD_TILE: float = 8.0
 const ROAD_HALF_WIDTH: float = 4.0
+## Проспект: 24 м асфальта (три тайла дороги), разметка и бордюр
+const AVENUE_HALF_WIDTH: float = 12.0
+const AVENUE_HEIGHT: float = 0.006
+const AVENUE_COLOR: Color = Color(0.17, 0.17, 0.19)
+const MARKING_COLOR: Color = Color(0.92, 0.9, 0.8)
+const MARKING_SIZE: Vector3 = Vector3(0.25, 0.02, 3.0)
+const MARKING_STEP: float = 6.0
+## Дрифт-площадь: асфальт на весь квартал, конусы по кругу для «пончиков», шины по углам
+const PLAZA_COLOR: Color = Color(0.2, 0.2, 0.22)
+const PLAZA_CONES: int = 14
+const PLAZA_CONE_RADIUS: float = 7.0
 ## Отступ построек от края дороги (тротуар)
 const SIDEWALK: float = 2.0
 const LOTS_PER_SIDE: int = 3
@@ -52,6 +64,13 @@ var _courtyards: Array[Vector3] = []
 ## Плафоны фонарей: светятся ночью (DayNightCycle, группа night_glow)
 var _lamps: Array[Transform3D] = []
 var _loot_spots: Array[LootSpot] = []
+## Полуширина дороги каждой линии сетки (проспекты шире)
+var _half_widths: Array[float] = []
+## Квартал под дрифт-площадь (bx, bz); (-1, -1) — нет
+var _plaza_block: Vector2i = Vector2i(-1, -1)
+var _plaza_center: Vector3 = Vector3.ZERO
+## Белая разметка проспектов (одним MultiMesh)
+var _markings: Array[Transform3D] = []
 
 
 func _ready() -> void:
@@ -66,6 +85,7 @@ func _ready() -> void:
 	_lines.clear()
 	for i in config.blocks + 1:
 		_lines.append(-_half + i * config.block_size)
+	_setup_avenues()
 
 	_body = StaticBody3D.new()
 	_body.name = "CityCollision"
@@ -75,11 +95,14 @@ func _ready() -> void:
 
 	_build_ground()
 	_build_roads()
+	_build_avenues()
 	_build_blocks()
+	_build_drift_plaza()
 	_build_street_lights()
 	_build_wrecks()
 	_build_props()
 	_build_multimeshes()
+	_build_markings()
 	_build_lamp_glow()
 	_spawn_drivable_cars()
 	_spawn_pickups()
@@ -98,10 +121,45 @@ func get_half_size() -> float:
 	return _half
 
 
+## Центр дрифт-площади (Vector3.ZERO, если её нет)
+func get_plaza_center() -> Vector3:
+	return _plaza_center
+
+
+## Проспекты: кольцо по краю города и бульвар вокруг делового центра; дрифт-площадь — за бульваром
+func _setup_avenues() -> void:
+	_half_widths.clear()
+	var wide := {}
+	if config.wide_avenues:
+		var middle: int = floori((config.blocks - 1) * 0.5)
+		for index: int in [0, config.blocks, middle - config.downtown_radius, middle + config.downtown_radius + 1]:
+			if index >= 0 and index <= config.blocks:
+				wide[index] = true
+	for i in _lines.size():
+		_half_widths.append(AVENUE_HALF_WIDTH if wide.has(i) else ROAD_HALF_WIDTH)
+	if config.drift_plaza:
+		var middle_block: int = floori((config.blocks - 1) * 0.5)
+		var plaza_x: int = mini(middle_block + config.downtown_radius + 1, config.blocks - 1)
+		if plaza_x != middle_block:
+			_plaza_block = Vector2i(plaza_x, middle_block)
+
+
+func _is_avenue(index: int) -> bool:
+	return _half_widths[index] > ROAD_HALF_WIDTH
+
+
+## Ширина самой широкой дороги (для границ)
+func _max_half_width() -> float:
+	var result: float = ROAD_HALF_WIDTH
+	for half_width: float in _half_widths:
+		result = maxf(result, half_width)
+	return result
+
+
 # ---------- Земля, дороги, границы ----------
 
 func _build_ground() -> void:
-	var size: float = _half * 2.0 + ROAD_TILE * 2.0
+	var size: float = (_half + _max_half_width() + BOUNDS_MARGIN) * 2.0 + ROAD_TILE
 	_add_box_collision(Vector3(0.0, -0.5, 0.0), Vector3(size, 1.0, size))
 	var plane := PlaneMesh.new()
 	plane.size = Vector2.ONE * GROUND_VISUAL_SIZE
@@ -124,9 +182,14 @@ func _build_roads() -> void:
 	if config.road_cross != null:
 		_no_shadow[config.road_cross] = true
 	var tiles_per_line: int = roundi(_half * 2.0 / ROAD_TILE)
-	for line: float in _lines:
+	for line_index in _lines.size():
+		if _is_avenue(line_index):
+			continue  # проспект — сплошной асфальт (_build_avenues)
+		var line: float = _lines[line_index]
 		for k in tiles_per_line + 1:
 			var along: float = -_half + k * ROAD_TILE
+			if _under_avenue(along):
+				continue
 			var crossing: bool = _is_on_line(along)
 			# Вдоль Z (x = line): здесь же перекрёстки
 			if crossing and config.road_cross != null:
@@ -138,13 +201,80 @@ func _build_roads() -> void:
 				_add_instance(config.road_straight, _xform(Vector3(along, ROAD_HEIGHT, line), PI * 0.5, 1.0))
 
 
+## Тайл дороги попадает на асфальт проспекта
+func _under_avenue(along: float) -> bool:
+	for i in _lines.size():
+		if _is_avenue(i) and absf(_lines[i] - along) < AVENUE_HALF_WIDTH - 0.1:
+			return true
+	return false
+
+
+## Проспекты: полоса асфальта вдоль Z и вдоль X, белая прерывистая разметка по оси и у краёв
+func _build_avenues() -> void:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = AVENUE_COLOR
+	material.roughness = 0.9
+	var length: float = _half * 2.0 + AVENUE_HALF_WIDTH * 2.0
+	for i in _lines.size():
+		if not _is_avenue(i):
+			continue
+		var line: float = _lines[i]
+		for along_x: bool in [false, true]:
+			var plane := PlaneMesh.new()
+			plane.size = Vector2(AVENUE_HALF_WIDTH * 2.0, length) if not along_x else Vector2(length, AVENUE_HALF_WIDTH * 2.0)
+			plane.material = material
+			var strip := MeshInstance3D.new()
+			strip.name = "Avenue%d%s" % [i, "X" if along_x else "Z"]
+			strip.mesh = plane
+			strip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			# Полосы вдоль X чуть выше — без мерцания на пересечениях
+			strip.position = Vector3(line, AVENUE_HEIGHT, 0.0) if not along_x else Vector3(0.0, AVENUE_HEIGHT + 0.002, line)
+			add_child(strip)
+			_add_avenue_markings(i, along_x)
+
+
+func _add_avenue_markings(index: int, along_x: bool) -> void:
+	var line: float = _lines[index]
+	var count: int = floori((_half * 2.0) / MARKING_STEP)
+	for k in count + 1:
+		var along: float = -_half + k * MARKING_STEP
+		if _near_crossing(along):
+			continue
+		for offset: float in [0.0, -AVENUE_HALF_WIDTH * 0.5, AVENUE_HALF_WIDTH * 0.5]:
+			var at := Vector3(line + offset, 0.02, along) if not along_x else Vector3(along, 0.02, line + offset)
+			_markings.append(Transform3D(Basis(Vector3.UP, 0.0 if not along_x else PI * 0.5), at))
+
+
+func _build_markings() -> void:
+	if _markings.is_empty():
+		return
+	var box := BoxMesh.new()
+	box.size = MARKING_SIZE
+	var material := StandardMaterial3D.new()
+	material.albedo_color = MARKING_COLOR
+	material.roughness = 0.8
+	box.material = material
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = box
+	multimesh.instance_count = _markings.size()
+	for i in _markings.size():
+		multimesh.set_instance_transform(i, _markings[i])
+	var instance := MultiMeshInstance3D.new()
+	instance.name = "RoadMarkings"
+	instance.multimesh = multimesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(instance)
+	_markings.clear()
+
+
 func _build_bounds() -> void:
 	var walls := StaticBody3D.new()
 	walls.name = "Bounds"
 	walls.collision_layer = PhysicsLayers.WORLD
 	walls.collision_mask = 0
 	add_child(walls)
-	var edge: float = _half + BOUNDS_MARGIN
+	var edge: float = _half + _max_half_width() + BOUNDS_MARGIN
 	var length: float = edge * 2.0 + 1.0
 	for side: Vector3 in [Vector3(edge, 0.0, 0.0), Vector3(-edge, 0.0, 0.0), Vector3(0.0, 0.0, edge), Vector3(0.0, 0.0, -edge)]:
 		var box := BoxShape3D.new()
@@ -159,16 +289,23 @@ func _build_bounds() -> void:
 
 func _build_blocks() -> void:
 	var middle: float = (config.blocks - 1) * 0.5
-	var interior_half: float = config.block_size * 0.5 - ROAD_HALF_WIDTH - SIDEWALK
-	var lot: float = interior_half * 2.0 / LOTS_PER_SIDE
 	for bx in config.blocks:
 		for bz in config.blocks:
-			var center := Vector3(-_half + (bx + 0.5) * config.block_size, 0.0,
-				-_half + (bz + 0.5) * config.block_size)
+			if Vector2i(bx, bz) == _plaza_block:
+				continue
+			# Участок между дорогами (у проспекта он уже)
+			var min_x: float = _lines[bx] + _half_widths[bx] + SIDEWALK
+			var max_x: float = _lines[bx + 1] - _half_widths[bx + 1] - SIDEWALK
+			var min_z: float = _lines[bz] + _half_widths[bz] + SIDEWALK
+			var max_z: float = _lines[bz + 1] - _half_widths[bz + 1] - SIDEWALK
+			var center := Vector3((min_x + max_x) * 0.5, 0.0, (min_z + max_z) * 0.5)
+			var lot_x: float = (max_x - min_x) / LOTS_PER_SIDE
+			var lot_z: float = (max_z - min_z) / LOTS_PER_SIDE
+			var lot: float = minf(lot_x, lot_z)
 			var downtown: bool = maxf(absf(bx - middle), absf(bz - middle)) <= config.downtown_radius
 			for ix in range(-1, 2):
 				for iz in range(-1, 2):
-					var lot_center: Vector3 = center + Vector3(ix * lot, 0.0, iz * lot)
+					var lot_center: Vector3 = center + Vector3(ix * lot_x, 0.0, iz * lot_z)
 					if ix == 0 and iz == 0:
 						_courtyards.append(lot_center)  # двор посередине квартала
 						continue
@@ -223,15 +360,82 @@ func _decorate_empty_lot(lot_center: Vector3, lot: float, downtown: bool) -> voi
 		_courtyards.append(lot_center)  # пустырь в центре — как двор
 
 
+## Дрифт-площадь: квартал без домов, асфальт до самых дорог, конусы кругом, шины по углам, фонари
+func _build_drift_plaza() -> void:
+	if _plaza_block.x < 0:
+		return
+	var bx: int = _plaza_block.x
+	var bz: int = _plaza_block.y
+	var min_x: float = _lines[bx] + _half_widths[bx]
+	var max_x: float = _lines[bx + 1] - _half_widths[bx + 1]
+	var min_z: float = _lines[bz] + _half_widths[bz]
+	var max_z: float = _lines[bz + 1] - _half_widths[bz + 1]
+	_plaza_center = Vector3((min_x + max_x) * 0.5, 0.0, (min_z + max_z) * 0.5)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = PLAZA_COLOR
+	material.roughness = 0.85
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(max_x - min_x, max_z - min_z)
+	plane.material = material
+	var asphalt := MeshInstance3D.new()
+	asphalt.name = "DriftPlaza"
+	asphalt.mesh = plane
+	asphalt.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	asphalt.position = _plaza_center + Vector3.UP * 0.004
+	add_child(asphalt)
+	# Круг разметки и конусы для «пончиков» (конусы без коллизии — можно проезжать насквозь)
+	for i in 48:
+		var angle: float = TAU * i / 48.0
+		var at: Vector3 = _plaza_center + Vector3(cos(angle), 0.0, sin(angle)) * (PLAZA_CONE_RADIUS + 5.0)
+		_markings.append(Transform3D(Basis(Vector3.UP, -angle), at + Vector3.UP * 0.02))
+	var cone: PackedScene = _find_prop("TrafficCone")
+	if cone != null:
+		_no_shadow[cone] = true
+		for i in PLAZA_CONES:
+			var angle_cone: float = TAU * i / PLAZA_CONES
+			_add_instance(cone, _xform(_plaza_center + Vector3(cos(angle_cone), 0.0, sin(angle_cone)) * PLAZA_CONE_RADIUS, angle_cone, 1.0))
+	# Шины и фонари по углам — площадь видно и ночью
+	var tires: PackedScene = _find_prop("Wheels_Stack")
+	var half_x: float = (max_x - min_x) * 0.5 - 2.5
+	var half_z: float = (max_z - min_z) * 0.5 - 2.5
+	for corner: Vector3 in [Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(-1, 0, 1), Vector3(1, 0, 1)]:
+		var at_corner: Vector3 = _plaza_center + Vector3(corner.x * half_x, 0.0, corner.z * half_z)
+		if tires != null:
+			_add_static(tires, _xform(at_corner, _rng.randf() * TAU, 1.0))
+		if config.street_light != null:
+			var light_at: Vector3 = at_corner - Vector3(corner.x, 0.0, corner.z) * 2.5
+			var light: Transform3D = _xform(light_at, atan2(-corner.x, -corner.z), 1.0)
+			_add_static(config.street_light, light, POLE_BOX)
+			_lamps.append(light)
+	var plaza_sign := Label3D.new()
+	plaza_sign.name = "PlazaSign"
+	plaza_sign.text = "ДРИФТ-ПЛОЩАДЬ"
+	plaza_sign.font_size = 96
+	plaza_sign.outline_size = 24
+	plaza_sign.pixel_size = 0.02
+	plaza_sign.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
+	plaza_sign.modulate = Color(1.0, 0.75, 0.25)
+	plaza_sign.position = _plaza_center + Vector3.UP * 7.0
+	add_child(plaza_sign)
+
+
+## Модель мелочи из config.props по части имени файла
+func _find_prop(part: String) -> PackedScene:
+	for scene: PackedScene in config.props:
+		if scene != null and scene.resource_path.get_file().contains(part):
+			return scene
+	return null
+
+
 # ---------- Улица ----------
 
 func _build_street_lights() -> void:
 	if config.street_light == null or config.street_light_spacing <= 0.0:
 		return
-	var offset: float = ROAD_HALF_WIDTH + 1.0
 	var count: int = floori(_half * 2.0 / config.street_light_spacing)
 	for line_index in _lines.size():
 		var line: float = _lines[line_index]
+		var offset: float = _half_widths[line_index] + 1.0
 		for k in count + 1:
 			var along: float = -_half + k * config.street_light_spacing
 			if _near_crossing(along):
@@ -283,9 +487,12 @@ func _build_props() -> void:
 
 
 ## Случайная точка на дороге (не у перекрёстка), сдвинутая от оси на lateral метров
-func _random_road_spot(lateral: float) -> Dictionary:
+## (на проспекте — у его края: середина свободна для езды)
+func _random_road_spot(lateral_offset: float) -> Dictionary:
 	for attempt in 6:
-		var line: float = _pick_float(_lines)
+		var line_index: int = _rng.randi() % _lines.size()
+		var line: float = _lines[line_index]
+		var lateral: float = lateral_offset + _half_widths[line_index] - ROAD_HALF_WIDTH
 		var along: float = _rng.randf_range(-_half + 4.0, _half - 4.0)
 		if _near_crossing(along):
 			continue
@@ -299,30 +506,49 @@ func _random_road_spot(lateral: float) -> Dictionary:
 # ---------- Машины и подборы ----------
 
 func _spawn_drivable_cars() -> void:
+	var start_yard: int = 0
+	if Net.in_match:
+		_spawn_match_cars()
+	elif not _courtyards.is_empty():
+		# Своя машина из автосалона ждёт во дворе у старта
+		var own: DrivableCar = DrivableCar.create_selected()
+		if own != null:
+			own.name = "MyCar"
+			own.position = _closest_courtyard(Vector3.ZERO) + Vector3(0.0, 0.3, 4.5)
+			own.rotation.y = PI * 0.5
+			add_child(own)
+			start_yard = 1
 	if config.drivable_cars.is_empty():
 		return
-	for i in config.drivable_car_count:
-		var at: Vector3
-		var yaw: float
-		if i == 0 and not _courtyards.is_empty():
-			# Первая — во дворе у старта игрока
-			at = _closest_courtyard(Vector3.ZERO) + Vector3(0.0, 0.0, 4.5)
-			yaw = PI * 0.5
-		else:
-			var spot: Dictionary = _random_road_spot(2.4)
-			if spot.is_empty():
-				continue
-			at = spot["position"]
-			yaw = spot["yaw"]
+	# Остальные — на дорогах (по сети у всех одинаковые: тот же _rng)
+	for i in range(start_yard, config.drivable_car_count):
+		var spot: Dictionary = _random_road_spot(2.4)
+		if spot.is_empty():
+			continue
 		var car := DrivableCar.new()
 		car.name = "Car%d" % (i + 1)
 		car.model_scene = config.drivable_cars[i % config.drivable_cars.size()]
-		# Своя машина из сюжета ждёт у старта
-		var owned: Array[PackedScene] = GameState.get_owned_cars()
-		if i == 0 and not owned.is_empty():
-			car.model_scene = owned[owned.size() - 1]
-		car.position = at + Vector3.UP * 0.3
-		car.rotation.y = yaw
+		car.position = (spot["position"] as Vector3) + Vector3.UP * 0.3
+		car.rotation.y = spot["yaw"]
+		add_child(car)
+
+
+## По сети: у каждого игрока его машина из автосалона (покраска, неон, тюнинг) — в ближних дворах.
+## Порядок по peer_id — одинаковые имена и места у всех
+func _spawn_match_cars() -> void:
+	var yards: Array[Vector3] = _courtyards.duplicate()
+	yards.sort_custom(func(a: Vector3, b: Vector3) -> bool: return a.length() < b.length())
+	var peers: Array = Net.players.keys()
+	peers.sort()
+	for i in mini(peers.size(), yards.size()):
+		var peer_id: int = int(peers[i])
+		var info: String = str((Net.players[peer_id] as Dictionary).get("car", ""))
+		var car: DrivableCar = DrivableCar.create_from_net_info(info)
+		if car == null:
+			continue
+		car.name = "PlayerCar_%d" % peer_id
+		car.position = yards[i] + Vector3(0.0, 0.3, 4.5)
+		car.rotation.y = PI * 0.5
 		add_child(car)
 
 
@@ -533,8 +759,8 @@ func _is_on_line(value: float) -> bool:
 
 
 func _near_crossing(value: float) -> bool:
-	for line: float in _lines:
-		if absf(line - value) < CROSSING_CLEARANCE:
+	for i in _lines.size():
+		if absf(_lines[i] - value) < CROSSING_CLEARANCE + _half_widths[i] - ROAD_HALF_WIDTH:
 			return true
 	return false
 

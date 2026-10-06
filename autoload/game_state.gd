@@ -11,6 +11,8 @@ signal inventory_changed
 signal skin_changed(skin: PlayerSkin)
 signal gear_changed
 signal campaign_changed
+## Куплена, выбрана, покрашена или затюнингована машина
+signal cars_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -51,6 +53,24 @@ const CAR_UPGRADES: Array[String] = ["ram", "engine"]
 const CAR_UPGRADE_MAX: int = 5
 const CAR_UPGRADE_BASE_COST: int = 150
 const CAR_UPGRADE_GROWTH: float = 1.6
+## Автосалон: машины классов D/C/B/A (первая — бесплатная)
+const CAR_PATHS: Array[String] = ["res://vehicles/cars/pickup.tres", "res://vehicles/cars/truck.tres",
+	"res://vehicles/cars/pickup_armored.tres", "res://vehicles/cars/sports.tres",
+	"res://vehicles/cars/truck_armored.tres", "res://vehicles/cars/sports_armored.tres"]
+## Тюнинг машины: двигатель — макс. скорость, газ — разгон, управление — руль и сцепление, таран — урон
+const CAR_TUNING: Array[String] = ["engine", "turbo", "handling", "ram"]
+const CAR_TUNING_MAX: int = 5
+const CAR_TUNING_GROWTH: float = 1.55
+## Покраска (индекс 0 — заводской цвет, бесплатно) и неон под днищем
+const CAR_PAINTS: Array[Color] = [Color.WHITE, Color(0.95, 0.25, 0.2), Color(0.3, 0.55, 1.0),
+	Color(0.35, 0.85, 0.35), Color(1.0, 0.85, 0.25), Color(0.32, 0.32, 0.36), Color(0.75, 0.4, 1.0),
+	Color(1.0, 0.55, 0.15), Color(0.55, 0.95, 0.95)]
+const CAR_PAINT_NAMES: PackedStringArray = ["ЗАВОДСКОЙ", "КРАСНЫЙ", "СИНИЙ", "ЗЕЛЁНЫЙ", "ЖЁЛТЫЙ",
+	"ГРАФИТ", "ФИОЛЕТОВЫЙ", "ОРАНЖЕВЫЙ", "БИРЮЗОВЫЙ"]
+const CAR_PAINT_PRICE: int = 150
+const CAR_NEONS: Array[Color] = [Color(0.2, 0.9, 1.0), Color(1.0, 0.2, 0.8), Color(0.3, 1.0, 0.3),
+	Color(1.0, 0.5, 0.1), Color(0.6, 0.3, 1.0)]
+const CAR_NEON_PRICE: int = 400
 ## Бонус склада патронов к максимальному запасу
 const ARMORY_AMMO_BONUS: float = 0.3
 
@@ -76,6 +96,12 @@ var _quests: Array[Dictionary] = []  # {"id": String, "progress": int, "claimed"
 var _inventory: Dictionary = {}  # id предмета -> количество
 var _buildings_owned: Array[String] = []
 var _car_upgrades: Dictionary = {}  # "ram"/"engine" -> уровень
+var cars: Array[CarData] = []
+var _cars_owned: Array[String] = []
+var _car_id: String = ""
+var _car_tuning: Dictionary = {}  # id машины -> {"engine": int, ...}
+var _car_paint: Dictionary = {}   # id машины -> индекс CAR_PAINTS
+var _car_neon: Dictionary = {}    # id машины -> индекс CAR_NEONS (нет ключа — неона нет)
 var _cutscenes_seen: Array[String] = []
 var skins: Array[PlayerSkin] = []
 var gear: Array[GearData] = []
@@ -133,6 +159,12 @@ func _ready() -> void:
 			push_warning("GameState: не найден скин %s" % path)
 			continue
 		skins.append(skin)
+	for path: String in CAR_PATHS:
+		var car: CarData = load(path) as CarData if ResourceLoader.exists(path) else null
+		if car == null or car.id.is_empty():
+			push_warning("GameState: не найдена машина %s" % path)
+			continue
+		cars.append(car)
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -560,6 +592,144 @@ func upgrade_car(stat: String) -> bool:
 	return true
 
 
+# ---------- Автосалон ----------
+
+func get_car(car_id: String) -> CarData:
+	for car: CarData in cars:
+		if car.id == car_id:
+			return car
+	return null
+
+
+## Своя: бесплатная, купленная или полученная в сюжете (та же модель)
+func owns_car(car_id: String) -> bool:
+	var car: CarData = get_car(car_id)
+	if car == null:
+		return false
+	if car.price <= 0 or car_id in _cars_owned:
+		return true
+	if car.model_scene != null:
+		for owned: PackedScene in get_owned_cars():
+			if owned != null and owned.resource_path == car.model_scene.resource_path:
+				return true
+	return false
+
+
+func buy_car(car_id: String) -> bool:
+	var car: CarData = get_car(car_id)
+	if car == null or owns_car(car_id) or coins < car.price:
+		return false
+	coins -= car.price
+	_cars_owned.append(car_id)
+	_car_id = car_id
+	coins_changed.emit(coins)
+	cars_changed.emit()
+	save_game()
+	return true
+
+
+func select_car(car_id: String) -> void:
+	if not owns_car(car_id) or _car_id == car_id:
+		return
+	_car_id = car_id
+	cars_changed.emit()
+	save_game()
+
+
+## Выбранная машина (её ставит город у старта)
+func get_selected_car() -> CarData:
+	var car: CarData = get_car(_car_id)
+	if car != null and owns_car(car.id):
+		return car
+	return cars[0] if not cars.is_empty() else null
+
+
+func get_car_tuning(car_id: String, stat: String) -> int:
+	var levels: Variant = _car_tuning.get(car_id, {})
+	return int((levels as Dictionary).get(stat, 0)) if levels is Dictionary else 0
+
+
+## Цена следующего уровня тюнинга, -1 — максимум
+func get_car_tuning_cost(car_id: String, stat: String) -> int:
+	var car: CarData = get_car(car_id)
+	var level: int = get_car_tuning(car_id, stat)
+	if car == null or level >= CAR_TUNING_MAX:
+		return -1
+	return roundi(car.tuning_base_cost * pow(CAR_TUNING_GROWTH, level))
+
+
+func tune_car(car_id: String, stat: String) -> bool:
+	if not stat in CAR_TUNING or not owns_car(car_id):
+		return false
+	var cost: int = get_car_tuning_cost(car_id, stat)
+	if cost < 0 or coins < cost:
+		return false
+	coins -= cost
+	var levels: Dictionary = _car_tuning.get(car_id, {})
+	levels[stat] = get_car_tuning(car_id, stat) + 1
+	_car_tuning[car_id] = levels
+	coins_changed.emit(coins)
+	cars_changed.emit()
+	save_game()
+	return true
+
+
+func get_car_paint_index(car_id: String) -> int:
+	return clampi(int(_car_paint.get(car_id, 0)), 0, CAR_PAINTS.size() - 1)
+
+
+## Перекраска: заводской цвет бесплатно, остальные — CAR_PAINT_PRICE
+func paint_car(car_id: String, paint: int) -> bool:
+	if not owns_car(car_id) or paint < 0 or paint >= CAR_PAINTS.size() or paint == get_car_paint_index(car_id):
+		return false
+	var cost: int = 0 if paint == 0 else CAR_PAINT_PRICE
+	if coins < cost:
+		return false
+	coins -= cost
+	_car_paint[car_id] = paint
+	coins_changed.emit(coins)
+	cars_changed.emit()
+	save_game()
+	return true
+
+
+## Индекс неона или -1 (не куплен или выключен)
+func get_car_neon_index(car_id: String) -> int:
+	return clampi(int(_car_neon.get(car_id, -1)), -1, CAR_NEONS.size() - 1)
+
+
+## Неон: первая установка — CAR_NEON_PRICE, смена цвета и выключение (-1) — бесплатно
+func set_car_neon(car_id: String, neon: int) -> bool:
+	if not owns_car(car_id) or neon < -1 or neon >= CAR_NEONS.size():
+		return false
+	if not has_car_neon_installed(car_id) and neon < 0:
+		return false
+	var cost: int = 0 if has_car_neon_installed(car_id) else CAR_NEON_PRICE
+	if coins < cost:
+		return false
+	coins -= cost
+	_car_neon[car_id] = neon  # -1 — куплен, но выключен
+	coins_changed.emit(coins)
+	cars_changed.emit()
+	save_game()
+	return true
+
+
+func has_car_neon_installed(car_id: String) -> bool:
+	return _car_neon.has(car_id)
+
+
+## Всё о машине одной строкой — для сети: "id|краска|неон|двигатель|газ|управление|таран"
+func get_car_net_info() -> String:
+	var car: CarData = get_selected_car()
+	if car == null:
+		return ""
+	var parts := PackedStringArray([car.id, str(get_car_paint_index(car.id)), str(get_car_neon_index(car.id))])
+	for stat: String in CAR_TUNING:
+		parts.append(str(get_car_tuning(car.id, stat)))
+	return "|".join(parts)
+
+
 # ---------- Улучшения игрока ----------
 
 func get_player_upgrade_level(stat: String) -> int:
@@ -746,6 +916,11 @@ func reset_progress() -> void:
 	_inventory.clear()
 	_buildings_owned.clear()
 	_car_upgrades.clear()
+	_cars_owned.clear()
+	_car_id = ""
+	_car_tuning.clear()
+	_car_paint.clear()
+	_car_neon.clear()
 	_skins_owned.clear()
 	_skin_id = ""
 	_gear_owned.clear()
@@ -759,6 +934,7 @@ func reset_progress() -> void:
 	inventory_changed.emit()
 	gear_changed.emit()
 	campaign_changed.emit()
+	cars_changed.emit()
 	skin_changed.emit(get_selected_skin())
 	save_game()
 
@@ -782,6 +958,11 @@ func save_game() -> void:
 		"inventory": _inventory,
 		"buildings": _buildings_owned,
 		"car_upgrades": _car_upgrades,
+		"cars_owned": _cars_owned,
+		"car": _car_id,
+		"car_tuning": _car_tuning,
+		"car_paint": _car_paint,
+		"car_neon": _car_neon,
 		"cutscenes_seen": _cutscenes_seen,
 		"skins_owned": _skins_owned,
 		"gear": _gear_owned,
@@ -909,12 +1090,48 @@ func load_game() -> void:
 		if stored_car.has(stat):
 			_car_upgrades[stat] = stored_car[stat]
 
+	_load_cars(data)
+
 	_inventory.clear()
 	var stored: Dictionary = _load_int_dictionary(data.get("inventory", {}), 0, 99)
 	for item_id: String in stored:
 		var item: ItemData = get_item(item_id)
 		if item != null:
 			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
+
+
+## Машины автосалона из сохранения (неизвестные id отбрасываются)
+func _load_cars(data: Dictionary) -> void:
+	_cars_owned.clear()
+	var stored_owned: Variant = data.get("cars_owned", [])
+	if stored_owned is Array:
+		for entry: Variant in stored_owned:
+			var key: String = str(entry)
+			if get_car(key) != null and not key in _cars_owned:
+				_cars_owned.append(key)
+	_car_id = str(data.get("car", ""))
+	_car_tuning.clear()
+	var stored_tuning: Variant = data.get("car_tuning", {})
+	if stored_tuning is Dictionary:
+		for car_id: Variant in stored_tuning:
+			if get_car(str(car_id)) == null:
+				continue
+			var levels: Dictionary = _load_int_dictionary((stored_tuning as Dictionary)[car_id], 0, CAR_TUNING_MAX)
+			var clean: Dictionary = {}
+			for stat: String in CAR_TUNING:
+				if levels.has(stat):
+					clean[stat] = levels[stat]
+			_car_tuning[str(car_id)] = clean
+	_car_paint.clear()
+	var paints: Dictionary = _load_int_dictionary(data.get("car_paint", {}), 0, CAR_PAINTS.size() - 1)
+	for car_id: String in paints:
+		if get_car(car_id) != null:
+			_car_paint[car_id] = paints[car_id]
+	_car_neon.clear()
+	var neons: Dictionary = _load_int_dictionary(data.get("car_neon", {}), -1, CAR_NEONS.size() - 1)
+	for car_id: String in neons:
+		if get_car(car_id) != null:
+			_car_neon[car_id] = neons[car_id]
 
 
 ## Словарь {строка: int} из JSON с ограничением значений

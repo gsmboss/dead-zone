@@ -2,8 +2,10 @@ class_name DriveController
 extends Node
 ## Посадка в машины уровня (группа drivable_cars) и выход из них.
 ## Рядом с машиной появляется кнопка «СЕСТЬ» (или E), в машине — «ВЫЙТИ».
-## Пока игрок за рулём: он спрятан на крыше машины (зомби видят и атакуют его),
-## джойстик управляет машиной, кнопки стрельбы скрыты, показан спидометр.
+## Пока игрок в машине: он спрятан на крыше (зомби видят и атакуют его), джойстик рулит,
+## кнопка прыжка становится «ДРИФТ» (ручник, Space), показаны спидометр и очки дрифта.
+## По сети: место просим у хоста (Net.request_car_seat), садимся по рассылке мест;
+## второй и следующие садятся пассажирами — едут вместе и стреляют из окна.
 
 const ENTER_DISTANCE: float = 3.8
 const CHECK_INTERVAL: float = 0.15
@@ -16,11 +18,20 @@ const CAR_SHOT_RANGE: float = 30.0
 const CAR_SHOT_CONE: float = 0.5  # косинус ~60°
 const CAR_SHOT_DAMAGE: float = 22.0
 const CAR_SHOT_SOUND: String = "res://audio/weapons/pistol_shot.ogg"
+## Дрифт: очки = скорость × время в заносе × множитель; занос прервался дольше паузы — очки в копилку
+const DRIFT_POINTS_RATE: float = 12.0
+const DRIFT_END_PAUSE: float = 0.7
+## Монеты за дрифт (только в одиночной игре): очки / делитель, не больше максимума за раз
+const DRIFT_COINS_DIVISOR: float = 400.0
+const DRIFT_COINS_MAX: int = 25
+## Запрос места по сети: повторно не раньше
+const SEAT_REQUEST_COOLDOWN: float = 1.0
 
 var _player: Player
 var _touch_controls: TouchControls
 var _button: TouchActionButton
 var _speed_label: Label
+var _drift_label: Label
 var _hud_layer: CanvasLayer
 var _car: DrivableCar          # машина, в которой сидим
 var _nearby: DrivableCar       # ближайшая машина рядом
@@ -28,8 +39,13 @@ var _check_timer: float = 0.0
 var _saved_layer: int = 0
 var _saved_mask: int = 0
 var _hidden_buttons: Array[TouchActionButton] = []
+var _drift_button: TouchActionButton
+var _drift_button_label: String = ""
 var _shot_cooldown: float = 0.0
 var _shot_sound: AudioStream
+var _drift_points: float = 0.0
+var _drift_pause: float = 0.0
+var _request_cooldown: float = 0.0
 
 
 func _ready() -> void:
@@ -37,11 +53,6 @@ func _ready() -> void:
 
 
 func _setup() -> void:
-	# По сети машины не синхронизируются — за руль только в одиночной игре
-	if Net.in_match:
-		set_process(false)
-		set_physics_process(false)
-		return
 	_player = get_tree().get_first_node_in_group(&"player") as Player
 	if _player == null:
 		push_warning("DriveController: игрок не найден")
@@ -56,6 +67,7 @@ func _setup() -> void:
 	_hud_layer = CanvasLayer.new()
 	add_child(_hud_layer)
 	_build_speed_label()
+	_build_drift_label()
 	if _touch_controls != null:
 		_button = TouchActionButton.new()
 		_button.action = &"interact"
@@ -74,11 +86,17 @@ func _setup() -> void:
 		_button.offset_bottom = BUTTON_SIZE * 0.5 - 40.0
 		_button.visible = false
 		_touch_controls.register_button(_button)
+	# По сети садимся по рассылке мест от хоста
+	for node: Node in get_tree().get_nodes_in_group(DrivableCar.GROUP):
+		var car := node as DrivableCar
+		if car != null:
+			car.seats_changed.connect(_on_seats_changed.bind(car))
 
 
 func _process(delta: float) -> void:
 	if _player == null:
 		return
+	_request_cooldown = maxf(_request_cooldown - delta, 0.0)
 	if _car == null:
 		_check_timer -= delta
 		if _check_timer <= 0.0:
@@ -87,6 +105,7 @@ func _process(delta: float) -> void:
 			_update_button()
 	else:
 		_speed_label.text = "%d КМ/Ч" % roundi(_car.get_speed_kmh())
+		_update_drift(delta)
 	if Input.is_action_just_pressed(&"interact"):
 		if _car != null:
 			_exit_car()
@@ -97,12 +116,14 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if _car == null or _player == null:
 		return
-	var input: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
-	if _touch_controls != null:
-		var touch: Vector2 = _touch_controls.get_move_vector()
-		if touch.length() > input.length():
-			input = touch
-	_car.set_input(input.x, -input.y)
+	if _car.is_driven():
+		var input: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+		if _touch_controls != null:
+			var touch: Vector2 = _touch_controls.get_move_vector()
+			if touch.length() > input.length():
+				input = touch
+		_car.set_input(input.x, -input.y)
+		_car.set_handbrake(Input.is_action_pressed(&"jump"))
 	_shot_cooldown = maxf(_shot_cooldown - delta, 0.0)
 	if Input.is_action_pressed(&"fire") and _shot_cooldown <= 0.0:
 		_shoot_from_car()
@@ -117,7 +138,10 @@ func _find_nearby_car() -> DrivableCar:
 	var best_distance: float = ENTER_DISTANCE
 	for node: Node in get_tree().get_nodes_in_group(DrivableCar.GROUP):
 		var car := node as DrivableCar
-		if car == null or car.is_driven():
+		if car == null:
+			continue
+		# В одиночной игре — только пустая; по сети — есть свободное место (можно пассажиром)
+		if (Net.in_match and not car.has_free_seat()) or (not Net.in_match and car.is_driven()):
 			continue
 		var distance: float = car.global_position.distance_to(_player.global_position)
 		if distance < best_distance:
@@ -130,14 +154,29 @@ func _update_button() -> void:
 	if _button == null:
 		return
 	var should_show: bool = _car != null or _nearby != null
-	var caption: String = "ВЫЙТИ" if _car != null else "СЕСТЬ"
+	var caption: String = "СЕСТЬ"
+	if _car != null:
+		caption = "ВЫЙТИ"
+	elif _nearby != null and _nearby.has_driver():
+		caption = "ПАССАЖИР"
 	if _button.visible != should_show or _button.label != caption:
 		_button.visible = should_show
 		_button.label = caption
 		_button.queue_redraw()
 
 
+## Сесть: в одиночной игре — сразу за руль, по сети — попросить место у хоста
 func _enter_car(car: DrivableCar) -> void:
+	if Net.in_match:
+		if _request_cooldown <= 0.0:
+			_request_cooldown = SEAT_REQUEST_COOLDOWN
+			Net.request_car_seat(car, 0)
+		return
+	_sit_in(car, true)
+
+
+## Посадка своего игрока: водителем или пассажиром
+func _sit_in(car: DrivableCar, as_driver: bool) -> void:
 	_car = car
 	_saved_layer = _player.collision_layer
 	_saved_mask = _player.collision_mask
@@ -149,8 +188,11 @@ func _enter_car(car: DrivableCar) -> void:
 	if _player.weapon_manager != null:
 		_player.weapon_manager.set_aiming(false)
 	_set_combat_buttons_visible(false)
-	car.enter()
+	car.enter(as_driver)
+	_setup_drift_button(as_driver)
 	_speed_label.visible = true
+	_drift_points = 0.0
+	_drift_label.visible = false
 	_update_button()
 	Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 0.8, 0.0)
 
@@ -158,11 +200,22 @@ func _enter_car(car: DrivableCar) -> void:
 func _exit_car() -> void:
 	if _car == null:
 		return
-	if absf(_car.speed) > MAX_EXIT_SPEED:
+	if _car.is_driven() and absf(_car.speed) > MAX_EXIT_SPEED:
 		Sfx.error()  # сначала притормози
 		return
+	if Net.in_match:
+		if _request_cooldown <= 0.0:
+			_request_cooldown = SEAT_REQUEST_COOLDOWN
+			Net.request_car_seat(_car, -1)  # выйдем по рассылке мест
+		return
+	_leave_car()
+
+
+## Выход своего игрока из машины (места уже освобождены)
+func _leave_car() -> void:
 	var car: DrivableCar = _car
 	_car = null
+	_bank_drift()
 	car.exit()
 	_restore_player(car)
 	if _player.health == null or not _player.health.is_dead:
@@ -175,8 +228,9 @@ func _exit_car() -> void:
 
 ## Вернуть игрока из машины: обработка, коллизии, видимость, камера, кнопки
 func _restore_player(car: DrivableCar) -> void:
+	var seat: int = car.get_seat_of(Net.my_id()) if Net.in_match else 0
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
-	_player.global_position = car.get_exit_position()
+	_player.global_position = car.get_exit_position(maxi(seat, 0))
 	_player.set_safe_position(_player.global_position)
 	_player.velocity = Vector3.ZERO
 	_player.collision_layer = _saved_layer
@@ -184,10 +238,51 @@ func _restore_player(car: DrivableCar) -> void:
 	_player.visible = true
 	_player.camera.make_current()
 	_set_combat_buttons_visible(true)
+	_restore_drift_button()
 	_speed_label.visible = false
+	_drift_label.visible = false
 
 
-## Кнопки стрельбы, прыжка и т.п. в машине не нужны
+## По сети сменились места в машине: садимся, пересаживаемся или выходим
+func _on_seats_changed(car: DrivableCar) -> void:
+	_refresh_remote_players()
+	if _player == null:
+		return
+	var seat: int = car.get_seat_of(Net.my_id())
+	if seat >= 0:
+		if _player.health != null and _player.health.is_dead:
+			Net.request_car_seat(car, -1)
+			return
+		if _car == null:
+			_sit_in(car, seat == 0)
+		elif _car == car and car.is_driven() != (seat == 0):
+			car.enter(seat == 0)  # водитель вышел — пассажир остаётся пассажиром, и наоборот
+			_setup_drift_button(seat == 0)
+	elif _car == car:
+		_leave_car()
+
+
+## Копии других игроков в машинах прячем
+func _refresh_remote_players() -> void:
+	if not Net.in_match or Net.match_manager == null or not is_instance_valid(Net.match_manager):
+		return
+	var manager := Net.match_manager as MatchManager
+	if manager == null:
+		return
+	var seated: Dictionary = {}
+	for node: Node in get_tree().get_nodes_in_group(DrivableCar.GROUP):
+		var car := node as DrivableCar
+		if car == null:
+			continue
+		for peer_id: int in car.seats:
+			if peer_id != 0:
+				seated[peer_id] = true
+	for peer_id: int in Net.players:
+		if peer_id != Net.my_id():
+			manager.set_proxy_in_car(peer_id, seated.has(peer_id))
+
+
+## Кнопки стрельбы, прыжка и т.п. в машине не нужны (прыжок водителю — «ДРИФТ»)
 func _set_combat_buttons_visible(visible_state: bool) -> void:
 	if _touch_controls == null:
 		return
@@ -197,8 +292,8 @@ func _set_combat_buttons_visible(visible_state: bool) -> void:
 			var button := child as TouchActionButton
 			if button == null or button == _button or not button.visible:
 				continue
-			if button.action in [&"pause", &"inventory", &"fire"]:
-				continue  # стрелять из окна машины можно
+			if button.action in [&"pause", &"inventory", &"fire", &"jump"]:
+				continue  # стрелять из окна машины можно, прыжок станет ручником
 			button.force_release()
 			button.visible = false
 			_hidden_buttons.append(button)
@@ -207,6 +302,73 @@ func _set_combat_buttons_visible(visible_state: bool) -> void:
 			if is_instance_valid(button):
 				button.visible = true
 		_hidden_buttons.clear()
+
+
+## Кнопка прыжка за рулём — «ДРИФТ» (ручник); пассажиру не нужна
+func _setup_drift_button(as_driver: bool) -> void:
+	if _drift_button == null and _touch_controls != null:
+		for child: Node in _touch_controls.get_children():
+			var button := child as TouchActionButton
+			if button != null and button.action == &"jump":
+				_drift_button = button
+				_drift_button_label = button.label
+				break
+	if _drift_button == null:
+		return
+	_drift_button.force_release()
+	_drift_button.label = "ДРИФТ"
+	_drift_button.visible = as_driver
+	_drift_button.queue_redraw()
+
+
+func _restore_drift_button() -> void:
+	if _drift_button == null or not is_instance_valid(_drift_button):
+		return
+	_drift_button.force_release()
+	_drift_button.label = _drift_button_label
+	_drift_button.visible = true
+	_drift_button.queue_redraw()
+
+
+# ---------- Дрифт ----------
+
+## Очки копятся, пока машина в заносе; занос кончился — очки в копилку (и монеты в одиночной игре)
+func _update_drift(delta: float) -> void:
+	if not _car.is_driven():
+		return
+	if _car.is_drifting():
+		_drift_pause = DRIFT_END_PAUSE
+		_drift_points += _car.get_speed_kmh() * DRIFT_POINTS_RATE * delta * 0.1
+		_drift_label.visible = true
+		_drift_label.text = "ДРИФТ  %d" % roundi(_drift_points)
+		_drift_label.modulate = UIKit.ACCENT.lerp(Color(1.0, 0.3, 0.2), clampf(_drift_points / 3000.0, 0.0, 1.0))
+	elif _drift_points > 0.0:
+		_drift_pause -= delta
+		if _drift_pause <= 0.0:
+			_bank_drift()
+
+
+func _bank_drift() -> void:
+	if _drift_points < 1.0:
+		_drift_points = 0.0
+		return
+	var points: int = roundi(_drift_points)
+	_drift_points = 0.0
+	var coins: int = 0 if Net.in_match else mini(floori(points / DRIFT_COINS_DIVISOR), DRIFT_COINS_MAX)
+	_drift_label.text = "ДРИФТ  %d  +%d МОНЕТ" % [points, coins] if coins > 0 else "ДРИФТ  %d" % points
+	_drift_label.modulate = UIKit.GOOD
+	_drift_label.visible = true
+	if coins > 0:
+		GameState.add_coins(coins)
+		Sfx.play_2d(Sfx.sounds.purchase, -8.0, 1.2, 0.0)
+	_drift_label.pivot_offset = _drift_label.size * 0.5
+	_drift_label.scale = Vector2.ONE * 1.3
+	var tween := _drift_label.create_tween()
+	tween.tween_property(_drift_label, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
+	tween.tween_interval(1.2)
+	tween.tween_callback(func() -> void:
+		if _drift_points <= 0.0:
+			_drift_label.visible = false)
 
 
 ## Выстрел из окна: ближайший видимый зомби в конусе перед камерой машины
@@ -249,10 +411,13 @@ func _shoot_from_car() -> void:
 func _on_player_died() -> void:
 	if _car == null:
 		return
-	# Погиб за рулём: игрок «выпадает» рядом с машиной — иначе после воскрешения за рекламу
+	# Погиб в машине: игрок «выпадает» рядом с ней — иначе после воскрешения за рекламу
 	# он остался бы выключенным, невидимым и без коллизий
 	var car: DrivableCar = _car
+	if Net.in_match:
+		Net.request_car_seat(car, -1)
 	_car = null
+	_drift_points = 0.0
 	car.exit()
 	_restore_player(car)
 	if _button != null:
@@ -273,3 +438,18 @@ func _build_speed_label() -> void:
 	_speed_label.offset_right = 150.0
 	_speed_label.offset_top = -90.0
 	_speed_label.offset_bottom = -30.0
+
+
+func _build_drift_label() -> void:
+	_drift_label = Label.new()
+	_drift_label.visible = false
+	_drift_label.add_theme_font_size_override(&"font_size", 46)
+	_drift_label.add_theme_constant_override(&"outline_size", 12)
+	_drift_label.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+	_drift_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hud_layer.add_child(_drift_label)
+	_drift_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_drift_label.offset_left = -300.0
+	_drift_label.offset_right = 300.0
+	_drift_label.offset_top = 150.0
+	_drift_label.offset_bottom = 210.0

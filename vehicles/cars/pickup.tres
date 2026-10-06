@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CarData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://vehicles/car_data.gd" id="1_car"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup.gltf" id="2_model"]
+
+[resource]
+script = ExtResource("1_car")
+id = "pickup"
+title = "РЖАВЫЙ ПИКАП"
+car_class = 0
+description = "Старый, но заводится с пол-оборота. Мягкий зад — легко пустить в занос."
+price = 0
+model_scene = ExtResource("2_model")
+max_speed = 18.0
+acceleration = 8.0
+steer_rate = 1.9
+grip = 7.5
+drift_grip = 2.0
+run_over_damage_factor = 14.0
+tuning_base_cost = 100

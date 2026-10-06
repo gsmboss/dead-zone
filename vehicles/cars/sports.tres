@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CarData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://vehicles/car_data.gd" id="1_car"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Sports.gltf" id="2_model"]
+
+[resource]
+script = ExtResource("1_car")
+id = "sports"
+title = "СПОРТКАР"
+car_class = 2
+description = "Лёгкий и очень быстрый. Король дрифта, но бьёт слабо."
+price = 3500
+model_scene = ExtResource("2_model")
+max_speed = 28.0
+acceleration = 13.0
+steer_rate = 2.3
+grip = 7.0
+drift_grip = 1.6
+run_over_damage_factor = 11.0
+tuning_base_cost = 320
