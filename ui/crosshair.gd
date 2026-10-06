@@ -48,15 +48,16 @@ func _connect_manager() -> void:
 		push_warning("Crosshair: WeaponManager не найден")
 		return
 	weapon_manager.hit_landed.connect(_on_hit_landed)
-	# «ХЕДШОТ!» — рядом с прицелом, но не его ребёнок (прицел масштабируется при попадании)
-	if get_parent() != null:
+	# «ХЕДШОТ!» и оптика — прямо в слое HUD (прицел лежит в CenterContainer, тот задал бы им размер)
+	var layer: Node = _find_hud_layer()
+	if layer != null:
 		_headshot_popup = HeadshotPopup.new()
-		get_parent().add_child(_headshot_popup)
+		layer.add_child(_headshot_popup)
 		# Оптика снайперской — под всеми кнопками HUD
 		_scope = ScopeOverlay.new()
 		_scope.weapon_manager = weapon_manager
-		get_parent().add_child(_scope)
-		get_parent().move_child(_scope, 0)
+		layer.add_child(_scope)
+		layer.move_child(_scope, 0)
 	weapon_manager.weapon_changed.connect(_on_weapon_changed)
 	var weapon: WeaponData = weapon_manager.get_current_weapon()
 	_melee = weapon != null and weapon.is_melee
@@ -116,6 +117,13 @@ func _spread_to_pixels(spread_degrees: float) -> float:
 
 func _on_weapon_changed(weapon: WeaponData) -> void:
 	_melee = weapon != null and weapon.is_melee
+
+
+func _find_hud_layer() -> Node:
+	var node: Node = get_parent()
+	while node != null and not node is CanvasLayer:
+		node = node.get_parent()
+	return node
 
 
 func _on_hit_landed(is_headshot: bool, killed: bool) -> void:
