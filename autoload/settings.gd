@@ -33,7 +33,7 @@ const DEFAULTS: Dictionary = {
 	"camera_mode": 0, "camera_distance": 2.6, "player_name": "",
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
-	"torch_auto": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
+	"torch_auto": true, "headshot_slowmo": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
 }
 
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -94,6 +94,8 @@ var damage_flash: float = 1.0
 var hit_shake: float = 1.0
 ## По сети: метка над игроком, который в вас стреляет
 var attacker_marker: bool = true
+## Миг замедления при убийстве в голову
+var headshot_slowmo: bool = true
 ## Факел сам зажигается ночью и гаснет на рассвете
 var torch_auto: bool = true
 # Озвучка (синтез речи устройства, язык — как в системе)

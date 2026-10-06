@@ -1057,6 +1057,8 @@ func _on_died() -> void:
 	if impacts != null:
 		impacts.spawn_blood(global_position)
 	died.emit(self)
+	if killed_by_headshot and not net_puppet:
+		_headshot_death()
 
 	if _has_anim(anim_death):
 		_play(anim_death, true)
@@ -1071,6 +1073,85 @@ func _on_died() -> void:
 	if visual != null:
 		corpse.tween_property(visual, "position:y", visual.position.y - 1.2, SINK_TIME)
 	corpse.tween_callback(queue_free)
+
+
+# ---------- Хедшот ----------
+
+const NECK_BONE: StringName = &"Neck"
+const NECK_BLOOD_TIME: float = 1.3
+const HEADSHOT_PUSH: float = 0.55
+static var _blood_mesh: SphereMesh
+
+
+## Голова лопается (кость Head сжимается), из шеи бьёт кровь, тело откидывает назад
+func _headshot_death() -> void:
+	var head_position: Vector3 = global_position + Vector3.UP * 1.7
+	if _skeleton != null and _head_bone >= 0:
+		head_position = global_transform * (_skeleton_to_body * _skeleton.get_bone_global_pose(_head_bone).origin)
+		var pop := HeadPopModifier.new()
+		pop.name = "HeadPop"
+		pop.bone = _head_bone
+		_skeleton.add_child(pop)
+		_spawn_neck_blood(head_position)
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		for direction: Vector3 in [Vector3.UP, Vector3(0.6, 0.8, 0.0), Vector3(-0.6, 0.8, 0.0)]:
+			impacts.spawn(head_position, direction, true)
+	Sfx.play_3d(Sfx.pick(Sfx.sounds.flesh_hits), head_position, 4.0, 0.65)
+	# Откидывает от стрелявшего (только модель — тело уже без коллизий)
+	if visual != null and _player != null and is_instance_valid(_player):
+		var away: Vector3 = global_position - _player.global_position
+		away.y = 0.0
+		if away.length_squared() > 0.01:
+			var local_away: Vector3 = (global_basis.inverse() * away.normalized()) * HEADSHOT_PUSH
+			var push := create_tween()
+			push.tween_property(visual, "position", visual.position + local_away, 0.25) \
+				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+## Фонтан крови из шеи: следует за костью Neck, пока тело падает
+func _spawn_neck_blood(fallback_position: Vector3) -> void:
+	var parent: Node3D = self
+	var neck: int = _skeleton.find_bone(NECK_BONE)
+	if neck >= 0:
+		var attachment := BoneAttachment3D.new()
+		attachment.bone_name = NECK_BONE
+		_skeleton.add_child(attachment)
+		parent = attachment
+	if _blood_mesh == null:
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.45, 0.0, 0.0)
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_blood_mesh = SphereMesh.new()
+		_blood_mesh.radius = 0.035
+		_blood_mesh.height = 0.07
+		_blood_mesh.radial_segments = 6
+		_blood_mesh.rings = 3
+		_blood_mesh.material = material
+	var blood := CPUParticles3D.new()
+	blood.mesh = _blood_mesh
+	blood.amount = 36
+	blood.lifetime = 0.7
+	blood.local_coords = false
+	blood.direction = Vector3.UP
+	blood.spread = 28.0
+	blood.initial_velocity_min = 2.5
+	blood.initial_velocity_max = 4.5
+	blood.gravity = Vector3(0.0, -9.8, 0.0)
+	blood.scale_amount_min = 0.6
+	blood.scale_amount_max = 1.3
+	parent.add_child(blood)
+	if parent == self:
+		blood.global_position = fallback_position
+	else:
+		# Кость Neck в масштабе модели — частицы мира не сжимаются (local_coords = false)
+		blood.position = Vector3.UP * 0.08
+	blood.emitting = true
+	var stop := create_tween()
+	stop.tween_interval(NECK_BLOOD_TIME)
+	stop.tween_callback(func() -> void:
+		if is_instance_valid(blood):
+			blood.emitting = false)
 
 
 # ---------- Мультиплеер ----------

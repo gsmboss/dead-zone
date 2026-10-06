@@ -25,6 +25,7 @@ const DIRECTIONS: Array[Vector2] = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vect
 var _flash: float = 0.0
 var _flash_color: Color = Color.WHITE
 var _hit_marker: HitMarker
+var _headshot_popup: HeadshotPopup
 var _gap: float = MIN_GAP
 var _melee: bool = false
 
@@ -46,6 +47,10 @@ func _connect_manager() -> void:
 		push_warning("Crosshair: WeaponManager не найден")
 		return
 	weapon_manager.hit_landed.connect(_on_hit_landed)
+	# «ХЕДШОТ!» — рядом с прицелом, но не его ребёнок (прицел масштабируется при попадании)
+	if get_parent() != null:
+		_headshot_popup = HeadshotPopup.new()
+		get_parent().add_child(_headshot_popup)
 	weapon_manager.weapon_changed.connect(_on_weapon_changed)
 	var weapon: WeaponData = weapon_manager.get_current_weapon()
 	_melee = weapon != null and weapon.is_melee
@@ -109,6 +114,8 @@ func _on_hit_landed(is_headshot: bool, killed: bool) -> void:
 	var marker_color: Color = kill_color if killed else _flash_color
 	_hit_marker.show_hit(marker_color, killed)
 	Sfx.play_2d(Sfx.sounds.hitmarker, hit_sound_volume_db, 1.25 if killed else 1.0, 0.03)
+	if is_headshot and killed and _headshot_popup != null:
+		_headshot_popup.show_headshot()
 
 
 func _update_pivot() -> void:

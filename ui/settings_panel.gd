@@ -151,6 +151,7 @@ func _build_effects() -> void:
 	_slider("ЯРКОСТЬ КРАСНОЙ ВСПЫШКИ ПРИ УРОНЕ", &"damage_flash", 0.0, 1.0, 0.05, _percent)
 	_slider("ТОЛЧОК КАМЕРЫ ПРИ УРОНЕ", &"hit_shake", 0.0, 1.0, 0.05, _percent)
 	_toggle("ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ", &"attacker_marker")
+	_toggle("ЗАМЕДЛЕНИЕ ПРИ ХЕДШОТЕ", &"headshot_slowmo")
 	var hint := UIKit.label("КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
 		+ "КАПЛЯ — КИСЛОТА", 20, content)
 	hint.modulate = UIKit.DIM
