@@ -13,3 +13,9 @@ export/
 /addons/admob/android/bin/
 /addons/admob/ios/bin/
 /addons/admob/downloads/
+
+# Подпись APK и старые копии пресетов экспорта
+*.idsig
+*.apk
+*.aab
+export_presets_old.cfg
