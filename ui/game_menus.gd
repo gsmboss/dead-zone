@@ -143,8 +143,10 @@ func _update_throw_button() -> void:
 	var item: ItemData = GameState.get_throwable()
 	var count: int = GameState.get_throwable_count()
 	_throw_button.visible = count > 0
-	_throw_button.label = "%s %d" % ["МОЛОТОВ" if item != null and item.effect == ItemData.Effect.MOLOTOV else "ГРАНАТА", count]
-	_throw_button.queue_redraw()
+	var molotov: bool = item != null and item.effect == ItemData.Effect.MOLOTOV
+	_throw_button.label = "%s %d" % ["МОЛОТОВ" if molotov else "ГРАНАТА", count]
+	_throw_button.badge = str(count)
+	_throw_button.set_icon_name("fire-bottle" if molotov else "flash-grenade")
 
 
 # ---------- Пауза ----------

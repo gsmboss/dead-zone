@@ -34,6 +34,7 @@ const DEFAULTS: Dictionary = {
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
 	"torch_auto": true, "headshot_slowmo": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
+	"button_icons": true,
 }
 
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -98,6 +99,8 @@ var attacker_marker: bool = true
 var headshot_slowmo: bool = true
 ## Факел сам зажигается ночью и гаснет на рассвете
 var torch_auto: bool = true
+## Значки-«стикеры» на экранных кнопках вместо надписей
+var button_icons: bool = true
 # Озвучка (синтез речи устройства, язык — как в системе)
 var voice_cutscenes: bool = true
 ## Голоса выживших у костра, когда подходишь ближе

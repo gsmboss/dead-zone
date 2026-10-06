@@ -41,6 +41,7 @@ var _saved_mask: int = 0
 var _hidden_buttons: Array[TouchActionButton] = []
 var _drift_button: TouchActionButton
 var _drift_button_label: String = ""
+var _drift_button_icon: Texture2D
 var _shot_cooldown: float = 0.0
 var _shot_sound: AudioStream
 var _drift_points: float = 0.0
@@ -162,7 +163,8 @@ func _update_button() -> void:
 	if _button.visible != should_show or _button.label != caption:
 		_button.visible = should_show
 		_button.label = caption
-		_button.queue_redraw()
+		# Значок: ключ — сесть за руль, сиденье — пассажиром, дверь — выйти
+		_button.set_icon_name({"СЕСТЬ": "car-key", "ПАССАЖИР": "car-seat"}.get(caption, "exit-door"))
 
 
 ## Сесть: в одиночной игре — сразу за руль, по сети — попросить место у хоста
@@ -312,13 +314,14 @@ func _setup_drift_button(as_driver: bool) -> void:
 			if button != null and button.action == &"jump":
 				_drift_button = button
 				_drift_button_label = button.label
+				_drift_button_icon = button.icon
 				break
 	if _drift_button == null:
 		return
 	_drift_button.force_release()
 	_drift_button.label = "ДРИФТ"
+	_drift_button.set_icon_name("car-wheel")
 	_drift_button.visible = as_driver
-	_drift_button.queue_redraw()
 
 
 func _restore_drift_button() -> void:
@@ -326,6 +329,7 @@ func _restore_drift_button() -> void:
 		return
 	_drift_button.force_release()
 	_drift_button.label = _drift_button_label
+	_drift_button.icon = _drift_button_icon
 	_drift_button.visible = true
 	_drift_button.queue_redraw()
 

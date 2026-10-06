@@ -119,6 +119,7 @@ func _build_buttons() -> void:
 	layout.pressed.connect(_open_layout_editor)
 	content.add_child(layout)
 	_choice("СТИЛЬ КНОПОК", &"button_style", Settings.BUTTON_STYLE_NAMES)
+	_toggle("ЗНАЧКИ НА КНОПКАХ ВМЕСТО НАДПИСЕЙ", &"button_icons")
 	_slider("РАЗМЕР КНОПОК", &"button_scale", 0.7, 1.4, 0.05, _percent)
 	_slider("НЕПРОЗРАЧНОСТЬ КНОПОК", &"button_opacity", 0.15, 0.9, 0.05, _percent)
 

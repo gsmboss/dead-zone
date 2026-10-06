@@ -12,11 +12,33 @@ const ACTION_COLORS: Dictionary = {
 	&"switch_weapon": Color(0.45, 0.47, 0.52),
 }
 const DEFAULT_BUTTON_COLOR: Color = Color(0.35, 0.37, 0.42)
+## Значки-«стикеры» вместо текста (game-icons.net, CC BY 3.0): действие → файл в ICON_DIR
+const ICON_DIR: String = "res://ui/touch/icons/"
+const ACTION_ICONS: Dictionary = {
+	&"fire": "bullets",
+	&"aim": "eye-target",
+	&"jump": "jump-across",
+	&"reload": "machine-gun-magazine",
+	&"switch_weapon": "switch-weapon",
+	&"slide": "foot-trip",
+	&"throw": "flash-grenade",
+	&"pause": "pause-button",
+	&"camera_view": "video-camera",
+	&"torch": "torch",
+	&"inventory": "knapsack",
+	&"interact": "car-key",
+}
+## Доля диаметра кнопки под значок
+const ICON_SHARE: float = 0.58
 ## Скорость анимации нажатия
 const PRESS_SPEED: float = 14.0
 
 @export var action: StringName = &""
 @export var label: String = ""
+## Значок вместо подписи; пусто — по действию из ACTION_ICONS (нет значка — рисуется label)
+@export var icon: Texture2D
+## Маленькая надпись в углу поверх значка (например, сколько гранат)
+var badge: String = ""
 ## Цвет из ACTION_COLORS по действию; иначе — base_color
 @export var use_action_color: bool = true
 @export var base_color: Color = DEFAULT_BUTTON_COLOR
@@ -37,6 +59,7 @@ var _color: Color = DEFAULT_BUTTON_COLOR
 var _aim_active: bool = false
 var _weapon_manager: WeaponManager
 var _style: int = 0  # Settings.ButtonStyle
+static var _icon_cache: Dictionary = {}
 
 
 func _ready() -> void:
@@ -45,6 +68,8 @@ func _ready() -> void:
 	if not _action_valid:
 		push_warning("TouchActionButton '%s': действие '%s' не найдено в InputMap" % [name, action])
 	_color = ACTION_COLORS.get(action, base_color) if use_action_color else base_color
+	if icon == null:
+		icon = load_icon(str(ACTION_ICONS.get(action, "")))
 	set_process(show_aim_state)
 	if use_settings_style:
 		Settings.changed.connect(_on_settings_changed)
@@ -54,6 +79,26 @@ func _ready() -> void:
 func _on_settings_changed() -> void:
 	opacity = Settings.button_opacity
 	_style = Settings.button_style
+	queue_redraw()
+
+
+## Значок из ui/touch/icons по имени файла (без .svg); null — нет такого
+static func load_icon(icon_name: String) -> Texture2D:
+	if icon_name.is_empty():
+		return null
+	if _icon_cache.has(icon_name):
+		return _icon_cache[icon_name]
+	var path: String = ICON_DIR + icon_name + ".svg"
+	var texture: Texture2D = load(path) as Texture2D if ResourceLoader.exists(path) else null
+	if texture == null:
+		push_warning("TouchActionButton: нет значка %s" % path)
+	_icon_cache[icon_name] = texture
+	return texture
+
+
+## Сменить значок по имени (машина: ключ / сиденье / дверь выхода; дрифт — колесо)
+func set_icon_name(icon_name: String) -> void:
+	icon = load_icon(icon_name)
 	queue_redraw()
 
 
@@ -168,6 +213,9 @@ func _draw() -> void:
 
 
 func _draw_label(center: Vector2, r: float) -> void:
+	if icon != null and Settings.button_icons:
+		_draw_icon(center, r)
+		return
 	if label.is_empty():
 		return
 	var font: Font = ThemeDB.fallback_font
@@ -179,6 +227,24 @@ func _draw_label(center: Vector2, r: float) -> void:
 	draw_string(font, text_pos + Vector2(0.0, 2.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
 		Color(0.0, 0.0, 0.0, 0.5))
 	draw_string(font, text_pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, label_color)
+
+
+## Значок с тенью; badge — в правом нижнем углу
+func _draw_icon(center: Vector2, r: float) -> void:
+	var side: float = r * 2.0 * ICON_SHARE
+	var rect := Rect2(center - Vector2(side, side) * 0.5, Vector2(side, side))
+	draw_texture_rect(icon, Rect2(rect.position + Vector2(0.0, maxf(r * 0.04, 2.0)), rect.size), false,
+		Color(0.0, 0.0, 0.0, 0.45))
+	draw_texture_rect(icon, rect, false, label_color)
+	if badge.is_empty():
+		return
+	var font: Font = ThemeDB.fallback_font
+	var font_size: int = maxi(10, int(r * 0.36))
+	var text_size: Vector2 = font.get_string_size(badge, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var at: Vector2 = center + Vector2(r * 0.42, r * 0.42)
+	draw_circle(at, maxf(text_size.x, text_size.y) * 0.62, Color(0.05, 0.05, 0.05, 0.85))
+	draw_string(font, at + Vector2(-text_size.x * 0.5, font.get_ascent(font_size) * 0.38), badge,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 0.85, 0.4))
 
 
 func _with_alpha(color: Color) -> Color:

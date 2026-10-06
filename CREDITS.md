@@ -42,6 +42,12 @@
 - Kenney "Car Kit" 3.1 (CC0): полиция, скорая, такси, седаны, внедорожники, фургоны, мусоровоз, обломки,
   https://kenney.nl/assets/car-kit
 
+## Значки экранных кнопок (ui/touch/icons/)
+- game-icons.net — Lorc, Delapouite и другие авторы, лицензия CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),
+  https://game-icons.net (взяты из npm-пакета @iconify-json/game-icons, перекрашены в белый):
+  bullets, eye-target, jump-across, machine-gun-magazine, switch-weapon, foot-trip, flash-grenade, fire-bottle,
+  pause-button, video-camera, torch, knapsack, car-key, car-seat, exit-door, car-wheel
+
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music
 - combat — "Fast fight / battle music (looped)" (CC0), https://opengameart.org/content/fast-fight-battle-music-looped

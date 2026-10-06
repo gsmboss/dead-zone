@@ -315,3 +315,6 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 фильмами intro_film/outro_film (ChapterData), «Стервятники», «Логово Барона» (Тёма найден), эпилог. Фильм-пролог —
 при первом входе в убежище (hub.gd), фильм главы — при первом старте (CampaignPanel._play_film), повтор — ИСТОРИЯ/ПРОЛОГ.
 Герои: мама, Тёма, Марина и Денис, Вера, Лев, дядя Гоша с кофемашиной, Шнырь-бухгалтер, Барон (охранник Генка).
+Значки на экранных кнопках: ui/touch/icons/*.svg (game-icons.net, CC BY 3.0 — атрибуция в CREDITS.md);
+TouchActionButton.ACTION_ICONS (действие → значок), icon, badge (счётчик гранат), set_icon_name(), load_icon();
+Settings.button_icons (вкладка УПРАВЛЕНИЕ) — значки или старые надписи. Машина: ключ/сиденье/дверь, дрифт — колесо.
