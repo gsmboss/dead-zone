@@ -100,6 +100,8 @@ static var _warned_types: Dictionary = {}
 ## Плевок: пауза после выстрела и точка вылета (доля высоты модели)
 const RANGED_RECOVERY: float = 0.4
 const SPIT_HEIGHT: float = 1.4
+## Крик бандита не чаще, сек
+const TAUNT_COOLDOWN: float = 7.0
 ## Взрывной раздувается перед взрывом
 const FUSE_SWELL: float = 0.35
 ## Ниже этой высоты зомби считается провалившимся за карту
@@ -214,6 +216,12 @@ var _special_hit_done: bool = false
 var _charge_direction: Vector3 = Vector3.ZERO
 var _last_hit_headshot: bool = false
 var _ranged_cooldown: float = 0.0
+# Бандит
+var _shots_left: int = 0
+var _shot_timer: float = 0.0
+var _taunt_cooldown: float = 0.0
+var _taunt_label: Label3D
+static var _tracer_material: StandardMaterial3D
 var _exploded: bool = false
 var _tint_material: StandardMaterial3D
 
@@ -325,6 +333,7 @@ func _physics_process(delta: float) -> void:
 	_hurt_sound_cooldown = maxf(_hurt_sound_cooldown - delta, 0.0)
 	_charge_cooldown = maxf(_charge_cooldown - delta, 0.0)
 	_ranged_cooldown = maxf(_ranged_cooldown - delta, 0.0)
+	_taunt_cooldown = maxf(_taunt_cooldown - delta, 0.0)
 	_slam_cooldown = maxf(_slam_cooldown - delta, 0.0)
 	_update_voice(delta)
 
@@ -438,9 +447,17 @@ func _process_hunt(delta: float) -> void:
 			and distance <= data.explode_trigger_distance:
 		_start_fuse()
 		return
-	if data.behavior == ZombieData.Behavior.RANGED and can_see and _ranged_cooldown <= 0.0 \
-			and distance >= data.ranged_min_distance and distance <= data.ranged_max_distance:
+	if (data.behavior == ZombieData.Behavior.RANGED or data.behavior == ZombieData.Behavior.GUNNER) \
+			and can_see and _ranged_cooldown <= 0.0 \
+			and distance >= data.ranged_min_distance and distance <= data.ranged_max_distance \
+			and _has_line_of_fire():
 		_start_ranged()
+		return
+	# Бандит между очередями не лезет в рукопашную: держит дистанцию и ходит боком
+	if data.behavior == ZombieData.Behavior.GUNNER and can_see and distance > data.ranged_min_distance \
+			and distance <= data.preferred_distance * 1.4:
+		_set_state(State.CHASE)
+		_strafe(player_position, distance, delta)
 		return
 
 	# Очередь атак: вблизи пытаемся занять место, далеко или без видимости — освобождаем
@@ -743,11 +760,19 @@ func _start_ranged() -> void:
 	_set_state(State.RANGED)
 	_special_elapsed = 0.0
 	_special_hit_done = false
+	_shots_left = data.burst_shots
+	_shot_timer = data.ranged_windup
+	if data.behavior == ZombieData.Behavior.GUNNER:
+		_play(data.anim_shoot if _has_anim(data.anim_shoot) else anim_idle, true)
+		return
 	_voice(Sfx.sounds.zombie_attack, 0.0)
 	_play(anim_attack, true)
 
 
 func _process_ranged(delta: float) -> void:
+	if data.behavior == ZombieData.Behavior.GUNNER:
+		_process_gunner(delta)
+		return
 	_special_elapsed += delta
 	_face(_flat(_player.global_position - global_position), delta)
 	_set_desired_velocity(Vector3.ZERO)
@@ -769,6 +794,148 @@ func _spit() -> void:
 	projectile.damage = data.projectile_damage * damage_multiplier
 	get_tree().current_scene.add_child(projectile)
 	projectile.launch(from, target, data.projectile_speed)
+
+
+# ---------- Бандит (GUNNER) ----------
+
+## Прицелился → очередь из burst_shots выстрелов → короткая пауза
+func _process_gunner(delta: float) -> void:
+	_face(_flat(_player.global_position - global_position), delta)
+	_set_desired_velocity(Vector3.ZERO)
+	_shot_timer -= delta
+	if _shot_timer > 0.0:
+		return
+	if _shots_left > 0:
+		_shots_left -= 1
+		_shot_timer = data.shot_interval
+		_fire_shot()
+		return
+	_ranged_cooldown = data.ranged_cooldown * _rng.randf_range(0.8, 1.25)
+	_circle_direction = -_circle_direction  # после очереди — шаг в другую сторону
+	_set_state(State.CHASE)
+
+
+## Выстрел: попадание по шансу (дальше и по бегущему — хуже), стена между — пуля в стену
+func _fire_shot() -> void:
+	var muzzle: Vector3 = global_position + Vector3.UP * SPIT_HEIGHT * _size_factor - global_basis.z * 0.55
+	var target: Vector3 = _player.global_position + Vector3.UP * 1.25
+	var distance: float = muzzle.distance_to(target)
+	var moving: float = clampf(_flat(_player.velocity).length() / 5.0, 0.0, 1.0)
+	var chance: float = data.accuracy * clampf(1.15 - distance / maxf(data.ranged_max_distance, 1.0) * 0.6, 0.3, 1.0) \
+		* (1.0 - 0.45 * moving)
+	var hit: bool = _rng.randf() < chance
+	if not hit:
+		# Промах: пуля летит рядом с игроком
+		var side: Vector3 = _flat(target - muzzle).cross(Vector3.UP).normalized()
+		target += side * _rng.randf_range(-1.2, 1.2) + Vector3.UP * _rng.randf_range(-0.6, 0.8)
+	var query := PhysicsRayQueryParameters3D.create(muzzle, target + (target - muzzle).normalized() * 2.0,
+		PhysicsLayers.WORLD)
+	query.exclude = [get_rid()]
+	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	var end: Vector3 = target
+	if not result.is_empty():
+		var wall: Vector3 = result["position"]
+		if muzzle.distance_to(wall) < distance - 0.3 or not hit:
+			end = wall
+			hit = false
+			var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+			if impacts != null:
+				impacts.spawn(wall, result["normal"], false)
+	if hit and _player_health != null:
+		_player_health.take_damage_from(data.shot_damage * damage_multiplier, muzzle, false,
+			Health.Kind.BULLET, data.display_name, self)
+	if data.gun_sound != null:
+		Sfx.play_3d(data.gun_sound, muzzle, -2.0, _rng.randf_range(0.92, 1.08))
+	_spawn_tracer(muzzle, end)
+	_flash_muzzle(muzzle)
+
+
+## Есть ли прямая линия выстрела до цели (не стреляет в стену)
+func _has_line_of_fire() -> bool:
+	if data.behavior != ZombieData.Behavior.GUNNER:
+		return true
+	var from: Vector3 = global_position + Vector3.UP * SPIT_HEIGHT * _size_factor
+	var query := PhysicsRayQueryParameters3D.create(from, _player.global_position + Vector3.UP * 1.2,
+		PhysicsLayers.WORLD)
+	query.exclude = [get_rid()]
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+## Ходит боком вокруг цели, держа дистанцию preferred_distance
+func _strafe(player_position: Vector3, distance: float, delta: float) -> void:
+	var from_player: Vector3 = _flat(global_position - player_position)
+	var around: float = atan2(from_player.z, from_player.x) + _circle_direction * 0.5
+	var keep: float = lerpf(distance, data.preferred_distance, 0.5)
+	var point: Vector3 = player_position + Vector3(cos(around), 0.0, sin(around)) * keep
+	_move_to(point, data.move_speed * _speed_multiplier * 0.6, delta)
+	_face(_flat(player_position - global_position), delta)
+
+
+## След пули — тонкая светящаяся полоска, гаснет за 0.08 с
+func _spawn_tracer(from: Vector3, to: Vector3) -> void:
+	var length: float = from.distance_to(to)
+	if length < 0.5:
+		return
+	if _tracer_material == null:
+		_tracer_material = StandardMaterial3D.new()
+		_tracer_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_tracer_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_tracer_material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		_tracer_material.albedo_color = Color(1.0, 0.85, 0.5, 0.9)
+	var box := BoxMesh.new()
+	box.size = Vector3(0.03, 0.03, length)
+	var tracer := MeshInstance3D.new()
+	tracer.mesh = box
+	tracer.material_override = _tracer_material
+	tracer.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	get_tree().current_scene.add_child(tracer)
+	tracer.global_position = (from + to) * 0.5
+	tracer.look_at(to, Vector3.UP if absf((to - from).normalized().y) < 0.99 else Vector3.RIGHT)
+	get_tree().create_timer(0.08, false).timeout.connect(tracer.queue_free)
+
+
+func _flash_muzzle(at: Vector3) -> void:
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		impacts.spawn(at, -global_basis.z, false)
+
+
+## Крик бандита над головой, когда он замечает цель
+func _taunt() -> void:
+	if not data.human or _taunt_cooldown > 0.0:
+		return
+	var line: String = VoiceOver.pick_random_line(data.taunts_ru, data.taunts_en)
+	if line.is_empty():
+		return
+	_taunt_cooldown = TAUNT_COOLDOWN * _rng.randf_range(0.8, 1.6)
+	if _taunt_label == null:
+		_taunt_label = Label3D.new()
+		_taunt_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_taunt_label.font_size = 40
+		_taunt_label.outline_size = 12
+		_taunt_label.pixel_size = 0.004
+		_taunt_label.no_depth_test = true
+		_taunt_label.modulate = Color(1.0, 0.55, 0.4)
+		_taunt_label.position = Vector3.UP * 2.3 * _size_factor
+		add_child(_taunt_label)
+	_taunt_label.text = line
+	_taunt_label.visible = true
+	_taunt_label.modulate.a = 1.0
+	var tween := create_tween()
+	tween.tween_interval(2.2)
+	tween.tween_property(_taunt_label, "modulate:a", 0.0, 0.4)
+	tween.tween_callback(func() -> void: _taunt_label.visible = false)
+
+
+## Встроенные стволы модели человека: показываем только held_weapon
+func _setup_held_weapon() -> void:
+	if not data.human or visual == null:
+		return
+	for node: Node in visual.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.skin == null:
+			mesh_instance.visible = String(mesh_instance.name) == data.held_weapon \
+				or String(mesh_instance.get_parent().name) == data.held_weapon
 
 
 func _start_fuse() -> void:
@@ -827,6 +994,8 @@ func _process_stagger(delta: float) -> void:
 func _set_state(new_state: State) -> void:
 	if state == new_state or state == State.DEAD:
 		return
+	if new_state == State.CHASE and (state == State.WANDER or state == State.SEARCH):
+		_taunt()
 	state = new_state
 
 
@@ -1237,6 +1406,9 @@ func _puppet_process(delta: float) -> void:
 	var changed: bool = _net_state != _net_last_state
 	_net_last_state = _net_state
 	match _net_state:
+		State.RANGED when data.behavior == ZombieData.Behavior.GUNNER:
+			if changed:
+				_play(data.anim_shoot, true)
 		State.ATTACK, State.SLAM, State.RANGED, State.FUSE:
 			if changed:
 				_play(anim_attack, true)
@@ -1322,6 +1494,8 @@ func _update_voice(delta: float) -> void:
 
 
 func _voice(list: Array[AudioStream], extra_db: float = 0.0) -> void:
+	if data.human:
+		return  # люди не стонут как зомби
 	Sfx.play_3d(Sfx.pick(list), global_position + Vector3(0.0, VOICE_HEIGHT * _model_height_factor(), 0.0),
 		data.voice_volume_db + extra_db, data.voice_pitch)
 
@@ -1400,6 +1574,7 @@ func _resolve_references() -> bool:
 	if visual != null:
 		_visual_base_position = visual.position
 		_apply_model_override()
+		_setup_held_weapon()
 		if animation_player == null:
 			var players: Array[Node] = visual.find_children("*", "AnimationPlayer", true, false)
 			if not players.is_empty():

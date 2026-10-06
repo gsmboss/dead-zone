@@ -2,8 +2,9 @@ class_name ZombieData
 extends Resource
 ## Параметры типа зомби. Каждый тип — отдельный .tres файл.
 
-## MELEE — бьёт вблизи; RANGED — плюётся кислотой издалека; EXPLODER — взрывается рядом с игроком
-enum Behavior { MELEE, RANGED, EXPLODER }
+## MELEE — бьёт вблизи; RANGED — плюётся кислотой издалека; EXPLODER — взрывается рядом с игроком;
+## GUNNER — человек с оружием (бандит): стреляет очередями, держит дистанцию, вблизи бьёт кулаком
+enum Behavior { MELEE, RANGED, EXPLODER, GUNNER }
 
 @export var display_name: String = "WALKER"
 @export var behavior: Behavior = Behavior.MELEE
@@ -75,6 +76,25 @@ enum Behavior { MELEE, RANGED, EXPLODER }
 @export var ranged_windup: float = 0.6
 @export var projectile_damage: float = 12.0
 @export var projectile_speed: float = 14.0
+
+@export_group("Gunner")
+## Человек, а не зомби: не стонет, кричит фразы (taunts) над головой
+@export var human: bool = false
+## Встроенный ствол модели Quaternius Characters_* (Pistol, Shotgun, SMG, Rifle); остальные прячутся
+@export var held_weapon: String = "Pistol"
+## Анимация стрельбы (прицеливание) — отдельно от удара кулаком anim_attack
+@export var anim_shoot: StringName = &"Idle_Gun"
+@export_range(1, 12) var burst_shots: int = 3
+@export var shot_interval: float = 0.15
+@export var shot_damage: float = 6.0
+## Попадание на ближней дистанции; дальше и по бегущему — хуже
+@export_range(0.05, 1.0, 0.05) var accuracy: float = 0.6
+## Держится на такой дистанции от цели (ходит боком), метры
+@export var preferred_distance: float = 9.0
+@export var gun_sound: AudioStream
+## Крики бандитов над головой (язык — как в телефоне)
+@export var taunts_ru: PackedStringArray = []
+@export var taunts_en: PackedStringArray = []
 
 @export_group("Exploder")
 ## На этой дистанции до игрока поджигает фитиль

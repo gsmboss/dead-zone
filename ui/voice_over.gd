@@ -35,6 +35,14 @@ static func pick(ru_text: String, en_text: String) -> String:
 	return en_text if not en_text.is_empty() else ru_text
 
 
+## Случайная реплика из списка на нужном языке (пусто, если списков нет)
+static func pick_random_line(ru_lines: PackedStringArray, en_lines: PackedStringArray) -> String:
+	var lines: PackedStringArray = ru_lines if is_russian() else en_lines
+	if lines.is_empty():
+		lines = en_lines if is_russian() else ru_lines
+	return lines[randi() % lines.size()] if not lines.is_empty() else ""
+
+
 ## Сказать фразу. pitch/rate — «характер» голоса (смешные голоса — высокий/низкий тон)
 static func speak(text: String, pitch: float = 1.0, rate: float = 1.0, interrupt: bool = true) -> void:
 	if text.strip_edges().is_empty() or not is_available():
