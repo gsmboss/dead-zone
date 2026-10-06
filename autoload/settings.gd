@@ -32,6 +32,7 @@ const DEFAULTS: Dictionary = {
 	"gyro_enabled": false, "gyro_mode": 0, "gyro_sensitivity_x": 1.0, "gyro_sensitivity_y": 1.0,
 	"camera_mode": 0, "camera_distance": 2.6, "player_name": "",
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
+	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
 }
 
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -82,6 +83,16 @@ var gyro_invert_y: bool = false
 var gyro_smoothing: float = 0.3
 ## Частота опроса гироскопа, Гц
 var gyro_rate: int = 60
+
+# Эффекты урона
+## Дуги и подсветка края экрана со стороны, откуда атакуют
+var damage_direction: bool = true
+## Яркость красной вспышки при уроне 0..1
+var damage_flash: float = 1.0
+## Толчок камеры при уроне 0..1
+var hit_shake: float = 1.0
+## По сети: метка над игроком, который в вас стреляет
+var attacker_marker: bool = true
 
 var _fps_layer: CanvasLayer
 var _fps_label: Label
@@ -189,6 +200,8 @@ func _clamp_values() -> void:
 	gyro_sensitivity_x = clampf(gyro_sensitivity_x, 0.1, 4.0)
 	gyro_sensitivity_y = clampf(gyro_sensitivity_y, 0.1, 4.0)
 	gyro_smoothing = clampf(gyro_smoothing, 0.0, 0.9)
+	damage_flash = clampf(damage_flash, 0.0, 1.0)
+	hit_shake = clampf(hit_shake, 0.0, 1.0)
 	if not gyro_rate in GYRO_RATES:
 		gyro_rate = 60
 

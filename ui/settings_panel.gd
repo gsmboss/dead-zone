@@ -1,6 +1,7 @@
 class_name SettingsPanel
 extends HubWindow
-## Настройки: управление, звук, графика, ссылки студии. Работает в убежище и в меню паузы.
+## Настройки по вкладкам (слева): управление, камера, кнопки, прицел, гироскоп, эффекты урона,
+## звук, графика, сюжет, прочее. Работает в убежище и в меню паузы.
 
 const TELEGRAM_URL: String = "https://t.me/SalamanderLab"
 const INSTAGRAM_URL: String = "https://www.instagram.com/salamandersec/"
@@ -15,22 +16,104 @@ func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS  # работает и на паузе
 	_grabber_texture = _make_grabber_texture()
 	super._ready()
+	_build_tabs()
+
+
+## Вкладки: каждая — своя страница настроек (последняя открытая запоминается)
+const TABS: PackedStringArray = ["УПРАВЛЕНИЕ", "КАМЕРА", "КНОПКИ", "ПРИЦЕЛ", "ГИРОСКОП", "ЭФФЕКТЫ",
+	"ЗВУК", "ГРАФИКА", "СЮЖЕТ", "ПРОЧЕЕ"]
+const TAB_WIDTH: float = 270.0
+
+static var _tab: int = 0
+
+var _tab_buttons: Array[Button] = []
 
 
 func _build_content() -> void:
-	_section("УПРАВЛЕНИЕ")
+	_tab = clampi(_tab, 0, TABS.size() - 1)
+	_section(TABS[_tab])
+	match _tab:
+		0:
+			_build_controls()
+		1:
+			_build_camera()
+		2:
+			_build_buttons()
+		3:
+			_build_crosshair()
+		4:
+			_build_gyro()
+		5:
+			_build_effects()
+		6:
+			_build_sound()
+		7:
+			_build_graphics()
+		8:
+			_build_story()
+		_:
+			_build_other()
+
+
+## Колонка вкладок слева от содержимого (ставится один раз после построения окна)
+func _build_tabs() -> void:
+	var root: Node = _scroll.get_parent()
+	var row := HBoxContainer.new()
+	row.size_flags_vertical = SIZE_EXPAND_FILL
+	row.add_theme_constant_override(&"separation", 16)
+	root.add_child(row)
+	root.move_child(row, _scroll.get_index())
+	_scroll.reparent(row)
+	_scroll.size_flags_horizontal = SIZE_EXPAND_FILL
+
+	var tabs_scroll := ScrollContainer.new()
+	tabs_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs_scroll.custom_minimum_size = Vector2(TAB_WIDTH, 0.0)
+	row.add_child(tabs_scroll)
+	row.move_child(tabs_scroll, 0)
+	TouchScroll.attach(tabs_scroll)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = SIZE_EXPAND_FILL
+	column.add_theme_constant_override(&"separation", 8)
+	tabs_scroll.add_child(column)
+	for i in TABS.size():
+		var button := UIKit.button(TABS[i], 22)
+		button.size_flags_horizontal = SIZE_EXPAND_FILL
+		button.pressed.connect(_select_tab.bind(i))
+		column.add_child(button)
+		_tab_buttons.append(button)
+	_highlight_tabs()
+
+
+func _select_tab(index: int) -> void:
+	if index == _tab:
+		return
+	_tab = index
+	_highlight_tabs()
+	_scroll.scroll_vertical = 0  # новая вкладка — с начала (refresh сохраняет текущую прокрутку)
+	refresh()
+
+
+func _highlight_tabs() -> void:
+	for i in _tab_buttons.size():
+		_tab_buttons[i].modulate = UIKit.ACCENT if i == _tab else Color(1.0, 1.0, 1.0, 0.7)
+
+
+func _build_controls() -> void:
 	_slider("ЧУВСТВИТЕЛЬНОСТЬ ОБЗОРА", &"look_sensitivity", Settings.SENSITIVITY_MIN,
 		Settings.SENSITIVITY_MAX, 5.0, func(v: float) -> String: return "%d" % roundi(v))
 	_toggle("ИНВЕРСИЯ ОСИ Y", &"invert_y")
 	_toggle("АВТООГОНЬ ПРИ НАВЕДЕНИИ", &"auto_fire")
-	_slider("ТРЯСКА КАМЕРЫ", &"camera_shake", 0.0, 1.0, 0.05, _percent)
 
-	_section("КАМЕРА")
+
+func _build_camera() -> void:
 	_choice("ВИД", &"camera_mode", Settings.CAMERA_MODE_NAMES)
 	_slider("ДИСТАНЦИЯ КАМЕРЫ (3-Е ЛИЦО)", &"camera_distance", 1.5, 4.5, 0.1,
 		func(v: float) -> String: return "%.1f М" % v)
+	_slider("ТРЯСКА КАМЕРЫ (ВЗРЫВЫ, БОСС)", &"camera_shake", 0.0, 1.0, 0.05, _percent)
 
-	_section("КНОПКИ")
+
+func _build_buttons() -> void:
 	var layout := UIKit.button("НАСТРОИТЬ РАСКЛАДКУ КНОПОК", 24)
 	layout.pressed.connect(_open_layout_editor)
 	content.add_child(layout)
@@ -38,11 +121,13 @@ func _build_content() -> void:
 	_slider("РАЗМЕР КНОПОК", &"button_scale", 0.7, 1.4, 0.05, _percent)
 	_slider("НЕПРОЗРАЧНОСТЬ КНОПОК", &"button_opacity", 0.15, 0.9, 0.05, _percent)
 
-	_section("ПРИЦЕЛ")
+
+func _build_crosshair() -> void:
 	_slider("РАЗМЕР ПРИЦЕЛА", &"crosshair_scale", 0.5, 2.0, 0.05, _percent)
 	_choice("ЦВЕТ ПРИЦЕЛА", &"crosshair_color", Settings.CROSSHAIR_COLOR_NAMES)
 
-	_section("ГИРОСКОП")
+
+func _build_gyro() -> void:
 	if not OS.has_feature("mobile"):
 		UIKit.label("ГИРОСКОП РАБОТАЕТ НА ТЕЛЕФОНЕ", 20, content).modulate = UIKit.DIM
 	_toggle("ОБЗОР НАКЛОНОМ ТЕЛЕФОНА", &"gyro_enabled")
@@ -59,7 +144,30 @@ func _build_content() -> void:
 		rate_values.append(rate)
 	_choice("ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)", &"gyro_rate", rate_names, rate_values)
 
-	_section("СЮЖЕТ")
+
+func _build_effects() -> void:
+	_toggle("ПОКАЗЫВАТЬ, С КАКОЙ СТОРОНЫ АТАКУЮТ", &"damage_direction")
+	_slider("ЯРКОСТЬ КРАСНОЙ ВСПЫШКИ ПРИ УРОНЕ", &"damage_flash", 0.0, 1.0, 0.05, _percent)
+	_slider("ТОЛЧОК КАМЕРЫ ПРИ УРОНЕ", &"hit_shake", 0.0, 1.0, 0.05, _percent)
+	_toggle("ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ", &"attacker_marker")
+	var hint := UIKit.label("КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
+		+ "КАПЛЯ — КИСЛОТА", 20, content)
+	hint.modulate = UIKit.DIM
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+
+func _build_sound() -> void:
+	_slider("ГРОМКОСТЬ", &"master_volume", 0.0, 1.0, 0.05, _percent)
+	_slider("МУЗЫКА", &"music_volume", 0.0, 1.0, 0.05, _percent)
+
+
+func _build_graphics() -> void:
+	_toggle("ТЕНИ", &"shadows")
+	_slider("РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)", &"render_scale", 0.5, 1.0, 0.05, _percent)
+	_toggle("ПОКАЗЫВАТЬ FPS", &"show_fps")
+
+
+func _build_story() -> void:
 	_toggle("ПОКАЗЫВАТЬ КАТ-СЦЕНЫ", &"cutscenes")
 	var replay := UIKit.button("ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА", 22)
 	replay.pressed.connect(func() -> void:
@@ -67,29 +175,19 @@ func _build_content() -> void:
 		Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0))
 	content.add_child(replay)
 
-	_section("ЗВУК")
-	_slider("ГРОМКОСТЬ", &"master_volume", 0.0, 1.0, 0.05,
-		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
-	_slider("МУЗЫКА", &"music_volume", 0.0, 1.0, 0.05,
-		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
 
-	_section("ГРАФИКА")
-	_toggle("ТЕНИ", &"shadows")
-	_slider("РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)", &"render_scale", 0.5, 1.0, 0.05,
-		func(v: float) -> String: return "%d%%" % roundi(v * 100.0))
-	_toggle("ПОКАЗЫВАТЬ FPS", &"show_fps")
-
-	var reset := UIKit.button("СБРОСИТЬ НАСТРОЙКИ", 24)
+func _build_other() -> void:
+	var reset := UIKit.button("СБРОСИТЬ ВСЕ НАСТРОЙКИ", 24)
 	reset.pressed.connect(_on_reset)
 	content.add_child(reset)
 
 	if Ads.privacy_options_required():
-		_section("РЕКЛАМА")
+		UIKit.label("РЕКЛАМА", 24, content).modulate = UIKit.DIM
 		var privacy := UIKit.button("НАСТРОЙКИ КОНФИДЕНЦИАЛЬНОСТИ", 22)
 		privacy.pressed.connect(Ads.show_privacy_options)
 		content.add_child(privacy)
 
-	_section("SALAMANDERLAB")
+	UIKit.label("SALAMANDERLAB", 24, content).modulate = UIKit.DIM
 	var links := HBoxContainer.new()
 	links.add_theme_constant_override(&"separation", 16)
 	content.add_child(links)
