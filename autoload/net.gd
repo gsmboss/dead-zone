@@ -35,6 +35,10 @@ const ANNOUNCE_INTERVAL: float = 1.0
 ## Игра пропадает из списка, если о ней не слышно столько секунд
 const HOST_TIMEOUT: float = 4.0
 const CONNECT_TIMEOUT: float = 6.0
+## Сколько ENet ждёт ответа соседа, мс: телефон на загрузке карты молчит несколько секунд,
+## по умолчанию (~5 с) соединение рвалось прямо на старте матча
+const PEER_TIMEOUT_MIN: int = 30000
+const PEER_TIMEOUT_MAX: int = 60000
 
 ## peer_id -> {"name": String, "skin": String, "team": int, "loaded": bool}
 var players: Dictionary = {}
@@ -57,6 +61,11 @@ var _announce_timer: float = 0.0
 var _time: float = 0.0
 var _connect_left: float = 0.0
 var _host_address: String = ""
+# Фоновая загрузка карты матча (соединение продолжает работать, экран не «замерзает»)
+var _loading_path: String = ""
+var _loading_progress: Array = []
+var _loading_layer: CanvasLayer
+var _loading_bar: ProgressBar
 
 
 func _ready() -> void:
@@ -170,6 +179,8 @@ func leave() -> void:
 	players.clear()
 	in_match = false
 	_connect_left = 0.0
+	_loading_path = ""
+	hide_loading()
 	lobby_changed.emit()
 
 
@@ -245,6 +256,8 @@ func _stop_announcer() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
+	if not _loading_path.is_empty():
+		_poll_map_loading()
 	if _connect_left > 0.0:
 		_connect_left -= delta
 		if _connect_left <= 0.0 and not is_online():
@@ -296,6 +309,7 @@ func _listen() -> void:
 # ---------- События сети ----------
 
 func _on_peer_connected(peer_id: int) -> void:
+	_extend_timeout(peer_id)
 	if is_host() and in_match:
 		_rpc_rejected.rpc_id(peer_id, "ИГРА УЖЕ ИДЁТ — ДОЖДИСЬ КОНЦА МАТЧА")
 		# Отключаем чуть позже, чтобы сообщение успело дойти
@@ -317,6 +331,7 @@ func _on_peer_disconnected(peer_id: int) -> void:
 
 func _on_connected_to_server() -> void:
 	_connect_left = 0.0
+	_extend_timeout(1)
 	status_changed.emit("ПОДКЛЮЧЕНО К %s" % _host_address)
 	var info: Dictionary = _my_info()
 	_rpc_register.rpc_id(1, PROTOCOL, info["name"], info["skin"])
@@ -333,6 +348,14 @@ func _on_server_disconnected() -> void:
 	disconnected.emit("ХОСТ ОТКЛЮЧИЛСЯ")
 	if was_in_match:
 		return_to_lobby()
+
+
+func _extend_timeout(peer_id: int) -> void:
+	if _peer == null:
+		return
+	var packet_peer: ENetPacketPeer = _peer.get_peer(peer_id)
+	if packet_peer != null:
+		packet_peer.set_timeout(0, PEER_TIMEOUT_MIN, PEER_TIMEOUT_MAX)
 
 
 func _my_info() -> Dictionary:
@@ -402,7 +425,81 @@ func _rpc_begin_match(new_players: Dictionary, new_mode: int, new_map: int) -> v
 	pending_go = -1.0
 	match_manager = null
 	get_tree().paused = false
-	get_tree().change_scene_to_file(MAPS[clampi(new_map, 0, MAPS.size() - 1)])
+	# Не грузим сцену внутри обработчика RPC и не блокируем поток: карта грузится в фоне
+	_load_map.call_deferred(MAPS[clampi(new_map, 0, MAPS.size() - 1)])
+
+
+# ---------- Загрузка карты матча ----------
+
+func _load_map(path: String) -> void:
+	Engine.time_scale = 1.0  # на случай прерванной кат-сцены
+	Ads.hide_banner()  # баннер убежища не должен остаться поверх карты
+	_show_loading()
+	_loading_progress.clear()
+	if ResourceLoader.load_threaded_request(path) != OK:
+		push_warning("Net: фоновая загрузка %s не началась — грузим сразу" % path)
+		get_tree().change_scene_to_file(path)
+		return
+	_loading_path = path
+
+
+func _poll_map_loading() -> void:
+	var status: int = ResourceLoader.load_threaded_get_status(_loading_path, _loading_progress)
+	if _loading_bar != null and not _loading_progress.is_empty():
+		_loading_bar.value = float(_loading_progress[0]) * 100.0
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		return
+	var path: String = _loading_path
+	_loading_path = ""
+	var scene := ResourceLoader.load_threaded_get(path) as PackedScene if status == ResourceLoader.THREAD_LOAD_LOADED else null
+	if scene == null:
+		push_error("Net: не удалось загрузить карту %s" % path)
+		get_tree().change_scene_to_file(path)
+		return
+	if _loading_bar != null:
+		_loading_bar.value = 100.0
+	get_tree().change_scene_to_packed(scene)
+	# Экран загрузки снимет MatchManager, когда уровень готов; на всякий случай — и по таймеру
+	get_tree().create_timer(15.0).timeout.connect(hide_loading)
+
+
+func _show_loading() -> void:
+	if _loading_layer != null:
+		return
+	_loading_layer = CanvasLayer.new()
+	_loading_layer.layer = 120
+	add_child(_loading_layer)
+	var background := ColorRect.new()
+	background.color = Color(0.06, 0.055, 0.05)
+	background.mouse_filter = Control.MOUSE_FILTER_STOP
+	_loading_layer.add_child(background)
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 18)
+	background.add_child(box)
+	box.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	box.offset_left = -360.0
+	box.offset_right = 360.0
+	box.offset_top = -80.0
+	box.offset_bottom = 80.0
+	var title := UIKit.label("ЗАГРУЗКА КАРТЫ…", 40, box)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.modulate = UIKit.ACCENT
+	_loading_bar = ProgressBar.new()
+	_loading_bar.custom_minimum_size = Vector2(0.0, 24.0)
+	_loading_bar.show_percentage = false
+	box.add_child(_loading_bar)
+	var hint := UIKit.label("%s  •  %s" % [MAP_NAMES[clampi(map_index, 0, MAP_NAMES.size() - 1)],
+		MODE_NAMES[clampi(match_mode, 0, MODE_NAMES.size() - 1)]], 24, box)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.modulate = UIKit.DIM
+
+
+func hide_loading() -> void:
+	if _loading_layer != null and is_instance_valid(_loading_layer):
+		_loading_layer.queue_free()
+	_loading_layer = null
+	_loading_bar = null
 
 
 # ---------- RPC: матч (передаются в MatchManager) ----------

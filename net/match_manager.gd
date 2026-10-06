@@ -102,6 +102,7 @@ func _ready() -> void:
 	hud_layer.add_child(_hud)
 	_hud.setup(self)
 	_hud.announce("ЖДЁМ ИГРОКОВ…")
+	Net.hide_loading.call_deferred()
 	Zombie.multi_target = Net.is_host()
 	if Net.is_host():
 		if spawner != null:
@@ -200,9 +201,14 @@ func net_loaded(peer_id: int) -> void:
 	if Net.players.has(peer_id):
 		Net.players[peer_id]["loaded"] = true
 	if _started:
-		# Опоздал (грузился дольше таймаута) — старт только ему
+		# Опоздал (грузился дольше таймаута) — старт и уже живые зомби только ему
 		if peer_id != Net.my_id():
 			Net.rpc_go.rpc_id(peer_id, _time_left if Net.match_mode != Net.Mode.LAST_STANDING else 0.0)
+			for net_id: int in _zombies:
+				var zombie: Zombie = _zombies[net_id] as Zombie
+				if zombie != null and is_instance_valid(zombie) and zombie.data != null:
+					Net.rpc_zombie_spawn.rpc_id(peer_id, net_id, zombie.data.resource_path,
+						zombie.global_position, zombie.rotation.y, zombie.health_multiplier)
 		return
 	for id: int in Net.players:
 		if not bool(Net.players[id].get("loaded", false)):
@@ -630,7 +636,7 @@ func _spawn_for(peer_id: int, first: bool) -> Vector3:
 	var pvp: bool = Net.match_mode == Net.Mode.FREE_FOR_ALL or Net.match_mode == Net.Mode.TEAMS
 	if not pvp:
 		var angle: float = TAU * index / maxf(ids.size(), 1.0)
-		return _start_position + Vector3(cos(angle), 0.0, sin(angle)) * 2.5
+		return _free_spot(_start_position + Vector3(cos(angle), 0.0, sin(angle)) * 2.5)
 	if first:
 		if Net.match_mode == Net.Mode.TEAMS:
 			# Команды — с разных концов карты
@@ -653,6 +659,29 @@ func _spawn_for(peer_id: int, first: bool) -> Vector3:
 			best_distance = nearest
 			best = point
 	return best
+
+
+## Точка без стен и ящиков рядом с point (иначе игрок застрянет внутри и увидит темноту)
+func _free_spot(point: Vector3) -> Vector3:
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = 0.4
+	capsule.height = 1.6
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = capsule
+	query.collision_mask = PhysicsLayers.WORLD
+	for ring in 3:
+		var tries: int = 1 if ring == 0 else 8
+		for i in tries:
+			var offset := Vector3.ZERO
+			if ring > 0:
+				var angle: float = TAU * i / 8.0
+				offset = Vector3(cos(angle), 0.0, sin(angle)) * 1.5 * ring
+			var candidate: Vector3 = point + offset
+			query.transform = Transform3D(Basis.IDENTITY, candidate + Vector3.UP * 1.0)
+			if space.intersect_shape(query, 1).is_empty():
+				return candidate
+	return _start_position
 
 
 # ---------- Зомби: хост ----------

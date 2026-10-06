@@ -119,6 +119,14 @@ func _take_control() -> void:
 		_hidden_hud.visible = false
 
 
+func _exit_tree() -> void:
+	# Сцену сменили посреди ролика (старт матча по сети, выход) — общее состояние не должно залипнуть
+	if not _finishing:
+		Engine.time_scale = 1.0
+		active = false
+		_ended_frame = Engine.get_process_frames()
+
+
 func _release_control() -> void:
 	Engine.time_scale = 1.0
 	active = false

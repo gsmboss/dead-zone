@@ -82,8 +82,10 @@ func show_banner() -> void:
 
 func hide_banner() -> void:
 	_banner_wanted = false
+	# Уничтожаем, а не прячем: догрузившийся после hide() баннер мог показаться снова поверх игры
 	if _banner != null:
-		_banner.hide()
+		_banner.destroy()
+		_banner = null
 
 
 # ---------- Межстраничная ----------
