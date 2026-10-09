@@ -4,6 +4,11 @@ extends HubWindow
 ## аксессуары (обычные, смешные, редкие) — по одному на голову и на лицо.
 ## Скин и аксессуары видны от 3-го лица и другим игрокам в мультиплеере.
 
+## Вкладки окна: персонажи и аксессуары по категориям (последняя открытая запоминается)
+const TABS: PackedStringArray = ["ПЕРСОНАЖИ", "ОБЫЧНЫЕ", "СМЕШНЫЕ", "РЕДКИЕ"]
+
+static var _tab: int = 0
+
 var _preview: SkinPreview
 var _shown_id: String = ""
 
@@ -38,11 +43,16 @@ func _build_content() -> void:
 	list.size_flags_horizontal = SIZE_EXPAND_FILL
 	list.add_theme_constant_override(&"separation", 10)
 	row.add_child(list)
-	UIKit.label("ВИД ОТ 3-ГО ЛИЦА — В НАСТРОЙКАХ ИЛИ КНОПКОЙ «ВИД»", 20, list).modulate = UIKit.DIM
-	var selected: PlayerSkin = GameState.get_selected_skin()
-	for skin: PlayerSkin in GameState.skins:
-		list.add_child(_make_row(skin, selected != null and selected.id == skin.id))
-	_build_accessories(list)
+	list.add_child(UIKit.tab_bar(TABS, _tab, func(index: int) -> void:
+		_tab = index
+		refresh()))
+	if _tab == 0:
+		UIKit.label("ВИД ОТ 3-ГО ЛИЦА — В НАСТРОЙКАХ ИЛИ КНОПКОЙ «ВИД»", 20, list).modulate = UIKit.DIM
+		var selected: PlayerSkin = GameState.get_selected_skin()
+		for skin: PlayerSkin in GameState.skins:
+			list.add_child(_make_row(skin, selected != null and selected.id == skin.id))
+	else:
+		_build_accessories(list, _tab - 1)
 
 
 func _make_row(skin: PlayerSkin, selected: bool) -> Control:
@@ -90,15 +100,13 @@ func _on_coins_changed(_coins: int) -> void:
 
 # ---------- Аксессуары ----------
 
-func _build_accessories(list: VBoxContainer) -> void:
-	UIKit.label("АКСЕССУАРЫ", 30, list).modulate = UIKit.ACCENT
-	UIKit.label("ОДИН НА ГОЛОВУ И ОДИН НА ЛИЦО. НАЖМИ НАДЕТЫЙ — СНИМЕШЬ", 20, list).modulate = UIKit.DIM
-	for category in AccessoryData.CATEGORY_NAMES.size():
-		var header := UIKit.label(AccessoryData.CATEGORY_NAMES[category], 26, list)
-		header.modulate = AccessoryData.CATEGORY_COLORS[category]
-		for accessory: AccessoryData in GameState.accessories:
-			if accessory.category == category:
-				list.add_child(_make_accessory_row(accessory))
+## Аксессуары одной категории (вкладка)
+func _build_accessories(list: VBoxContainer, category: int) -> void:
+	UIKit.label("ОДИН НА ГОЛОВУ И ОДИН НА ЛИЦО. НАЖМИ НАДЕТЫЙ — СНИМЕШЬ. ПОД ШЛЯПОЙ СВОЯ ШАПКА ПРЯЧЕТСЯ",
+		20, list).modulate = UIKit.DIM
+	for accessory: AccessoryData in GameState.accessories:
+		if accessory.category == category:
+			list.add_child(_make_accessory_row(accessory))
 
 
 func _make_accessory_row(accessory: AccessoryData) -> Control:

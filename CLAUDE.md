@@ -332,3 +332,8 @@ PlayerBody.set_accessories — BoneAttachment3D на кости головы, г
 GameState: buy_accessory/toggle_accessory/get_worn_accessories (по одному на слот), сигнал accessories_changed;
 окно ПЕРСОНАЖ — раздел АКСЕССУАРЫ; по сети Net.players[*]["acc"], Net.PROTOCOL = 3. У людей в лагере — CAMP_HATS.
 Метка «стреляет в тебя» по сети: маленькая ▼ над именем (font 48, pixel_size 0.0028).
+Своя шапка модели под надетым убором: PlayerSkin.hide_hat_from (доля высоты головы, у Шона/Лис/Мэтта/Сэма 0.52) —
+PlayerBody._set_hat_flattened подменяет меш копией, где верх головы прижат к срезу (без дыр), кэш по скину.
+Посадка: глаза = низ головы + 0.4 ширины, лицо — самая передняя точка у глаз (без козырька), ACCESSORY_FIT 0.9.
+Вкладки: UIKit.tab_bar(names, current, on_select); ПЕРСОНАЖ — ПЕРСОНАЖИ/ОБЫЧНЫЕ/СМЕШНЫЕ/РЕДКИЕ,
+МАШИНЫ — МАШИНЫ/ТЮНИНГ/ПОКРАСКА И НЕОН (static var _tab запоминает вкладку).

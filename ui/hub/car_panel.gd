@@ -19,6 +19,11 @@ const STATS: Array = [
 ]
 const SWATCH_SIZE: float = 72.0
 
+## Вкладки: выбор машины, тюнинг, внешний вид (последняя открытая запоминается)
+const TABS: PackedStringArray = ["МАШИНЫ", "ТЮНИНГ", "ПОКРАСКА И НЕОН"]
+
+static var _tab: int = 0
+
 var _preview: CarPreview
 var _shown_id: String = ""
 
@@ -56,11 +61,18 @@ func _build_content() -> void:
 	row.add_child(right)
 	UIKit.label("МОНЕТЫ: %d" % GameState.coins, 26, right).modulate = UIKit.ACCENT
 	UIKit.label("ВЫБРАННАЯ МАШИНА ЖДЁТ В ГОРОДЕ У СТАРТА И ЕДЕТ С ВАМИ В ИГРУ ПО СЕТИ", 20, right).modulate = UIKit.DIM
-	var selected: CarData = GameState.get_selected_car()
-	for car: CarData in GameState.cars:
-		right.add_child(_make_car_row(car, selected != null and selected.id == car.id))
-	if shown != null and GameState.owns_car(shown.id):
+	right.add_child(UIKit.tab_bar(TABS, _tab, func(index: int) -> void:
+		_tab = index
+		refresh()))
+	if _tab == 0:
+		var selected: CarData = GameState.get_selected_car()
+		for car: CarData in GameState.cars:
+			right.add_child(_make_car_row(car, selected != null and selected.id == car.id))
+	elif shown == null or not GameState.owns_car(shown.id):
+		UIKit.label("СНАЧАЛА КУПИ ЭТУ МАШИНУ НА ВКЛАДКЕ «МАШИНЫ»", 24, right).modulate = UIKit.DIM
+	elif _tab == 1:
 		_build_tuning(shown, right)
+	else:
 		_build_paint(shown, right)
 		_build_neon(shown, right)
 

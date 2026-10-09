@@ -32,6 +32,8 @@ extends Resource
 @export_group("Accessories")
 ## Кость головы: к ней крепятся шляпы и очки (Quaternius — Head, Kenney — head)
 @export var head_bone: StringName = &"Head"
+## Своя шапка/волосы модели: выше этой доли высоты головы сплющиваются под надетым убором (-1 — не трогать)
+@export_range(-1.0, 1.0, 0.05) var hide_hat_from: float = -1.0
 
 @export_group("Hand")
 ## Не показывать оружие в руках (у блочных персонажей Kenney нет кисти — ствол висит криво)

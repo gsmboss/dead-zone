@@ -291,6 +291,17 @@ func _transform_to(node: Node3D, root: Node3D) -> Transform3D:
 
 # ---------- Аксессуары ----------
 
+## Аксессуар чуть меньше ширины головы — не выглядит огромным
+const ACCESSORY_FIT: float = 0.9
+## Встроенный убор/волосы под надетой шляпой сплющиваются до этой доли высоты
+const HAT_FLATTEN: float = 0.12
+const HAT_SHRINK: float = 0.8
+## Глаза — на этой доле ширины головы от её низа (высота головы врёт из-за шапок и причёсок);
+## плоскость лица — самая передняя точка в полосе вокруг глаз (без козырька)
+const EYE_LEVEL: float = 0.4
+const FACE_BAND: Vector2 = Vector2(-0.12, 0.1)
+
+
 ## Надеть аксессуары по id (шляпа — на макушку, очки и т.п. — на лицо); пусто — снять всё
 func set_accessories(ids: PackedStringArray) -> void:
 	_accessory_ids = ids.duplicate()
@@ -304,7 +315,7 @@ func _build_accessories() -> void:
 		if is_instance_valid(node):
 			node.queue_free()
 	_accessory_nodes.clear()
-	if _model == null or skin == null or _accessory_ids.is_empty():
+	if _model == null or skin == null:
 		return
 	var skeletons: Array[Node] = _model.find_children("*", "Skeleton3D", true, false)
 	if skeletons.is_empty():
@@ -312,11 +323,27 @@ func _build_accessories() -> void:
 	var skeleton := skeletons[0] as Skeleton3D
 	var bone: int = skeleton.find_bone(skin.head_bone)
 	if bone < 0:
-		push_warning("PlayerBody: у скина '%s' нет кости головы %s" % [skin.id, skin.head_bone])
+		if not _accessory_ids.is_empty():
+			push_warning("PlayerBody: у скина '%s' нет кости головы %s" % [skin.id, skin.head_bone])
 		return
-	var head: AABB = _head_bounds(skeleton, bone)
-	if head.size == Vector3.ZERO:
+	var info: Dictionary = _head_info(skeleton, bone)
+	if info.is_empty():
 		return
+	var wears_hat: bool = false
+	for accessory_id: String in _accessory_ids:
+		var item: AccessoryData = GameState.get_accessory(accessory_id)
+		if item != null and item.slot == AccessoryData.Slot.HEAD:
+			wears_hat = true
+	# Своя шапка/берет модели не торчит из-под надетого убора
+	var flattened: bool = wears_hat and skin.hide_hat_from >= 0.0
+	_set_hat_flattened(flattened, info)
+	if _accessory_ids.is_empty():
+		return
+	var head: AABB = info["aabb"]
+	var cut: float = float(info["cut"])
+	var top: float = head.end.y
+	if flattened:
+		top = cut + (head.end.y - cut) * HAT_FLATTEN
 	var anchor := BoneAttachment3D.new()
 	anchor.name = "AccessoryAnchor"
 	anchor.bone_name = skin.head_bone
@@ -324,7 +351,7 @@ func _build_accessories() -> void:
 	_accessory_nodes.append(anchor)
 	# Узлы аксессуаров ставим в осях скелета (лицо модели — +Z), переводя в оси кости головы
 	var to_bone: Transform3D = skeleton.get_bone_global_rest(bone).affine_inverse()
-	var width: float = maxf(head.size.x, 0.01)
+	var width: float = maxf(head.size.x, 0.01) * ACCESSORY_FIT
 	var center: Vector3 = head.get_center()
 	for accessory_id: String in _accessory_ids:
 		var data: AccessoryData = GameState.get_accessory(accessory_id)
@@ -333,24 +360,58 @@ func _build_accessories() -> void:
 			continue
 		var at: Vector3
 		if data.slot == AccessoryData.Slot.HEAD:
-			at = Vector3(center.x, head.end.y - head.size.y * 0.04, center.z)
+			at = Vector3(center.x, top - head.size.y * 0.03, center.z)
 		else:
-			at = Vector3(center.x, head.position.y + head.size.y * 0.55, head.end.z)
+			at = Vector3(center.x, float(info["eye_y"]), float(info["face_z"]))
 		node.transform = to_bone * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * width), at)
 		anchor.add_child(node)
 
 
-## Габариты вершин головы (вес кости головы ≥ 0.5) в осях скелета; кэш по скину
-func _head_bounds(skeleton: Skeleton3D, bone: int) -> AABB:
+## Голова скина в осях скелета: габариты (вершины с весом кости головы ≥ 0.5), уровень глаз,
+## плоскость лица (самая передняя точка на высоте глаз — без козырька), высота среза убора. Кэш по скину
+func _head_info(skeleton: Skeleton3D, bone: int) -> Dictionary:
 	if _head_cache.has(skin.id):
 		return _head_cache[skin.id]
-	var result := AABB()
-	var has_bounds: bool = false
+	var points := PackedVector3Array()
 	var bone_rest: Transform3D = skeleton.get_bone_global_rest(bone)
+	for entry: Dictionary in _head_surfaces(skeleton, bone):
+		var to_skeleton: Transform3D = bone_rest * (entry["bind_pose"] as Transform3D)
+		var vertices: PackedVector3Array = entry["vertices"]
+		for index: int in entry["head"] as PackedInt32Array:
+			points.append(to_skeleton * vertices[index])
+	var info: Dictionary = {}
+	if points.is_empty():
+		push_warning("PlayerBody: не нашёл вершины головы у скина '%s'" % skin.id)
+		_head_cache[skin.id] = info
+		return info
+	var head := AABB(points[0], Vector3.ZERO)
+	for point: Vector3 in points:
+		head = head.expand(point)
+	var eye_y: float = minf(head.position.y + head.size.x * EYE_LEVEL, head.position.y + head.size.y * 0.6)
+	var band_low: float = eye_y + head.size.x * FACE_BAND.x
+	var band_high: float = eye_y + head.size.x * FACE_BAND.y
+	var face_z: float = head.position.z
+	for point: Vector3 in points:
+		if point.y >= band_low and point.y <= band_high:
+			face_z = maxf(face_z, point.z)
+	info = {
+		"aabb": head,
+		"eye_y": eye_y,
+		"face_z": face_z,
+		"cut": head.position.y + head.size.y * maxf(skin.hide_hat_from, 0.0),
+	}
+	_head_cache[skin.id] = info
+	return info
+
+
+## Меши модели с вершинами головы: [{mesh_instance, surface, bind_pose, vertices, head (индексы)}]
+func _head_surfaces(skeleton: Skeleton3D, bone: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
 	var bone_name: String = skeleton.get_bone_name(bone)
 	for node: Node in _model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
-		if mesh_instance.mesh == null or mesh_instance.skin == null:
+		var mesh: Mesh = mesh_instance.get_meta(&"original_mesh", mesh_instance.mesh) as Mesh
+		if mesh == null or mesh_instance.skin == null:
 			continue
 		var bind: int = -1
 		for i in mesh_instance.skin.get_bind_count():
@@ -359,27 +420,89 @@ func _head_bounds(skeleton: Skeleton3D, bone: int) -> AABB:
 				break
 		if bind < 0:
 			continue
-		var bind_pose: Transform3D = mesh_instance.skin.get_bind_pose(bind)
-		for surface in mesh_instance.mesh.get_surface_count():
-			var arrays: Array = mesh_instance.mesh.surface_get_arrays(surface)
+		for surface in mesh.get_surface_count():
+			var arrays: Array = mesh.surface_get_arrays(surface)
 			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES] if arrays[Mesh.ARRAY_BONES] != null else PackedInt32Array()
 			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS] if arrays[Mesh.ARRAY_WEIGHTS] != null else PackedFloat32Array()
 			if vertices.is_empty() or bones.size() < vertices.size():
 				continue
 			var per_vertex: int = floori(float(bones.size()) / float(vertices.size()))
+			var head := PackedInt32Array()
 			for v in vertices.size():
 				for k in per_vertex:
 					var index: int = v * per_vertex + k
 					if bones[index] == bind and weights[index] >= 0.5:
-						var point: Vector3 = bone_rest * (bind_pose * vertices[v])
-						if has_bounds:
-							result = result.expand(point)
-						else:
-							result = AABB(point, Vector3.ZERO)
-							has_bounds = true
+						head.append(v)
 						break
-	if not has_bounds:
-		push_warning("PlayerBody: не нашёл вершины головы у скина '%s'" % skin.id)
-	_head_cache[skin.id] = result
+			if not head.is_empty():
+				result.append({"mesh_instance": mesh_instance, "surface": surface, "arrays": arrays,
+					"bind_pose": mesh_instance.skin.get_bind_pose(bind), "vertices": vertices, "head": head})
+	return result
+
+
+## Сплющить (или вернуть) верх головы модели — встроенный берет, кепку, волосы — под надетой шляпой
+func _set_hat_flattened(enabled: bool, info: Dictionary) -> void:
+	var skeletons: Array[Node] = _model.find_children("*", "Skeleton3D", true, false)
+	if skeletons.is_empty():
+		return
+	var skeleton := skeletons[0] as Skeleton3D
+	if not enabled:
+		for node: Node in _model.find_children("*", "MeshInstance3D", true, false):
+			var mesh_instance := node as MeshInstance3D
+			if mesh_instance.has_meta(&"original_mesh"):
+				mesh_instance.mesh = mesh_instance.get_meta(&"original_mesh") as Mesh
+		return
+	var cache_key: String = skin.id + "#flat"
+	var built: Dictionary = _head_cache.get(cache_key, {})
+	if built.is_empty():
+		built = _build_flattened(skeleton, skeleton.find_bone(skin.head_bone), info)
+		_head_cache[cache_key] = built
+	for node: Node in _model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		var key: String = String(mesh_instance.name)
+		if built.has(key):
+			if not mesh_instance.has_meta(&"original_mesh"):
+				mesh_instance.set_meta(&"original_mesh", mesh_instance.mesh)
+			mesh_instance.mesh = built[key]
+
+
+## Копии мешей, где вершины головы выше среза прижаты к срезу и чуть сужены (без дыр в голове)
+func _build_flattened(skeleton: Skeleton3D, bone: int, info: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var head: AABB = info["aabb"]
+	var cut: float = float(info["cut"])
+	var center: Vector3 = head.get_center()
+	var bone_rest: Transform3D = skeleton.get_bone_global_rest(bone)
+	var changed: Dictionary = {}  # MeshInstance3D -> {surface: arrays}
+	for entry: Dictionary in _head_surfaces(skeleton, bone):
+		var to_skeleton: Transform3D = bone_rest * (entry["bind_pose"] as Transform3D)
+		var from_skeleton: Transform3D = to_skeleton.affine_inverse()
+		var arrays: Array = entry["arrays"]
+		var vertices: PackedVector3Array = (entry["vertices"] as PackedVector3Array).duplicate()
+		for index: int in entry["head"] as PackedInt32Array:
+			var point: Vector3 = to_skeleton * vertices[index]
+			if point.y <= cut:
+				continue
+			point.y = cut + (point.y - cut) * HAT_FLATTEN
+			point.x = center.x + (point.x - center.x) * HAT_SHRINK
+			point.z = center.z + (point.z - center.z) * HAT_SHRINK
+			vertices[index] = from_skeleton * point
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		var mesh_instance: MeshInstance3D = entry["mesh_instance"]
+		if not changed.has(mesh_instance):
+			changed[mesh_instance] = {}
+		(changed[mesh_instance] as Dictionary)[int(entry["surface"])] = arrays
+	for mesh_instance: MeshInstance3D in changed:
+		var source: Mesh = mesh_instance.get_meta(&"original_mesh", mesh_instance.mesh) as Mesh
+		var copy := ArrayMesh.new()
+		var surfaces: Dictionary = changed[mesh_instance]
+		for surface in source.get_surface_count():
+			var arrays: Array = surfaces[surface] if surfaces.has(surface) else source.surface_get_arrays(surface)
+			var flags: int = 0
+			if source is ArrayMesh:
+				flags = (source as ArrayMesh).surface_get_format(surface) & Mesh.ARRAY_FLAG_USE_8_BONE_WEIGHTS
+			copy.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, flags)
+			copy.surface_set_material(surface, source.surface_get_material(surface))
+		result[String(mesh_instance.name)] = copy
 	return result

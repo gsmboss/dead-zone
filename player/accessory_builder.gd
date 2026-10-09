@@ -57,8 +57,8 @@ static func build(data: AccessoryData) -> Node3D:
 				_part(root, _cylinder(0.0, 0.1, 0.5), WHITE.darkened(0.1), Vector3(side * 0.62, 0.15, 0),
 					Vector3(0, 0, -side * 55.0))
 		"chef":
-			_part(root, _cylinder(0.44, 0.42, 0.22), WHITE, Vector3(0, 0.08, 0))
-			_part(root, _sphere(0.58, 0.58), WHITE, Vector3(0, 0.42, 0), Vector3.ZERO, Vector3(1, 0.6, 1))
+			_part(root, _cylinder(0.4, 0.4, 0.22), WHITE, Vector3(0, 0.08, 0))
+			_part(root, _sphere(0.46, 0.46), WHITE, Vector3(0, 0.34, 0), Vector3.ZERO, Vector3(1, 0.6, 1))
 		"propeller":
 			_part(root, _sphere(0.52, 0.5), c, Vector3(0, -0.05, 0), Vector3.ZERO, Vector3(1, 0.55, 1))
 			_part(root, _cylinder(0.025, 0.025, 0.2), METAL, Vector3(0, 0.3, 0))

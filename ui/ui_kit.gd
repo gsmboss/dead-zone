@@ -49,6 +49,26 @@ static func count(value: int, one: String, few: String, many: String) -> String:
 	return "%d %s" % [value, word]
 
 
+## Ряд вкладок: выбранная подсвечена; on_select(index) — при нажатии на другую
+static func tab_bar(names: PackedStringArray, current: int, on_select: Callable) -> HFlowContainer:
+	var row := HFlowContainer.new()
+	row.add_theme_constant_override(&"h_separation", 10)
+	row.add_theme_constant_override(&"v_separation", 10)
+	for i in names.size():
+		var tab := button(names[i], 24, 170.0)
+		if i == current:
+			tab.modulate = ACCENT
+			var active := _button_box(BUTTON_COLOR.lightened(0.25), 3, 4)
+			tab.add_theme_stylebox_override(&"normal", active)
+			tab.add_theme_stylebox_override(&"hover", active)
+		var index: int = i
+		tab.pressed.connect(func() -> void:
+			if index != current:
+				on_select.call(index))
+		row.add_child(tab)
+	return row
+
+
 ## «N МОНЕТ / МОНЕТА / МОНЕТЫ» заглавными
 static func coins_text(value: int) -> String:
 	return count(value, "МОНЕТА", "МОНЕТЫ", "МОНЕТ")
