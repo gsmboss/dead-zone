@@ -7,7 +7,7 @@ extends Control
 
 var _coins_label: Label
 var _menu_bar: HBoxContainer
-var _exit_panel: PanelContainer
+var _exit_panel: Control
 var _daily_button: Button
 var _settings_button: Button
 var _base_button: Button
@@ -48,6 +48,7 @@ func _on_back() -> void:
 
 ## Первый заход: предложить обучение (один раз; потом — кнопка в настройках, вкладка СЮЖЕТ)
 const TUTORIAL_OFFERED: String = "tutorial_offered"
+const DIALOG_WIDTH: float = 680.0
 
 
 func offer_tutorial() -> void:
@@ -55,22 +56,8 @@ func offer_tutorial() -> void:
 			or GameState.has_seen_cutscene(TUTORIAL_OFFERED):
 		return
 	GameState.mark_cutscene_seen(TUTORIAL_OFFERED)
-	_exit_panel = PanelContainer.new()
-	_exit_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())
-	add_child(_exit_panel)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override(&"separation", 16)
-	_exit_panel.add_child(box)
-	var title := UIKit.label("ОБУЧЕНИЕ", 40, box)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.modulate = UIKit.ACCENT
-	var text := UIKit.label("ДВЕ МИНУТЫ НА ПОЛИГОНЕ: ХОДЬБА, ОБЗОР, СТРЕЛЬБА, ПРИЦЕЛ И ПЕРВЫЕ ЗОМБИ.\nНАГРАДА — 150 МОНЕТ.", 24, box)
-	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	text.custom_minimum_size.x = 620.0
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override(&"separation", 16)
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_child(row)
+	var row: HBoxContainer = _open_dialog("ОБУЧЕНИЕ",
+		"ДВЕ МИНУТЫ НА ПОЛИГОНЕ: ХОДЬБА, ОБЗОР, СТРЕЛЬБА, ПРИЦЕЛ И ПЕРВЫЕ ЗОМБИ. НАГРАДА — 150 МОНЕТ.")
 	var go := UIKit.button("ПРОЙТИ", 28, 240.0)
 	go.modulate = UIKit.GOOD
 	go.pressed.connect(GameState.start_tutorial)
@@ -78,24 +65,10 @@ func offer_tutorial() -> void:
 	var later := UIKit.button("ПОЗЖЕ", 28, 240.0)
 	later.pressed.connect(_on_back)
 	row.add_child(later)
-	_exit_panel.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
-	_exit_panel.grow_horizontal = GROW_DIRECTION_BOTH
-	_exit_panel.grow_vertical = GROW_DIRECTION_BOTH
 
 
 func _show_exit_confirm() -> void:
-	_exit_panel = PanelContainer.new()
-	_exit_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())
-	add_child(_exit_panel)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override(&"separation", 16)
-	_exit_panel.add_child(box)
-	var title := UIKit.label("ВЫЙТИ ИЗ ИГРЫ?", 40, box)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.modulate = UIKit.ACCENT
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override(&"separation", 16)
-	box.add_child(row)
+	var row: HBoxContainer = _open_dialog("ВЫЙТИ ИЗ ИГРЫ?", "")
 	var stay := UIKit.button("ОСТАТЬСЯ", 28, 240.0)
 	stay.pressed.connect(_on_back)
 	row.add_child(stay)
@@ -104,13 +77,36 @@ func _show_exit_confirm() -> void:
 		GameState.save_game()
 		get_tree().quit())
 	row.add_child(quit)
-	_exit_panel.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
-	_exit_panel.grow_horizontal = GROW_DIRECTION_BOTH
-	_exit_panel.grow_vertical = GROW_DIRECTION_BOTH
-	_exit_panel.scale = Vector2.ONE * 0.8
-	_exit_panel.pivot_offset = _exit_panel.get_combined_minimum_size() * 0.5
-	create_tween().tween_property(_exit_panel, "scale", Vector2.ONE, 0.2) \
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## Окно по центру экрана: заголовок, текст (можно пустой), ряд кнопок — его и возвращает.
+## CenterContainer пересчитывает размер при каждой раскладке: текст с переносом не раздувает окно
+func _open_dialog(title_text: String, body_text: String) -> HBoxContainer:
+	var center := CenterContainer.new()
+	center.mouse_filter = MOUSE_FILTER_IGNORE
+	add_child(center)
+	center.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	_exit_panel = center
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())
+	panel.custom_minimum_size.x = DIALOG_WIDTH
+	center.add_child(panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 16)
+	panel.add_child(box)
+	var title := UIKit.label(title_text, 40, box)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.modulate = UIKit.ACCENT
+	if not body_text.is_empty():
+		var text := UIKit.label(body_text, 24, box)
+		text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override(&"separation", 16)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(row)
+	center.modulate.a = 0.0
+	create_tween().tween_property(center, "modulate:a", 1.0, 0.2)
+	return row
 
 
 func _build_ui() -> void:
