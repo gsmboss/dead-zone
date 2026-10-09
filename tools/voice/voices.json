@@ -1,0 +1,55 @@
+{
+  "_comment": "Голоса ролей для tools/voice/build_voice.py. model — голос Piper (huggingface.co/rhasspy/piper-voices), speaker — номер голоса в многоголосой модели или auto:female:N / auto:male:N (N-й найденный по высоте голоса), pitch — сдвиг тона (1 — как есть), length — темп (больше — медленнее). Роль = имя говорящего в фильмах (speaker) или служебная: narrator, player, camp_1..camp_4.",
+  "models": {
+    "ru": ["ru_RU-irina-medium", "ru_RU-denis-medium", "ru_RU-dmitri-medium", "ru_RU-ruslan-medium"],
+    "en": ["en_US-libritts_r-medium"]
+  },
+  "roles": {
+    "ru": {
+      "narrator":  {"model": "ru_RU-denis-medium", "pitch": 0.95, "length": 1.0},
+      "player":    {"model": "ru_RU-ruslan-medium", "pitch": 1.0, "length": 1.0},
+      "camp_1":    {"model": "ru_RU-irina-medium", "pitch": 1.0, "length": 1.0},
+      "camp_2":    {"model": "ru_RU-denis-medium", "pitch": 1.04, "length": 1.0},
+      "camp_3":    {"model": "ru_RU-irina-medium", "pitch": 1.12, "length": 0.95},
+      "camp_4":    {"model": "ru_RU-dmitri-medium", "pitch": 0.92, "length": 1.05},
+      "МАМА":      {"model": "ru_RU-irina-medium", "pitch": 0.96, "length": 1.06},
+      "ТЁМА":      {"model": "ru_RU-irina-medium", "pitch": 1.24, "length": 0.92},
+      "МАРИНА":    {"model": "ru_RU-irina-medium", "pitch": 1.08, "length": 1.0},
+      "ВЕРА":      {"model": "ru_RU-irina-medium", "pitch": 0.9, "length": 1.1},
+      "ИРИНА":     {"model": "ru_RU-irina-medium", "pitch": 1.0, "length": 1.0},
+      "НИНА":      {"model": "ru_RU-irina-medium", "pitch": 0.86, "length": 1.12},
+      "ДЕНИС":     {"model": "ru_RU-denis-medium", "pitch": 1.05, "length": 1.0},
+      "ЛЕВ":       {"model": "ru_RU-dmitri-medium", "pitch": 1.0, "length": 1.0},
+      "ДЯДЯ ГОША": {"model": "ru_RU-ruslan-medium", "pitch": 0.88, "length": 1.08},
+      "ШНЫРЬ":     {"model": "ru_RU-denis-medium", "pitch": 1.16, "length": 0.86},
+      "БАРОН":     {"model": "ru_RU-dmitri-medium", "pitch": 0.82, "length": 1.08},
+      "ГЕНКА":     {"model": "ru_RU-ruslan-medium", "pitch": 0.94, "length": 1.0},
+      "КАПИТАН":   {"model": "ru_RU-dmitri-medium", "pitch": 0.9, "length": 1.02},
+      "КАБАН":     {"model": "ru_RU-ruslan-medium", "pitch": 0.8, "length": 1.05},
+      "БАНДИТ":    {"model": "ru_RU-denis-medium", "pitch": 0.9, "length": 0.95}
+    },
+    "en": {
+      "narrator":  {"model": "en_US-libritts_r-medium", "speaker": "auto:male:0", "pitch": 0.97, "length": 1.0},
+      "player":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:1", "pitch": 1.0, "length": 1.0},
+      "camp_1":    {"model": "en_US-libritts_r-medium", "speaker": "auto:female:0", "pitch": 1.0, "length": 1.0},
+      "camp_2":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:2", "pitch": 1.0, "length": 1.0},
+      "camp_3":    {"model": "en_US-libritts_r-medium", "speaker": "auto:female:1", "pitch": 1.05, "length": 0.95},
+      "camp_4":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:3", "pitch": 0.94, "length": 1.05},
+      "МАМА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:2", "pitch": 1.0, "length": 1.05},
+      "ТЁМА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:3", "pitch": 1.2, "length": 0.92},
+      "МАРИНА":    {"model": "en_US-libritts_r-medium", "speaker": "auto:female:4", "pitch": 1.0, "length": 1.0},
+      "ВЕРА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:5", "pitch": 0.92, "length": 1.08},
+      "ИРИНА":     {"model": "en_US-libritts_r-medium", "speaker": "auto:female:6", "pitch": 1.0, "length": 1.0},
+      "НИНА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:7", "pitch": 0.9, "length": 1.1},
+      "ДЕНИС":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:4", "pitch": 1.0, "length": 1.0},
+      "ЛЕВ":       {"model": "en_US-libritts_r-medium", "speaker": "auto:male:5", "pitch": 1.0, "length": 1.0},
+      "ДЯДЯ ГОША": {"model": "en_US-libritts_r-medium", "speaker": "auto:male:6", "pitch": 0.9, "length": 1.08},
+      "ШНЫРЬ":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:7", "pitch": 1.12, "length": 0.88},
+      "БАРОН":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:8", "pitch": 0.84, "length": 1.08},
+      "ГЕНКА":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:9", "pitch": 0.95, "length": 1.0},
+      "КАПИТАН":   {"model": "en_US-libritts_r-medium", "speaker": "auto:male:10", "pitch": 0.92, "length": 1.0},
+      "КАБАН":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:11", "pitch": 0.82, "length": 1.05},
+      "БАНДИТ":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:12", "pitch": 0.9, "length": 0.95}
+    }
+  }
+}

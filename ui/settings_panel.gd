@@ -193,6 +193,8 @@ func _build_story() -> void:
 		"" if VoiceOver.is_available() else UIKit.t(" • ГОЛОС НЕ НАЙДЕН: УСТАНОВИ СИНТЕЗ РЕЧИ GOOGLE")], 20, content)
 	voice_hint.modulate = UIKit.DIM
 	voice_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if VoiceOver.has_voice_pack():
+		UIKit.label("ГОЛОСА ГЕРОЕВ: НЕЙРОСЕТЬ PIPER", 20, content).modulate = UIKit.GOOD
 	var replay := UIKit.button("ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА", 22)
 	replay.pressed.connect(func() -> void:
 		GameState.reset_cutscenes()

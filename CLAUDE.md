@@ -397,3 +397,9 @@ toggle_attachment; get_upgraded применяет поставленные. Wea
 hide_flash, attachment_looks. WeaponManager._build_attachments — примитивы у среза ствола (узел Attachments в осях
 менеджера, константы SILENCER_SIZE, RED_DOT_BACK/UP, UNDER_BACK/DOWN — подгонка), лазер: луч к точке попадания луча
 камеры + точка LaserDot. Crosshair: с коллиматором в прицеле — красная точка. Оружейная: «ОБВЕСЫ (n) ▼» в карточке ствола.
+Озвучка нейросетью: tools/voice/build_voice.py (Piper, бесплатно) собирает реплики (фильмы, hub_intro, voice_lines с
+подстановкой локаций/боссов, camp_chatter), голос роли — tools/voice/voices.json (speaker фильма, narrator, player,
+camp_1..4; auto:female/male:N — подбор голоса многоголосой модели по высоте, кэш speaker_cache.json), пишет
+audio/voice/<ru|en>/<md5[:16]>.ogg + voice_pack.tres, manifest.json. VoiceOver: find_recording(text) — сначала запись
+(свой AudioStreamPlayer в корне, громкость voice_volume, estimate_duration — длина записи), иначе TTS устройства.
+Голоса качаются с huggingface.co в tools/voice/models/ (.gitignore); лицензии — MODEL_CARD рядом с моделью.

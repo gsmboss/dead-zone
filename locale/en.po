@@ -580,6 +580,9 @@ msgstr "A YEAR AGO"
 msgid "ГОЛОСА ВЫЖИВШИХ В УБЕЖИЩЕ"
 msgstr "SURVIVOR VOICES IN THE SHELTER"
 
+msgid "ГОЛОСА ГЕРОЕВ: НЕЙРОСЕТЬ PIPER"
+msgstr "CHARACTER VOICES: PIPER NEURAL TTS"
+
 msgid "ГОЛОСА С ЮГА"
 msgstr "VOICES FROM THE SOUTH"
 
