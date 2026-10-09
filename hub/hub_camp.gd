@@ -47,7 +47,6 @@ func _ready() -> void:
 ## Спасённые в сюжете люди греются у костра (до MAX_SURVIVORS фигур); двое — всегда (первая группа)
 const MAX_SURVIVORS: int = 6
 const MIN_SURVIVORS: int = 2
-const CAMP_HATS: PackedStringArray = ["chef", "cowboy", "beanie", "party_hat", "headphones", "pot"]
 var _survivors: Array[PlayerBody] = []
 
 # Разговоры у костра: реплика — текст над головой (и голос, если игрок рядом)
@@ -99,8 +98,6 @@ func _build_survivors(fire: Vector3) -> void:
 		var body := PlayerBody.new()
 		add_child(body)
 		body.set_skin(skins[i % skins.size()])
-		# У каждого в лагере своя шляпа — повар, ковбой, любитель кастрюль…
-		body.set_accessories(PackedStringArray([CAMP_HATS[i % CAMP_HATS.size()]]))
 		body.position = at
 		body.rotation.y = atan2(at.x - fire.x, at.z - fire.z)  # лицом к огню
 		_survivors.append(body)

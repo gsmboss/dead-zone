@@ -337,9 +337,7 @@ func _setup_body() -> void:
 	body.visible = false
 	if not is_remote:
 		body.set_skin(GameState.get_selected_skin())
-		body.set_accessories(GameState.get_worn_accessories())
 		GameState.skin_changed.connect(_on_skin_changed)
-		GameState.accessories_changed.connect(_on_accessories_changed)
 	if weapon_manager != null:
 		weapon_manager.weapon_changed.connect(_on_weapon_changed)
 		weapon_manager.fired.connect(body.on_fired)
@@ -402,11 +400,6 @@ func _update_third_person_camera() -> void:
 	camera.position.y = local.y
 	if _shake <= 0.0:
 		camera.position.x = local.x
-
-
-func _on_accessories_changed() -> void:
-	if body != null:
-		body.set_accessories(GameState.get_worn_accessories())
 
 
 func _on_skin_changed(skin: PlayerSkin) -> void:

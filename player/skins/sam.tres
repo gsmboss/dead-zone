@@ -9,4 +9,3 @@ id = "sam"
 display_name = "СЭМ"
 model_scene = ExtResource("2_model")
 price = 500
-hide_hat_from = 0.52

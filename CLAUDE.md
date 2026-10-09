@@ -323,17 +323,10 @@ UIKit.count(n, one, few, many) и coins_text — русские окончани
 Графика: Settings.graphics_quality (Quality AUTO/LOW/MEDIUM/HIGH/CUSTOM, QUALITY_PRESETS: тени, render_scale, msaa,
 lod_threshold), auto_tier — ступень по железу (detect_tier: память, ядра, видеочип) и снижение при FPS < 70% цели
 8 с (_watch_auto_quality); fps_limit (Engine.max_fps, FPS_LIMITS). Ручная правка теней/разрешения → СВОЁ.
-Края карт: levels/edge_cover.gd (EdgeCover, ставит MissionManager): земля 1200 м, страховочный пол, туман
-FOG_MODE_DEPTH от 0.75 до 1.9 полуразмера (по стенам Bounds); Weather в депт-режиме двигает fog_depth_end.
-Персонажи: +6 Kenney (male/female b, d, f) и костюмы зомби (zombie_cosplay, zombie_chubby). PlayerSkin.head_bone.
-Аксессуары: player/accessory_data.gd (AccessoryData: category REGULAR/FUNNY/RARE, slot HEAD/FACE, kind, color),
-player/accessories/*.tres (20 шт.), AccessoryBuilder.build — фигуры кодом (единица — ширина головы);
-PlayerBody.set_accessories — BoneAttachment3D на кости головы, габариты головы по вершинам (вес кости ≥ 0.5, кэш);
-GameState: buy_accessory/toggle_accessory/get_worn_accessories (по одному на слот), сигнал accessories_changed;
-окно ПЕРСОНАЖ — раздел АКСЕССУАРЫ; по сети Net.players[*]["acc"], Net.PROTOCOL = 3. У людей в лагере — CAMP_HATS.
+Края карт: levels/edge_cover.gd (EdgeCover, ставит MissionManager): земля 1200 м без освещения в цвет тумана,
+страховочный пол, густой экспоненциальный туман 1.5/полуразмер (по стенам Bounds; FOG_MODE_DEPTH на Compatibility
+не виден — не использовать); meta base_fog_density — основа для Weather.
+Персонажи: +6 Kenney (male/female b, d, f) и костюмы зомби (zombie_cosplay, zombie_chubby).
+Аксессуары (шляпы/очки) были и убраны по просьбе: в старых сохранениях ключи accessories_* игнорируются; Net.PROTOCOL = 4.
 Метка «стреляет в тебя» по сети: маленькая ▼ над именем (font 48, pixel_size 0.0028).
-Своя шапка модели под надетым убором: PlayerSkin.hide_hat_from (доля высоты головы, у Шона/Лис/Мэтта/Сэма 0.52) —
-PlayerBody._set_hat_flattened подменяет меш копией, где верх головы прижат к срезу (без дыр), кэш по скину.
-Посадка: глаза = низ головы + 0.4 ширины, лицо — самая передняя точка у глаз (без козырька), ACCESSORY_FIT 0.9.
-Вкладки: UIKit.tab_bar(names, current, on_select); ПЕРСОНАЖ — ПЕРСОНАЖИ/ОБЫЧНЫЕ/СМЕШНЫЕ/РЕДКИЕ,
-МАШИНЫ — МАШИНЫ/ТЮНИНГ/ПОКРАСКА И НЕОН (static var _tab запоминает вкладку).
+Вкладки: UIKit.tab_bar(names, current, on_select); МАШИНЫ — МАШИНЫ/ТЮНИНГ/ПОКРАСКА И НЕОН (static var _tab).

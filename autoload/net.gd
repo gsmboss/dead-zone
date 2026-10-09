@@ -29,7 +29,7 @@ const PORT: int = 24680
 const DISCOVERY_PORT: int = 24681
 const MAX_PLAYERS: int = 4
 ## Версия протокола: разные версии игры не соединяются
-const PROTOCOL: int = 3
+const PROTOCOL: int = 4
 const DISCOVERY_TAG: String = "DEADZONE"
 const ANNOUNCE_INTERVAL: float = 1.0
 ## Игра пропадает из списка, если о ней не слышно столько секунд
@@ -336,7 +336,7 @@ func _on_connected_to_server() -> void:
 	_extend_timeout(1)
 	status_changed.emit("ПОДКЛЮЧЕНО К %s" % _host_address)
 	var info: Dictionary = _my_info()
-	_rpc_register.rpc_id(1, PROTOCOL, info["name"], info["skin"], info["car"], info["acc"])
+	_rpc_register.rpc_id(1, PROTOCOL, info["name"], info["skin"], info["car"])
 
 
 func _on_connection_failed() -> void:
@@ -366,8 +366,7 @@ func _my_info() -> Dictionary:
 	if player_name.is_empty():
 		player_name = "ВЫЖИВШИЙ"
 	return {"name": player_name.substr(0, 16), "skin": skin.id if skin != null else "", "team": 0,
-		"loaded": false, "car": GameState.get_car_net_info(),
-		"acc": ",".join(GameState.get_worn_accessories())}
+		"loaded": false, "car": GameState.get_car_net_info()}
 
 
 ## Команды: по очереди 0, 1, 0, 1 (1×1, 2×1, 2×2)
@@ -388,8 +387,7 @@ static func _is_private_ipv4(address: String) -> bool:
 # ---------- RPC: лобби ----------
 
 @rpc("any_peer", "call_remote", "reliable")
-func _rpc_register(protocol: int, player_name: String, skin_id: String, car_info: String,
-		accessories: String) -> void:
+func _rpc_register(protocol: int, player_name: String, skin_id: String, car_info: String) -> void:
 	if not is_host():
 		return
 	var sender: int = multiplayer.get_remote_sender_id()
@@ -400,7 +398,7 @@ func _rpc_register(protocol: int, player_name: String, skin_id: String, car_info
 		_rpc_rejected.rpc_id(sender, "ЛОББИ ЗАПОЛНЕНО")
 		return
 	players[sender] = {"name": player_name.substr(0, 16), "skin": skin_id, "team": 0, "loaded": false,
-		"car": car_info.substr(0, 64), "acc": accessories.substr(0, 96)}
+		"car": car_info.substr(0, 64)}
 	_assign_teams()
 	_rpc_lobby.rpc(players, mode, map_index)
 	lobby_changed.emit()
