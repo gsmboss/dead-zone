@@ -4,6 +4,16 @@ extends CharacterBody3D
 ## Выносливость: бег (Shift или джойстик до упора вперёд) и подкат (C / кнопка ПОДКАТ).
 
 signal stamina_changed(current: float, max_value: float)
+## Сел / встал (диван в убежище)
+signal seated_changed(is_seated: bool)
+
+## Слой отрисовки тела, когда его снимают другие камеры (видеокамера убежища), а вид от 1-го лица:
+## своя камера этот слой не рисует — не видно тело изнутри
+const BODY_CAMERA_LAYER: int = 1 << 19
+## Сидя голова ниже на столько (м)
+const SIT_HEAD_DROP: float = 0.8
+## Сидя: джойстик сильнее этого или прыжок — встать
+const STAND_UP_INPUT: float = 0.6
 
 @export var touch_controls: TouchControls
 ## Пусто → ищется по пути Head/Camera3D/WeaponManager
@@ -119,6 +129,12 @@ var _camera_fps_position: Vector3 = Vector3.ZERO
 var _weapons_enabled: bool = true
 ## Факел (если куплен в оружейной)
 var torch: Torch
+## Сидит (диван): не ходит и не падает, тело в позе «сидя», голова ниже
+var seated: bool = false
+var _seat_yaw: float = 0.0
+var _stand_point: Vector3 = Vector3.ZERO
+## Сколько камер сейчас снимают игрока (тогда тело видно и от 1-го лица — им, не своей камере)
+var _body_viewers: int = 0
 ## Ночь по мнению автофакела (с запасом: зажигается после NIGHT_ON, гаснет до NIGHT_OFF)
 const TORCH_NIGHT_ON: float = 0.5
 const TORCH_NIGHT_OFF: float = 0.3
@@ -155,6 +171,8 @@ func _ready() -> void:
 	_camera_base_x = camera.position.x
 	_camera_fps_position = camera.position
 	_head_base_y = head.position.y
+	# Своё тело на «слое для других камер» своя камера не рисует (вид от 1-го лица)
+	camera.cull_mask &= ~BODY_CAMERA_LAYER
 	_setup_body()
 	_setup_spring_arm()
 	_setup_torch()
@@ -189,6 +207,9 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if is_remote:
 		_remote_physics(delta)
+		return
+	if seated:
+		_process_seated()
 		return
 	_check_fall(delta)
 	if not is_on_floor():
@@ -309,13 +330,78 @@ func set_third_person(enabled: bool) -> void:
 	if body == null or _spring == null:
 		return
 	third_person = enabled
-	body.visible = enabled
+	_refresh_body_visibility()
 	if weapon_manager != null:
 		weapon_manager.visible = _weapons_enabled and not enabled
 	if not enabled:
 		camera.position = _camera_fps_position
 		_camera_base_x = _camera_fps_position.x
 		_camera_base_y = _camera_fps_position.y
+
+
+## Тело видно: от 3-го лица или пока игрока снимает другая камера (тогда от 1-го лица тело
+## на отдельном слое, своя камера его не рисует)
+func _refresh_body_visibility() -> void:
+	if body == null:
+		return
+	body.visible = third_person or _body_viewers > 0
+	body.set_render_layer(1 if third_person else BODY_CAMERA_LAYER)
+
+
+## Камера убежища начала / перестала снимать игрока
+func add_body_viewer() -> void:
+	_body_viewers += 1
+	_refresh_body_visibility()
+
+
+func remove_body_viewer() -> void:
+	_body_viewers = maxi(_body_viewers - 1, 0)
+	_refresh_body_visibility()
+
+
+# ---------- Сидеть ----------
+
+## Сесть: seat_origin — где стоят ноги тела (поза «сидя» уже поднимает таз), facing_yaw — поворот
+## лицом от спинки, stand_point — куда встать
+func sit_at(seat_origin: Vector3, facing_yaw: float, stand_point: Vector3) -> void:
+	if seated or is_remote:
+		return
+	seated = true
+	_stand_point = stand_point
+	_seat_yaw = facing_yaw
+	_slide_left = 0.0
+	velocity = Vector3.ZERO
+	global_position = seat_origin
+	rotation.y = facing_yaw
+	head.position.y = _head_base_y - SIT_HEAD_DROP
+	if body != null:
+		body.rotation.y = 0.0
+		body.set_seated(true)
+	seated_changed.emit(true)
+
+
+func stand_up() -> void:
+	if not seated:
+		return
+	seated = false
+	global_position = _stand_point
+	_safe_position = _stand_point
+	velocity = Vector3.ZERO
+	head.position.y = _head_base_y
+	if body != null:
+		body.rotation.y = 0.0
+		body.set_seated(false)
+	seated_changed.emit(false)
+
+
+## Сидя можно оглядываться (тело остаётся лицом от спинки); шаг или прыжок — встать
+func _process_seated() -> void:
+	velocity = Vector3.ZERO
+	if input_enabled and (Input.is_action_just_pressed(&"jump") or _get_move_input().length() > STAND_UP_INPUT):
+		stand_up()
+		return
+	if body != null:
+		body.rotation.y = _seat_yaw - rotation.y
 
 
 ## Оружие включено (в убежище — нет): вью-модель, стрельба и оружие в руке тела

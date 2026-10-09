@@ -26,6 +26,9 @@ var _builtin_weapons: Dictionary = {}
 ## В руках огнестрел — стрелковая стойка (Idle_Gun и т.п.)
 var _armed: bool = false
 var _shadow_only: bool = false
+## Сидит (диван): поза anim_sit, движение анимацию не меняет
+var seated: bool = false
+var _render_layer: int = 1
 
 
 ## Сменить скин. null — скин по умолчанию из GameState
@@ -56,6 +59,10 @@ func set_skin(new_skin: PlayerSkin) -> void:
 	_play(new_skin.anim_idle)
 	if _shadow_only:
 		set_shadow_only(true)
+	if _render_layer != 1:
+		set_render_layer(_render_layer)
+	if seated:
+		set_seated(true)
 
 
 ## Оружие в руке (null — пустые руки)
@@ -85,11 +92,13 @@ func set_weapon(weapon: WeaponData) -> void:
 	_weapon_model.position = skin.hand_offset / model_scale
 	_weapon_model.rotation_degrees = skin.hand_rotation_degrees
 	_fit_length(_weapon_model, skin.weapon_length / model_scale)
+	if _render_layer != 1:
+		set_render_layer(_render_layer)
 
 
 ## Анимация по движению: скорость по земле, на земле ли, жив ли
 func update_motion(horizontal_speed: float, on_floor: bool, delta: float) -> void:
-	if skin == null or _animation_player == null or _dead:
+	if skin == null or _animation_player == null or _dead or seated:
 		return
 	if _one_shot_left > 0.0:
 		_one_shot_left -= delta
@@ -162,6 +171,35 @@ func set_shadow_only(enabled: bool) -> void:
 	for node: Node in _model.find_children("*", "GeometryInstance3D", true, false):
 		(node as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY \
 			if enabled else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+
+
+## Сесть / встать. Своей позы нет (модели Quaternius) — присед Duck, иначе покой
+func set_seated(enabled: bool) -> void:
+	seated = enabled
+	if skin == null or _animation_player == null or _dead:
+		return
+	_one_shot_left = 0.0
+	_current_anim = &""
+	if not enabled:
+		_play(skin.anim_idle if _armed else skin.anim_idle_unarmed)
+		return
+	for anim: StringName in [skin.anim_sit, &"Duck"]:
+		if anim != &"" and _animation_player.has_animation(anim):
+			# Поза держится на последнем кадре
+			_animation_player.get_animation(anim).loop_mode = Animation.LOOP_NONE
+			_animation_player.speed_scale = 1.0
+			_play(anim)
+			return
+	_play(skin.anim_idle_unarmed)
+
+
+## Слой отрисовки всех мешей тела (BODY_CAMERA_LAYER — только для камер убежища)
+func set_render_layer(mask: int) -> void:
+	_render_layer = mask
+	if _model == null:
+		return
+	for node: Node in _model.find_children("*", "GeometryInstance3D", true, false):
+		(node as GeometryInstance3D).layers = mask
 
 
 func _play(anim: StringName) -> void:

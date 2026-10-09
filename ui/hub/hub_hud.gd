@@ -19,6 +19,7 @@ var _player: Player
 
 func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_IGNORE
+	add_to_group(&"hub_hud")
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_build_ui()
 	_connect_world.call_deferred()
@@ -184,6 +185,7 @@ func _connect_world() -> void:
 		if interactable != null:
 			interactable.player_entered.connect(_on_player_entered)
 			interactable.player_exited.connect(_on_player_exited)
+			interactable.prompt_changed.connect(_on_prompt_changed)
 
 
 func _update_coins(coins: int) -> void:
@@ -206,6 +208,11 @@ func _on_player_entered(interactable: Interactable) -> void:
 	_current = interactable
 	_interact_button.text = interactable.prompt
 	_interact_button.visible = _window == null
+
+
+func _on_prompt_changed(interactable: Interactable) -> void:
+	if _current == interactable:
+		_interact_button.text = interactable.prompt
 
 
 func _on_player_exited(interactable: Interactable) -> void:

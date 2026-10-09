@@ -25,6 +25,8 @@ extends Resource
 @export var anim_run_unarmed: StringName = &"Run"
 ## Приветствие в лобби
 @export var anim_emote: StringName = &"Wave"
+## Поза «сидя» (диван); нет такой анимации — присед или покой
+@export var anim_sit: StringName = &"sit"
 ## Скорость (м/с), при которой анимация ходьбы и бега выглядит естественно
 @export var walk_anim_speed: float = 1.6
 @export var run_anim_speed: float = 4.5

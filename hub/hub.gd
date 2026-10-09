@@ -8,9 +8,15 @@ const INTRO_PATH: String = "res://cutscene/hub_intro.tres"
 func _ready() -> void:
 	# Ждём, пока игрок закончит свой _ready (он сам находит WeaponManager)
 	_disable_player_weapons.call_deferred()
+	var yard := HubYard.new()
+	yard.name = "Yard"
+	add_child(yard)
 	var camp := HubCamp.new()
 	camp.name = "Camp"
 	add_child(camp)
+	var lounge := HubLounge.new()
+	lounge.name = "Lounge"
+	add_child(lounge)
 	_play_intro.call_deferred()
 
 

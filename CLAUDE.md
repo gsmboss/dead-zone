@@ -150,9 +150,17 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   "player" и отключает оружие: weapon_manager.process_mode = PROCESS_MODE_DISABLED, visible = false.
 - Свет и небо: WorldEnvironment (ProceduralSky) + DirectionalLight3D с тенями. Потолок не нужен
   (открытый двор убежища), чтобы не было темно на Compatibility.
-- Room: пол CSGBox3D 16×0.5×16 (y = -0.25, use_collision); стены — невидимые коллизии Room/Bounds
-  (StaticBody3D, 4 бокса высотой 4 по краям ±8); OutsideGround — земля вокруг без коллизии.
-- Perimeter: видимая ограда из контейнеров Quaternius снаружи коллизий, ворота — бронированный грузовик.
+- Room: пол CSGBox3D 32×0.5×32 (y = -0.25, use_collision); стены — невидимые коллизии Room/Bounds
+  (StaticBody3D, 4 бокса по краям ±16); OutsideGround — земля вокруг без коллизии.
+- Ограда — кодом hub/hub_yard.gd (HubYard: контейнеры за стенами, ворота-грузовик, склад у севера, фонари).
+- Уголок спасённых (запад, за забором, вход с табличкой СПАСЁННЫЕ) — hub/hub_camp.gd (HubCamp.FIRE): костёр,
+  палатки, спальники, кухня с кофемашиной, диван Couch.gltf — на нём сидят спасённые (PlayerBody.set_seated).
+- Зона отдыха (восток) — hub/hub_lounge.gd (HubLounge, мебель models/furniture — Kenney Furniture Kit, ×2.1,
+  HubCamp.add_centered): 2 дивана (кнопка СЕСТЬ/ВСТАТЬ → Player.sit_at/stand_up, seated_changed), ТВ с живой
+  картинкой с видеокамеры (SubViewport, только когда игрок ближе 11 м), штатив КАМЕРА → ui/hub/video_mode.gd
+  (VideoMode: ШТАТИВ/СЛЕЖКА/ОБЛЁТ/КРУПНО, зум, ПРИВЕТ, ● ЗАПИСЬ — чистый экран для записи экрана телефона).
+  Тело игрока видно камерам и от 1-го лица: Player.add_body_viewer/remove_body_viewer, слой BODY_CAMERA_LAYER
+  (своя камера его не рисует). PlayerSkin.anim_sit (Kenney «sit», у Quaternius — Duck). Interactable.set_prompt.
   Props: машина, бочки, ящики, фонари и т.п. (StaticProp); Props/Outside: башня, знак, дорога.
 - Player: экземпляр player/player.tscn в (0, 0.1, 4), touch_controls → HUD/TouchControls.
 - MissionTerminal (Interactable) в (-4, 0, -5): prompt «МИССИИ», action_id &"missions";

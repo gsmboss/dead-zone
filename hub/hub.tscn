@@ -20,7 +20,6 @@
 [ext_resource type="PackedScene" path="res://models/environment/Barrel.gltf" id="m_Barrel"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest.gltf" id="m_Chest"]
 [ext_resource type="PackedScene" path="res://models/environment/Chest_Special.gltf" id="m_Chest_Special"]
-[ext_resource type="PackedScene" path="res://models/environment/Container_Green.gltf" id="m_Container_Green"]
 [ext_resource type="PackedScene" path="res://models/environment/FireHydrant.gltf" id="m_FireHydrant"]
 [ext_resource type="PackedScene" path="res://models/environment/Pallet.gltf" id="m_Pallet"]
 [ext_resource type="PackedScene" path="res://models/environment/Pipes.gltf" id="m_Pipes"]
@@ -36,8 +35,6 @@
 [ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
 [ext_resource type="PackedScene" path="res://models/environment/Wheels_Stack.gltf" id="m_Wheels_Stack"]
 [ext_resource type="Script" path="res://levels/static_prop.gd" id="30_prop1"]
-[ext_resource type="PackedScene" path="res://models/environment/Container_Red.gltf" id="m_Container_Red"]
-[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck_Armored.gltf" id="m_Vehicle_Truck_Armored"]
 [ext_resource type="PackedScene" path="res://models/environment/Street_Straight.gltf" id="m_Street_Straight"]
 [ext_resource type="Script" path="res://hub/hologram.gd" id="40_holo1"]
 [ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="41_zmb01"]
@@ -73,10 +70,10 @@ metallic = 0.3
 roughness = 0.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wallx"]
-size = Vector3(16.8, 40, 0.4)
+size = Vector3(32.8, 40, 0.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wallz"]
-size = Vector3(0.4, 40, 16.8)
+size = Vector3(0.4, 40, 32.8)
 
 [node name="Hub" type="Node3D" unique_id=846140359]
 script = ExtResource("1_hub01")
@@ -93,111 +90,31 @@ shadow_enabled = true
 [node name="Floor" type="CSGBox3D" parent="Room" unique_id=1867148235]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 use_collision = true
-size = Vector3(16, 0.5, 16)
+size = Vector3(32, 0.5, 32)
 material = SubResource("Mat_hubfloor")
 
 [node name="Bounds" type="StaticBody3D" parent="Room" unique_id=616455894]
 
 [node name="North" type="CollisionShape3D" parent="Room/Bounds" unique_id=1816087198]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -16)
 shape = SubResource("BoxShape3D_wallx")
 
 [node name="South" type="CollisionShape3D" parent="Room/Bounds" unique_id=642730241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 16)
 shape = SubResource("BoxShape3D_wallx")
 
 [node name="West" type="CollisionShape3D" parent="Room/Bounds" unique_id=799878127]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 2, 0)
 shape = SubResource("BoxShape3D_wallz")
 
 [node name="East" type="CollisionShape3D" parent="Room/Bounds" unique_id=523729283]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0)
 shape = SubResource("BoxShape3D_wallz")
 
 [node name="OutsideGround" type="CSGBox3D" parent="Room" unique_id=514743897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0)
 size = Vector3(120, 0.5, 120)
 material = SubResource("Mat_hubground")
-
-[node name="Perimeter" type="Node3D" parent="." unique_id=1866425269]
-
-[node name="North1" parent="Perimeter" unique_id=2117909015 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.71, 0, -9.28)
-
-[node name="West1" parent="Perimeter" unique_id=347094926 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9.28, 0, -5.71)
-
-[node name="East1" parent="Perimeter" unique_id=727763166 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9.28, 0, -5.71)
-
-[node name="North2" parent="Perimeter" unique_id=1122710673 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -9.28)
-
-[node name="West2" parent="Perimeter" unique_id=2146645364 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9.28, 0, 0)
-
-[node name="East2" parent="Perimeter" unique_id=1298069806 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9.28, 0, 0)
-
-[node name="North3" parent="Perimeter" unique_id=1412827761 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.71, 0, -9.28)
-
-[node name="West3" parent="Perimeter" unique_id=610694214 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9.28, 0, 5.71)
-
-[node name="East3" parent="Perimeter" unique_id=412397592 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9.28, 0, 5.71)
-
-[node name="South1" parent="Perimeter" unique_id=1293766472 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.71, 0, 9.28)
-
-[node name="South3" parent="Perimeter" unique_id=1454311809 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 5.71, 0, 9.28)
-
-[node name="NorthTop" parent="Perimeter" unique_id=1519745620 instance=ExtResource("m_Container_Green")]
-transform = Transform3D(0.99863, 0, 0.052336, 0, 1, 0, -0.052336, 0, 0.99863, -2.4, 2.6, -9.28)
-
-[node name="WestTop" parent="Perimeter" unique_id=1175072793 instance=ExtResource("m_Container_Red")]
-transform = Transform3D(0.034899, 0, 0.999391, 0, 1, 0, -0.999391, 0, 0.034899, -9.28, 2.6, 1.2)
-
-[node name="GateTruck" parent="Perimeter" unique_id=105210123 instance=ExtResource("m_Vehicle_Truck_Armored")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 9.7)
-
-[node name="CornerNWBarrel1" parent="Perimeter" unique_id=1927763782 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.3, 0, -9.6)
-
-[node name="CornerNWBarrel2" parent="Perimeter" unique_id=701167581 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, -9.2)
-
-[node name="CornerNWWheels" parent="Perimeter" unique_id=160883825 instance=ExtResource("m_Wheels_Stack")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, -9.9)
-
-[node name="CornerSWBarrel1" parent="Perimeter" unique_id=1894062152 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.3, 0, 9.6)
-
-[node name="CornerSWBarrel2" parent="Perimeter" unique_id=1167621639 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, 9.2)
-
-[node name="CornerSWWheels" parent="Perimeter" unique_id=470827150 instance=ExtResource("m_Wheels_Stack")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, 9.9)
-
-[node name="CornerNEBarrel1" parent="Perimeter" unique_id=1801748852 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.3, 0, -9.6)
-
-[node name="CornerNEBarrel2" parent="Perimeter" unique_id=1846667133 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 0, -9.2)
-
-[node name="CornerNEWheels" parent="Perimeter" unique_id=510664858 instance=ExtResource("m_Wheels_Stack")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 0, -9.9)
-
-[node name="CornerSEBarrel1" parent="Perimeter" unique_id=1189450433 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.3, 0, 9.6)
-
-[node name="CornerSEBarrel2" parent="Perimeter" unique_id=1894638472 instance=ExtResource("m_Barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 0, 9.2)
-
-[node name="CornerSEWheels" parent="Perimeter" unique_id=934411673 instance=ExtResource("m_Wheels_Stack")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 0, 9.9)
 
 [node name="Props" type="Node3D" parent="." unique_id=1071477686]
 
@@ -316,10 +233,10 @@ script = ExtResource("30_prop1")
 [node name="Outside" type="Node3D" parent="Props" unique_id=1387670034]
 
 [node name="WaterTower" parent="Props/Outside" unique_id=164601866 instance=ExtResource("m_WaterTower")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
 
 [node name="TownSign" parent="Props/Outside" unique_id=1770975072 instance=ExtResource("m_TownSign")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -22)
 
 [node name="BaseBuildings" type="Node3D" parent="." unique_id=1560241127]
 script = ExtResource("60_base1")
@@ -405,13 +322,13 @@ font_size = 64
 outline_size = 16
 
 [node name="Road1" parent="Props/Outside" unique_id=492718981 instance=ExtResource("m_Street_Straight")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24)
 
 [node name="Road2" parent="Props/Outside" unique_id=811867347 instance=ExtResource("m_Street_Straight")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
 
 [node name="Road3" parent="Props/Outside" unique_id=790377927 instance=ExtResource("m_Street_Straight")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 31)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=329524396]
 

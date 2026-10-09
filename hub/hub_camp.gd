@@ -9,43 +9,161 @@ const DIR: String = "res://models/survival/"
 ## Модели Kenney маленькие: палатка 0.56 → ~1.9 м
 const PROP_SCALE: float = 3.4
 const FIRE_COLOR: Color = Color(1.0, 0.6, 0.25)
+## Уголок спасённых — западная часть двора за забором; костёр в его середине
+const FIRE: Vector3 = Vector3(-11.5, 0.0, 6.5)
+## Забор уголка: линия x (вдоль Z, вход посередине) и линия z (вдоль X, со стороны двора)
+const FENCE_X: float = -7.8
+const FENCE_Z: float = 1.0
+const FENCE_SEGMENT: float = 1.7
+## Модель забора стоит на краю своей клетки — сдвиг до линии забора
+const FENCE_EDGE: float = 0.78
+const ENTRANCE: Vector3 = Vector3(-7.8, 0.0, 9.6)
 
-## [модель, позиция, поворот в градусах, коллизия]
+## [модель, позиция относительно костра, поворот в градусах, коллизия]
 const LAYOUT: Array = [
-	["tent-canvas", Vector3(-6.7, 0.0, 1.4), 90.0, true],
-	["campfire-pit", Vector3(-4.6, 0.0, 1.3), 0.0, false],
-	["campfire-stand", Vector3(-4.6, 0.0, 1.3), 0.0, false],
-	["bedroll", Vector3(-4.9, 0.0, 2.9), 80.0, false],
-	["box-large", Vector3(-7.2, 0.0, -0.9), 0.0, true],
-	["box", Vector3(-6.4, 0.0, -1.1), 25.0, true],
-	["barrel-open", Vector3(-3.4, 0.0, 2.6), 0.0, true],
-	["bucket", Vector3(-3.6, 0.0, 0.4), 0.0, false],
-	["signpost", Vector3(-2.9, 0.0, -0.4), -30.0, true],
+	["tent-canvas", Vector3(-2.9, 0.0, 0.1), 90.0, true],
+	["campfire-pit", Vector3.ZERO, 0.0, false],
+	["campfire-stand", Vector3.ZERO, 0.0, false],
+	["bedroll", Vector3(-0.3, 0.0, 1.9), 80.0, false],
+	["box-large", Vector3(-2.9, 0.0, -2.2), 0.0, true],
+	["box", Vector3(-2.1, 0.0, -2.4), 25.0, true],
+	["barrel-open", Vector3(2.2, 0.0, 2.6), 0.0, true],
+	["bucket", Vector3(1.4, 0.0, 1.6), 0.0, false],
+	["signpost", Vector3(3.2, 0.0, -3.6), -30.0, true],
+	# Спальный ряд у западной стены
+	["tent", Vector3(-2.9, 0.0, 4.0), 90.0, true],
+	["tent-canvas", Vector3(-2.9, 0.0, 7.0), 90.0, true],
+	["bedroll", Vector3(-0.6, 0.0, 4.2), 0.0, false],
+	["bedroll", Vector3(-0.6, 0.0, 5.8), 0.0, false],
+	["bedroll", Vector3(-0.6, 0.0, 7.4), 0.0, false],
+	["box-open", Vector3(1.0, 0.0, 8.0), 15.0, true],
+	["barrel", Vector3(2.9, 0.0, 8.0), 0.0, true],
+]
+
+## Мастерская во дворе (не в уголке): [модель, позиция, поворот, коллизия]
+const WORKSHOP: Array = [
 	["workbench", Vector3(2.9, 0.0, 0.6), 0.0, true],
 	["tool-axe", Vector3(2.7, 1.0, 0.6), 0.0, false],
 	["tool-hammer", Vector3(3.1, 1.0, 0.7), 30.0, false],
 ]
 
+## Мебель Kenney Furniture Kit: модели маленькие — масштаб; центр по габаритам
+const FURNITURE_DIR: String = "res://models/furniture/"
+const FURNITURE_SCALE: float = 2.1
+## «Кухня» дяди Гоши: стол, стулья, кофемашина (относительно костра)
+const KITCHEN: Array = [
+	["table", Vector3(2.1, 0.0, 7.1), 0.0, FURNITURE_SCALE, true],
+	["chair", Vector3(2.1, 0.0, 6.1), 180.0, FURNITURE_SCALE, true],
+	["chair", Vector3(2.1, 0.0, 8.1), 0.0, FURNITURE_SCALE, false],
+	["kitchenCoffeeMachine", Vector3(1.8, 0.69, 7.1), 90.0, 1.3, false],
+	["radio", Vector3(2.5, 0.69, 7.0), -70.0, 1.4, false],
+]
+
+## Диван со свалки (Quaternius Couch.gltf, метры) к северу от костра, лицом к огню
+const COUCH_PATH: String = "res://models/environment/Couch.gltf"
+const COUCH_OFFSET: Vector3 = Vector3(0.0, 0.0, -2.9)
+## Места на диване (в его координатах): ноги тела — поза «сидя» сама поднимает таз
+const COUCH_SEATS: Array[Vector3] = [Vector3(-0.9, 0.5, -0.07), Vector3(0.0, 0.5, -0.07), Vector3(0.9, 0.5, -0.07)]
+
 
 func _ready() -> void:
 	var batch := PropBatch.new(self)
 	for entry: Array in LAYOUT:
-		var path: String = DIR + str(entry[0]) + ".glb"
-		var scene: PackedScene = load(path) as PackedScene if ResourceLoader.exists(path) else null
-		if scene == null:
-			push_warning("HubCamp: нет модели %s" % path)
-			continue
-		var at: Vector3 = entry[1]
-		var xform := Transform3D(Basis(Vector3.UP, deg_to_rad(float(entry[2]))).scaled(Vector3.ONE * PROP_SCALE), at)
-		batch.add(scene, xform, bool(entry[3]))
+		_add_survival(batch, str(entry[0]), FIRE + (entry[1] as Vector3), float(entry[2]), bool(entry[3]))
+	for entry: Array in WORKSHOP:
+		_add_survival(batch, str(entry[0]), entry[1], float(entry[2]), bool(entry[3]))
+	for entry: Array in KITCHEN:
+		_add_furniture(batch, str(entry[0]), FIRE + (entry[1] as Vector3), float(entry[2]), float(entry[3]),
+			bool(entry[4]))
+	_build_fence(batch)
+	var couch: PackedScene = load(COUCH_PATH) as PackedScene if ResourceLoader.exists(COUCH_PATH) else null
+	if couch != null:
+		batch.add(couch, Transform3D(Basis.IDENTITY, FIRE + COUCH_OFFSET), true)
+	else:
+		push_warning("HubCamp: нет модели %s" % COUCH_PATH)
 	batch.build()
-	_build_fire(Vector3(-4.6, 0.0, 1.3))
-	_build_survivors(Vector3(-4.6, 0.0, 1.3))
-	_build_talk_zone(Vector3(-4.6, 0.0, 1.3))
+	_build_fire(FIRE)
+	_build_survivors(FIRE)
+	_build_resting(couch != null)
+	_build_sign()
+	_build_talk_zone(FIRE)
 
 
-## Спасённые в сюжете люди греются у костра (до MAX_SURVIVORS фигур); двое — всегда (первая группа)
-const MAX_SURVIVORS: int = 6
+func _add_survival(batch: PropBatch, model: String, at: Vector3, yaw_deg: float, collide: bool) -> void:
+	var path: String = DIR + model + ".glb"
+	var scene: PackedScene = load(path) as PackedScene if ResourceLoader.exists(path) else null
+	if scene == null:
+		push_warning("HubCamp: нет модели %s" % path)
+		return
+	var xform := Transform3D(Basis(Vector3.UP, deg_to_rad(yaw_deg)).scaled(Vector3.ONE * PROP_SCALE), at)
+	batch.add(scene, xform, collide)
+
+
+## Модель Kenney Furniture: начало координат в углу — ставим центром габаритов в точку at
+static func add_centered(batch: PropBatch, path: String, at: Vector3, yaw_deg: float, model_scale: float,
+		collide: bool) -> void:
+	var scene: PackedScene = load(path) as PackedScene if ResourceLoader.exists(path) else null
+	if scene == null:
+		push_warning("HubCamp: нет модели %s" % path)
+		return
+	var bounds: AABB = batch.get_bounds(scene)
+	var center := Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z)
+	var basis := Basis(Vector3.UP, deg_to_rad(yaw_deg)).scaled(Vector3.ONE * model_scale)
+	batch.add(scene, Transform3D(basis, at) * Transform3D(Basis.IDENTITY, -center), collide)
+
+
+func _add_furniture(batch: PropBatch, model: String, at: Vector3, yaw_deg: float, model_scale: float,
+		collide: bool) -> void:
+	add_centered(batch, FURNITURE_DIR + model + ".glb", at, yaw_deg, model_scale, collide)
+
+
+## Забор уголка: со стороны двора по x = FENCE_X (вход посередине) и по z = FENCE_Z
+func _build_fence(batch: PropBatch) -> void:
+	var path: String = DIR + "fence-fortified.glb"
+	var scene: PackedScene = load(path) as PackedScene if ResourceLoader.exists(path) else null
+	if scene == null:
+		push_warning("HubCamp: нет модели %s" % path)
+		return
+	var basis_x := Basis.IDENTITY.scaled(Vector3.ONE * PROP_SCALE)
+	var basis_z := Basis(Vector3.UP, PI * 0.5).scaled(Vector3.ONE * PROP_SCALE)
+	# Вдоль X (северная сторона уголка), от западной стены до угла
+	var x: float = -15.5 + FENCE_SEGMENT * 0.5
+	while x < FENCE_X:
+		batch.add(scene, Transform3D(basis_x, Vector3(x, 0.0, FENCE_Z + FENCE_EDGE)), true)
+		x += FENCE_SEGMENT
+	# Вдоль Z (восточная сторона), с проходом у входа
+	var z: float = FENCE_Z + FENCE_SEGMENT * 0.5
+	while z < 15.6:
+		if absf(z - ENTRANCE.z) > FENCE_SEGMENT:
+			batch.add(scene, Transform3D(basis_z, Vector3(FENCE_X + FENCE_EDGE, 0.0, z)), true)
+		z += FENCE_SEGMENT
+
+
+## Табличка над входом: «СПАСЁННЫЕ» и сколько людей в лагере
+func _build_sign() -> void:
+	var title := Label3D.new()
+	title.text = "СПАСЁННЫЕ"
+	title.font_size = 72
+	title.outline_size = 18
+	title.pixel_size = 0.005
+	title.modulate = Color(1.0, 0.85, 0.5)
+	title.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	title.position = ENTRANCE + Vector3(0.0, 2.9, 0.0)
+	add_child(title)
+	var rescued: int = maxi(GameState.get_rescued_count(), MIN_SURVIVORS)
+	var count := Label3D.new()
+	count.text = "В ЛАГЕРЕ: " + UIKit.count(rescued, "ЧЕЛОВЕК", "ЧЕЛОВЕКА", "ЧЕЛОВЕК")
+	count.font_size = 44
+	count.outline_size = 12
+	count.pixel_size = 0.005
+	count.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	count.position = ENTRANCE + Vector3(0.0, 2.45, 0.0)
+	add_child(count)
+
+
+## Спасённые в сюжете люди греются у костра (до MAX_SURVIVORS фигур); двое — всегда (первая группа).
+## Остальные отдыхают на диване (до трёх; один — всегда)
+const MAX_SURVIVORS: int = 5
 const MIN_SURVIVORS: int = 2
 var _survivors: Array[PlayerBody] = []
 
@@ -81,14 +199,40 @@ var _dialogue_index: int = 0
 var _rng := RandomNumberGenerator.new()
 
 
-func _build_survivors(fire: Vector3) -> void:
-	var count: int = clampi(GameState.get_rescued_count(), MIN_SURVIVORS, MAX_SURVIVORS)
-	if count <= 0:
+## Отдыхающие на диване у костра — поза «сидя»
+func _build_resting(has_couch: bool) -> void:
+	if not has_couch:
 		return
+	var skins: Array[PlayerSkin] = _camp_skins()
+	if skins.is_empty():
+		return
+	var at_fire: int = clampi(GameState.get_rescued_count(), MIN_SURVIVORS, MAX_SURVIVORS)
+	var count: int = clampi(GameState.get_rescued_count() - at_fire, 1, COUCH_SEATS.size())
+	var couch := Transform3D(Basis.IDENTITY, FIRE + COUCH_OFFSET)
+	for i in count:
+		var body := PlayerBody.new()
+		add_child(body)
+		# Другие лица, чем у костра
+		body.set_skin(skins[(i + at_fire) % skins.size()])
+		body.position = couch * COUCH_SEATS[(i + 1) % COUCH_SEATS.size()]
+		body.rotation.y = PI  # лицом к огню (+Z дивана); тело смотрит в -Z
+		body.set_seated(true)
+
+
+## Скины людей лагеря (без оружия в руках)
+func _camp_skins() -> Array[PlayerSkin]:
 	var skins: Array[PlayerSkin] = []
 	for skin: PlayerSkin in GameState.skins:
 		if skin.hide_weapon:
 			skins.append(skin)
+	return skins
+
+
+func _build_survivors(fire: Vector3) -> void:
+	var count: int = clampi(GameState.get_rescued_count(), MIN_SURVIVORS, MAX_SURVIVORS)
+	if count <= 0:
+		return
+	var skins: Array[PlayerSkin] = _camp_skins()
 	if skins.is_empty():
 		return
 	for i in count:

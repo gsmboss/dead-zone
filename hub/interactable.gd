@@ -5,6 +5,8 @@ extends Area3D
 signal player_entered(interactable: Interactable)
 signal player_exited(interactable: Interactable)
 signal interacted
+## Сменился текст кнопки (например, СЕСТЬ → ВСТАТЬ)
+signal prompt_changed(interactable: Interactable)
 
 ## Текст кнопки
 @export var prompt: String = "ИСПОЛЬЗОВАТЬ"
@@ -20,6 +22,13 @@ func _ready() -> void:
 	monitorable = false
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+
+
+func set_prompt(text: String) -> void:
+	if prompt == text:
+		return
+	prompt = text
+	prompt_changed.emit(self)
 
 
 func interact() -> void:
