@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itm01"]
+
+[resource]
+script = ExtResource("1_itm01")
+id = "land_mine"
+title = "МИНА"
+description = "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби"
+effect = 7
+amount = 120.0
+max_stack = 5
+price = 110
+icon_color = Color(0.62, 0.22, 0.18, 1)
+craft_cost = 4

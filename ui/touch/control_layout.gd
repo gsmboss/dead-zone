@@ -13,6 +13,7 @@ const DEFAULTS: Dictionary = {
 	&"switch_weapon": [Vector2(1.0, 1.0), Vector2(-280.0, -330.0), 100.0, "⇄"],
 	&"slide": [Vector2(1.0, 1.0), Vector2(-455.0, -115.0), 90.0, "ПОДКАТ"],
 	&"throw": [Vector2(1.0, 1.0), Vector2(-420.0, -375.0), 90.0, "ГРАНАТА"],
+	&"deploy": [Vector2(1.0, 1.0), Vector2(-560.0, -375.0), 90.0, "ЛОВУШКА"],
 	&"interact": [Vector2(1.0, 0.5), Vector2(-105.0, -40.0), 130.0, "ЗА РУЛЬ"],
 	&"pause": [Vector2(1.0, 0.0), Vector2(-75.0, 175.0), 90.0, "II"],
 	&"camera_view": [Vector2(1.0, 0.0), Vector2(-185.0, 175.0), 90.0, "ВИД"],

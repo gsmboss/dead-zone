@@ -13,6 +13,8 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 @export var type: Type = Type.WAVES
 ## Сцена уровня, где проходит миссия
 @export_file("*.tscn") var level_scene: String = "res://levels/test_level.tscn"
+## Своё название места в досье (пусто — по сцене уровня, LOCATIONS)
+@export var location_name: String = ""
 
 @export_group("Goal")
 ## WAVES: количество волн
@@ -116,6 +118,8 @@ func get_type_name() -> String:
 
 
 func get_location_name() -> String:
+	if not location_name.is_empty():
+		return location_name
 	var path: String = level_scene
 	if path.begins_with("uid://"):
 		var uid: int = ResourceUID.text_to_id(path)

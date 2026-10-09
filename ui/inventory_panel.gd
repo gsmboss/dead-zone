@@ -44,7 +44,7 @@ func _make_item_card(item: ItemData, count: int, player: Player) -> Control:
 		hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		return card
 
-	var use := UIKit.button("ИСПОЛЬЗОВАТЬ", 24, 260.0)
+	var use := UIKit.button("ПОСТАВИТЬ" if item.is_deployable() else "ИСПОЛЬЗОВАТЬ", 24, 260.0)
 	use.disabled = player == null
 	use.pressed.connect(func() -> void:
 		if GameState.use_item(item.id, player):

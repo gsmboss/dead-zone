@@ -1,7 +1,8 @@
 class_name GameMenus
 extends Control
-## Меню уровня (создаётся кодом): кнопки «II» (пауза), «СУМКА» и «ГРАНАТА» на экране,
-## окно паузы (продолжить, сумка, настройки, заново, в убежище), бросок гранат и коктейлей.
+## Меню уровня (создаётся кодом): кнопки «II» (пауза), «СУМКА», «ГРАНАТА» и «ЛОВУШКА» на экране,
+## окно паузы (продолжить, сумка, настройки, заново, в убежище), бросок гранат и коктейлей,
+## установка турелей, капканов и мин (Deployable).
 ## Достаточно пустого Control в HUD уровня с этим скриптом.
 
 const HUB_SCENE: String = "res://hub/hub.tscn"
@@ -16,6 +17,7 @@ var _pause_button: TouchActionButton
 var _bag_button: TouchActionButton
 var _throw_button: TouchActionButton
 var _throw_cooldown: float = 0.0
+var _deploy_button: TouchActionButton
 var _pause_panel: PanelContainer
 var _window: HubWindow
 ## Сумка открыта прямо из HUD (закрытие — сразу в игру, без окна паузы)
@@ -43,6 +45,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"throw") and not get_tree().paused and not _pause_panel.visible \
 			and _window == null:
 		_throw()
+	if Input.is_action_just_pressed(&"deploy") and not get_tree().paused and not _pause_panel.visible \
+			and _window == null:
+		_deploy()
 	if Input.is_action_just_pressed(&"pause"):
 		if _window != null:
 			_window.close_window()
@@ -91,6 +96,12 @@ func _setup_buttons() -> void:
 	_throw_button.base_color = Color(0.3, 0.42, 0.22)
 	GameState.inventory_changed.connect(_update_throw_button)
 	_update_throw_button()
+	# Ловушки по сети не ставятся (зомби ведёт хост)
+	if not Net.in_match:
+		_deploy_button = _make_touch_button(&"deploy", "", Vector2(1.0, 1.0), Vector2(-605.0, -420.0))
+		_deploy_button.base_color = Color(0.35, 0.5, 0.62)
+		GameState.inventory_changed.connect(_update_deploy_button)
+		_update_deploy_button()
 
 
 func _make_touch_button(action: StringName, text: String, anchor: Vector2, offset: Vector2) -> TouchActionButton:
@@ -134,6 +145,43 @@ func _throw() -> void:
 		+ Vector3(player.velocity.x, 0.0, player.velocity.z) * 0.5
 	ThrownItem.throw_item(get_tree().current_scene, item, from, throw_velocity)
 	Sfx.play_2d(Sfx.sounds.ui_back, -4.0, 0.7)
+
+
+# ---------- Ловушки ----------
+
+func _deploy() -> void:
+	if _throw_cooldown > 0.0 or _is_player_dead() or Net.in_match:
+		return
+	var player := get_tree().get_first_node_in_group(&"player") as Player
+	if player == null or not player.input_enabled:
+		return
+	var item: ItemData = GameState.get_deployable()
+	if item == null:
+		Sfx.error()
+		return
+	_throw_cooldown = THROW_COOLDOWN
+	if not GameState.use_item(item.id, player):
+		Sfx.error()  # некуда поставить: стена или обрыв
+
+
+## Значок и счётчик кнопки ловушки: что поставится первым
+func _update_deploy_button() -> void:
+	if _deploy_button == null:
+		return
+	var item: ItemData = GameState.get_deployable()
+	_deploy_button.visible = item != null
+	if item == null:
+		return
+	var count: int = GameState.get_item_count(item.id)
+	_deploy_button.label = "%s %d" % [UIKit.t(item.title), count]
+	_deploy_button.badge = str(count)
+	match item.effect:
+		ItemData.Effect.TRAP:
+			_deploy_button.set_icon_name("mantrap")
+		ItemData.Effect.MINE:
+			_deploy_button.set_icon_name("land-mine")
+		_:
+			_deploy_button.set_icon_name("sentry-gun")
 
 
 ## Подпись кнопки броска: что полетит и сколько всего

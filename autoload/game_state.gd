@@ -33,9 +33,18 @@ const MAX_REWARD_MULTIPLIER: float = 2.0
 const SECONDS_PER_DAY: int = 86400
 ## Предметы инвентаря (порядок = порядок в сумке и оружейной)
 const ITEM_PATHS: Array[String] = ["res://items/medkit.tres", "res://items/ammo_pack.tres",
-	"res://items/grenade.tres", "res://items/molotov.tres", "res://items/scrap.tres"]
+	"res://items/grenade.tres", "res://items/molotov.tres", "res://items/scrap.tres",
+	"res://items/turret.tres", "res://items/bear_trap.tres", "res://items/land_mine.tres"]
 const SCRAP_ID: String = "scrap"
 ## Постройки базы (порядок = порядок в окне БАЗА и во дворе убежища)
+## Набег на убежище: раз в RAID_INTERVAL секунд «ОРДА У ВОРОТ!» (HubHUD) — миссия обороны
+## с набором ловушек RAID_KIT и наградой ×RAID_REWARD
+const RAID_MISSION_PATH: String = "res://missions/data/mission_shelter.tres"
+const RAID_INTERVAL: int = 20 * 3600
+## Первый набег — через столько секунд после первой победы
+const RAID_FIRST_DELAY: int = 20 * 60
+const RAID_REWARD: float = 2.0
+const RAID_KIT: Dictionary = {"turret": 1, "bear_trap": 2, "land_mine": 2}
 ## Снаряжение (покупается один раз)
 const GEAR_PATHS: Array[String] = ["res://items/torch.tres"]
 ## Скины игрока (вид от 3-го лица и мультиплеер). Первый — по умолчанию
@@ -116,6 +125,10 @@ var _pending_story: String = ""
 var _gear_owned: Array[String] = []
 var _skins_owned: Array[String] = []
 var _skin_id: String = ""
+## Время следующего набега (unix, 0 — ещё не назначен)
+var _next_raid: int = 0
+## Идёт миссия-набег (награда ×RAID_REWARD); не сохраняется
+var raid_active: bool = false
 
 
 func _ready() -> void:
@@ -347,6 +360,14 @@ func remove_item(item_id: String, count: int = 1) -> bool:
 func get_throwable() -> ItemData:
 	for item: ItemData in items:
 		if item.is_throwable() and get_item_count(item.id) > 0:
+			return item
+	return null
+
+
+## Первая имеющаяся ловушка (турель, капкан, мина) — для кнопки «ЛОВУШКА»
+func get_deployable() -> ItemData:
+	for item: ItemData in items:
+		if item.is_deployable() and get_item_count(item.id) > 0:
 			return item
 	return null
 
@@ -905,6 +926,48 @@ func start_mission(mission: MissionData) -> void:
 	get_tree().change_scene_to_file(mission.level_scene)
 
 
+# ---------- Набег на убежище ----------
+
+func is_raid_ready() -> bool:
+	if _mission_clears.is_empty():
+		return false  # сначала хоть одна победа
+	var now: int = int(Time.get_unix_time_from_system())
+	if _next_raid <= 0 or _next_raid > now + RAID_INTERVAL:
+		# Не назначен или часы телефона перевели назад
+		_next_raid = now + RAID_FIRST_DELAY
+		save_game()
+		return false
+	return now >= _next_raid
+
+
+func get_raid_mission() -> MissionData:
+	if not ResourceLoader.exists(RAID_MISSION_PATH):
+		push_warning("GameState: нет миссии набега %s" % RAID_MISSION_PATH)
+		return null
+	return load(RAID_MISSION_PATH) as MissionData
+
+
+## Принять набег: набор ловушек в сумку, следующий — через RAID_INTERVAL, в бой
+func start_raid() -> void:
+	var mission: MissionData = get_raid_mission()
+	if mission == null or not is_raid_ready():
+		return
+	for item_id: String in RAID_KIT:
+		add_item(item_id, int(RAID_KIT[item_id]))
+	_next_raid = int(Time.get_unix_time_from_system()) + RAID_INTERVAL
+	raid_active = true
+	save_game()
+	start_mission(mission)
+
+
+func is_raid_mission(mission: MissionData) -> bool:
+	return raid_active and mission != null and mission.id == "shelter"
+
+
+func end_raid() -> void:
+	raid_active = false
+
+
 ## Обучение — миссия на полигоне (MissionData.tutorial)
 const TUTORIAL_PATH: String = "res://missions/data/mission_tutorial.tres"
 
@@ -942,6 +1005,8 @@ func reset_progress() -> void:
 	_gear_owned.clear()
 	_chapters_done.clear()
 	_pending_story = ""
+	_next_raid = 0
+	raid_active = false
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -985,6 +1050,7 @@ func save_game() -> void:
 		"chapters_done": _chapters_done,
 		"pending_story": _pending_story,
 		"skin": _skin_id,
+		"next_raid": _next_raid,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1087,6 +1153,7 @@ func load_game() -> void:
 			if get_skin(str(skin_id)) != null and not str(skin_id) in _skins_owned:
 				_skins_owned.append(str(skin_id))
 	_skin_id = str(data.get("skin", ""))
+	_next_raid = maxi(int(data.get("next_raid", 0)), 0)
 
 	_cutscenes_seen.clear()
 	var seen: Variant = data.get("cutscenes_seen", [])

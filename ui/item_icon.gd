@@ -1,6 +1,6 @@
 class_name ItemIcon
 extends Control
-## Объёмный значок предмета: аптечка — крест, патроны — три патрона.
+## Объёмный значок предмета: аптечка — крест, патроны — три патрона, ловушки — турель, капкан, мина.
 
 var item: ItemData
 
@@ -43,6 +43,24 @@ func _draw() -> void:
 			for i in 6:
 				var dir := Vector2.from_angle(i * TAU / 6.0)
 				draw_line(center + dir * r * 0.4, center + dir * r * 0.58, Color(0.85, 0.85, 0.9), r * 0.14)
+		ItemData.Effect.TURRET:
+			var metal := Color(0.82, 0.84, 0.88)
+			draw_line(center + Vector2(0.0, r * 0.05), center + Vector2(-r * 0.4, r * 0.6), metal, r * 0.1)
+			draw_line(center + Vector2(0.0, r * 0.05), center + Vector2(r * 0.4, r * 0.6), metal, r * 0.1)
+			draw_rect(Rect2(center + Vector2(-r * 0.3, -r * 0.3), Vector2(r * 0.6, r * 0.38)), metal)
+			draw_rect(Rect2(center + Vector2(r * 0.2, -r * 0.2), Vector2(r * 0.42, r * 0.14)), metal.darkened(0.3))
+		ItemData.Effect.TRAP:
+			var steel := Color(0.85, 0.85, 0.82)
+			draw_arc(center, r * 0.5, 0.0, TAU, 20, steel, r * 0.1, false)
+			for i in 8:
+				var tooth := Vector2.from_angle(i * TAU / 8.0)
+				draw_line(center + tooth * r * 0.5, center + tooth * r * 0.28, steel, r * 0.09)
+		ItemData.Effect.MINE:
+			draw_set_transform(center + Vector2(0.0, r * 0.15), 0.0, Vector2(1.0, 0.45))
+			draw_circle(Vector2.ZERO, r * 0.6, Color(0.25, 0.27, 0.22))
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			draw_rect(Rect2(center + Vector2(-r * 0.15, -r * 0.2), Vector2(r * 0.3, r * 0.3)), Color(0.3, 0.32, 0.27))
+			draw_circle(center + Vector2(0.0, -r * 0.25), r * 0.12, Color(1.0, 0.25, 0.2))
 		ItemData.Effect.AMMO:
 			var width: float = r * 0.22
 			for i in 3:

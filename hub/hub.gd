@@ -6,6 +6,7 @@ const INTRO_PATH: String = "res://cutscene/hub_intro.tres"
 
 
 func _ready() -> void:
+	GameState.end_raid()  # вернулись из набега (проигрыш) — бонус не тянется в следующую миссию
 	# Ждём, пока игрок закончит свой _ready (он сам находит WeaponManager)
 	_disable_player_weapons.call_deferred()
 	var yard := HubYard.new()

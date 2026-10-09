@@ -376,3 +376,10 @@ lod_threshold), auto_tier — ступень по железу (detect_tier: п�
 Аксессуары (шляпы/очки) были и убраны по просьбе: в старых сохранениях ключи accessories_* игнорируются; Net.PROTOCOL = 4.
 Метка «стреляет в тебя» по сети: маленькая ▼ над именем (font 48, pixel_size 0.0028).
 Вкладки: UIKit.tab_bar(names, current, on_select); МАШИНЫ — МАШИНЫ/ТЮНИНГ/ПОКРАСКА И НЕОН (static var _tab).
+Ловушки (этап 6): ItemData.Effect TURRET/TRAP/MINE (items/turret.tres, bear_trap.tres, land_mine.tres — оружейная
+и мастерская), кнопка «ЛОВУШКА» (действие deploy, B; GameMenus._deploy, значки sentry-gun/mantrap/land-mine) или
+«ПОСТАВИТЬ» в сумке → Deployable.place (effects/deployable.gd: луч на пол перед игроком, не по сети и не в убежище,
+не больше MAX_ACTIVE). Turret (16 м, 120 патронов, видимость лучом WORLD), BearTrap (Zombie.hold — держит 4 с,
+3 раза), LandMine (взвод 1.5 с, Explosion). Набег: GameState.is_raid_ready (раз в 20 ч после первой победы,
+next_raid в сохранении), HubHUD «ОРДА У ВОРОТ!» → start_raid (RAID_KIT в сумку) → missions/data/mission_shelter.tres
+(DEFEND, стоянка, MissionData.location_name), награда ×2 (raid_active, end_raid при победе/выходе/в убежище).

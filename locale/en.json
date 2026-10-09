@@ -782,5 +782,21 @@
  "▼ В ВАС СТРЕЛЯЕТ: %s": "▼ SHOOTING AT YOU: %s",
  "● ЗАПИСЬ": "● REC",
  "☰  МЕНЮ": "☰  MENU",
- "✓ ОТЛИЧНО!": "✓ NICE!"
+ "✓ ОТЛИЧНО!": "✓ NICE!",
+ "ВОРОТА УБЕЖИЩА": "SHELTER GATES",
+ "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s": "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s",
+ "КАПКАН": "BEAR TRAP",
+ "ЛОВУШКА": "TRAP",
+ "МИНА": "MINE",
+ "НАБЕГ: НАГРАДА ×2, ЛОВУШКИ В СУМКЕ": "RAID: REWARD ×2, TRAPS IN YOUR BAG",
+ "ОБОРОНА УБЕЖИЩА": "SHELTER DEFENSE",
+ "ОРДА У ВОРОТ!": "HORDE AT THE GATES!",
+ "ОТБИТЬ": "FIGHT BACK",
+ "Орда идёт к воротам. Поставь турели, капканы и мины (кнопка ЛОВУШКА) и удержи ворота 150 секунд": "A horde is heading for the gates. Set up turrets, bear traps and mines (TRAP button) and hold the gates for 150 seconds",
+ "ПОСТАВИТЬ": "PLACE",
+ "ПУСТО": "EMPTY",
+ "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби": "Placed with the TRAP button: arms in 1.5 seconds, blows up under zombies",
+ "Ставится кнопкой ЛОВУШКА: держит зомби 4 секунды и ранит, срабатывает 3 раза": "Placed with the TRAP button: holds a zombie for 4 seconds and wounds it, works 3 times",
+ "Ставится кнопкой ЛОВУШКА: сама стреляет по зомби в 16 м, 120 патронов": "Placed with the TRAP button: shoots zombies within 16 m on its own, 120 rounds",
+ "ТУРЕЛЬ": "TURRET"
 }

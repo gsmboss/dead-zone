@@ -212,6 +212,8 @@ var _attack_elapsed: float = 0.0
 var _attack_hit_done: bool = false
 var _stagger_left: float = 0.0
 var _stagger_cooldown: float = 0.0
+## Капкан держит на месте (секунд осталось)
+var _hold_left: float = 0.0
 
 # Визуал
 var _flash: float = 0.0
@@ -349,6 +351,7 @@ func _physics_process(delta: float) -> void:
 	_ranged_cooldown = maxf(_ranged_cooldown - delta, 0.0)
 	_taunt_cooldown = maxf(_taunt_cooldown - delta, 0.0)
 	_slam_cooldown = maxf(_slam_cooldown - delta, 0.0)
+	_hold_left = maxf(_hold_left - delta, 0.0)
 	_update_voice(delta)
 
 	if _has_live_target():
@@ -1200,6 +1203,8 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 
 
 func _apply_velocity(horizontal: Vector3) -> void:
+	if _hold_left > 0.0:
+		horizontal = Vector3.ZERO  # в капкане: рвётся, но с места не сходит
 	velocity.x = horizontal.x
 	velocity.z = horizontal.z
 	move_and_slide()
@@ -1483,6 +1488,19 @@ func despawn() -> void:
 
 
 ## Удар машиной: урон по скорости, отбрасывание; погибший отлетает
+## Капкан: держит на месте seconds секунд (босса — вдвое меньше); бить рядом стоящего может
+func hold(seconds: float) -> void:
+	if state == State.DEAD or net_puppet or seconds <= 0.0:
+		return
+	var duration: float = seconds * (0.5 if data != null and data.is_boss else 1.0)
+	_hold_left = maxf(_hold_left, duration)
+	_play(anim_hit, true)
+
+
+func is_held() -> bool:
+	return _hold_left > 0.0
+
+
 func hit_by_vehicle(damage: float, push: Vector3) -> void:
 	apply_blast(damage, push)
 

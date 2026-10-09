@@ -123,6 +123,8 @@ func _ready() -> void:
 	_health_multiplier = difficulty
 	_damage_multiplier = 1.0 + (difficulty - 1.0) * DAMAGE_DIFFICULTY_SHARE
 	_reward_multiplier = GameState.get_reward_multiplier(mission.id)
+	if GameState.is_raid_mission(mission):
+		_reward_multiplier *= GameState.RAID_REWARD
 	_event = GameState.get_daily_event()
 	spawning_enabled = not mission.tutorial
 	_start.call_deferred()
@@ -167,6 +169,8 @@ func _start() -> void:
 	if _event != null and (not is_equal_approx(_event.coin_multiplier, 1.0)
 			or not is_equal_approx(_event.spawn_multiplier, 1.0) or not is_equal_approx(_event.drop_multiplier, 1.0)):
 		title += UIKit.t("\nСОБЫТИЕ ДНЯ: %s") % UIKit.t(_event.title)
+	if GameState.is_raid_mission(mission):
+		title += "\n" + UIKit.t("НАБЕГ: НАГРАДА ×2, ЛОВУШКИ В СУМКЕ")
 	announcement.emit(title)
 	_update_objective()
 	if mission.tutorial:
@@ -647,6 +651,7 @@ func leave_mission() -> void:
 	if state == State.WON or state == State.LOST:
 		return
 	state = State.LOST
+	GameState.end_raid()
 	var earned: int = roundi((score + _waves_cleared * mission.coins_per_wave) * _event_value(&"coins"))
 	_record_endless()
 	GameState.add_coins(earned)
@@ -767,6 +772,7 @@ func _finish(won: bool) -> void:
 		+ _waves_cleared * mission.coins_per_wave) * _event_value(&"coins"))
 	_record_endless()
 	if won:
+		GameState.end_raid()
 		GameState.complete_mission(mission, score, stars)
 		if mission.tutorial:
 			GameState.mark_cutscene_seen(TutorialDirector.DONE_FLAG)

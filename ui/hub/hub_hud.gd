@@ -9,6 +9,9 @@ var _coins_label: Label
 var _menu_bar: HBoxContainer
 var _exit_panel: Control
 var _daily_button: Button
+## «ОРДА У ВОРОТ!» — набег на убежище (GameState.is_raid_ready)
+var _raid_button: Button
+var _raid_check_left: float = 0.0
 var _menu: HubMenu
 var _interact_button: Button
 var _current: Interactable
@@ -25,7 +28,11 @@ func _ready() -> void:
 	Ads.show_banner()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_raid_check_left -= delta
+	if _raid_check_left <= 0.0:
+		_raid_check_left = RAID_CHECK_INTERVAL
+		_update_raid_button()
 	if Input.is_action_just_pressed(&"interact"):
 		_interact()
 	if Input.is_action_just_pressed(&"pause") and not CutscenePlayer.is_blocking_input() \
@@ -51,6 +58,7 @@ func _on_back() -> void:
 ## Первый заход: предложить обучение (один раз; потом — кнопка в настройках, вкладка СЮЖЕТ)
 const TUTORIAL_OFFERED: String = "tutorial_offered"
 const DIALOG_WIDTH: float = 680.0
+const RAID_CHECK_INTERVAL: float = 5.0
 
 
 func offer_tutorial() -> void:
@@ -67,6 +75,39 @@ func offer_tutorial() -> void:
 	var later := UIKit.button("ПОЗЖЕ", 28, 240.0)
 	later.pressed.connect(_on_back)
 	row.add_child(later)
+
+
+## Набег: окно с объяснением, «ОТБИТЬ» — миссия ОБОРОНА УБЕЖИЩА с ловушками и наградой ×2
+func _offer_raid() -> void:
+	if _exit_panel != null or _window != null or not GameState.is_raid_ready():
+		return
+	var kit := PackedStringArray()
+	for item_id: String in GameState.RAID_KIT:
+		var item: ItemData = GameState.get_item(item_id)
+		if item != null:
+			kit.append("%s ×%d" % [UIKit.t(item.title), int(GameState.RAID_KIT[item_id])])
+	var row: HBoxContainer = _open_dialog("ОРДА У ВОРОТ!",
+		UIKit.t("ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s") % ", ".join(kit))
+	var go := UIKit.button("ОТБИТЬ", 28, 240.0)
+	go.modulate = UIKit.GOOD
+	go.pressed.connect(GameState.start_raid)
+	row.add_child(go)
+	var later := UIKit.button("ПОЗЖЕ", 28, 240.0)
+	later.pressed.connect(_on_back)
+	row.add_child(later)
+
+
+func _update_raid_button() -> void:
+	if _raid_button == null:
+		return
+	var raid_ready: bool = GameState.is_raid_ready()
+	if raid_ready and not _raid_button.visible:
+		# Кнопка «вспыхивает» при появлении
+		_raid_button.pivot_offset = _raid_button.size * 0.5
+		_raid_button.scale = Vector2.ONE * 1.3
+		create_tween().tween_property(_raid_button, "scale", Vector2.ONE, 0.4) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_raid_button.visible = raid_ready
 
 
 func _show_exit_confirm() -> void:
@@ -131,6 +172,9 @@ func _build_ui() -> void:
 	var story := _add_menu_button("СЮЖЕТ", _choose.bind(&"story"))
 	story.modulate = Color(1.0, 0.75, 0.45)
 	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", _choose.bind(&"daily"))
+	_raid_button = _add_menu_button("ОРДА У ВОРОТ!", _offer_raid)
+	_raid_button.modulate = Color(1.0, 0.4, 0.3)
+	_raid_button.visible = false
 
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = SIZE_EXPAND_FILL

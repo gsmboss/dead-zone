@@ -22,6 +22,7 @@ const ACTION_ICONS: Dictionary = {
 	&"switch_weapon": "switch-weapon",
 	&"slide": "foot-trip",
 	&"throw": "flash-grenade",
+	&"deploy": "sentry-gun",
 	&"pause": "pause-button",
 	&"camera_view": "video-camera",
 	&"torch": "torch",

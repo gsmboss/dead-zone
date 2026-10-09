@@ -397,6 +397,9 @@ msgstr "WAVES"
 msgid "ВОЛНЫ ВСЁ СИЛЬНЕЕ, БЕЗ ВОЗРОЖДЕНИЯ — ПОБЕЖДАЕТ ПОСЛЕДНИЙ ЖИВОЙ"
 msgstr "WAVES KEEP GETTING STRONGER, NO RESPAWNS — LAST ONE ALIVE WINS"
 
+msgid "ВОРОТА УБЕЖИЩА"
+msgstr "SHELTER GATES"
+
 msgid "ВОСКРЕСНУТЬ  ▶ РЕКЛАМА"
 msgstr "REVIVE  ▶ AD"
 
@@ -796,6 +799,9 @@ msgstr "MIRROR"
 msgid "ЗНАЧКИ НА КНОПКАХ ВМЕСТО НАДПИСЕЙ"
 msgstr "ICONS ON BUTTONS INSTEAD OF TEXT"
 
+msgid "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s"
+msgstr "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s"
+
 msgid "ЗОМБИ! УБЕЙ ЕГО. В ГОЛОВУ — ДВОЙНОЙ УРОН"
 msgstr "ZOMBIE! KILL IT. HEADSHOTS DEAL DOUBLE DAMAGE"
 
@@ -927,6 +933,9 @@ msgstr "THE CAPTAIN"
 
 msgid "КАПИТАН ЯКОРЕВ ПРИНЯЛ ЧЕМОДАН С ВАКЦИНОЙ И ОТДАЛ ЧЕСТЬ. ТЁМЕ. ТЁМА ОТДАЛ ЧЕСТЬ В ОТВЕТ — ЛЕВОЙ РУКОЙ, НО ОТ ДУШИ."
 msgstr "CAPTAIN YAKOREV TOOK THE VACCINE CASE AND SALUTED. TYOMA. TYOMA SALUTED BACK — WITH HIS LEFT HAND, BUT FROM THE HEART."
+
+msgid "КАПКАН"
+msgstr "BEAR TRAP"
 
 msgid "КАПЛЯ — КИСЛОТА"
 msgstr "DROP — ACID"
@@ -1069,6 +1078,9 @@ msgstr "FOX"
 msgid "ЛОББИ ЗАПОЛНЕНО"
 msgstr "LOBBY FULL"
 
+msgid "ЛОВУШКА"
+msgstr "TRAP"
+
 msgid "ЛОГОВО БАРОНА"
 msgstr "BARON'S LAIR"
 
@@ -1162,6 +1174,9 @@ msgstr "NURSE"
 msgid "МЕХАНИК"
 msgstr "MECHANIC"
 
+msgid "МИНА"
+msgstr "MINE"
+
 msgid "МИССИИ"
 msgstr "MISSIONS"
 
@@ -1236,6 +1251,9 @@ msgstr "ON THE STREET OUTSIDE THE ENTRANCE — THE WHOLE GANG: SAWED-OFFS, RIFLE
 
 msgid "НАЁМНИК"
 msgstr "MERCENARY"
+
+msgid "НАБЕГ: НАГРАДА ×2, ЛОВУШКИ В СУМКЕ"
+msgstr "RAID: REWARD ×2, TRAPS IN YOUR BAG"
 
 msgid "НАГРАДА"
 msgstr "REWARD"
@@ -1363,6 +1381,9 @@ msgstr "DEFENSE"
 msgid "ОБОРОНА ТОЧКИ"
 msgstr "DEFEND THE POINT"
 
+msgid "ОБОРОНА УБЕЖИЩА"
+msgstr "SHELTER DEFENSE"
+
 msgid "ОБУЧЕНИЕ"
 msgstr "TUTORIAL"
 
@@ -1390,6 +1411,9 @@ msgstr "ORANGE"
 msgid "ОРДА"
 msgstr "HORDE"
 
+msgid "ОРДА У ВОРОТ!"
+msgstr "HORDE AT THE GATES!"
+
 msgid "ОРУЖЕЙНАЯ"
 msgstr "ARMORY"
 
@@ -1404,6 +1428,9 @@ msgstr "LOOK AROUND: MOVE THE MOUSE"
 
 msgid "ОСТАТЬСЯ"
 msgstr "STAY"
+
+msgid "ОТБИТЬ"
+msgstr "FIGHT BACK"
 
 msgid "ОТКРЫТЫЙ ГОРОД"
 msgstr "OPEN CITY"
@@ -1422,6 +1449,9 @@ msgstr "HUNTRESS"
 
 msgid "ОШИБКА ПОДКЛЮЧЕНИЯ (%s)"
 msgstr "CONNECTION ERROR (%s)"
+
+msgid "Орда идёт к воротам. Поставь турели, капканы и мины (кнопка ЛОВУШКА) и удержи ворота 150 секунд"
+msgstr "A horde is heading for the gates. Set up turrets, bear traps and mines (TRAP button) and hold the gates for 150 seconds"
 
 msgid "Отбей %s"
 msgstr "Repel %s"
@@ -1573,6 +1603,9 @@ msgstr "LAST ONE STANDING"
 msgid "ПОСЛЕДНЯЯ ВОЛНА: %s!"
 msgstr "FINAL WAVE: %s!"
 
+msgid "ПОСТАВИТЬ"
+msgstr "PLACE"
+
 msgid "ПОСТРОЕНО"
 msgstr "BUILT"
 
@@ -1665,6 +1698,9 @@ msgstr "JUMP: TAP THE BUTTON"
 
 msgid "ПРЫЖОК: ПРОБЕЛ"
 msgstr "JUMP: SPACE"
+
+msgid "ПУСТО"
+msgstr "EMPTY"
 
 msgid "ПЯТЕРО РАБОЧИХ ДЕРЖАТ ЗАПРАВКУ ПОСРЕДИ ПРОМЗОНЫ. БЕЗ ТОПЛИВА ИХ ГЕНЕРАТОРЫ ВСТАНУТ, А СКЛАД БАРОНА — СРАЗУ ЗА ЗАБОРОМ."
 msgstr "FIVE WORKERS ARE HOLDING A GAS STATION IN THE MIDDLE OF THE INDUSTRIAL ZONE. WITHOUT FUEL THEIR GENERATORS WILL DIE, AND THE BARON'S WAREHOUSE IS RIGHT BEHIND THE FENCE."
@@ -1990,6 +2026,15 @@ msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
 msgid "Собери %s с припасами"
 msgstr "Collect %s of supplies"
 
+msgid "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби"
+msgstr "Placed with the TRAP button: arms in 1.5 seconds, blows up under zombies"
+
+msgid "Ставится кнопкой ЛОВУШКА: держит зомби 4 секунды и ранит, срабатывает 3 раза"
+msgstr "Placed with the TRAP button: holds a zombie for 4 seconds and wounds it, works 3 times"
+
+msgid "Ставится кнопкой ЛОВУШКА: сама стреляет по зомби в 16 м, 120 патронов"
+msgstr "Placed with the TRAP button: shoots zombies within 16 m on its own, 120 rounds"
+
 msgid "Старый, но заводится с пол-оборота. Мягкий зад — легко пустить в занос."
 msgstr "Old, but starts on the first try. Loose rear end — easy to drift."
 
@@ -2061,6 +2106,9 @@ msgstr "KABAN'S THREE PRISONERS ARE WITH US NOW. GENKA WASHED DISHES TILL MORNIN
 
 msgid "ТРЯСКА КАМЕРЫ (ВЗРЫВЫ, БОСС)"
 msgstr "CAMERA SHAKE (EXPLOSIONS, BOSS)"
+
+msgid "ТУРЕЛЬ"
+msgstr "TURRET"
 
 msgid "ТЮНИНГ"
 msgstr "TUNING"

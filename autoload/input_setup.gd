@@ -15,6 +15,7 @@ const ACTIONS: Dictionary = {
 	&"aim": [KEY_Z],
 	&"inventory": [KEY_I],
 	&"throw": [KEY_G],
+	&"deploy": [KEY_B],
 	&"sprint": [KEY_SHIFT],
 	&"slide": [KEY_C],
 	&"pause": [KEY_ESCAPE, KEY_P],
