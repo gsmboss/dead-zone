@@ -12,6 +12,8 @@
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
 [ext_resource type="Resource" path="res://enemies/spitter.tres" id="z_spitter"]
 [ext_resource type="Resource" path="res://enemies/kaban.tres" id="z_kaban"]
+[ext_resource type="Resource" path="res://enemies/brute.tres" id="z7_brute"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
 
 [resource]
 script = ExtResource("1_mdt")
@@ -27,7 +29,7 @@ walker = ExtResource("z_walker")
 runner = ExtResource("z_runner")
 tank = ExtResource("z_ghoul")
 tank_chance = 0.1
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_bandit"), ExtResource("z_bandit_sg"), ExtResource("z_bandit_rf"), ExtResource("z_exploder"), ExtResource("z_spitter")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_bandit"), ExtResource("z_bandit_sg"), ExtResource("z_bandit_rf"), ExtResource("z_exploder"), ExtResource("z_spitter"), ExtResource("z7_brute"), ExtResource("z7_screamer")])
 special_chance = 0.45
 boss = ExtResource("z_kaban")
 max_alive = 12

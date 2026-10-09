@@ -185,6 +185,35 @@ func get_alive_count() -> int:
 	return _alive
 
 
+## Крикун позвал подмогу: count зомби сверх обычного спавна (обычные типы, не больше REINFORCE_EXTRA
+## сверх лимита живых). Сразу знают, где игрок
+const REINFORCE_EXTRA: int = 4
+
+
+func call_reinforcements(count: int) -> void:
+	if not spawning_enabled or spawner == null or count <= 0 \
+			or (state != State.RUNNING and state != State.BETWEEN_WAVES):
+		return
+	var limit: int = maxi(roundi(mission.max_alive * Settings.get_crowd_factor()), 2) + REINFORCE_EXTRA
+	for i in count:
+		if _alive >= limit:
+			return
+		if mission.type == MissionData.Type.KILL_COUNT and kills + _alive >= mission.kill_target:
+			return
+		var data: ZombieData = mission.runner if mission.runner != null and _rng.randf() < 0.5 else mission.walker
+		if data == null:
+			return
+		var zombie: Zombie = spawner.spawn(data, _health_multiplier, _damage_multiplier)
+		if zombie == null:
+			return
+		zombie.died.connect(_on_zombie_died)
+		zombie.despawned.connect(_on_zombie_despawned)
+		_alive += 1
+		if _player != null:
+			zombie.notify_target(_player.global_position)
+			zombie.boost(4.0, 1.25)
+
+
 ## Один зомби вне обычного спавна (обучение): самый простой тип
 func spawn_single() -> Zombie:
 	var data: ZombieData = mission.walker if mission.walker != null else _pick_zombie_type()

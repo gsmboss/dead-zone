@@ -8,6 +8,9 @@
 [ext_resource type="Resource" path="res://enemies/dog.tres" id="z_dog"]
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
 [ext_resource type="Resource" path="res://enemies/crawler.tres" id="z_crawler"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
+[ext_resource type="Resource" path="res://enemies/brute.tres" id="z7_brute"]
 
 [resource]
 script = ExtResource("1_mdt")
@@ -24,7 +27,7 @@ runner = ExtResource("z_runner")
 tank = ExtResource("z_tank")
 runner_chance = 0.22
 tank_chance = 0.06
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_crawler"), ExtResource("z_exploder")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_crawler"), ExtResource("z_exploder"), ExtResource("z7_helmet"), ExtResource("z7_screamer"), ExtResource("z7_brute")])
 special_chance = 0.15
 max_alive = 14
 spawn_interval = 1.0

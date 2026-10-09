@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://enemies/spitter.tres" id="sp_2"]
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="sp_3"]
 [ext_resource type="Resource" path="res://enemies/dog.tres" id="sp_4"]
+[ext_resource type="Resource" path="res://enemies/brute.tres" id="z7_brute"]
 
 [resource]
 script = ExtResource("2_mdt01")
@@ -28,5 +29,5 @@ wave_size_growth = 4
 ammo_drop_chance = 0.2
 health_drop_chance = 0.1
 reward_coins = 400
-specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4"), ExtResource("z7_brute")])
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

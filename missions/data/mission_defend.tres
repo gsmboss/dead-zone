@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://enemies/spitter.tres" id="sp_2"]
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="sp_3"]
 [ext_resource type="Resource" path="res://enemies/dog.tres" id="sp_4"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
 
 [resource]
 script = ExtResource("2_mdt01")
@@ -30,5 +32,5 @@ max_alive = 10
 spawn_interval = 1.4
 min_spawn_interval = 0.6
 reward_coins = 160
-specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4"), ExtResource("z7_helmet"), ExtResource("z7_screamer")])
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

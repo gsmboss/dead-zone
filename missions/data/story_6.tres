@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://enemies/bandit.tres" id="z_bandit"]
 [ext_resource type="Resource" path="res://enemies/bandit_shotgun.tres" id="z_bandit_sg"]
 [ext_resource type="Resource" path="res://enemies/bandit_rifle.tres" id="z_bandit_rf"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
 
 [resource]
 script = ExtResource("1_mdt")
@@ -23,6 +24,6 @@ walker = ExtResource("z_walker")
 runner = ExtResource("z_runner")
 tank = ExtResource("z_tank")
 tank_chance = 0.08
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_exploder"), ExtResource("z_bandit"), ExtResource("z_bandit_sg")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_exploder"), ExtResource("z_bandit"), ExtResource("z_bandit_sg"), ExtResource("z7_helmet")])
 reward_coins = 450
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

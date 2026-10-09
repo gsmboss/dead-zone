@@ -3,8 +3,9 @@ extends Resource
 ## Параметры типа зомби. Каждый тип — отдельный .tres файл.
 
 ## MELEE — бьёт вблизи; RANGED — плюётся кислотой издалека; EXPLODER — взрывается рядом с игроком;
-## GUNNER — человек с оружием (бандит): стреляет очередями, держит дистанцию, вблизи бьёт кулаком
-enum Behavior { MELEE, RANGED, EXPLODER, GUNNER }
+## GUNNER — человек с оружием (бандит): стреляет очередями, держит дистанцию, вблизи бьёт кулаком;
+## SCREAMER — крикун: держится поодаль и кричит (ускоряет зомби вокруг, зовёт подмогу)
+enum Behavior { MELEE, RANGED, EXPLODER, GUNNER, SCREAMER }
 
 @export var display_name: String = "WALKER"
 @export var behavior: Behavior = Behavior.MELEE
@@ -104,6 +105,26 @@ enum Behavior { MELEE, RANGED, EXPLODER, GUNNER }
 @export var explode_damage: float = 45.0
 ## Взрывается и при смерти от выстрела (задевает соседей)
 @export var explode_on_death: bool = true
+
+@export_group("Armor")
+## Каска: столько урона по голове принимает на себя, потом слетает (0 — каски нет)
+@export var helmet_health: float = 0.0
+@export var helmet_color: Color = Color(0.32, 0.38, 0.24)
+## Урон по голове в каске проходит такой долей (оглушает, но не убивает)
+@export_range(0.0, 1.0, 0.05) var helmet_pass: float = 0.15
+## Броня спереди: урон по телу спереди умножается на это (1 — брони нет); сзади и в голову — полный
+@export_range(0.05, 1.0, 0.05) var front_armor: float = 1.0
+@export var armor_color: Color = Color(0.35, 0.36, 0.38)
+
+@export_group("Screamer")
+## Крик: зомби в радиусе бегут к игроку быстрее (scream_boost) scream_boost_time секунд.
+## Перезарядка крика — ranged_cooldown, замах — ranged_windup, дистанции — ranged_min/max_distance
+@export var scream_radius: float = 18.0
+@export var scream_boost: float = 1.4
+@export var scream_boost_time: float = 6.0
+## Сколько зомби приходит на крик (сверх обычного спавна миссии)
+@export_range(0, 6) var scream_reinforcements: int = 2
+@export var anim_scream: StringName = &"Wave"
 
 @export_group("Tactics")
 ## Участвует в очереди атак (не больше MAX_ATTACKERS бьют одновременно, остальные кружат)

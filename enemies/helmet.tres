@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "КАСКА"
+max_health = 120.0
+move_speed = 1.8
+attack_damage = 12.0
+body_color = Color(0.32, 0.38, 0.24, 1)
+model_scene = ExtResource("2_md01")
+model_scale = 1.6
+tint = Color(0.75, 0.6, 0.2, 0.12)
+helmet_health = 110.0
+helmet_color = Color(0.32, 0.38, 0.24, 1)
+helmet_pass = 0.15
+voice_pitch = 0.9
+score = 20
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

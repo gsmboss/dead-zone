@@ -244,6 +244,9 @@ msgstr "ARMORED PICKUP"
 msgid "БРОНЕСПОРТ"
 msgstr "ARMORED SPORT"
 
+msgid "БУГАЙ"
+msgstr "BRUTE"
+
 msgid "Банда Барона грабит колонну выживших на стоянке контейнеров. Отбей колонну — убей 25 бандитов и зомби"
 msgstr "Baron's gang is robbing a survivor convoy at the container yard. Save the convoy — kill 25 bandits and zombies"
 
@@ -946,6 +949,12 @@ msgstr "MAP"
 msgid "КАРТА ЗАРАЖЕНИЯ"
 msgstr "INFECTION MAP"
 
+msgid "КАСКА"
+msgstr "HELMET"
+
+msgid "КАСКУ СБИВАЮТ ДВА ВЫСТРЕЛА В ГОЛОВУ"
+msgstr "TWO HEADSHOTS KNOCK A HELMET OFF"
+
 msgid "КАЧЕСТВО ГРАФИКИ"
 msgstr "GRAPHICS QUALITY"
 
@@ -1011,6 +1020,12 @@ msgstr "THE RED BACKPACK. MOM BOUGHT IT FOR TYOMA BEFORE SCHOOL STARTED. HE HATE
 
 msgid "КРАСНЫХ"
 msgstr "RED"
+
+msgid "КРИКУН"
+msgstr "SCREAMER"
+
+msgid "КРИКУН ЗОВЁТ ОРДУ — УБЕЙ ЕГО ПЕРВЫМ"
+msgstr "THE SCREAMER CALLS THE HORDE — KILL IT FIRST"
 
 msgid "КРУПНО"
 msgstr "CLOSE-UP"
@@ -1150,8 +1165,8 @@ msgstr "CAR"
 msgid "МАШИНА «%s»"
 msgstr "CAR \"%s\""
 
-msgid "МАШИНА СБИВАЕТ ЗОМБИ — ЖМИ «СЕСТЬ» РЯДОМ С НЕЙ"
-msgstr "CARS RUN OVER ZOMBIES — PRESS \"GET IN\" NEXT TO ONE"
+msgid "МАШИНА СБИВАЕТ ЗОМБИ — ЖМИ «ЗА РУЛЬ» РЯДОМ С НЕЙ"
+msgstr "CARS RUN ZOMBIES OVER — PRESS «DRIVE» NEXT TO ONE"
 
 msgid "МАШИНА СЛОМАНА — ВЫЙДИ И ПОЧИНИ"
 msgstr "CAR BROKEN — GET OUT AND REPAIR"
@@ -2118,6 +2133,9 @@ msgstr "TUNING: %s"
 
 msgid "Точность: %d%%  •  Здоровье: %d%%"
 msgstr "Accuracy: %d%%  •  Health: %d%%"
+
+msgid "У БУГАЯ БРОНЯ СПЕРЕДИ — ЗАЙДИ СБОКУ ИЛИ ЦЕЛЬСЯ В ГОЛОВУ"
+msgstr "THE BRUTE IS ARMORED IN FRONT — FLANK IT OR AIM FOR THE HEAD"
 
 msgid "У ВЫШКИ ПРЯТАЛИСЬ ЧЕТВЕРО ЛЕСНИКОВ. МЕСЯЦ ЕЛИ ШИШКИ. ТЕПЕРЬ ЕДЯТ У ДЯДИ ГОШИ И ХВАЛЯТ ДАЖЕ ПЕРЕСОЛЕННОЕ."
 msgstr "FOUR FORESTERS WERE HIDING BY THE TOWER. THEY ATE PINE CONES FOR A MONTH. NOW THEY EAT AT UNCLE GOSHA'S AND PRAISE EVEN THE OVERSALTED STUFF."

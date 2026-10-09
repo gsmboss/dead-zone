@@ -15,6 +15,10 @@ extends Area3D
 ## Сейчас идёт урон от выстрела через хитбокс (мультиплеер: отличить выстрел от удара зомби)
 static var applying: bool = false
 
+## Своя обработка урона (каска, броня зомби): func(amount, hit_position, is_head) -> float.
+## Вернула 0 — попадание засчитано, но урон поглощён
+var damage_filter: Callable
+
 
 func _ready() -> void:
 	collision_layer = PhysicsLayers.HITBOX
@@ -30,6 +34,10 @@ func apply_hit(damage: float, hit_position: Vector3) -> bool:
 	if health == null or health.is_dead or damage <= 0.0:
 		return false
 	applying = true
-	health.take_damage(damage * damage_multiplier, hit_position, is_head)
+	var amount: float = damage * damage_multiplier
+	if damage_filter.is_valid():
+		amount = float(damage_filter.call(amount, hit_position, is_head))
+	if amount > 0.0:
+		health.take_damage(amount, hit_position, is_head)
 	applying = false
 	return true

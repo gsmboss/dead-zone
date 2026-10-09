@@ -214,6 +214,14 @@ var _stagger_left: float = 0.0
 var _stagger_cooldown: float = 0.0
 ## Капкан держит на месте (секунд осталось)
 var _hold_left: float = 0.0
+## Крик соседа-крикуна: ускорение, пока _boost_left > 0
+var _boost_left: float = 0.0
+var _base_speed_multiplier: float = 1.0
+## Каска (ZombieData.helmet_health) и броня спереди (front_armor)
+var _helmet_left: float = 0.0
+var _helmet: Node3D
+var _armor_plate: Node3D
+var _armor_sound_cooldown: float = 0.0
 
 # Визуал
 var _flash: float = 0.0
@@ -287,6 +295,7 @@ func _ready() -> void:
 	_rng.randomize()
 	_separation_timer = _rng.randf() * SEPARATION_INTERVAL  # не все зомби в один кадр
 	_speed_multiplier = 1.0 + _rng.randf_range(-data.speed_variation, data.speed_variation)
+	_base_speed_multiplier = _speed_multiplier
 	# Сектора по золотому углу: каждый новый зомби заходит со своей стороны
 	_flank_angle = fmod(_flank_counter * GOLDEN_ANGLE, TAU)
 	_flank_counter += 1
@@ -302,6 +311,7 @@ func _ready() -> void:
 	_ranged_cooldown = data.ranged_cooldown * _rng.randf_range(0.3, 1.0)
 	_setup_agent()
 	_setup_visuals()
+	_setup_armor()
 	_play(anim_idle)
 	_find_player.call_deferred()
 
@@ -352,6 +362,11 @@ func _physics_process(delta: float) -> void:
 	_taunt_cooldown = maxf(_taunt_cooldown - delta, 0.0)
 	_slam_cooldown = maxf(_slam_cooldown - delta, 0.0)
 	_hold_left = maxf(_hold_left - delta, 0.0)
+	_armor_sound_cooldown = maxf(_armor_sound_cooldown - delta, 0.0)
+	if _boost_left > 0.0:
+		_boost_left -= delta
+		if _boost_left <= 0.0:
+			_speed_multiplier = _base_speed_multiplier
 	_update_voice(delta)
 
 	if _has_live_target():
@@ -474,14 +489,16 @@ func _process_hunt(delta: float) -> void:
 			and distance <= data.explode_trigger_distance:
 		_start_fuse()
 		return
-	if (data.behavior == ZombieData.Behavior.RANGED or data.behavior == ZombieData.Behavior.GUNNER) \
+	if (data.behavior == ZombieData.Behavior.RANGED or data.behavior == ZombieData.Behavior.GUNNER
+			or data.behavior == ZombieData.Behavior.SCREAMER) \
 			and can_see and _ranged_cooldown <= 0.0 \
 			and distance >= data.ranged_min_distance and distance <= data.ranged_max_distance \
 			and _has_line_of_fire():
 		_start_ranged()
 		return
-	# Бандит между очередями не лезет в рукопашную: держит дистанцию и ходит боком
-	if data.behavior == ZombieData.Behavior.GUNNER and can_see and distance > data.ranged_min_distance \
+	# Бандит между очередями (и крикун между криками) не лезет в рукопашную: держит дистанцию и ходит боком
+	if (data.behavior == ZombieData.Behavior.GUNNER or data.behavior == ZombieData.Behavior.SCREAMER) \
+			and can_see and distance > data.ranged_min_distance \
 			and distance <= data.preferred_distance * 1.4:
 		_set_state(State.CHASE)
 		_strafe(player_position, distance, delta)
@@ -801,6 +818,9 @@ func _start_ranged() -> void:
 	if data.behavior == ZombieData.Behavior.GUNNER:
 		_play(data.anim_shoot if _has_anim(data.anim_shoot) else anim_idle, true)
 		return
+	if data.behavior == ZombieData.Behavior.SCREAMER:
+		_play(data.anim_scream if _has_anim(data.anim_scream) else anim_attack, true)
+		return
 	_voice(Sfx.sounds.zombie_attack, 0.0)
 	_play(anim_attack, true)
 
@@ -814,7 +834,10 @@ func _process_ranged(delta: float) -> void:
 	_set_desired_velocity(Vector3.ZERO)
 	if not _special_hit_done and _special_elapsed >= data.ranged_windup:
 		_special_hit_done = true
-		_spit()
+		if data.behavior == ZombieData.Behavior.SCREAMER:
+			_scream()
+		else:
+			_spit()
 	if _special_elapsed >= data.ranged_windup + RANGED_RECOVERY:
 		_ranged_cooldown = data.ranged_cooldown
 		_set_state(State.CHASE)
@@ -830,6 +853,212 @@ func _spit() -> void:
 	projectile.damage = data.projectile_damage * damage_multiplier
 	get_tree().current_scene.add_child(projectile)
 	projectile.launch(from, target, data.projectile_speed)
+
+
+# ---------- Крикун (SCREAMER) ----------
+
+## Крик: зомби в радиусе узнают, где игрок, и бегут быстрее; миссия присылает подмогу
+func _scream() -> void:
+	_voice(Sfx.sounds.zombie_attack, 9.0)
+	_voice(Sfx.sounds.zombie_hurt, 6.0)
+	_spawn_scream_ring()
+	if _player == null:
+		return
+	var target: Vector3 = _player.global_position
+	var radius_squared: float = data.scream_radius * data.scream_radius
+	for other: Zombie in _all:
+		if other == self or not is_instance_valid(other) or other.state == State.DEAD or other.net_puppet:
+			continue
+		if other.global_position.distance_squared_to(global_position) > radius_squared:
+			continue
+		other.notify_target(target)
+		other.boost(data.scream_boost_time, data.scream_boost)
+	if _flat_distance_to(target) <= data.scream_radius:
+		_player.shake(0.25)
+	if data.scream_reinforcements > 0 and not net_puppet:
+		var manager := get_tree().get_first_node_in_group(&"mission_manager") as MissionManager
+		if manager != null:
+			manager.call_reinforcements(data.scream_reinforcements)
+
+
+## Ускорение от крика (не складывается: берётся большее время)
+func boost(seconds: float, factor: float) -> void:
+	if state == State.DEAD or seconds <= 0.0:
+		return
+	_boost_left = maxf(_boost_left, seconds)
+	_speed_multiplier = _base_speed_multiplier * maxf(factor, 1.0)
+
+
+## Волна крика — расходящееся кольцо у ног
+func _spawn_scream_ring() -> void:
+	var ring := MeshInstance3D.new()
+	var torus := TorusMesh.new()
+	torus.inner_radius = 0.9
+	torus.outer_radius = 1.0
+	torus.rings = 24
+	torus.ring_segments = 4
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.albedo_color = Color(0.75, 0.35, 1.0, 0.7)
+	torus.material = material
+	ring.mesh = torus
+	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	get_tree().current_scene.add_child(ring)
+	ring.global_position = global_position + Vector3.UP * (1.4 * _size_factor)
+	var tween := ring.create_tween().set_parallel(true)
+	var final_scale: float = minf(data.scream_radius, 12.0)
+	tween.tween_property(ring, "scale", Vector3(final_scale, 1.0, final_scale), 0.8) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(material, "albedo_color:a", 0.0, 0.8)
+	tween.chain().tween_callback(ring.queue_free)
+
+
+# ---------- Каска и броня ----------
+
+func _setup_armor() -> void:
+	if data.helmet_health > 0.0:
+		_helmet_left = data.helmet_health
+		_build_helmet()
+	if data.front_armor < 1.0:
+		_build_armor_plate()
+	if _helmet_left <= 0.0 and data.front_armor >= 1.0:
+		return
+	for hitbox: Hitbox in _hitboxes:
+		hitbox.damage_filter = _filter_damage.bind(hitbox)
+
+
+## Каска поглощает выстрелы в голову, броня — в тело спереди (искры и звон вместо крови)
+func _filter_damage(amount: float, hit_position: Vector3, is_head: bool, hitbox: Hitbox) -> float:
+	if state == State.DEAD:
+		return amount
+	if is_head and _helmet_left > 0.0:
+		_helmet_left -= amount
+		_ring_metal(hit_position, 1.3)
+		if _helmet_left <= 0.0:
+			_knock_off_helmet(hit_position)
+		# Удар по каске оглушает, но урон проходит малой долей и не как хедшот
+		if hitbox.health != null:
+			hitbox.health.take_damage(amount * data.helmet_pass, hit_position, false)
+		return 0.0
+	if not is_head and data.front_armor < 1.0:
+		var forward: Vector3 = -global_basis.z
+		var to_hit: Vector3 = _flat(hit_position - global_position)
+		if to_hit.length_squared() > 0.0001 and forward.dot(to_hit.normalized()) > 0.35:
+			_ring_metal(hit_position, 0.8)
+			return amount * data.front_armor
+	return amount
+
+
+func _ring_metal(at: Vector3, pitch: float) -> void:
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		impacts.spawn(at, _flat(at - global_position).normalized(), false)
+	if _armor_sound_cooldown <= 0.0:
+		_armor_sound_cooldown = 0.12
+		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), at, 0.0, pitch)
+
+
+## Каска на голове: следует за хитбоксом головы (он сам ходит за костью Head)
+func _build_helmet() -> void:
+	var head := _find_head_shape()
+	if head == null:
+		return
+	var radius: float = 0.27 * _size_factor
+	var sphere := head.shape as SphereShape3D
+	if sphere != null:
+		radius = sphere.radius
+	var material := StandardMaterial3D.new()
+	material.albedo_color = data.helmet_color
+	material.roughness = 0.45
+	material.metallic = 0.4
+	_helmet = Node3D.new()
+	_helmet.name = "Helmet"
+	head.add_child(_helmet)
+	var dome := SphereMesh.new()
+	dome.radius = radius * 1.08
+	dome.height = radius * 1.08
+	dome.is_hemisphere = true
+	dome.material = material
+	var dome_instance := MeshInstance3D.new()
+	dome_instance.mesh = dome
+	dome_instance.position = Vector3(0.0, radius * 0.05, 0.0)
+	_helmet.add_child(dome_instance)
+	var brim := CylinderMesh.new()
+	brim.top_radius = radius * 1.25
+	brim.bottom_radius = radius * 1.25
+	brim.height = radius * 0.08
+	brim.material = material
+	var brim_instance := MeshInstance3D.new()
+	brim_instance.mesh = brim
+	brim_instance.position = Vector3(0.0, radius * 0.05, 0.0)
+	_helmet.add_child(brim_instance)
+
+
+## Каска слетает: летит вверх и назад, кувыркаясь, и исчезает
+func _knock_off_helmet(hit_position: Vector3) -> void:
+	if _helmet == null:
+		return
+	var helmet: Node3D = _helmet
+	_helmet = null
+	var start: Transform3D = helmet.global_transform
+	helmet.top_level = true
+	helmet.global_transform = start
+	var away: Vector3 = _flat(start.origin - hit_position)
+	away = away.normalized() if away.length_squared() > 0.0001 else -global_basis.z
+	var tween := helmet.create_tween().set_parallel(true)
+	tween.tween_property(helmet, "global_position", start.origin + away * 1.6 + Vector3.UP * 0.4, 0.35) \
+		.set_ease(Tween.EASE_OUT)
+	tween.tween_property(helmet, "rotation", helmet.rotation + Vector3(4.0, 0.0, 2.5), 0.7)
+	tween.chain().tween_property(helmet, "global_position:y", global_position.y + 0.1, 0.35) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	tween.chain().tween_interval(2.0)
+	tween.chain().tween_callback(helmet.queue_free)
+	Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), hit_position, 4.0, 1.6)
+
+
+## Нагрудник бугая: пластина спереди тела (видно, куда не стрелять)
+func _build_armor_plate() -> void:
+	if visual == null:
+		return
+	var material := StandardMaterial3D.new()
+	material.albedo_color = data.armor_color
+	material.roughness = 0.5
+	material.metallic = 0.5
+	_armor_plate = Node3D.new()
+	_armor_plate.name = "ArmorPlate"
+	visual.add_child(_armor_plate)
+	var plate := BoxMesh.new()
+	plate.size = Vector3(0.85, 0.75, 0.08) * _size_factor
+	plate.material = material
+	var plate_instance := MeshInstance3D.new()
+	plate_instance.mesh = plate
+	plate_instance.position = Vector3(0.0, 0.95, -0.42) * _size_factor
+	plate_instance.rotation.x = -0.12
+	_armor_plate.add_child(plate_instance)
+	# Заклёпки
+	var rivet := SphereMesh.new()
+	rivet.radius = 0.035 * _size_factor
+	rivet.height = 0.07 * _size_factor
+	rivet.material = material
+	for x: float in [-0.32, 0.32]:
+		for y: float in [0.7, 1.2]:
+			var rivet_instance := MeshInstance3D.new()
+			rivet_instance.mesh = rivet
+			rivet_instance.position = Vector3(x, y, -0.47) * _size_factor
+			_armor_plate.add_child(rivet_instance)
+
+
+func _find_head_shape() -> CollisionShape3D:
+	if _head_shape != null:
+		return _head_shape
+	for hitbox: Hitbox in _hitboxes:
+		if not hitbox.is_head:
+			continue
+		for shape_node: Node in hitbox.get_children():
+			if shape_node is CollisionShape3D:
+				return shape_node as CollisionShape3D
+	return null
 
 
 # ---------- Бандит (GUNNER) ----------
@@ -964,8 +1193,20 @@ func _taunt() -> void:
 
 
 ## Встроенные стволы модели человека: показываем только held_weapon
+## Стволы, встроенные в модели Quaternius Characters_* (у зомби-крикуна прячутся все)
+const BUILT_IN_WEAPONS: PackedStringArray = ["Axe", "Guitar", "Knife", "Pistol", "Rifle", "Shotgun", "SMG",
+	"Spear", "WoodenBat_Barbed", "WoodenBat_Saw"]
+
+
 func _setup_held_weapon() -> void:
-	if not data.human or visual == null:
+	if visual == null:
+		return
+	if not data.human:
+		for node: Node in visual.find_children("*", "MeshInstance3D", true, false):
+			var mesh_instance := node as MeshInstance3D
+			if mesh_instance.skin == null and (String(mesh_instance.name) in BUILT_IN_WEAPONS
+					or String(mesh_instance.get_parent().name) in BUILT_IN_WEAPONS):
+				mesh_instance.visible = false
 		return
 	for node: Node in visual.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
@@ -1297,6 +1538,13 @@ func _on_died() -> void:
 	velocity = Vector3.ZERO
 	_set_far(false)  # анимация смерти — обычным темпом (_physics_process у мёртвых не идёт)
 	_set_flash(false)
+	_speed_multiplier = _base_speed_multiplier
+	# Хитбокс головы у мёртвого не двигается — каска слетает, нагрудник падает вперёд
+	if _helmet != null:
+		_knock_off_helmet(global_position - global_basis.z)
+	if _armor_plate != null:
+		_armor_plate.create_tween().tween_property(_armor_plate, "rotation:x", -1.3, 0.5) \
+			.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 	# Отложенно: смерть случается внутри обработки выстрела
 	set_deferred(&"collision_layer", 0)
 	set_deferred(&"collision_mask", 0)

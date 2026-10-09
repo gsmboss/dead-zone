@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
 [ext_resource type="Resource" path="res://enemies/spitter.tres" id="z_spitter"]
 [ext_resource type="Resource" path="res://enemies/skeleton.tres" id="z_skeleton"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
 
 [resource]
 script = ExtResource("1_mdt")
@@ -25,6 +27,6 @@ runner = ExtResource("z_runner")
 tank = ExtResource("z_ghoul")
 tank_chance = 0.08
 boss = ExtResource("z_boss")
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_exploder"), ExtResource("z_spitter"), ExtResource("z_skeleton")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_exploder"), ExtResource("z_spitter"), ExtResource("z_skeleton"), ExtResource("z7_screamer"), ExtResource("z7_helmet")])
 reward_coins = 700
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

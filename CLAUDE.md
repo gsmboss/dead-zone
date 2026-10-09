@@ -383,3 +383,9 @@ lod_threshold), auto_tier — ступень по железу (detect_tier: п�
 3 раза), LandMine (взвод 1.5 с, Explosion). Набег: GameState.is_raid_ready (раз в 20 ч после первой победы,
 next_raid в сохранении), HubHUD «ОРДА У ВОРОТ!» → start_raid (RAID_KIT в сумку) → missions/data/mission_shelter.tres
 (DEFEND, стоянка, MissionData.location_name), награда ×2 (raid_active, end_raid при победе/выходе/в убежище).
+Новые зомби (этап 7): enemies/helmet.tres (КАСКА: ZombieData.helmet_health — каска поглощает урон в голову,
+helmet_pass проходит не как хедшот, потом слетает), screamer.tres (КРИКУН: Behavior.SCREAMER, Characters_Lis без
+стволов — BUILT_IN_WEAPONS, держит дистанцию, крик по ranged_*: Zombie.boost соседям в scream_radius, кольцо,
+MissionManager.call_reinforcements), brute.tres (БУГАЙ: front_armor 0.35 — урон спереди по телу, нагрудник,
+рывок charge_*, без вздрагивания). Каска/броня — Hitbox.damage_filter (Zombie._filter_damage). Добавлены в specials
+обычных миссий, бесконечного режима, города, набега и глав 6, 7, «Голоса с юга», «Старый мост»; советы в boot.gd.

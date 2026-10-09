@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://dslw3rc6df824" path="res://models/zombies/Characters_Lis.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "КРИКУН"
+behavior = 4
+max_health = 70.0
+move_speed = 2.6
+attack_damage = 6.0
+attack_cooldown = 1.0
+detection_radius = 20.0
+alert_radius = 0.0
+body_color = Color(0.5, 0.3, 0.6, 1)
+model_scene = ExtResource("2_md01")
+model_scale = 1.6
+tint = Color(0.6, 0.25, 0.9, 0.25)
+ranged_min_distance = 4.0
+ranged_max_distance = 20.0
+ranged_cooldown = 10.0
+ranged_windup = 0.9
+preferred_distance = 11.0
+scream_radius = 18.0
+scream_boost = 1.4
+scream_boost_time = 6.0
+scream_reinforcements = 2
+anim_scream = &"Wave"
+uses_attack_queue = false
+voice_pitch = 1.5
+voice_volume_db = 2.0
+score = 30
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

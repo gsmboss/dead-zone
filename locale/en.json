@@ -376,7 +376,6 @@
  "МАТЧ ОКОНЧЕН": "MATCH OVER",
  "МАШИНА": "CAR",
  "МАШИНА «%s»": "CAR \"%s\"",
- "МАШИНА СБИВАЕТ ЗОМБИ — ЖМИ «СЕСТЬ» РЯДОМ С НЕЙ": "CARS RUN OVER ZOMBIES — PRESS \"GET IN\" NEXT TO ONE",
  "МАШИНА СЛОМАНА — ВЫЙДИ И ПОЧИНИ": "CAR BROKEN — GET OUT AND REPAIR",
  "МАШИНА СЛОМАНА — ДЕРЖИ «ЧИНИТЬ»": "CAR BROKEN — HOLD \"REPAIR\"",
  "МАШИНЫ": "CARS",
@@ -798,5 +797,12 @@
  "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби": "Placed with the TRAP button: arms in 1.5 seconds, blows up under zombies",
  "Ставится кнопкой ЛОВУШКА: держит зомби 4 секунды и ранит, срабатывает 3 раза": "Placed with the TRAP button: holds a zombie for 4 seconds and wounds it, works 3 times",
  "Ставится кнопкой ЛОВУШКА: сама стреляет по зомби в 16 м, 120 патронов": "Placed with the TRAP button: shoots zombies within 16 m on its own, 120 rounds",
- "ТУРЕЛЬ": "TURRET"
+ "ТУРЕЛЬ": "TURRET",
+ "БУГАЙ": "BRUTE",
+ "КАСКА": "HELMET",
+ "КАСКУ СБИВАЮТ ДВА ВЫСТРЕЛА В ГОЛОВУ": "TWO HEADSHOTS KNOCK A HELMET OFF",
+ "КРИКУН": "SCREAMER",
+ "КРИКУН ЗОВЁТ ОРДУ — УБЕЙ ЕГО ПЕРВЫМ": "THE SCREAMER CALLS THE HORDE — KILL IT FIRST",
+ "МАШИНА СБИВАЕТ ЗОМБИ — ЖМИ «ЗА РУЛЬ» РЯДОМ С НЕЙ": "CARS RUN ZOMBIES OVER — PRESS «DRIVE» NEXT TO ONE",
+ "У БУГАЯ БРОНЯ СПЕРЕДИ — ЗАЙДИ СБОКУ ИЛИ ЦЕЛЬСЯ В ГОЛОВУ": "THE BRUTE IS ARMORED IN FRONT — FLANK IT OR AIM FOR THE HEAD"
 }

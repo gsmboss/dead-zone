@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://enemies/dog.tres" id="z_dog"]
 [ext_resource type="Resource" path="res://enemies/skeleton.tres" id="z_skeleton"]
 [ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
 
 [resource]
 script = ExtResource("1_mdt")
@@ -23,7 +25,7 @@ walker = ExtResource("z_walker")
 runner = ExtResource("z_skeleton")
 tank = ExtResource("z_ghoul")
 tank_chance = 0.1
-specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_dog"), ExtResource("z_exploder")])
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_dog"), ExtResource("z_exploder"), ExtResource("z7_screamer"), ExtResource("z7_helmet")])
 health_drop_chance = 0.12
 ammo_drop_chance = 0.22
 reward_coins = 800
