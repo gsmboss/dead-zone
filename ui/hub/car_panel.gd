@@ -176,8 +176,8 @@ func _level_marks(level: int) -> String:
 ## Цветные квадраты покраски: заводской — бесплатно, остальные — по цене
 func _build_paint(car: CarData, parent: Control) -> void:
 	var current: int = GameState.get_car_paint_index(car.id)
-	UIKit.label("ПОКРАСКА: %s  (%d МОНЕТ, ЗАВОДСКОЙ — БЕСПЛАТНО)" % [GameState.CAR_PAINT_NAMES[current],
-		GameState.CAR_PAINT_PRICE], 24, parent).modulate = UIKit.ACCENT
+	UIKit.label("ПОКРАСКА: %s  (%s, ЗАВОДСКОЙ — БЕСПЛАТНО)" % [GameState.CAR_PAINT_NAMES[current],
+		UIKit.coins_text(GameState.CAR_PAINT_PRICE)], 24, parent).modulate = UIKit.ACCENT
 	var grid := HFlowContainer.new()
 	grid.add_theme_constant_override(&"h_separation", 10)
 	grid.add_theme_constant_override(&"v_separation", 10)
@@ -199,7 +199,7 @@ func _build_paint(car: CarData, parent: Control) -> void:
 func _build_neon(car: CarData, parent: Control) -> void:
 	var installed: bool = GameState.has_car_neon_installed(car.id)
 	var current: int = GameState.get_car_neon_index(car.id)
-	var caption: String = "НЕОН: ВЫБЕРИ ЦВЕТ" if installed else "НЕОН ПОД ДНИЩЕМ — %d МОНЕТ" % GameState.CAR_NEON_PRICE
+	var caption: String = "НЕОН: ВЫБЕРИ ЦВЕТ" if installed else "НЕОН ПОД ДНИЩЕМ — %s" % UIKit.coins_text(GameState.CAR_NEON_PRICE)
 	UIKit.label(caption, 24, parent).modulate = UIKit.ACCENT
 	var grid := HFlowContainer.new()
 	grid.add_theme_constant_override(&"h_separation", 10)

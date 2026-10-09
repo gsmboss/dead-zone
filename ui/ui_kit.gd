@@ -36,6 +36,24 @@ static func _fix_wrap(target: Label) -> void:
 		target.autowrap_mode = TextServer.AUTOWRAP_OFF
 
 
+## Число со словом в нужном падеже: count(3, "волна", "волны", "волн") → «3 волны»
+static func count(value: int, one: String, few: String, many: String) -> String:
+	var tail: int = absi(value) % 100
+	var last: int = tail % 10
+	var word: String = many
+	if tail < 11 or tail > 14:
+		if last == 1:
+			word = one
+		elif last >= 2 and last <= 4:
+			word = few
+	return "%d %s" % [value, word]
+
+
+## «N МОНЕТ / МОНЕТА / МОНЕТЫ» заглавными
+static func coins_text(value: int) -> String:
+	return count(value, "МОНЕТА", "МОНЕТЫ", "МОНЕТ")
+
+
 static func button(text: String, font_size: int = 26, min_width: float = 0.0) -> Button:
 	var result := Button.new()
 	result.text = text

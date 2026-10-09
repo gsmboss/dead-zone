@@ -37,7 +37,7 @@ func _make_daily_card() -> Control:
 
 	var can_claim: bool = GameState.can_claim_daily()
 	var claim := UIKit.button(
-		"ЗАБРАТЬ %d МОНЕТ" % GameState.get_daily_reward() if can_claim else "ПРИХОДИ ЗАВТРА", 28)
+		"ЗАБРАТЬ %s" % UIKit.coins_text(GameState.get_daily_reward()) if can_claim else "ПРИХОДИ ЗАВТРА", 28)
 	claim.disabled = not can_claim
 	claim.pressed.connect(_on_claim_daily)
 	box.add_child(claim)

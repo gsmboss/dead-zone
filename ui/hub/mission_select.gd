@@ -177,12 +177,12 @@ func _fill_dossier(mission: MissionData) -> void:
 			reward = "%d за волну + за убитых" % mission.coins_per_wave
 		_fact("МОНЕТЫ", reward)
 		if mission.type == MissionData.Type.ENDLESS:
-			_fact("РЕКОРД", "%d волн" % GameState.get_best_score(mission.id))
+			_fact("РЕКОРД", UIKit.count(GameState.get_best_score(mission.id), "волна", "волны", "волн"))
 	else:
 		var coins: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
-		_fact("НАГРАДА", "%d монет + за убитых" % coins)
+		_fact("НАГРАДА", "%s + за убитых" % UIKit.count(coins, "монета", "монеты", "монет"))
 		if GameState.is_mission_completed(mission.id):
-			_fact("РЕКОРД", "%d очков" % GameState.get_best_score(mission.id))
+			_fact("РЕКОРД", UIKit.count(GameState.get_best_score(mission.id), "очко", "очка", "очков"))
 		var stars := StarRating.new()
 		stars.star_radius = 22.0
 		stars.size_flags_horizontal = SIZE_SHRINK_BEGIN

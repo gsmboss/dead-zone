@@ -125,19 +125,19 @@ func get_location_name() -> String:
 func get_goal_text() -> String:
 	match type:
 		Type.WAVES:
-			var text: String = "Отбей %d волн" % wave_count
+			var text: String = "Отбей %s" % UIKit.count(wave_count, "волну", "волны", "волн")
 			if boss != null:
 				text += ", в последней — %s" % boss.display_name
 			return text
 		Type.KILL_COUNT:
-			return "Убей %d зомби" % kill_target
+			return "Убей %s" % UIKit.count(kill_target, "зомби", "зомби", "зомби")
 		Type.SURVIVE:
 			var total: int = maxi(ceili(survive_time), 0)
 			return "Продержись %d:%02d" % [floori(total / 60.0), total % 60]
 		Type.DEFEND:
-			return "Простой на точке %d секунд" % roundi(defend_time)
+			return "Продержись на точке %s" % UIKit.count(roundi(defend_time), "секунду", "секунды", "секунд")
 		Type.COLLECT:
-			return "Собери %d ящиков с припасами" % collect_target
+			return "Собери %s с припасами" % UIKit.count(collect_target, "ящик", "ящика", "ящиков")
 		Type.ENDLESS:
 			return "Держись как можно дольше: волны без конца"
 		Type.FREE_ROAM:

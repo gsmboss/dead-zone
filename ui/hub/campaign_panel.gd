@@ -183,7 +183,7 @@ func _fill_dossier() -> void:
 	if chapter.unlock_car != null:
 		rewards.append("МАШИНА «%s»" % chapter.unlock_car_name)
 	if chapter.mission != null:
-		rewards.append("%d МОНЕТ" % chapter.mission.reward_coins)
+		rewards.append(UIKit.coins_text(chapter.mission.reward_coins))
 	UIKit.label("НАГРАДА: %s" % ", ".join(rewards), 20, _dossier).modulate = UIKit.ACCENT
 
 

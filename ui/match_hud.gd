@@ -200,7 +200,7 @@ func show_results(winner_text: String, won: bool, coins: int) -> void:
 		var line := UIKit.label("%s — %d / %d / %d / %d" % [Net.get_player_name(peer_id), int(entry["score"]),
 			int(entry["zkills"]), int(entry["kills"]), int(entry["deaths"])], 24, box)
 		line.modulate = _match.color_for(peer_id)
-	var reward := UIKit.label("+%d МОНЕТ" % coins, 30, box)
+	var reward := UIKit.label("+" + UIKit.coins_text(coins), 30, box)
 	reward.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	reward.modulate = UIKit.ACCENT
 	var back := UIKit.button("В ЛОББИ", 30, 380.0)

@@ -359,7 +359,7 @@ func _bank_drift() -> void:
 	var points: int = roundi(_drift_points)
 	_drift_points = 0.0
 	var coins: int = 0 if Net.in_match else mini(floori(points / DRIFT_COINS_DIVISOR), DRIFT_COINS_MAX)
-	_drift_label.text = "ДРИФТ  %d  +%d МОНЕТ" % [points, coins] if coins > 0 else "ДРИФТ  %d" % points
+	_drift_label.text = "ДРИФТ  %d  +%s" % [points, UIKit.coins_text(coins)] if coins > 0 else "ДРИФТ  %d" % points
 	_drift_label.modulate = UIKit.GOOD
 	_drift_label.visible = true
 	if coins > 0:

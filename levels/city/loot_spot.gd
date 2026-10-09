@@ -53,7 +53,7 @@ func _loot() -> void:
 	var found := PackedStringArray()
 	var coins: int = _rng.randi_range(20, 60)
 	GameState.add_coins(coins)
-	found.append("%d МОНЕТ" % coins)
+	found.append(UIKit.coins_text(coins))
 	var scrap: int = _rng.randi_range(1, 4)
 	if GameState.add_item(GameState.SCRAP_ID, scrap):
 		found.append("ЛОМ ×%d" % scrap)
