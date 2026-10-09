@@ -9,8 +9,7 @@ var _coins_label: Label
 var _menu_bar: HBoxContainer
 var _exit_panel: Control
 var _daily_button: Button
-var _settings_button: Button
-var _base_button: Button
+var _menu: HubMenu
 var _interact_button: Button
 var _current: Interactable
 var _window: HubWindow
@@ -36,6 +35,9 @@ func _process(_delta: float) -> void:
 
 ## «Назад» в убежище: закрыть окно, иначе спросить про выход
 func _on_back() -> void:
+	if _menu != null:
+		_menu.close_menu()
+		return
 	if _exit_panel != null:
 		_exit_panel.queue_free()
 		_exit_panel = null
@@ -121,16 +123,14 @@ func _build_ui() -> void:
 	_menu_bar.offset_top = _menu_top()
 	_menu_bar.offset_bottom = _menu_top() + UIKit.BUTTON_HEIGHT
 
-	var story := _add_menu_button("СЮЖЕТ", func() -> void: _open_window(CampaignPanel.new()))
+	# Сверху — только главное: меню (все разделы плитками), сюжет и ежедневные награды
+	var menu := _add_menu_button("☰  МЕНЮ", open_menu)
+	menu.add_theme_font_size_override(&"font_size", 24)
+	menu.custom_minimum_size.x = 180.0
+	menu.modulate = UIKit.ACCENT
+	var story := _add_menu_button("СЮЖЕТ", _choose.bind(&"story"))
 	story.modulate = Color(1.0, 0.75, 0.45)
-	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", func() -> void: _open_window(DailyPanel.new()))
-	_settings_button = _add_menu_button("НАСТРОЙКИ", func() -> void: _open_window(SettingsPanel.new()))
-	_base_button = _add_menu_button("БАЗА", func() -> void: _open_window(BasePanel.new()))
-	_add_menu_button("ПЕРСОНАЖ", func() -> void: _open_window(SkinPanel.new()))
-	var cars := _add_menu_button("МАШИНЫ", func() -> void: _open_window(CarPanel.new()))
-	cars.modulate = Color(0.8, 1.0, 0.8)
-	var online := _add_menu_button("ПО СЕТИ", func() -> void: _open_window(LobbyPanel.new()))
-	online.modulate = Color(0.75, 0.95, 1.0)
+	_daily_button = _add_menu_button("ЕЖЕДНЕВНО", _choose.bind(&"daily"))
 
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -195,6 +195,57 @@ func _on_story_closed() -> void:
 		_set_player_controls(true)
 
 
+## Меню-сетка всех разделов (HubMenu)
+func open_menu() -> void:
+	if _menu != null or _window != null or _exit_panel != null:
+		return
+	_menu = HubMenu.new()
+	_menu.chosen.connect(_on_menu_chosen)
+	_menu.closed.connect(_on_menu_closed)
+	add_child(_menu)
+	_set_player_controls(false)
+	Ads.hide_banner()  # баннер сверху не закрывает заголовок меню
+
+
+func _on_menu_closed() -> void:
+	_menu = null
+	_set_player_controls(true)
+	Ads.show_banner()
+
+
+func _on_menu_chosen(id: StringName) -> void:
+	_menu = null
+	_set_player_controls(true)
+	_choose(id)
+
+
+## Открыть раздел убежища по id (плитка меню или кнопка сверху)
+func _choose(id: StringName) -> void:
+	match id:
+		&"story":
+			_open_window(CampaignPanel.new())
+		&"missions":
+			var select := MissionSelect.new()
+			select.missions = missions
+			_open_window(select)
+		&"shop":
+			_open_window(ShopPanel.new())
+		&"character":
+			_open_window(SkinPanel.new())
+		&"cars":
+			_open_window(CarPanel.new())
+		&"base":
+			_open_window(BasePanel.new())
+		&"daily":
+			_open_window(DailyPanel.new())
+		&"online":
+			_open_window(LobbyPanel.new())
+		&"settings":
+			_open_window(SettingsPanel.new())
+		&"tutorial":
+			GameState.start_tutorial()
+
+
 ## Кнопка в верхней строке меню убежища
 func _add_menu_button(text: String, callback: Callable) -> Button:
 	var button := UIKit.button(text, 19)
@@ -255,16 +306,11 @@ func _on_player_exited(interactable: Interactable) -> void:
 
 
 func _interact() -> void:
-	if _current == null or _window != null:
+	if _current == null or _window != null or _menu != null:
 		return
 	match _current.action_id:
-		&"missions":
-			# Карта заражения в 3D вместо списка
-			var select := MissionSelect.new()
-			select.missions = missions
-			_open_window(select)
-		&"shop":
-			_open_window(ShopPanel.new())
+		&"missions", &"shop":
+			_choose(_current.action_id)
 		_:
 			_current.interact()
 

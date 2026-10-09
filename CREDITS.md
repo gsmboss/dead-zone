@@ -47,7 +47,9 @@
 - game-icons.net — Lorc, Delapouite и другие авторы, лицензия CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),
   https://game-icons.net (взяты из npm-пакета @iconify-json/game-icons, перекрашены в белый):
   bullets, eye-target, jump-across, machine-gun-magazine, switch-weapon, foot-trip, flash-grenade, fire-bottle,
-  pause-button, video-camera, torch, knapsack, car-key, car-seat, exit-door, car-wheel
+  pause-button, video-camera, torch, knapsack, car-key, car-seat, exit-door, car-wheel, monkey-wrench
+- меню убежища (ui/hub/icons/), оттуда же: open-book, crossed-swords, ak47, cowled, city-car, castle,
+  open-treasure-chest, wifi-router, cog, graduate-cap
 
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music
