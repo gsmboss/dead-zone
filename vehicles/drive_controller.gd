@@ -87,7 +87,7 @@ func _setup() -> void:
 	if _touch_controls != null:
 		_button = TouchActionButton.new()
 		_button.action = &"interact"
-		_button.label = "СЕСТЬ"
+		_button.label = "ЗА РУЛЬ"
 		_button.base_color = Color(0.2, 0.55, 0.35)
 		_button.use_action_color = false
 		_button.name = "DriveButton"
@@ -193,7 +193,7 @@ func _update_button() -> void:
 	if _button == null:
 		return
 	var should_show: bool = _car != null or _nearby != null
-	var caption: String = "СЕСТЬ"
+	var caption: String = "ЗА РУЛЬ"
 	if _car != null:
 		caption = "ВЫЙТИ"
 	elif _nearby != null and _nearby.has_driver():
@@ -202,7 +202,7 @@ func _update_button() -> void:
 		_button.visible = should_show
 		_button.label = caption
 		# Значок: ключ — сесть за руль, сиденье — пассажиром, дверь — выйти
-		_button.set_icon_name({"СЕСТЬ": "car-key", "ПАССАЖИР": "car-seat"}.get(caption, "exit-door"))
+		_button.set_icon_name({"ЗА РУЛЬ": "car-key", "ПАССАЖИР": "car-seat"}.get(caption, "exit-door"))
 
 
 ## Сесть: в одиночной игре — сразу за руль, по сети — попросить место у хоста

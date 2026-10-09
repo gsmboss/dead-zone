@@ -304,6 +304,13 @@ test_level) → MissionManager.spawning_enabled = false, без интро; miss
 Меню убежища (этап 2): сверху «☰ МЕНЮ», «СЮЖЕТ», «ЕЖЕДНЕВНО» (!) и монеты; МЕНЮ — ui/hub/hub_menu.gd (HubMenu: сетка 5×2
 плиток — значок ui/hub/icons/*.svg, название, состояние; chosen(id) → HubHUD._choose(id) открывает окно; терминалы МИССИИ
 и ОРУЖЕЙНАЯ тоже через _choose). HubHUD._open_dialog — окно-вопрос по центру (CenterContainer).
+Английский (этап 3): ключи перевода — сами русские строки; перевод locale/en.json → tools/l10n/build_po.py → locale/en.po
+(project.godot internationalization/locale/translations). Label/Button/Label3D переводятся сами; текст, склеенный с
+числами (% или +) или нарисованный draw_string, — через UIKit.t("…") (статический TranslationServer.translate),
+данные в таких строках тоже (UIKit.t(mission.title)). UIKit.count по-английски: 1 → перевод one, иначе — many.
+Settings.language (АВТО/РУССКИЙ/ENGLISH, get_language_code, is_english) → TranslationServer.set_locale; в убежище смена языка
+перезагружает сцену; VoiceOver берёт язык из Settings. Новые строки: python3 tools/l10n/extract_keys.py — список
+непереведённых, добавить в locale/en.json и пересобрать en.po. Кнопка машины — «ЗА РУЛЬ» (СЕСТЬ — диван).
 План улучшений по этапам: 1 обучение, 2 меню убежища, 3 английский, 4 производительность и баланс, 5 напарник,
 6 оборона убежища/ловушки/турели, 7 новые зомби, 8 обвесы оружия, 9 машины (бронелисты, мотоцикл, заезды),
 10 достижения/облако/события, 11 релиз, 12 онлайн (сервер).
