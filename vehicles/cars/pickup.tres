@@ -8,6 +8,7 @@ script = ExtResource("1_car")
 id = "pickup"
 title = "РЖАВЫЙ ПИКАП"
 car_class = 0
+durability = 260.0
 description = "Старый, но заводится с пол-оборота. Мягкий зад — легко пустить в занос."
 price = 0
 model_scene = ExtResource("2_model")

@@ -8,6 +8,7 @@ script = ExtResource("1_car")
 id = "truck_armored"
 title = "БРОНЕГРУЗОВИК"
 car_class = 2
+durability = 700.0
 description = "Крепость на колёсах: таран, перед которым не устоит даже толстяк."
 price = 4500
 model_scene = ExtResource("2_model")

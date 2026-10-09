@@ -538,16 +538,23 @@ func _spawn_drivable_cars() -> void:
 func _spawn_match_cars() -> void:
 	var yards: Array[Vector3] = _courtyards.duplicate()
 	yards.sort_custom(func(a: Vector3, b: Vector3) -> bool: return a.length() < b.length())
+	if yards.is_empty():
+		yards.append(Vector3.ZERO)
 	var peers: Array = Net.players.keys()
 	peers.sort()
-	for i in mini(peers.size(), yards.size()):
+	# Здесь — запасные места; MatchManager потом ставит каждую машину рядом с её игроком
+	for i in peers.size():
 		var peer_id: int = int(peers[i])
 		var info: String = str((Net.players[peer_id] as Dictionary).get("car", ""))
 		var car: DrivableCar = DrivableCar.create_from_net_info(info)
+		if car == null and not config.drivable_cars.is_empty():
+			# Нет данных о машине игрока — обычный пикап, чтобы у каждого была своя
+			car = DrivableCar.new()
+			car.model_scene = config.drivable_cars[0]
 		if car == null:
 			continue
 		car.name = "PlayerCar_%d" % peer_id
-		car.position = yards[i] + Vector3(0.0, 0.3, 4.5)
+		car.position = yards[i % yards.size()] + Vector3(floorf(float(i) / yards.size()) * 3.0, 0.3, 4.5)
 		car.rotation.y = PI * 0.5
 		add_child(car)
 

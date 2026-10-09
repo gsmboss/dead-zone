@@ -29,6 +29,8 @@ const CLASS_COLORS: Array[Color] = [Color(0.7, 0.72, 0.75), Color(0.45, 0.85, 0.
 @export var drift_grip: float = 2.0
 ## Урон сбитому зомби = скорость (м/с) × множитель
 @export var run_over_damage_factor: float = 14.0
+## Прочность кузова: столько урона от зомби выдержит до поломки
+@export var durability: float = 300.0
 
 @export_group("Tuning")
 ## Цена первого уровня тюнинга; дальше растёт в GameState.CAR_TUNING_GROWTH раз за уровень

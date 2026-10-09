@@ -11,6 +11,10 @@ extends CharacterBody3D
 signal driver_changed(driving: bool)
 ## По сети сменились водитель или пассажиры
 signal seats_changed
+## Прочность кузова изменилась (зомби бьют машину, ремонт)
+signal health_changed(current: float, maximum: float)
+## Сломалась (прочность 0: мотор заглох) или починили
+signal broken_changed(is_broken: bool)
 
 const GROUP: StringName = &"drivable_cars"
 ## Водитель и три пассажира
@@ -63,6 +67,12 @@ const SLIDE_SCRUB: float = 0.25
 const NET_INTERVAL: float = 0.05
 const NET_STATE_SIZE: int = 8
 const NET_SNAP_DISTANCE: float = 8.0
+## Поломка: ниже этой доли прочности мотор слабеет (до DAMAGED_POWER_MIN), дымит; ниже HEAVY — чёрный дым
+const DAMAGED_POWER_AT: float = 0.5
+const DAMAGED_POWER_MIN: float = 0.45
+const SMOKE_AT: float = 0.6
+const HEAVY_SMOKE_AT: float = 0.3
+const HIT_SOUND_INTERVAL: float = 0.15
 
 @export var model_scene: PackedScene
 @export var model_rotation_y_degrees: float = 180.0
@@ -86,6 +96,10 @@ const NET_SNAP_DISTANCE: float = 8.0
 @export var grip: float = 8.0
 ## Сцепление на ручнике (меньше — длиннее занос)
 @export var drift_grip: float = 2.0
+
+@export_group("Durability")
+## Прочность кузова: зомби бьют машину, на нуле мотор глохнет — нужен ремонт
+@export var max_health: float = 300.0
 
 @export_group("Run Over")
 ## Ниже этой скорости зомби не получают урон
@@ -147,6 +161,12 @@ var _net_yaw: float = 0.0
 var _net_has_state: bool = false
 var _net_flags: int = 0
 
+var health: float = 300.0
+var _damage_smoke: CPUParticles3D
+var _damage_fade: Gradient
+var _fire_light: OmniLight3D
+var _hit_sound_left: float = 0.0
+
 
 ## Машина автосалона с тюнингом, покраской и неоном
 static func create(data: CarData, car_tuning: Dictionary = {}, paint_color: Color = Color.WHITE,
@@ -203,6 +223,8 @@ func _ready() -> void:
 	_build_neon()
 	_apply_garage()
 	_apply_tuning()
+	_build_damage_smoke()
+	health = max_health
 	_safe_position = global_position
 	_net_position = global_position
 	_net_yaw = rotation.y
@@ -317,14 +339,16 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = minf(velocity.y, 0.0)
 
-	var throttle: float = _throttle if _driven else 0.0
+	# Сломанная не едет; побитая — слабее
+	var throttle: float = _throttle if _driven and not is_broken() else 0.0
+	var power: float = get_power_factor()
 	var handbrake: bool = _driven and _handbrake
 	if throttle > 0.0:
 		var rate: float = brake_power if speed < 0.0 else acceleration
-		speed = move_toward(speed, max_speed, rate * throttle * delta)
+		speed = move_toward(speed, max_speed * power, rate * power * throttle * delta)
 	elif throttle < 0.0:
 		var rate_back: float = brake_power if speed > 0.0 else acceleration * 0.6
-		speed = move_toward(speed, -max_reverse_speed, rate_back * -throttle * delta)
+		speed = move_toward(speed, -max_reverse_speed * power, rate_back * power * -throttle * delta)
 	else:
 		speed = move_toward(speed, 0.0, drag * delta)
 	if handbrake:
@@ -369,6 +393,9 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	_update_lights()
 	_update_smoke()
+	_hit_sound_left = maxf(_hit_sound_left - delta, 0.0)
+	if _fire_light != null and _fire_light.visible:
+		_fire_light.light_energy = 1.6 + sin(_time * 23.0) * 0.4 + sin(_time * 7.0) * 0.3
 	if camera == null or not _inside:
 		return
 	var target: Vector3 = _camera_target()
@@ -437,11 +464,183 @@ func _snap_camera() -> void:
 	camera.look_at(global_position + Vector3.UP * 1.2, Vector3.UP)
 
 
+# ---------- Прочность и поломка ----------
+
+func is_broken() -> bool:
+	return health <= 0.0
+
+
+func is_damaged() -> bool:
+	return health < max_health - 0.5
+
+
+func get_health_ratio() -> float:
+	return clampf(health / maxf(max_health, 1.0), 0.0, 1.0)
+
+
+## Сила мотора: целая — 1, ниже половины прочности падает до DAMAGED_POWER_MIN
+func get_power_factor() -> float:
+	var ratio: float = get_health_ratio()
+	if ratio >= DAMAGED_POWER_AT:
+		return 1.0
+	return lerpf(DAMAGED_POWER_MIN, 1.0, ratio / DAMAGED_POWER_AT)
+
+
+## Удар по машине (зомби). По сети урон считает хост и рассылает прочность
+func take_damage(amount: float, from: Vector3) -> void:
+	if amount <= 0.0 or is_broken():
+		return
+	if Net.in_match and not Net.is_host():
+		return
+	_set_health(health - amount)
+	_hit_effect(from)
+	if Net.in_match:
+		Net.send_car_health(self)
+
+
+## Машина, в которой сидит игрок (свой — по _inside, по сети — по местам), иначе null
+static func find_car_with(player: Player) -> DrivableCar:
+	if player == null or not player.is_inside_tree():
+		return null
+	var peer: int = 0
+	if Net.in_match:
+		peer = player.peer_id if player.is_remote else Net.my_id()
+		if peer == 0:
+			return null
+	for node: Node in player.get_tree().get_nodes_in_group(GROUP):
+		var car := node as DrivableCar
+		if car == null:
+			continue
+		if Net.in_match:
+			if car.seats.has(peer):
+				return car
+		elif car._inside:
+			return car
+	return null
+
+
+## Переставить машину (начало матча): без рывка копии и без «возврата» на старое место
+func teleport(at: Vector3, yaw: float) -> void:
+	global_position = at + Vector3.UP * 0.3
+	rotation.y = yaw
+	velocity = Vector3.ZERO
+	speed = 0.0
+	lateral = 0.0
+	_safe_position = global_position
+	_net_position = global_position
+	_net_yaw = yaw
+
+
+## Расстояние по земле от точки до кузова (0 — касается)
+func distance_to_body(point: Vector3) -> float:
+	var local: Vector3 = global_transform.affine_inverse() * point - _box_center
+	var outside := Vector2(maxf(absf(local.x) - _box_size.x * 0.5, 0.0), maxf(absf(local.z) - _box_size.z * 0.5, 0.0))
+	return outside.length()
+
+
+## Полный ремонт (одиночная игра или хост; клиент просит хоста через Net.request_car_repair)
+func repair() -> void:
+	_set_health(max_health)
+	if Net.in_match and Net.is_host():
+		Net.send_car_health(self)
+
+
+## Прочность от хоста — долей (у игроков разный гараж, значит и разная полная прочность)
+func net_set_health(ratio: float) -> void:
+	var before: float = health
+	var value: float = clampf(ratio, 0.0, 1.0) * max_health
+	_set_health(value)
+	if value < before - 0.5:
+		_hit_effect(global_position + Vector3.UP * _box_size.y)
+
+
+func _set_health(value: float) -> void:
+	var was_broken: bool = is_broken()
+	health = clampf(value, 0.0, max_health)
+	health_changed.emit(health, max_health)
+	_update_damage_fx()
+	if was_broken != is_broken():
+		if is_broken():
+			speed = 0.0
+			lateral = 0.0
+			Sfx.play_3d(Sfx.pick(Sfx.sounds.explosions), global_position, -10.0, 1.6)
+		broken_changed.emit(is_broken())
+
+
+## Искры и звон металла в месте удара
+func _hit_effect(from: Vector3) -> void:
+	var at: Vector3 = global_position + _box_center
+	var toward: Vector3 = from - at
+	toward.y = 0.0
+	var point: Vector3 = at + toward.limit_length(_box_size.x * 0.5) + Vector3.UP * 0.3
+	var impacts := get_node_or_null(^"/root/Impacts") as ImpactPool
+	if impacts != null:
+		impacts.spawn(point, toward.normalized() if toward.length_squared() > 0.01 else Vector3.UP, false)
+	if _hit_sound_left <= 0.0:
+		_hit_sound_left = HIT_SOUND_INTERVAL
+		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), point, -2.0, randf_range(0.8, 1.1))
+
+
+## Дым из-под капота: серый → чёрный → огонь (сломана)
+func _update_damage_fx() -> void:
+	if _damage_smoke == null:
+		return
+	var ratio: float = get_health_ratio()
+	_damage_smoke.emitting = ratio < SMOKE_AT
+	var dark: float = 1.0 - smoothstep(HEAVY_SMOKE_AT * 0.5, SMOKE_AT, ratio)
+	var tone: float = lerpf(0.75, 0.08, dark)
+	_damage_fade.set_color(0, Color(tone, tone, tone, lerpf(0.35, 0.75, dark)))
+	_damage_fade.set_color(1, Color(tone * 0.8, tone * 0.8, tone * 0.8, 0.0))
+	_damage_smoke.amount = 16 if ratio < HEAVY_SMOKE_AT else 8
+	if _fire_light != null:
+		_fire_light.visible = is_broken()
+
+
+func _build_damage_smoke() -> void:
+	var material := StandardMaterial3D.new()
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	material.vertex_color_use_as_albedo = true
+	var quad := QuadMesh.new()
+	quad.size = Vector2(1.0, 1.0)
+	quad.material = material
+	_damage_fade = Gradient.new()
+	_damage_fade.set_color(0, Color(0.75, 0.75, 0.75, 0.35))
+	_damage_fade.set_color(1, Color(0.6, 0.6, 0.6, 0.0))
+	# Капот — перёд машины (-Z)
+	var hood := Vector3(0.0, _box_center.y + _box_size.y * 0.35, _box_center.z - _box_size.z * 0.32)
+	_damage_smoke = CPUParticles3D.new()
+	_damage_smoke.name = "DamageSmoke"
+	_damage_smoke.mesh = quad
+	_damage_smoke.emitting = false
+	_damage_smoke.amount = 8
+	_damage_smoke.lifetime = 1.6
+	_damage_smoke.local_coords = false
+	_damage_smoke.direction = Vector3.UP
+	_damage_smoke.spread = 20.0
+	_damage_smoke.initial_velocity_min = 0.8
+	_damage_smoke.initial_velocity_max = 1.6
+	_damage_smoke.gravity = Vector3(0.0, 0.8, 0.0)
+	_damage_smoke.scale_amount_min = 0.5
+	_damage_smoke.scale_amount_max = 1.8
+	_damage_smoke.color_ramp = _damage_fade
+	_damage_smoke.position = hood
+	add_child(_damage_smoke)
+	_fire_light = OmniLight3D.new()
+	_fire_light.light_color = Color(1.0, 0.45, 0.15)
+	_fire_light.omni_range = 5.0
+	_fire_light.shadow_enabled = false
+	_fire_light.position = hood + Vector3.UP * 0.4
+	_fire_light.visible = false
+	add_child(_fire_light)
+
+
 # ---------- Свет и дым ----------
 
 ## Фары горят, пока в машине кто-то есть: днём слабо, ночью ярко освещают улицу
 func _update_lights() -> void:
-	var occupied: bool = _inside or (Net.in_match and seats[0] != 0)
+	var occupied: bool = (_inside or (Net.in_match and seats[0] != 0)) and not is_broken()
 	var night: float = DayNightCycle.night_amount
 	if occupied != _lights_on:
 		_lights_on = occupied
@@ -558,6 +757,7 @@ func _apply_car_data() -> void:
 	grip = car_data.grip
 	drift_grip = car_data.drift_grip
 	run_over_damage_factor = car_data.run_over_damage_factor
+	max_health = car_data.durability
 
 
 func _build_model() -> void:
@@ -660,6 +860,8 @@ func _apply_garage() -> void:
 	acceleration *= 1.0 + ENGINE_PER_LEVEL * engine
 	run_over_damage_factor *= 1.0 + RAM_PER_LEVEL * ram
 	_hit_slowdown = minf(HIT_SLOWDOWN + 0.015 * ram, 0.98)
+	# Гараж с тараном укрепляет и кузов
+	max_health *= 1.0 + 0.1 * ram
 
 
 ## Тюнинг автосалона этой машины

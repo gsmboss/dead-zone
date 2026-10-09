@@ -8,6 +8,7 @@ script = ExtResource("1_car")
 id = "sports"
 title = "СПОРТКАР"
 car_class = 2
+durability = 220.0
 description = "Лёгкий и очень быстрый. Король дрифта, но бьёт слабо."
 price = 3500
 model_scene = ExtResource("2_model")

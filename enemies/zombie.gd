@@ -27,6 +27,8 @@ const VISIBLE_GRACE: float = 0.5
 const KNOWN_SIGHT_MULTIPLIER: float = 1.5
 const ATTACK_RECOVERY: float = 0.35
 const ATTACK_HIT_TOLERANCE: float = 1.25
+## Игрок в машине: зомби бьют машину (раз в столько секунд проверяем, в машине ли он)
+const CAR_CHECK_INTERVAL: float = 0.5
 const FLANK_RADIUS: float = 2.0
 ## Ближе этого — идёт прямо на игрока, без обхода с фланга
 const FLANK_MIN_DISTANCE: float = 4.0
@@ -161,6 +163,9 @@ var state: State = State.WANDER
 var _agent: NavigationAgent3D
 var _player: Player
 var _player_health: Health
+## Машина, в которой сидит цель (бьём её, а не игрока)
+var _target_car: DrivableCar
+var _car_check_left: float = 0.0
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _rng := RandomNumberGenerator.new()
 
@@ -420,6 +425,9 @@ func _has_line_of_sight() -> bool:
 	var to: Vector3 = _player.global_position + Vector3(0.0, PLAYER_HEAD_HEIGHT, 0.0)
 	var query := PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.WORLD)
 	query.exclude = [get_rid()]
+	# Игрок в машине: кузов не загораживает его
+	if _target_car != null and is_instance_valid(_target_car):
+		query.exclude = [get_rid(), _target_car.get_rid()]
 	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 
@@ -439,6 +447,13 @@ func _alert_others() -> void:
 func _process_hunt(delta: float) -> void:
 	var player_position: Vector3 = _player.global_position
 	var distance: float = _flat_distance_to(player_position)
+	_car_check_left -= delta
+	if _car_check_left <= 0.0:
+		_car_check_left = CAR_CHECK_INTERVAL
+		_target_car = DrivableCar.find_car_with(_player)
+	if _target_car != null and is_instance_valid(_target_car):
+		# Игрок в машине: «дистанция» — до кузова, иначе спереди и сзади зомби не дотянуться
+		distance = _target_car.distance_to_body(global_position)
 	var can_see: bool = _time_since_seen <= VISIBLE_GRACE
 
 	_ai_time += delta
@@ -651,8 +666,17 @@ func _process_attack(delta: float) -> void:
 
 	if not _attack_hit_done and _attack_elapsed >= data.attack_windup:
 		_attack_hit_done = true
+		var car: DrivableCar = DrivableCar.find_car_with(_player)
+		if car != null and not car.is_broken():
+			# Игрок в машине — достаётся кузову (сломанная уже не защищает)
+			if car.distance_to_body(global_position) <= data.attack_range * ATTACK_HIT_TOLERANCE:
+				car.take_damage(data.attack_damage * damage_multiplier, global_position)
+		elif car != null:
+			if car.distance_to_body(global_position) <= data.attack_range * ATTACK_HIT_TOLERANCE:
+				_player_health.take_damage_from(data.attack_damage * damage_multiplier, global_position, false,
+				Health.Kind.MELEE, "", self)
 		# Игрок успел отбежать — промах
-		if to_player.length() <= data.attack_range * ATTACK_HIT_TOLERANCE:
+		elif to_player.length() <= data.attack_range * ATTACK_HIT_TOLERANCE:
 			_player_health.take_damage_from(data.attack_damage * damage_multiplier, global_position, false,
 			Health.Kind.MELEE, "", self)
 

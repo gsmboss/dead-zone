@@ -27,6 +27,7 @@ const ACTION_ICONS: Dictionary = {
 	&"torch": "torch",
 	&"inventory": "knapsack",
 	&"interact": "car-key",
+	&"repair": "monkey-wrench",
 }
 ## Доля диаметра кнопки под значок
 const ICON_SHARE: float = 0.58

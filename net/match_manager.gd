@@ -85,6 +85,7 @@ func _ready() -> void:
 	if ResourceLoader.exists(ZOMBIE_TYPES_MISSION):
 		_types = load(ZOMBIE_TYPES_MISSION) as MissionData
 	_collect_spawn_points()
+	_place_player_cars()
 	for peer_id: int in Net.players:
 		_scores[peer_id] = {"score": 0, "kills": 0, "zkills": 0, "deaths": 0, "alive": true, "survived": 0.0}
 	_player.input_enabled = false
@@ -636,6 +637,54 @@ func _collect_spawn_points() -> void:
 	_spawn_points.sort_custom(func(a: Vector3, b: Vector3) -> bool: return a.x < b.x or (a.x == b.x and a.z < b.z))
 	if _spawn_points.is_empty():
 		_spawn_points.append(_start_position)
+
+
+## Город: машина каждого игрока (PlayerCar_<id>) — рядом с его точкой появления.
+## Порядок и проверки одинаковы у всех, поэтому машины стоят в одних и тех же местах
+func _place_player_cars() -> void:
+	var ids: Array = Net.players.keys()
+	ids.sort()
+	for peer: Variant in ids:
+		var peer_id: int = int(peer)
+		var car: DrivableCar = null
+		for node: Node in get_tree().get_nodes_in_group(DrivableCar.GROUP):
+			if node.name == "PlayerCar_%d" % peer_id:
+				car = node as DrivableCar
+				break
+		if car == null:
+			continue
+		var spawn: Vector3 = _spawn_for(peer_id, true)
+		var spot: Vector3 = _car_spot(spawn, car)
+		if spot != Vector3.INF:
+			car.teleport(spot, car.rotation.y)
+
+
+## Свободное место под машину в 5–8 м от точки (на земле, без стен и других машин); нет — INF
+func _car_spot(around: Vector3, car: DrivableCar) -> Vector3:
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var box := BoxShape3D.new()
+	box.size = Vector3(2.6, 1.4, 5.2)
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = box
+	query.collision_mask = PhysicsLayers.WORLD
+	query.exclude = [car.get_rid()]
+	var basis := Basis(Vector3.UP, car.rotation.y)
+	for radius: float in [5.0, 8.0]:
+		for i in 8:
+			var angle: float = TAU * float(i) / 8.0
+			var candidate: Vector3 = around + Vector3(cos(angle), 0.0, sin(angle)) * radius
+			candidate.y = around.y
+			query.transform = Transform3D(basis, candidate + Vector3.UP * 1.0)
+			if not space.intersect_shape(query, 1).is_empty():
+				continue
+			# Под машиной должна быть земля
+			var ray := PhysicsRayQueryParameters3D.create(candidate + Vector3.UP * 1.5, candidate + Vector3.DOWN * 2.0,
+				PhysicsLayers.WORLD)
+			ray.exclude = [car.get_rid()]
+			var hit: Dictionary = space.intersect_ray(ray)
+			if not hit.is_empty():
+				return hit["position"]
+	return Vector3.INF
 
 
 ## first = начало матча (у всех одинаково), иначе — возрождение подальше от врагов

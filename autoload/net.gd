@@ -29,7 +29,7 @@ const PORT: int = 24680
 const DISCOVERY_PORT: int = 24681
 const MAX_PLAYERS: int = 4
 ## Версия протокола: разные версии игры не соединяются
-const PROTOCOL: int = 4
+const PROTOCOL: int = 5
 const DISCOVERY_TAG: String = "DEADZONE"
 const ANNOUNCE_INTERVAL: float = 1.0
 ## Игра пропадает из списка, если о ней не слышно столько секунд
@@ -660,3 +660,35 @@ func rpc_car_state(car_path: NodePath, state: PackedFloat32Array) -> void:
 	var car := get_tree().root.get_node_or_null(car_path) as DrivableCar
 	if car != null:
 		car.net_apply_state(multiplayer.get_remote_sender_id(), state)
+
+
+## Хост: прочность машины изменилась (зомби бьют её только у хоста) — всем
+func send_car_health(car: DrivableCar) -> void:
+	if is_host() and car != null and is_instance_valid(car):
+		rpc_car_health.rpc(car.get_path(), car.get_health_ratio())
+
+
+@rpc("authority", "call_remote", "reliable")
+func rpc_car_health(car_path: NodePath, ratio: float) -> void:
+	var car := get_tree().root.get_node_or_null(car_path) as DrivableCar
+	if car != null:
+		car.net_set_health(ratio)
+
+
+## Починить машину: хост чинит сам, клиент просит хоста
+func request_car_repair(car: DrivableCar) -> void:
+	if car == null or not is_instance_valid(car):
+		return
+	if is_host():
+		car.repair()
+	else:
+		rpc_car_repair.rpc_id(1, car.get_path())
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func rpc_car_repair(car_path: NodePath) -> void:
+	if not is_host():
+		return
+	var car := get_tree().root.get_node_or_null(car_path) as DrivableCar
+	if car != null:
+		car.repair()

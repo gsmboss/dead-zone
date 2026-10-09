@@ -8,6 +8,7 @@ script = ExtResource("1_car")
 id = "sports_armored"
 title = "БРОНЕСПОРТ"
 car_class = 3
+durability = 480.0
 description = "Лучшее, что осталось в городе: скорость спорткара и бронированный бампер."
 price = 8000
 model_scene = ExtResource("2_model")

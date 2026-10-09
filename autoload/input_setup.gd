@@ -20,6 +20,7 @@ const ACTIONS: Dictionary = {
 	&"pause": [KEY_ESCAPE, KEY_P],
 	&"camera_view": [KEY_V],
 	&"torch": [KEY_T],
+	&"repair": [KEY_H],
 }
 ## Дополнительно: прицеливание правой кнопкой мыши
 const MOUSE_ACTIONS: Dictionary = {
