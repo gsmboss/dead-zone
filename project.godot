@@ -46,6 +46,7 @@ sensors/enable_gyroscope=true
 
 [internationalization]
 
+locale/fallback="ru"
 locale/translations=PackedStringArray("res://locale/en.po")
 
 [physics]

@@ -296,12 +296,20 @@ func _ensure_translation() -> void:
 	if _translation_checked:
 		return
 	_translation_checked = true
-	if not "en" in TranslationServer.get_loaded_locales():
-		var translation := load(TRANSLATION_PATH) as Translation if ResourceLoader.exists(TRANSLATION_PATH) else null
-		if translation == null:
+	var english: Translation = TranslationServer.get_translation_object("en")
+	if english == null or english.locale != "en":
+		english = load(TRANSLATION_PATH) as Translation if ResourceLoader.exists(TRANSLATION_PATH) else null
+		if english == null:
 			push_error("Settings: не загрузился перевод %s — английский не будет работать" % TRANSLATION_PATH)
 			return
-		TranslationServer.add_translation(translation)
+		TranslationServer.add_translation(english)
+	# Русский = ключи как есть. Без своего перевода Godot для «ru» берёт запасной язык (по умолчанию английский)
+	if not "ru" in TranslationServer.get_loaded_locales():
+		var russian := Translation.new()
+		russian.locale = "ru"
+		for key: String in english.get_message_list():
+			russian.add_message(key, key)
+		TranslationServer.add_translation(russian)
 	print("Dead Zone: язык %s, загружены переводы %s, проверка «НАСТРОЙКИ» → «%s»" % [get_language_code(),
 		TranslationServer.get_loaded_locales(), TranslationServer.translate("НАСТРОЙКИ")])
 
