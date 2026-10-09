@@ -31,6 +31,21 @@
 [ext_resource type="Resource" path="res://story/films/chapter_baron_outro.tres" id="f_chapter_baron_outro"]
 [ext_resource type="Resource" path="res://missions/data/story_7.tres" id="m_chapter_7"]
 [ext_resource type="Resource" path="res://story/films/chapter_7_intro.tres" id="f_chapter_7_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_1_outro.tres" id="f_chapter_1_outro"]
+[ext_resource type="Resource" path="res://story/films/chapter_7_outro.tres" id="f_chapter_7_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_pharmacy.tres" id="m_chapter_pharmacy"]
+[ext_resource type="Resource" path="res://story/films/chapter_pharmacy_intro.tres" id="f_chapter_pharmacy_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_pharmacy_outro.tres" id="f_chapter_pharmacy_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_tower.tres" id="m_chapter_tower"]
+[ext_resource type="Resource" path="res://story/films/chapter_tower_intro.tres" id="f_chapter_tower_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_tower_outro.tres" id="f_chapter_tower_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_rat.tres" id="m_chapter_rat"]
+[ext_resource type="Resource" path="res://story/films/chapter_rat_intro.tres" id="f_chapter_rat_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_rat_outro.tres" id="f_chapter_rat_outro"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Sports.gltf" id="car_rat"]
+[ext_resource type="Resource" path="res://missions/data/story_bridge.tres" id="m_chapter_bridge"]
+[ext_resource type="Resource" path="res://story/films/chapter_bridge_intro.tres" id="f_chapter_bridge_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_bridge_outro.tres" id="f_chapter_bridge_outro"]
 
 [sub_resource type="Resource" id="chapter_1"]
 script = ExtResource("2_chap")
@@ -42,6 +57,7 @@ mission = ExtResource("m_chapter_1")
 intro_pages = PackedStringArray("ДЕНЬ 92. РАЦИЯ, КОТОРАЯ ТРИ МЕСЯЦА ШИПЕЛА, ВДРУГ ЗАГОВОРИЛА ЖЕНСКИМ ГОЛОСОМ: «МЫ НА СТОЯНКЕ У ТРАССЫ, НАС ДВОЕ, БРАТ РАНЕН!»", "СТОЯНКА В ДВУХ КИЛОМЕТРАХ. ЗОМБИ УЖЕ ТАМ — ОНИ ВСЕГДА ПРИХОДЯТ РАНЬШЕ. БЕРИ НОЖ И ПИСТОЛЕТ.", "ПРАВИЛО №2: НЕ УЛЫБАЙСЯ, КОГДА ВОКРУГ ЗОМБИ. ПРАВИЛО №3: ЕСЛИ УЛЫБНУЛСЯ — БЕГИ.")
 outro_pages = PackedStringArray("МАРИНА И ЕЁ БРАТ ДЕНИС ТЕПЕРЬ В УБЕЖИЩЕ. ДЕНИС — МЕХАНИК: ОН ОБЕЩАЕТ ПОЧИНИТЬ ЛЮБУЮ МАШИНУ. ДАЖЕ ТУ, ЧТО БЕЗ КОЛЁС.", "МАРИНА ВИДЕЛА НЕДЕЛЮ НАЗАД МАЛЬЧИШКУ С КРАСНЫМ РЮКЗАКОМ. ОН ШЁЛ К УЛИЦЕ МОЛЧАНИЯ И РУГАЛСЯ НА ЗОМБИ, КАК ВЗРОСЛЫЙ.", "КРАСНЫЙ РЮКЗАК. МАМА КУПИЛА ЕГО ТЁМЕ ПЕРЕД ШКОЛОЙ. ОН НЕНАВИДЕЛ ЭТОТ ЦВЕТ.")
 intro_film = ExtResource("f_chapter_1_intro")
+outro_film = ExtResource("f_chapter_1_outro")
 rescued = 2
 
 [sub_resource type="Resource" id="chapter_2"]
@@ -150,15 +166,71 @@ location_name = "ЦЕХА «ГЕНОМ»"
 map_position = Vector2(0.84, 0.18)
 mission = ExtResource("m_chapter_7")
 intro_pages = PackedStringArray("ЦЕХА «ГЕНОМА». ЗДЕСЬ ДЕРЖАЛИ «ГНИЛЬ-7» — ЛЕКАРСТВО, КОТОРОЕ ОТМЕНИЛО СМЕРТЬ. ЗДЕСЬ РОДИЛОСЬ ГНЕЗДО.", "ТЁМА ИДЁТ С ТОБОЙ. СПОРИТЬ БЕСПОЛЕЗНО: «МАМА СКАЗАЛА СЛУШАТЬСЯ БРАТА, А БРАТ ИДЁТ ТУДА».", "ПЯТЬ ВОЛН, ПОТОМ ПРИДЁТ ОН — ГРОМИЛА, ПЕРВЫЙ ЗАРАЖЁННЫЙ. ПРАВИЛО ПОСЛЕДНЕЕ: ВОЗВРАЩАЙСЯ ДОМОЙ.")
-outro_pages = PackedStringArray("ГРОМИЛА МЁРТВ, ГНЕЗДО ГОРИТ. В ПОДВАЛЕ ЦЕХА — ТРОЕ УЧЁНЫХ «ГЕНОМА». ОНИ ЗНАЮТ, КАК СДЕЛАТЬ ВАКЦИНУ.", "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ. ТЁМА УЖЕ ПОЧИНИЛ В НЕЙ МИКРОСКОП. ЕГО НИКТО НЕ ПРОСИЛ.")
+outro_pages = PackedStringArray("ГРОМИЛА МЁРТВ, ГНЕЗДО ГОРИТ. В ПОДВАЛЕ ЦЕХА — ТРОЕ УЧЁНЫХ «ГЕНОМА». ОНИ ЗНАЮТ, КАК СДЕЛАТЬ ВАКЦИНУ.", "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ. ТЁМА УЖЕ ПОЧИНИЛ В НЕЙ МИКРОСКОП. ЕГО НИКТО НЕ ПРОСИЛ.", "ГЛАВНАЯ У УЧЁНЫХ — ДОКТОР ИРИНА. ЕЙ НУЖНЫ РЕАКТИВЫ, ХОЛОДИЛЬНИК И НОРМАЛЬНЫЙ КОФЕ. ДЯДЯ ГОША ВПЕРВЫЕ ВСТРЕТИЛ РАВНОГО ПРОТИВНИКА.")
 intro_film = ExtResource("f_chapter_7_intro")
+outro_film = ExtResource("f_chapter_7_outro")
 rescued = 3
+unlock_house = true
+
+[sub_resource type="Resource" id="chapter_pharmacy"]
+script = ExtResource("2_chap")
+id = "chapter_pharmacy"
+title = "РЕЦЕПТ ВАКЦИНЫ"
+location_name = "АПТЕЧНЫЙ СКЛАД"
+map_position = Vector2(0.42, 0.4)
+mission = ExtResource("m_chapter_pharmacy")
+intro_pages = PackedStringArray("ДОКТОР ИРИНА СОБИРАЕТ ВАКЦИНУ ИЗ ТОГО, ЧТО ЕСТЬ: МИКРОСКОП ТЁМЫ, ХОЛОДИЛЬНИК ДЕНИСА И КОФЕМАШИНА ДЯДИ ГОШИ — «ДЛЯ НАСТРОЕНИЯ».", "НЕ ХВАТАЕТ ШЕСТИ РЕАКТИВОВ. ОНИ НА АПТЕЧНОМ СКЛАДЕ У ПРОСПЕКТА. ТАМ ЖЕ, ПО СЛУХАМ, ДО СИХ ПОР СИДИТ АПТЕКАРША НИНА И НЕ ОТПУСКАЕТ БЕЗ РЕЦЕПТА.", "СОБЕРИ ЯЩИКИ С РЕАКТИВАМИ. ПЛЕВУНЫ ЛЮБЯТ ХИМИЮ — НЕ ДАЙ ИМ ДОБРАТЬСЯ ДО НЕЁ ПЕРВЫМИ.")
+outro_pages = PackedStringArray("НИНА ДЕЙСТВИТЕЛЬНО ПОТРЕБОВАЛА РЕЦЕПТ. ИРИНА ВЫПИСАЛА ЕГО НА КОРОБКЕ ОТ ПИЦЦЫ. НИНА ПРИНЯЛА: «ПОЧЕРК ВРАЧЕБНЫЙ, ВСЁ ЧЕСТНО».", "ПЕРВУЮ ДОЗУ ВЫЗВАЛСЯ ПРОВЕРИТЬ ШНЫРЬ: «Я БУХГАЛТЕР, Я ВСЮ ЖИЗНЬ РИСКУЮ». К УТРУ У НЕГО ОТРОСЛА БОРОДА. ИРИНА ГОВОРИТ, ЭТО ПОБОЧНОЕ И ПРОЙДЁТ.", "ВАКЦИНА РАБОТАЕТ. ТЕПЕРЬ О НЕЙ ДОЛЖНЫ УЗНАТЬ ВСЕ, КТО ЕЩЁ ЖИВ. ЛЕВ ЗНАЕТ КАК: НУЖНА ВЫШКА СВЯЗИ В ЛЕСУ.")
+intro_film = ExtResource("f_chapter_pharmacy_intro")
+outro_film = ExtResource("f_chapter_pharmacy_outro")
+rescued = 2
+
+[sub_resource type="Resource" id="chapter_tower"]
+script = ExtResource("2_chap")
+id = "chapter_tower"
+title = "ГОЛОСА С ЮГА"
+location_name = "ЛЕСНАЯ ВЫШКА"
+map_position = Vector2(0.06, 0.5)
+mission = ExtResource("m_chapter_tower")
+intro_pages = PackedStringArray("ЛЕВ ПОЧТИ НЕ СПИТ: ОН СЛУШАЕТ ЭФИР. С ЮГА, ИЗ ПОРТА, КТО-ТО ПОВТОРЯЕТ ОДНО И ТО ЖЕ: «ЕСТЬ ЛИ КТО ЖИВОЙ? ПРИЁМ».", "ЧТОБЫ ДОКРИЧАТЬСЯ ДО ПОРТА, НУЖНА ВЫШКА СВЯЗИ В ЛЕСУ. ЛЕВ ПЕРЕДАСТ РЕЦЕПТ ВАКЦИНЫ — ЭТО ЗАЙМЁТ ВРЕМЯ. И НАДЕЛАЕТ ШУМА.", "УДЕРЖИ ВЫШКУ, ПОКА ИДЁТ ПЕРЕДАЧА. ЗОМБИ ИДУТ НА ЗВУК, СОБАКИ — НА ЗАПАХ, А ЛЕВ РУГАЕТСЯ НА ПОМЕХИ.")
+outro_pages = PackedStringArray("ПОРТ ОТВЕТИЛ. ТАМ ДВЕСТИ ЧЕЛОВЕК, КОРАБЛЬ И КАПИТАН ЯКОРЕВ — ЭТО НАСТОЯЩАЯ ФАМИЛИЯ. ЧЕРЕЗ НЕДЕЛЮ КОРАБЛЬ ПРИДЁТ К СТАРОМУ МОСТУ.", "У ВЫШКИ ПРЯТАЛИСЬ ЧЕТВЕРО ЛЕСНИКОВ. МЕСЯЦ ЕЛИ ШИШКИ. ТЕПЕРЬ ЕДЯТ У ДЯДИ ГОШИ И ХВАЛЯТ ДАЖЕ ПЕРЕСОЛЕННОЕ.", "А В АРХИВЕ ВЫШКИ ЛЕВ НАШЁЛ ЗАПИСЬ ДНЯ НОЛЬ. ЖЕНСКИЙ ГОЛОС НА АВАРИЙНОЙ ЧАСТОТЕ: «ЕСЛИ КТО-ТО НАЙДЁТ МОИХ МАЛЬЧИКОВ…» ЭТО МАМА.")
+intro_film = ExtResource("f_chapter_tower_intro")
+outro_film = ExtResource("f_chapter_tower_outro")
+rescued = 4
+
+[sub_resource type="Resource" id="chapter_rat"]
+script = ExtResource("2_chap")
+id = "chapter_rat"
+title = "КРЫСА"
+location_name = "СТОЯНКА КОНТЕЙНЕРОВ"
+map_position = Vector2(0.62, 0.92)
+mission = ExtResource("m_chapter_rat")
+intro_pages = PackedStringArray("ЗА ТРИ ДНЯ ДО КОРАБЛЯ ИЗ ЛАБОРАТОРИИ ПРОПАЛ ЧЕМОДАН С ВАКЦИНОЙ. И ШНЫРЬ. И ЕГО БОРОДА.", "ЛЕВ ПЕРЕХВАТИЛ ЭФИР: ОСТАТКИ СТЕРВЯТНИКОВ, БАНДА КАБАНА, ХОТЯТ ПРОДАТЬ ВАКЦИНУ ПОРТУ. ЦЕНА — ВЕСЬ ПОРТ.", "ГЕНКА, БЫВШИЙ БАРОН, ПРОСИТСЯ С ТОБОЙ: «КАБАН БЫЛ МОИМ ЗАМОМ. ЭТО МОЙ ПОЗОР — Я ЕГО И ОТМОЮ». ОН ТЕПЕРЬ МОЕТ ПОСУДУ И ВЕРИТ В ОТМЫВАНИЕ.")
+outro_pages = PackedStringArray("ШНЫРЯ НАШЛИ В КОНТЕЙНЕРЕ, ПРИВЯЗАННОГО К СТУЛУ. КАБАН ЗАСТАВИЛ ЕГО УКРАСТЬ ВАКЦИНУ — ДЕРЖАЛ В ЗАЛОЖНИКАХ ЕГО КАЛЬКУЛЯТОР. СОВЕТСКИЙ.", "ЧЕМОДАН ЦЕЛ. КАБАН СБЕЖАЛ И БРОСИЛ СВОЙ СПОРТКАР. ДЕНИС ГОВОРИТ, ЧТО У МАШИНЫ ХАРАКТЕР. ТЁМА ГОВОРИТ, ЧТО ОНА РОЗОВАЯ.", "ТРОЕ ПЛЕННЫХ КАБАНА ТЕПЕРЬ С НАМИ. ГЕНКА ДО УТРА МЫЛ ПОСУДУ — СКАЗАЛ, ЧТО ТАК ЛУЧШЕ ДУМАЕТСЯ. ЗАВТРА — МОСТ.")
+intro_film = ExtResource("f_chapter_rat_intro")
+outro_film = ExtResource("f_chapter_rat_outro")
+rescued = 3
+unlock_car = ExtResource("car_rat")
+unlock_car_name = "СПОРТКАР КАБАНА"
+
+[sub_resource type="Resource" id="chapter_bridge"]
+script = ExtResource("2_chap")
+id = "chapter_bridge"
+title = "СТАРЫЙ МОСТ"
+location_name = "СТАРЫЙ МОСТ"
+map_position = Vector2(0.95, 0.86)
+mission = ExtResource("m_chapter_bridge")
+intro_pages = PackedStringArray("СТАРЫЙ МОСТ. В ДЕНЬ НОЛЬ ЗДЕСЬ МАМА ОТПУСТИЛА НАШИ РУКИ И СКАЗАЛА: «БЕГИТЕ, Я ДОГОНЮ».", "СЕГОДНЯ К МОСТУ ПРИДЁТ КОРАБЛЬ С ЮГА. ВАКЦИНУ НАДО ПЕРЕДАТЬ ИЗ РУК В РУКИ. А КАБАН ХОЧЕТ ЗАБРАТЬ ЕЁ СИЛОЙ — С БАНДОЙ И ОРДОЙ, КОТОРУЮ ОН ПРИВЁЛ НА ШУМ.", "ПЯТЬ ВОЛН, ПОТОМ КАБАН. ТЁМА НА РАЦИИ, ДЕНИС ЗА РУЛЁМ, ДЯДЯ ГОША С ТЕРМОСОМ. ПРАВИЛО №1 ВСЁ ЕЩЁ В СИЛЕ: ПРОВЕРЯЙ ЗАДНЕЕ СИДЕНЬЕ.")
+outro_pages = PackedStringArray("КАБАН ЛЕЖИТ В ПЫЛИ И ПРОСИТ ПОЗВАТЬ ГЕНКУ. ГЕНКА ПРИНЁС ЕМУ ФАРТУК: «ПОСУДА САМА СЕБЯ НЕ ПОМОЕТ».", "КАПИТАН ЯКОРЕВ ПРИНЯЛ ЧЕМОДАН С ВАКЦИНОЙ И ОТДАЛ ЧЕСТЬ. ТЁМЕ. ТЁМА ОТДАЛ ЧЕСТЬ В ОТВЕТ — ЛЕВОЙ РУКОЙ, НО ОТ ДУШИ.", "НА ПЕРИЛАХ МОСТА ВСЁ ЕЩЁ ВИСИТ СИНИЙ ШАРФ. МАМИН. МЫ С ТЁМОЙ ЗАВЯЗАЛИ РЯДОМ КРАСНЫЙ РЮКЗАК. ПУСТЬ ВИСЯТ ВМЕСТЕ.", "ПОД МОСТОМ ПРЯТАЛАСЬ СЕМЬЯ ИЗ ЧЕТЫРЁХ. ТЕПЕРЬ ОНИ В ЛАГЕРЕ, А У ЛАГЕРЯ — НОВЫЙ ДОМ ДЛЯ ГОСТЕЙ С ЮГА.")
+intro_film = ExtResource("f_chapter_bridge_intro")
+outro_film = ExtResource("f_chapter_bridge_outro")
+rescued = 4
 unlock_house = true
 
 [resource]
 script = ExtResource("1_camp")
 prologue_pages = PackedStringArray("СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО. ГОРОД, ГДЕ СВЕТОФОРЫ РАБОТАЛИ, АВТОБУСЫ ХОДИЛИ ПО РАСПИСАНИЮ, А САМОЙ СТРАШНОЙ БЕДОЙ БЫЛА ПРОБКА НА ПРОСПЕКТЕ.", "МЫ ЖИЛИ НА САДОВОЙ: МАМА, Я И МОЙ МЛАДШИЙ БРАТ ТЁМА. ДВЕНАДЦАТЬ ЛЕТ, СОРОК КИЛОГРАММОВ УПРЯМСТВА И ВЕЧНО РАЗРЯЖЕННЫЙ ТЕЛЕФОН.", "ЗА РЕКОЙ РАБОТАЛА ЛАБОРАТОРИЯ «ГЕНОМ». ОНИ ИСКАЛИ ЛЕКАРСТВО ОТ СТАРОСТИ — И НАШЛИ «ГНИЛЬ-7». ОНА НЕ ЛЕЧИЛА СТАРОСТЬ. ОНА ОТМЕНЯЛА СМЕРТЬ.", "ДЕНЬ НОЛЬ, 18:40. ПОЖАР В «ГЕНОМЕ». ЧЕРЕЗ ЧАС ПО ГОРОДУ БЕЖАЛИ ЛЮДИ. ЧЕРЕЗ ДВА — ЗА НИМИ БЕЖАЛИ ТЕ, КТО УЖЕ НЕ БЫЛ ЛЮДЬМИ.", "МАМА ОСТАЛАСЬ, ЧТОБЫ МЫ УСПЕЛИ К МОСТУ. ОНА НЕ ДОГНАЛА. А ПОТОМ ТОЛПА РАЗОРВАЛА НАС С ТЁМОЙ.", "ТРИ МЕСЯЦА СПУСТЯ. МАМУ Я ПОХОРОНИЛ У СТАРОЙ ЧАСОВНИ. ТЁМУ НЕ НАШЁЛ. А РАЗ НЕ НАШЁЛ — ЗНАЧИТ, ОН ЖИВ.", "У МЕНЯ ЕСТЬ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ, НОЖ, ПИСТОЛЕТ И ПРАВИЛА ВЫЖИВАНИЯ. ПРАВИЛО №1: ВСЕГДА ПРОВЕРЯЙ ЗАДНЕЕ СИДЕНЬЕ.", "Я НАЙДУ БРАТА. И ВСЕХ, КТО ЕЩЁ ДЫШИТ.")
-epilogue_pages = PackedStringArray("ГНЕЗДО В ЦЕХАХ СГОРЕЛО. ВПЕРВЫЕ ЗА МЕСЯЦЫ НОЧЬ ТИХАЯ — ДАЖЕ ГИТАРА МОЛЧИТ.", "ДЯДЯ ГОША ОТКРЫЛ В ЛАГЕРЕ КОФЕЙНЮ «ПОСЛЕДНЯЯ КАПЛЯ». ШНЫРЬ ВЕДЁТ БУХГАЛТЕРИЮ. БАРОН МОЕТ ПОСУДУ И НАЗЫВАЕТ КУХНЮ СВОИМ КОРОЛЕВСТВОМ.", "УЧЁНЫЕ ДЕЛАЮТ ВАКЦИНУ. ЛЕВ ЛОВИТ ГОЛОСА С ЮГА: ТАМ ТОЖЕ ВЫЖИЛИ.", "ТЁМА ЧИНИТ ВСЁ, ЧТО ВИДИТ, И СПОРИТ С ДЕНИСОМ, КАКАЯ МАШИНА ЛУЧШЕ ДРИФТУЕТ. МАМА БЫ СМЕЯЛАСЬ.", "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ.", "КАМПАНИЯ ПРОЙДЕНА. ГОРОД, БЕСКОНЕЧНАЯ ОБОРОНА И ИГРА С ДРУЗЬЯМИ ЖДУТ.")
+epilogue_pages = PackedStringArray("КОРАБЛЬ УШЁЛ НА ЮГ С ВАКЦИНОЙ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ.", "ДЯДЯ ГОША ОТКРЫЛ В ЛАГЕРЕ КОФЕЙНЮ «ПОСЛЕДНЯЯ КАПЛЯ». ШНЫРЬ ВЕДЁТ БУХГАЛТЕРИЮ НА СОВЕТСКОМ КАЛЬКУЛЯТОРЕ И НОСИТ БОРОДУ С ГОРДОСТЬЮ.", "ГЕНКА И КАБАН МОЮТ ПОСУДУ И СПОРЯТ, ЧЬЯ ТАРЕЛКА ЧИЩЕ. ИРИНА ДЕЛАЕТ ВАКЦИНУ ПАРТИЯМИ. НИНА ВЫДАЁТ ЕЁ СТРОГО ПО РЕЦЕПТУ.", "ТЁМА ЧИНИТ ВСЁ, ЧТО ВИДИТ, И СПОРИТ С ДЕНИСОМ, КАКАЯ МАШИНА ЛУЧШЕ ДРИФТУЕТ. МАМА БЫ СМЕЯЛАСЬ.", "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ.", "КАМПАНИЯ ПРОЙДЕНА. ГОРОД, БЕСКОНЕЧНАЯ ОБОРОНА И ИГРА С ДРУЗЬЯМИ ЖДУТ.")
 prologue_film = ExtResource("f_prologue")
 epilogue_film = ExtResource("f_epilogue")
-chapters = Array[ExtResource("2_chap")]([SubResource("chapter_1"), SubResource("chapter_2"), SubResource("chapter_3"), SubResource("chapter_4"), SubResource("chapter_bandits"), SubResource("chapter_5"), SubResource("chapter_6"), SubResource("chapter_baron"), SubResource("chapter_7")])
+chapters = Array[ExtResource("2_chap")]([SubResource("chapter_1"), SubResource("chapter_2"), SubResource("chapter_3"), SubResource("chapter_4"), SubResource("chapter_bandits"), SubResource("chapter_5"), SubResource("chapter_6"), SubResource("chapter_baron"), SubResource("chapter_7"), SubResource("chapter_pharmacy"), SubResource("chapter_tower"), SubResource("chapter_rat"), SubResource("chapter_bridge")])

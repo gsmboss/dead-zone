@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://dihkut06hhkvb" path="res://models/zombies/Characters_Sam.gltf" id="2_md01"]
+[ext_resource type="AudioStream" path="res://audio/weapons/shotgun_shot.ogg" id="3_snd"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "КАБАН"
+behavior = 3
+max_health = 1200.0
+move_speed = 2.4
+attack_damage = 12.0
+detection_radius = 26.0
+close_sense_radius = 4.0
+hearing_radius = 40.0
+alert_radius = 18.0
+lose_interest_time = 12.0
+model_scene = ExtResource("2_md01")
+model_scale = 1.9
+anim_idle = &"Idle_Gun"
+anim_walk = &"Walk_Gun"
+anim_run = &"Run_Gun"
+anim_attack = &"Punch"
+tint = Color(0.9, 0.35, 0.55, 0.22)
+ranged_min_distance = 3.0
+ranged_max_distance = 24.0
+ranged_cooldown = 2.5
+ranged_windup = 0.45
+human = true
+held_weapon = "Shotgun"
+anim_shoot = &"Idle_Gun"
+burst_shots = 3
+shot_interval = 0.35
+shot_damage = 12.0
+accuracy = 0.5
+preferred_distance = 9.0
+gun_sound = ExtResource("3_snd")
+taunts_ru = PackedStringArray("Я КАБАН! НЕ ПУТАТЬ С БАРОНОМ!", "ЧЕМОДАН МОЙ! И МОСТ МОЙ!", "ГЕНКА — ПРЕДАТЕЛЬ! ПОСУДОМОЙКА!", "Я ЭТУ ОРДУ СВИСТОМ ПРИВЁЛ!", "СПОРТКАР ВЕРНИТЕ! ОН НЕ РОЗОВЫЙ, ОН ЛОСОСЕВЫЙ!", "ПОРТ БУДЕТ МОЙ!", "ВАКЦИНУ — НА ПРОДАЖУ, ТЕБЯ — НА ЗАПЧАСТИ!", "Я НЕ ЗЛОЙ, У МЕНЯ БИЗНЕС!")
+taunts_en = PackedStringArray("I AM KABAN! NOT TO BE CONFUSED WITH THE BARON!", "THE CASE IS MINE! THE BRIDGE IS MINE!", "GENKA IS A TRAITOR! A DISHWASHER!", "I WHISTLED THIS HORDE HERE MYSELF!", "GIVE BACK MY SPORTS CAR! IT'S NOT PINK, IT'S SALMON!", "THE PORT WILL BE MINE!", "THE VACCINE GOES ON SALE, YOU GO FOR SPARE PARTS!", "I'M NOT EVIL, IT'S JUST BUSINESS!")
+search_points = 4
+search_radius = 9.0
+footstep_hearing_radius = 12.0
+stagger_time = 0.25
+voice_volume_db = -80.0
+score = 500
+is_boss = true
+charge_enabled = true
+charge_speed = 8.0
+charge_damage = 25.0
+charge_cooldown = 9.0
+knockback = 7.0
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

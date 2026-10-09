@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+caption = "ЗА ТРИ ДНЯ ДО КОРАБЛЯ"
+voice_ru = "Чемодан с вакциной пропал! И Шнырь пропал! И моя ручка пропала, но это, наверное, Тёма."
+voice_en = "The vaccine case is gone! And Shnyr is gone! And my pen is gone, but that's probably Tyoma."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Ручку взял я. Но чемодан — не я! Честно-честно!"
+voice_en = "I took the pen. But not the case! Honest!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 5.0
+caption = "РАЦИЯ. ПЕРЕХВАТ"
+voice_ru = "Порт, слышите? Вакцина у нас. Цена — весь ваш порт. И корабль. И капитан пусть поёт нам по утрам."
+voice_en = "Port, do you hear me? We have the vaccine. The price is your whole port. And the ship. And the captain sings to us every morning."
+speaker = "КАБАН"
+pitch = 0.5
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Кабан был моим замом. Это мой позор — я его и отмою. Я теперь мою посуду, в отмывании я разбираюсь."
+voice_en = "Kaban was my deputy. He's my shame, so I'll wash it off. I do the dishes now, I know a thing or two about washing."
+speaker = "ГЕНКА"
+pitch = 0.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 12
+КРЫСА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_rat_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

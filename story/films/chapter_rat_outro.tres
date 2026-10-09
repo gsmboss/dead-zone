@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.0
+caption = "КОНТЕЙНЕР №7"
+voice_ru = "Я не крыса! Кабан взял в заложники мой калькулятор! Советский! Он считает быстрее меня!"
+voice_en = "I'm not a rat! Kaban took my calculator hostage! A Soviet one! It counts faster than I do!"
+speaker = "ШНЫРЬ"
+pitch = 1.45
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sidewalk"
+duration = 5.0
+voice_ru = "Кабан сбежал. Бросил чемодан, пленных, калькулятор. И спорткар. Розовый."
+voice_en = "Kaban ran off. Left the case, the prisoners, the calculator. And his sports car. A pink one."
+speaker = "ГЕНКА"
+pitch = 0.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Шнырь всю ночь обнимал калькулятор. Никто не смеялся. Ну, почти никто."
+voice_en = "Shnyr hugged his calculator all night. Nobody laughed. Well, almost nobody."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 5.0
+caption = "НОЧЬ ПЕРЕД МОСТОМ"
+voice_ru = "Завтра мост. Тот самый. Я обещал себе туда не возвращаться. Но обещание маме важнее."
+voice_en = "Tomorrow, the bridge. That bridge. I promised myself I'd never go back. But a promise to Mom matters more."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ЗАВТРА — МОСТ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_rat_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

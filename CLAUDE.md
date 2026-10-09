@@ -298,6 +298,12 @@ Crosshair кладёт ХЕДШОТ и оптику в CanvasLayer HUD (приц
 
 Бэклог: звуки взмаха топора и шагов по разным поверхностям, иконки звёзд вместо текста.
 
+Поломка машин: DrivableCar.health/max_health (CarData.durability, гараж «таран» +10%/ур.), take_damage — зомби бьют
+кузов, если цель внутри (Zombie: дистанция до кузова distance_to_body, DrivableCar.find_car_with); ниже 50% мотор
+слабеет (get_power_factor), дым из-под капота, на нуле глохнет и не защищает. Ремонт — DriveController: кнопка ЧИНИТЬ
+(действие repair, H, значок monkey-wrench), держать; с ломом 3 с (тратится 1), без — 8 с. По сети прочность и ремонт —
+через хоста (Net.send_car_health/request_car_repair, PROTOCOL = 5). В матче MatchManager._place_player_cars ставит
+PlayerCar_<id> рядом с точкой появления игрока (DrivableCar.teleport).
 Машины: DrivableCar — фары и рассеянный свет, пока в машине кто-то есть (ночью ярче), стоп-сигналы (материалы
 Headlights/BrakeLight моделей), занос (speed вдоль + lateral вбок, grip/drift_grip, ручник — кнопка прыжка
 становится «ДРИФТ», Space), дым шин, очки дрифта и монеты (DriveController, только одиночная игра).
@@ -325,6 +331,11 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 фильмами intro_film/outro_film (ChapterData), «Стервятники», «Логово Барона» (Тёма найден), эпилог. Фильм-пролог —
 при первом входе в убежище (hub.gd), фильм главы — при первом старте (CampaignPanel._play_film), повтор — ИСТОРИЯ/ПРОЛОГ.
 Герои: мама, Тёма, Марина и Денис, Вера, Лев, дядя Гоша с кофемашиной, Шнырь-бухгалтер, Барон (охранник Генка).
+Часть вторая (главы 10–13): «Рецепт вакцины» (story_pharmacy, улица, сбор; доктор Ирина, аптекарша Нина),
+«Голоса с юга» (story_tower, лес, оборона вышки; капитан Якорев, запись мамы из архива), «Крыса» (story_rat,
+стоянка, бандиты Кабана; Шнырь и калькулятор, спорткар Кабана — Vehicle_Sports), «Старый мост» (story_bridge, улица,
+5 волн + босс enemies/kaban.tres). Концовки у глав 1 и 9 тоже с фильмами. Эпилог — после «Старого моста».
+StoryShot.Mood.CAMP — ночной лагерь в кино (костёр, палатки, люди сидят — Kenney «sit»), камеры camp_orbit/camp_fire/camp_high.
 Значки на экранных кнопках: ui/touch/icons/*.svg (game-icons.net, CC BY 3.0 — атрибуция в CREDITS.md);
 TouchActionButton.ACTION_ICONS (действие → значок), icon, badge (счётчик гранат), set_icon_name(), load_icon();
 Settings.button_icons (вкладка УПРАВЛЕНИЕ) — значки или старые надписи. Машина: ключ/сиденье/дверь, дрифт — колесо.

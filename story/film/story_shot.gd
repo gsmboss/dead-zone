@@ -3,7 +3,7 @@ extends Resource
 ## План сюжетного фильма (StoryFilm): настроение сцены-диорамы (живой город, мёртвый, бандиты…),
 ## точка камеры (заготовка StoryStage), надпись места/времени, голос рассказчика или героя, титр.
 
-enum Mood { LIVING, OUTBREAK, DEAD, BANDITS, HOPE, BLACK }
+enum Mood { LIVING, OUTBREAK, DEAD, BANDITS, HOPE, BLACK, CAMP }
 
 @export var mood: Mood = Mood.LIVING
 ## Заготовка камеры StoryStage.CAMERAS (aerial, sidewalk, crossroad, zombie_low…)

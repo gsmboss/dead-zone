@@ -14,43 +14,41 @@ title = "ЭПИЛОГ"
 script = ExtResource("2_shot")
 mood = 4
 camera = "hope_walk"
-duration = 6.0
-caption = "СЕВЕР-9. ВЕСНА"
-voice_ru = "Гнездо сгорело. Мёртвые ещё бродят, но их всё меньше, а нас — всё больше."
-voice_en = "The nest burned down. The dead still wander, but there are fewer of them, and more of us."
+duration = 5.0
+voice_ru = "Корабль ушёл на юг с вакциной. Через месяц Лев поймал голоса ещё трёх городов. Там тоже живут."
+voice_en = "The ship sailed south with the vaccine. A month later Lev picked up voices from three more cities. People live there too."
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "aerial"
-duration = 6.0
-voice_ru = "Дядя Гоша открыл кофейню прямо в лагере. Называется «Последняя капля». Очередь — как до апокалипсиса."
-voice_en = "Uncle Gosha opened a coffee shop right in the camp. It's called The Last Drop. The line is as long as before the apocalypse."
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Дядя Гоша открыл в лагере кофейню «Последняя капля». Очередь — как до апокалипсиса."
+voice_en = "Uncle Gosha opened a coffee shop in the camp called 'The Last Drop'. The line is like before the apocalypse."
 
 [sub_resource type="Resource" id="Shot_4"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "sky_up"
-duration = 6.0
-voice_ru = "Шнырь ведёт бухгалтерию лагеря. Барон моет посуду и говорит, что это его новое королевство."
-voice_en = "Weasel keeps the camp's books. The Baron washes dishes and says it's his new kingdom."
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Шнырь ведёт бухгалтерию на советском калькуляторе и носит бороду с гордостью. Генка и Кабан моют посуду и спорят, чья тарелка чище."
+voice_en = "Shnyr keeps the books on his Soviet calculator and wears his beard with pride. Genka and Kaban wash dishes and argue whose plate is cleaner."
 
 [sub_resource type="Resource" id="Shot_5"]
 script = ExtResource("2_shot")
 mood = 0
 camera = "crossroad"
-duration = 6.5
-caption = "ПАМЯТЬ"
+duration = 5.0
 voice_ru = "Иногда мне снится город таким, каким он был. Мама берёт кофе, Тёма спорит, светофор горит зелёным."
-voice_en = "Sometimes I dream of the city the way it used to be. Mom getting coffee, Tyoma arguing, the traffic light glowing green."
+voice_en = "Sometimes I dream of the city as it used to be. Mom getting coffee, Tyoma arguing, the traffic light turning green."
 
 [sub_resource type="Resource" id="Shot_6"]
 script = ExtResource("2_shot")
 mood = 4
 camera = "hope_walk"
-duration = 5.5
-voice_ru = "Эй! Хватит спать. Денис говорит, что починил тот спорткар. Поехали дрифтить!"
-voice_en = "Hey! Stop daydreaming. Denis says he fixed that sports car. Let's go drifting!"
+duration = 5.0
+voice_ru = "Эй! Хватит спать. Денис говорит, что починил тот розовый спорткар. Поехали дрифтить!"
+voice_en = "Hey! Stop sleeping. Denis says he fixed that pink sports car. Let's go drifting!"
 speaker = "ТЁМА"
 pitch = 1.6
 
@@ -58,10 +56,10 @@ pitch = 1.6
 script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
-duration = 5.0
+duration = 4.0
 voice_ru = "Мы ещё вернём этот город. Улица за улицей."
 voice_en = "We'll take this city back. Street by street."
-title = "КОНЕЦ.\nНО ГОРОД ЕЩЁ ЖДЁТ"
+title = "МЫ ВЕРНЁМ ЭТОТ ГОРОД"
 
 [resource]
 script = ExtResource("1_film")

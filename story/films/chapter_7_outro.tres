@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "fire_wreck"
+duration = 5.0
+caption = "ЦЕХА «ГЕНОМ». ПОЖАР"
+voice_ru = "Гнездо горело так, что зарево было видно из лагеря. Тёма сказал, что это лучший салют в его жизни."
+voice_en = "The nest burned so bright you could see the glow from the camp. Tyoma said it was the best fireworks of his life."
+effect = "flash"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Вы нас спасли. Три месяца в подвале на сухарях и формулах. Формулы, к сожалению, несъедобные."
+voice_en = "You saved us. Three months in a basement living on crackers and formulas. Formulas, sadly, are not edible."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sidewalk"
+duration = 5.0
+voice_ru = "Вакцину сделать можно. Нужны реактивы, холодильник и, пожалуйста, нормальный кофе."
+voice_en = "A vaccine is possible. I need reagents, a fridge and, please, some decent coffee."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Кофе — это ко мне. Холодильник — к Тёме. А реактивы — вон к нему, у него пистолет."
+voice_en = "Coffee is my department. The fridge goes to Tyoma. And reagents, well, ask him, he's got the gun."
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.5
+title = "ЧАСТЬ ВТОРАЯ
+ВАКЦИНА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_7_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "close_up"
+duration = 5.0
+voice_ru = "Стоять! Рецепт есть? Нет рецепта — нет реактивов. У меня порядок, хоть и конец света."
+voice_en = "Stop right there! Got a prescription? No prescription, no reagents. I keep order here, end of the world or not."
+speaker = "НИНА"
+pitch = 1.25
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Рецепт Ирина выписала на коробке от пиццы. Нина посмотрела и сказала: «Почерк врачебный, всё честно»."
+voice_en = "Irina wrote the prescription on a pizza box. Nina looked at it and said: 'Doctor's handwriting. Legit.'"
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Колите меня! Я бухгалтер, я всю жизнь рискую. Квартальный отчёт страшнее любого зомби."
+voice_en = "Inject me! I'm an accountant, I take risks for a living. A quarterly report is scarier than any zombie."
+speaker = "ШНЫРЬ"
+pitch = 1.45
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+caption = "СЛЕДУЮЩЕЕ УТРО"
+voice_ru = "К утру у Шныря выросла борода. Ирина говорит — побочное действие. Шнырь говорит, что теперь он солидный."
+voice_en = "By morning Shnyr had grown a beard. Irina says it's a side effect. Shnyr says he looks respectable now."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 5.0
+voice_ru = "Вакцина есть. Теперь о ней должны узнать все, кто ещё жив. Мне нужна вышка в лесу. И кто-то, кто её удержит."
+voice_en = "We have a vaccine. Now everyone still alive has to hear about it. I need the tower in the forest. And someone to hold it."
+speaker = "ЛЕВ"
+pitch = 0.75
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ВАКЦИНА РАБОТАЕТ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_pharmacy_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

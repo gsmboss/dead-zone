@@ -4,7 +4,7 @@ extends Node3D
 ## Настроения (StoryShot.Mood): LIVING — живой город днём (люди гуляют, машины едут, светофоры работают),
 ## OUTBREAK — начало заражения (люди бегут, за ними зомби, мигалки, пожар), DEAD — мёртвый город ночью
 ## (обгоревшие машины, бродят зомби, туман), BANDITS — лагерь бандитов Барона у бочки с огнём,
-## HOPE — рассвет, выжившие идут вместе. Строится кодом в отдельном мире (SubViewport StoryCinema).
+## HOPE — рассвет, выжившие идут вместе, CAMP — ночной лагерь выживших: костёр, палатки, люди сидят у огня. Строится кодом в отдельном мире (SubViewport StoryCinema).
 
 const ROAD_TILE: float = 8.0
 const STREET_HALF: float = 64.0
@@ -68,6 +68,9 @@ const DEBRIS: Array[String] = [
 const BLOOD: Array[String] = ["res://models/environment/Blood_1.gltf", "res://models/environment/Blood_2.gltf",
 	"res://models/environment/Blood_3.gltf"]
 const BARREL: String = "res://models/environment/Barrel.gltf"
+## Лагерь (Kenney Survival Kit, модели маленькие — масштаб)
+const CAMP_DIR: String = "res://models/survival/"
+const CAMP_SCALE: float = 3.4
 
 ## Камеры: [откуда, куда, взгляд в начале, взгляд в конце]
 const CAMERAS: Dictionary = {
@@ -86,6 +89,9 @@ const CAMERAS: Dictionary = {
 	"hope_walk": [Vector3(-34, 1.8, 0.4), Vector3(-26, 1.7, 0.4), Vector3(0, 1.4, 0), Vector3(-12, 1.4, 0)],
 	"sky_up": [Vector3(0, 2, 12), Vector3(0, 2.5, 12), Vector3(0, 3, 0), Vector3(0, 45, -10)],
 	"street_end": [Vector3(-58, 3.5, 2), Vector3(-50, 2.5, 1), Vector3(0, 2, 0), Vector3(0, 1.5, 0)],
+	"camp_orbit": [Vector3(7.5, 3.2, 6.0), Vector3(-7.5, 3.2, 6.0), Vector3(0, 0.8, 0), Vector3(0, 0.8, 0)],
+	"camp_fire": [Vector3(0.6, 0.5, 4.6), Vector3(0.2, 0.6, 3.8), Vector3(0, 0.7, 0), Vector3(0, 0.9, -1.5)],
+	"camp_high": [Vector3(-14, 9, 14), Vector3(-9, 7, 10), Vector3(0, 0.5, 0), Vector3(0, 0.5, 0)],
 }
 
 ## Настроение: небо (верх, горизонт), солнце (цвет, сила, высота°), окружение, туман
@@ -96,6 +102,7 @@ const MOODS: Dictionary = {
 	StoryShot.Mood.BANDITS: [Color(0.03, 0.02, 0.05), Color(0.2, 0.08, 0.06), Color(0.5, 0.4, 0.6), 0.2, 30.0, 0.25, 0.018],
 	StoryShot.Mood.HOPE: [Color(0.35, 0.45, 0.75), Color(1.0, 0.7, 0.5), Color(1.0, 0.78, 0.55), 0.9, 12.0, 0.75, 0.006],
 	StoryShot.Mood.BLACK: [Color.BLACK, Color.BLACK, Color.BLACK, 0.0, 30.0, 0.0, 0.0],
+	StoryShot.Mood.CAMP: [Color(0.02, 0.03, 0.09), Color(0.09, 0.11, 0.22), Color(0.5, 0.6, 0.95), 0.22, 35.0, 0.3, 0.014],
 }
 
 var mood: int = -1
@@ -150,6 +157,8 @@ func set_mood(new_mood: int) -> void:
 			_build_bandits()
 		StoryShot.Mood.HOPE:
 			_build_hope()
+		StoryShot.Mood.CAMP:
+			_build_camp()
 	visible = new_mood != StoryShot.Mood.BLACK
 
 
@@ -468,6 +477,50 @@ func _build_hope() -> void:
 			_rng.randf_range(80.0, 100.0))
 		if wreck != null:
 			wreck.position = Vector3(-40.0 + i * 14.0, 0.0, 4.6 if i % 2 == 0 else -4.6)
+
+
+## Ночной лагерь выживших на перекрёстке: костёр, палатки, люди сидят у огня, собака, броневики
+func _build_camp() -> void:
+	_place_camp_prop("campfire-pit", Vector3.ZERO, 0.0)
+	_place_camp_prop("campfire-stand", Vector3.ZERO, 0.0)
+	_add_fire(Vector3(0.0, 0.15, 0.0), 0.8)
+	_place_camp_prop("tent-canvas", Vector3(-5.0, 0.0, -4.0), 0.5)
+	_place_camp_prop("tent", Vector3(5.0, 0.0, -4.5), -0.5)
+	_place_camp_prop("tent-canvas", Vector3(0.0, 0.0, -6.5), 0.0)
+	_place_camp_prop("box-large", Vector3(3.6, 0.0, 1.8), 0.4)
+	_place_camp_prop("barrel", Vector3(-3.8, 0.0, 2.2), 0.0)
+	_place_camp_prop("bedroll", Vector3(-2.8, 0.0, -2.6), 0.9)
+	# Сидят у огня (Kenney «sit»), лицом к костру
+	for i in 6:
+		var angle: float = TAU * i / 6.0 + 0.4
+		var at := Vector3(cos(angle), 0.0, sin(angle)) * 2.1
+		var scene: PackedScene = _load(PEOPLE_KENNEY[(i * 2) % PEOPLE_KENNEY.size()])
+		var person: StageActor = _add_actor(scene, 1.7, PackedVector3Array([at]), 0.0, &"walk", &"sit", 0.0)
+		if person != null:
+			person.rotation.y = atan2(at.x, at.z)  # актёр смотрит в -Z — к огню
+	# Часовой с винтовкой ходит по краю
+	_add_actor(_load(PEOPLE_QUATERNIUS[2]), 1.8, PackedVector3Array([Vector3(-9, 0, 5), Vector3(9, 0, 5)]), 1.0,
+		&"Walk_Gun", &"Idle_Gun", 0.3, "Rifle")
+	_add_actor(_load(DOG), 0.55, PackedVector3Array([Vector3(1.2, 0.0, 2.6)]), 0.0, &"Walk", &"Idle", 0.0)
+	var truck: StageCar = _add_car(_load(ARMORED_TRUCK), PackedVector3Array(), 0.0, false, 0.0, 70.0)
+	if truck != null:
+		truck.position = Vector3(-8.0, 0.0, -9.0)
+	var pickup: StageCar = _add_car(_load(ARMORED_PICKUP), PackedVector3Array(), 0.0, false, 0.0, -60.0)
+	if pickup != null:
+		pickup.position = Vector3(8.5, 0.0, -8.0)
+
+
+func _place_camp_prop(model: String, at: Vector3, yaw: float) -> void:
+	var scene: PackedScene = _load(CAMP_DIR + model + ".glb")
+	if scene == null:
+		return
+	var prop := scene.instantiate() as Node3D
+	if prop == null:
+		return
+	prop.position = at
+	prop.rotation.y = yaw
+	prop.scale = Vector3.ONE * CAMP_SCALE
+	_actors.add_child(prop)
 
 
 # ---------- Актёры ----------

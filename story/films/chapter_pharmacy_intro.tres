@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "skyline"
+duration = 5.0
+caption = "ЛАГЕРЬ. УТРО"
+voice_ru = "Доктор Ирина превратила кухню дяди Гоши в лабораторию. Дядя Гоша превратил лабораторию обратно в кухню. Так прошло три дня."
+voice_en = "Doctor Irina turned Uncle Gosha's kitchen into a lab. Uncle Gosha turned the lab back into a kitchen. Three days went by like that."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Вакцина почти готова. Не хватает шести реактивов. Они на аптечном складе у проспекта."
+voice_en = "The vaccine is almost ready. I'm missing six reagents. They're at the pharmacy warehouse by the avenue."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Я пойду! Я знаю, где аптека! Там продавали жвачку с вкладышами!"
+voice_en = "I'll go! I know where the pharmacy is! They sold gum with stickers there!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 5.0
+caption = "ПРОСПЕКТ МИРА"
+voice_ru = "Тёма остался в лагере. Обиделся и починил мне рацию так, что она теперь ловит только шансон."
+voice_en = "Tyoma stayed at the camp. He sulked and fixed my radio so that it only plays prison ballads now."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "window"
+duration = 5.0
+voice_ru = "На складе кто-то есть: свет в окне и табличка «Без рецепта не отпускаем»."
+voice_en = "Someone is in the warehouse: a light in the window and a sign that says 'Prescription only'."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 10
+РЕЦЕПТ ВАКЦИНЫ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_pharmacy_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])
