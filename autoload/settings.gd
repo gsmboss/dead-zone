@@ -286,8 +286,29 @@ func is_english() -> bool:
 	return get_language_code() == "en"
 
 
+const TRANSLATION_PATH: String = "res://locale/en.po"
+static var _translation_checked: bool = false
+
+
+## Английский перевод загружен? Обычно его грузит project.godot (Localization → Translations);
+## если там его нет (старый project.godot, сбой импорта) — подгружаем сами. Итог — одной строкой в Output
+func _ensure_translation() -> void:
+	if _translation_checked:
+		return
+	_translation_checked = true
+	if not "en" in TranslationServer.get_loaded_locales():
+		var translation := load(TRANSLATION_PATH) as Translation if ResourceLoader.exists(TRANSLATION_PATH) else null
+		if translation == null:
+			push_error("Settings: не загрузился перевод %s — английский не будет работать" % TRANSLATION_PATH)
+			return
+		TranslationServer.add_translation(translation)
+	print("Dead Zone: язык %s, загружены переводы %s, проверка «НАСТРОЙКИ» → «%s»" % [get_language_code(),
+		TranslationServer.get_loaded_locales(), TranslationServer.translate("НАСТРОЙКИ")])
+
+
 ## Перевод: ключи — русские фразы, английский — locale/en.po (подписи Label/Button переводятся сами)
 func _apply_language() -> void:
+	_ensure_translation()
 	var code: String = get_language_code()
 	if TranslationServer.get_locale() != code:
 		TranslationServer.set_locale(code)

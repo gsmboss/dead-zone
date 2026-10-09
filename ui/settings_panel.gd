@@ -20,7 +20,7 @@ func _ready() -> void:
 
 
 ## Вкладки: каждая — своя страница настроек (последняя открытая запоминается)
-const TABS: PackedStringArray = ["УПРАВЛЕНИЕ", "КАМЕРА", "КНОПКИ", "ПРИЦЕЛ", "ГИРОСКОП", "ЭФФЕКТЫ",
+const TABS: PackedStringArray = ["ЯЗЫК / LANGUAGE", "УПРАВЛЕНИЕ", "КАМЕРА", "КНОПКИ", "ПРИЦЕЛ", "ГИРОСКОП", "ЭФФЕКТЫ",
 	"ЗВУК", "ГРАФИКА", "СЮЖЕТ", "ПРОЧЕЕ"]
 const TAB_WIDTH: float = 270.0
 
@@ -34,22 +34,24 @@ func _build_content() -> void:
 	_section(TABS[_tab])
 	match _tab:
 		0:
-			_build_controls()
+			_build_language()
 		1:
-			_build_camera()
+			_build_controls()
 		2:
-			_build_buttons()
+			_build_camera()
 		3:
-			_build_crosshair()
+			_build_buttons()
 		4:
-			_build_gyro()
+			_build_crosshair()
 		5:
-			_build_effects()
+			_build_gyro()
 		6:
-			_build_sound()
+			_build_effects()
 		7:
-			_build_graphics()
+			_build_sound()
 		8:
+			_build_graphics()
+		9:
 			_build_story()
 		_:
 			_build_other()
@@ -203,9 +205,14 @@ func _build_story() -> void:
 		content.add_child(tutorial)
 
 
-func _build_other() -> void:
-	# Язык: подписи меняются сразу; окна, собранные раньше, — после перезахода в убежище
+## Язык — первая вкладка (её легко найти, даже не зная русского)
+func _build_language() -> void:
 	_choice("ЯЗЫК / LANGUAGE", &"language", Settings.LANGUAGE_NAMES, [], _on_language_changed)
+	var hint := UIKit.label("АВТО — КАК В ТЕЛЕФОНЕ. В УБЕЖИЩЕ ВСЁ ПЕРЕКЛЮЧАЕТСЯ СРАЗУ.", 20, content)
+	hint.modulate = UIKit.DIM
+
+
+func _build_other() -> void:
 	var reset := UIKit.button("СБРОСИТЬ ВСЕ НАСТРОЙКИ", 24)
 	reset.pressed.connect(_on_reset)
 	content.add_child(reset)

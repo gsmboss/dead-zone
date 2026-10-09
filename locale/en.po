@@ -151,6 +151,9 @@ msgstr "THEN HE HEARD BARON'S VOICE ON THE RADIO AND BURST OUT LAUGHING: \"THAT'
 msgid "АВТО"
 msgstr "AUTO"
 
+msgid "АВТО — КАК В ТЕЛЕФОНЕ. В УБЕЖИЩЕ ВСЁ ПЕРЕКЛЮЧАЕТСЯ СРАЗУ."
+msgstr "AUTO — SAME AS THE PHONE. IN THE SHELTER EVERYTHING SWITCHES INSTANTLY."
+
 msgid "АВТО: ПОДБИРАЕТСЯ ПОД ТЕЛЕФОН И САМО СНИЖАЕТСЯ, ЕСЛИ ИГРА ТОРМОЗИТ"
 msgstr "AUTO: FITS YOUR PHONE AND LOWERS ITSELF IF THE GAME LAGS"
 
