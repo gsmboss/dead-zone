@@ -3,9 +3,12 @@ extends HubWindow
 ## Окно «ИГРА ПО СЕТИ»: имя, создать игру, найденные игры в сети, подключение к точке
 ## доступа или по IP; в лобби — игроки, режим, карта и СТАРТ (у хоста).
 
-const HELP: String = "КАК ИГРАТЬ ВМЕСТЕ: ОДИН ТЕЛЕФОН ВКЛЮЧАЕТ ТОЧКУ ДОСТУПА (ИЛИ ВСЕ В ОДНОЙ WI-FI СЕТИ) " \
-	+ UIKit.t("И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, ") \
-	+ UIKit.t("«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ.")
+## Подсказка кусками — каждый кусок отдельный ключ перевода (в константе вызывать UIKit.t нельзя)
+const HELP_PARTS: PackedStringArray = [
+	"КАК ИГРАТЬ ВМЕСТЕ: ОДИН ТЕЛЕФОН ВКЛЮЧАЕТ ТОЧКУ ДОСТУПА (ИЛИ ВСЕ В ОДНОЙ WI-FI СЕТИ) ",
+	"И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, ",
+	"«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ.",
+]
 
 var _status: String = ""
 var _ip_text: String = ""
@@ -210,7 +213,10 @@ func _build_menu() -> void:
 	join_ip.pressed.connect(func() -> void: Net.join_game(_ip_text))
 	ip_row.add_child(join_ip)
 
-	UIKit.label(HELP, 20, content).modulate = UIKit.DIM
+	var help: String = ""
+	for part: String in HELP_PARTS:
+		help += UIKit.t(part)
+	UIKit.label(help, 20, content).modulate = UIKit.DIM
 
 
 # ---------- Лобби ----------

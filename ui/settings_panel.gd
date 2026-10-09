@@ -155,7 +155,7 @@ func _build_effects() -> void:
 	_slider("ТОЛЧОК КАМЕРЫ ПРИ УРОНЕ", &"hit_shake", 0.0, 1.0, 0.05, _percent)
 	_toggle("ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ", &"attacker_marker")
 	_toggle("ЗАМЕДЛЕНИЕ ПРИ ХЕДШОТЕ", &"headshot_slowmo")
-	var hint := UIKit.label("КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
+	var hint := UIKit.label(UIKit.t("КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, ")
 		+ UIKit.t("КАПЛЯ — КИСЛОТА"), 20, content)
 	hint.modulate = UIKit.DIM
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

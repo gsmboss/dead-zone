@@ -20,7 +20,7 @@ func _build_content() -> void:
 		has_any = true
 		content.add_child(_make_item_card(item, count, player))
 	if not has_any:
-		UIKit.label("Сумка пуста. Ненужные сейчас аптечки и патроны с земли попадают сюда, "
+		UIKit.label(UIKit.t("Сумка пуста. Ненужные сейчас аптечки и патроны с земли попадают сюда, ")
 			+ UIKit.t("а купить их можно в оружейной"), 24, content).modulate = UIKit.DIM
 
 
