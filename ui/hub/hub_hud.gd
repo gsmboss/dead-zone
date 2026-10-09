@@ -46,6 +46,43 @@ func _on_back() -> void:
 	_show_exit_confirm()
 
 
+## Первый заход: предложить обучение (один раз; потом — кнопка в настройках, вкладка СЮЖЕТ)
+const TUTORIAL_OFFERED: String = "tutorial_offered"
+
+
+func offer_tutorial() -> void:
+	if _exit_panel != null or _window != null or GameState.has_seen_cutscene(TutorialDirector.DONE_FLAG) \
+			or GameState.has_seen_cutscene(TUTORIAL_OFFERED):
+		return
+	GameState.mark_cutscene_seen(TUTORIAL_OFFERED)
+	_exit_panel = PanelContainer.new()
+	_exit_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())
+	add_child(_exit_panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 16)
+	_exit_panel.add_child(box)
+	var title := UIKit.label("ОБУЧЕНИЕ", 40, box)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.modulate = UIKit.ACCENT
+	var text := UIKit.label("ДВЕ МИНУТЫ НА ПОЛИГОНЕ: ХОДЬБА, ОБЗОР, СТРЕЛЬБА, ПРИЦЕЛ И ПЕРВЫЕ ЗОМБИ.\nНАГРАДА — 150 МОНЕТ.", 24, box)
+	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	text.custom_minimum_size.x = 620.0
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override(&"separation", 16)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(row)
+	var go := UIKit.button("ПРОЙТИ", 28, 240.0)
+	go.modulate = UIKit.GOOD
+	go.pressed.connect(GameState.start_tutorial)
+	row.add_child(go)
+	var later := UIKit.button("ПОЗЖЕ", 28, 240.0)
+	later.pressed.connect(_on_back)
+	row.add_child(later)
+	_exit_panel.set_anchors_and_offsets_preset(PRESET_CENTER, PRESET_MODE_MINSIZE)
+	_exit_panel.grow_horizontal = GROW_DIRECTION_BOTH
+	_exit_panel.grow_vertical = GROW_DIRECTION_BOTH
+
+
 func _show_exit_confirm() -> void:
 	_exit_panel = PanelContainer.new()
 	_exit_panel.add_theme_stylebox_override(&"panel", UIKit.panel_style())

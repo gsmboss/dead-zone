@@ -196,6 +196,11 @@ func _build_story() -> void:
 		GameState.reset_cutscenes()
 		Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0))
 	content.add_child(replay)
+	# Обучение — только из убежища (из миссии ушли бы без сохранения монет)
+	if get_tree().current_scene != null and get_tree().current_scene.scene_file_path == "res://hub/hub.tscn":
+		var tutorial := UIKit.button("ПРОЙТИ ОБУЧЕНИЕ НА ПОЛИГОНЕ", 22)
+		tutorial.pressed.connect(GameState.start_tutorial)
+		content.add_child(tutorial)
 
 
 func _build_other() -> void:

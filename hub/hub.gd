@@ -34,16 +34,26 @@ func _disable_player_weapons() -> void:
 
 func _play_intro() -> void:
 	if not Settings.cutscenes:
+		_offer_tutorial()
 		return
 	# Первый вход: сначала фильм-пролог «каким был город и что с ним стало»
 	var prologue: StoryFilm = GameState.campaign.prologue_film
 	if prologue != null and not GameState.has_seen_cutscene("film_" + prologue.id):
 		GameState.mark_cutscene_seen("film_" + prologue.id)
 		await StoryCinema.play(get_tree(), prologue).finished
-	if GameState.has_seen_cutscene("hub_intro"):
+	if not GameState.has_seen_cutscene("hub_intro"):
+		var intro := load(INTRO_PATH) as CutsceneData if ResourceLoader.exists(INTRO_PATH) else null
+		if intro == null:
+			push_warning("%s: не найдена кат-сцена %s" % [name, INTRO_PATH])
+		else:
+			await CutscenePlayer.play(get_tree(), intro).finished
+	_offer_tutorial()
+
+
+## После вступления — предложить обучение (один раз)
+func _offer_tutorial() -> void:
+	if not is_inside_tree():
 		return
-	var intro := load(INTRO_PATH) as CutsceneData if ResourceLoader.exists(INTRO_PATH) else null
-	if intro == null:
-		push_warning("%s: не найдена кат-сцена %s" % [name, INTRO_PATH])
-		return
-	CutscenePlayer.play(get_tree(), intro)
+	var hud := get_tree().get_first_node_in_group(&"hub_hud")
+	if hud != null and hud.has_method(&"offer_tutorial"):
+		hud.call(&"offer_tutorial")

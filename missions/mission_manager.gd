@@ -37,6 +37,8 @@ const DAMAGE_DIFFICULTY_SHARE: float = 0.5
 @export var spawner: ZombieSpawner
 
 var state: State = State.STARTING
+## Обучение выключает обычный спавн, пока игрок не пройдёт шаги (TutorialDirector включит)
+var spawning_enabled: bool = true
 var kills: int = 0
 var score: int = 0
 var elapsed: float = 0.0
@@ -122,6 +124,7 @@ func _ready() -> void:
 	_damage_multiplier = 1.0 + (difficulty - 1.0) * DAMAGE_DIFFICULTY_SHARE
 	_reward_multiplier = GameState.get_reward_multiplier(mission.id)
 	_event = GameState.get_daily_event()
+	spawning_enabled = not mission.tutorial
 	_start.call_deferred()
 
 
@@ -166,6 +169,30 @@ func _start() -> void:
 		title += "\nСОБЫТИЕ ДНЯ: %s" % _event.title
 	announcement.emit(title)
 	_update_objective()
+	if mission.tutorial:
+		var director := TutorialDirector.new()
+		director.name = "Tutorial"
+		director.manager = self
+		add_child(director)
+
+
+## Сколько зомби сейчас живо (для обучения)
+func get_alive_count() -> int:
+	return _alive
+
+
+## Один зомби вне обычного спавна (обучение): самый простой тип
+func spawn_single() -> Zombie:
+	var data: ZombieData = mission.walker if mission.walker != null else _pick_zombie_type()
+	if data == null or spawner == null:
+		return null
+	var zombie: Zombie = spawner.spawn(data, _health_multiplier, _damage_multiplier)
+	if zombie == null:
+		return null
+	zombie.died.connect(_on_zombie_died)
+	zombie.despawned.connect(_on_zombie_despawned)
+	_alive += 1
+	return zombie
 
 
 # ---------- Кат-сцены ----------
@@ -173,7 +200,7 @@ func _start() -> void:
 ## Облёт локации при первом заходе в миссию: обзор, цель, «В БОЙ!»
 func _play_intro() -> void:
 	var cutscene_id: String = "mission_%s" % mission.id
-	if not Settings.cutscenes or _player == null or GameState.has_seen_cutscene(cutscene_id):
+	if mission.tutorial or not Settings.cutscenes or _player == null or GameState.has_seen_cutscene(cutscene_id):
 		return
 	var p: Vector3 = _player.global_position
 	var forward: Vector3 = -_player.global_basis.z
@@ -324,6 +351,8 @@ func _start_wave(number: int) -> void:
 # ---------- Спавн ----------
 
 func _process_spawning(delta: float) -> void:
+	if not spawning_enabled:
+		return
 	_spawn_timer -= delta
 	var max_alive: int = mission.max_alive + roundi(DayNightCycle.night_amount * NIGHT_EXTRA_ALIVE)
 	if _spawn_timer > 0.0 or _alive >= max_alive:
@@ -738,6 +767,8 @@ func _finish(won: bool) -> void:
 	_record_endless()
 	if won:
 		GameState.complete_mission(mission, score, stars)
+		if mission.tutorial:
+			GameState.mark_cutscene_seen(TutorialDirector.DONE_FLAG)
 	GameState.add_coins(earned)
 	GameState.save_game()  # прогресс заданий, даже если монет 0
 

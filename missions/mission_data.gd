@@ -78,6 +78,9 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 ## Третья звезда: точность не ниже этой доли
 @export_range(0.0, 1.0, 0.05) var star_accuracy: float = 0.5
 
+## Обучение: подсказки по шагам (TutorialDirector), зомби появляются по ходу обучения
+@export var tutorial: bool = false
+
 @export_group("Reward")
 ## Монеты за победу (плюс очки за каждого убитого зомби)
 @export var reward_coins: int = 100

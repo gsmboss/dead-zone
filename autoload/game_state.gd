@@ -905,6 +905,18 @@ func start_mission(mission: MissionData) -> void:
 	get_tree().change_scene_to_file(mission.level_scene)
 
 
+## Обучение — миссия на полигоне (MissionData.tutorial)
+const TUTORIAL_PATH: String = "res://missions/data/mission_tutorial.tres"
+
+
+func start_tutorial() -> void:
+	var tutorial := load(TUTORIAL_PATH) as MissionData if ResourceLoader.exists(TUTORIAL_PATH) else null
+	if tutorial == null:
+		push_warning("GameState: нет миссии обучения %s" % TUTORIAL_PATH)
+		return
+	start_mission(tutorial)
+
+
 func reset_progress() -> void:
 	coins = 0
 	_owned.clear()
