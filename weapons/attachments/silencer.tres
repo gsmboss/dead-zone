@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AttachmentData" format=3]
+
+[ext_resource type="Script" path="res://weapons/attachment_data.gd" id="1_att01"]
+
+[resource]
+script = ExtResource("1_att01")
+id = "silencer"
+title = "ГЛУШИТЕЛЬ"
+description = "Зомби слышат выстрел втрое ближе, нет вспышки. Урон −5%"
+slot = 0
+look = 1
+price = 300
+damage = 0.95
+hearing = 0.33
+volume_db = -9.0
+fire_pitch = 1.15
+hide_flash = true

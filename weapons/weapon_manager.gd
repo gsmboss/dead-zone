@@ -112,6 +112,11 @@ var _rng := RandomNumberGenerator.new()
 
 # Модели
 var _current_model: Node3D
+## Обвесы на модели в руках (AttachmentData.Look): узел в осях менеджера у среза ствола
+var _attachment_holder: Node3D
+var _laser_pivot: Node3D
+var _laser_dot: MeshInstance3D
+var _laser_from: Vector3 = Vector3.ZERO
 var _view_instance: Node3D
 var _model_rest: Vector3 = Vector3.ZERO
 var _fallback_rest: Vector3 = Vector3.ZERO
@@ -319,6 +324,7 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	_update_aim(delta)
 	_update_flame(delta)
+	_update_laser()
 	if _current_model != null and is_instance_valid(_current_model):
 		_animate_model(delta)
 		var show_model: bool = not is_scoped()
@@ -416,6 +422,8 @@ func _apply_view_model(weapon: WeaponData) -> void:
 			_flash_sprite.position = _fallback_muzzle
 			_flash_sprite.scale = Vector3.ONE
 
+	_build_attachments(weapon)
+
 	# Оружие появляется снизу и поднимается
 	if _current_model != null:
 		_current_model.position = _model_rest + _offset_scale() * SWITCH_LOWER_OFFSET
@@ -430,6 +438,182 @@ func _clear_view_model() -> void:
 	if _view_instance != null and is_instance_valid(_view_instance):
 		_view_instance.queue_free()
 	_view_instance = null
+	if _attachment_holder != null and is_instance_valid(_attachment_holder):
+		_attachment_holder.queue_free()
+	_attachment_holder = null
+	_laser_pivot = null
+	if _laser_dot != null:
+		_laser_dot.visible = false
+
+
+# ---------- Обвесы на модели ----------
+
+## Размеры обвесов (до уменьшения вью-модели), метры
+const SILENCER_SIZE: Vector2 = Vector2(0.024, 0.2)    # радиус, длина
+const COMPENSATOR_SIZE: Vector2 = Vector2(0.028, 0.07)
+## Коллиматор: доля длины ствола назад от среза и высота над срезом
+const RED_DOT_BACK: float = 0.7
+const RED_DOT_UP: float = 0.05
+## Лазер и рукоять: доля длины назад и глубина под срезом
+const UNDER_BACK: float = 0.3
+const UNDER_DOWN: float = 0.04
+const LASER_RANGE: float = 40.0
+const LASER_COLOR: Color = Color(1.0, 0.1, 0.08)
+
+
+## Примитивы обвесов. Узел-держатель — ребёнок модели (качается и наклоняется с ней),
+## но в осях и масштабе менеджера: −Z — вперёд по стволу
+func _build_attachments(weapon: WeaponData) -> void:
+	if _current_model == null or weapon.attachment_looks.is_empty():
+		return
+	var k: float = _offset_scale()
+	# Модель ещё в покое (опускание при смене ствола — позже): срез ствола в осях менеджера
+	var muzzle: Vector3 = _view_instance.transform * weapon.muzzle_position if _view_instance != null \
+		else _fallback_muzzle
+	var rest := Transform3D(_current_model.basis, _model_rest)
+	_attachment_holder = Node3D.new()
+	_attachment_holder.name = "Attachments"
+	_current_model.add_child(_attachment_holder)
+	_attachment_holder.transform = rest.affine_inverse() * Transform3D(Basis.IDENTITY, muzzle)
+	# Длина ствола: от среза до точки крепления модели (по оси вперёд)
+	var length: float = clampf(absf(muzzle.z - _model_rest.z), 0.08 * k, 0.6)
+	var metal := _attachment_material(Color(0.12, 0.12, 0.13), 0.0)
+	for look: int in weapon.attachment_looks:
+		match look:
+			AttachmentData.Look.SILENCER:
+				_add_tube(SILENCER_SIZE * k, metal)
+			AttachmentData.Look.COMPENSATOR:
+				_add_tube(COMPENSATOR_SIZE * k, _attachment_material(Color(0.35, 0.33, 0.3), 0.0))
+			AttachmentData.Look.RED_DOT:
+				var sight := Node3D.new()
+				sight.position = Vector3(0.0, RED_DOT_UP * k, length * RED_DOT_BACK)
+				_attachment_holder.add_child(sight)
+				_add_box(sight, Vector3(0.03, 0.012, 0.06) * k, Vector3(0.0, 0.0, 0.0), metal)
+				_add_box(sight, Vector3(0.032, 0.034, 0.006) * k, Vector3(0.0, 0.02 * k, -0.025 * k), metal)
+				_add_box(sight, Vector3(0.032, 0.034, 0.006) * k, Vector3(0.0, 0.02 * k, 0.025 * k), metal)
+				var dot := _add_sphere(sight, 0.004 * k, Vector3(0.0, 0.022 * k, -0.02 * k),
+					_attachment_material(LASER_COLOR, 3.0))
+				dot.name = "RedDot"
+			AttachmentData.Look.LASER:
+				_laser_from = Vector3(0.0, -UNDER_DOWN * k, length * UNDER_BACK)
+				_add_box(_attachment_holder, Vector3(0.022, 0.02, 0.07) * k, _laser_from, metal)
+				_build_laser(k)
+			AttachmentData.Look.GRIP:
+				var grip := _add_box(_attachment_holder, Vector3(0.02, 0.07, 0.025) * k,
+					Vector3(0.0, (-UNDER_DOWN - 0.04) * k, length * (UNDER_BACK + 0.15)), metal)
+				grip.rotation.x = 0.2
+	_disable_shadows(_attachment_holder)
+
+
+func _add_tube(size: Vector2, material: Material) -> void:
+	var tube := CylinderMesh.new()
+	tube.top_radius = size.x
+	tube.bottom_radius = size.x
+	tube.height = size.y
+	tube.radial_segments = 10
+	tube.rings = 1
+	tube.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = tube
+	instance.rotation.x = PI * 0.5
+	instance.position = Vector3(0.0, 0.0, -size.y * 0.5)
+	_attachment_holder.add_child(instance)
+
+
+func _add_box(parent: Node3D, box_size: Vector3, at: Vector3, material: Material) -> MeshInstance3D:
+	var box := BoxMesh.new()
+	box.size = box_size
+	box.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = box
+	instance.position = at
+	parent.add_child(instance)
+	return instance
+
+
+func _add_sphere(parent: Node3D, radius: float, at: Vector3, material: Material) -> MeshInstance3D:
+	var sphere := SphereMesh.new()
+	sphere.radius = radius
+	sphere.height = radius * 2.0
+	sphere.radial_segments = 8
+	sphere.rings = 4
+	sphere.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = sphere
+	instance.position = at
+	parent.add_child(instance)
+	return instance
+
+
+func _attachment_material(color: Color, emission: float) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.metallic = 0.6
+	material.roughness = 0.4
+	if emission > 0.0:
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	return material
+
+
+## Луч лазера (тонкая полоска от излучателя до точки попадания) и точка на цели
+func _build_laser(k: float) -> void:
+	_laser_pivot = Node3D.new()
+	_laser_pivot.position = _laser_from + Vector3(0.0, 0.0, -0.035 * k)
+	_attachment_holder.add_child(_laser_pivot)
+	var beam_material := StandardMaterial3D.new()
+	beam_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	beam_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	beam_material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	beam_material.albedo_color = Color(LASER_COLOR, 0.35)
+	var beam := BoxMesh.new()
+	beam.size = Vector3(0.0025, 0.0025, 1.0)
+	beam.material = beam_material
+	var beam_instance := MeshInstance3D.new()
+	beam_instance.mesh = beam
+	beam_instance.position = Vector3(0.0, 0.0, -0.5)  # единичная длина вперёд от излучателя
+	_laser_pivot.add_child(beam_instance)
+	if _laser_dot == null:
+		var dot_material := StandardMaterial3D.new()
+		dot_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		dot_material.albedo_color = LASER_COLOR
+		var dot := SphereMesh.new()
+		dot.radius = 0.025
+		dot.height = 0.05
+		dot.radial_segments = 8
+		dot.rings = 4
+		dot.material = dot_material
+		_laser_dot = MeshInstance3D.new()
+		_laser_dot.name = "LaserDot"
+		_laser_dot.mesh = dot
+		_laser_dot.top_level = true
+		_laser_dot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(_laser_dot)
+
+
+## Луч смотрит туда, куда полетит пуля (луч камеры), точка — на попадании
+func _update_laser() -> void:
+	if _laser_pivot == null or camera == null:
+		return
+	var shown: bool = _current_model != null and _current_model.visible
+	_laser_pivot.visible = shown
+	if not shown:
+		_laser_dot.visible = false
+		return
+	var origin: Vector3 = camera.global_position
+	var far_point: Vector3 = origin - camera.global_basis.z * LASER_RANGE
+	var result: Dictionary = _raycast(origin, far_point)
+	var target: Vector3 = far_point
+	if not result.is_empty():
+		target = result["position"]
+		_laser_dot.global_position = target
+	_laser_dot.visible = not result.is_empty()
+	var from: Vector3 = _laser_pivot.global_position
+	var direction: Vector3 = target - from
+	var distance: float = direction.length()
+	if distance < 0.05:
+		return
+	var up: Vector3 = Vector3.UP if absf(direction.normalized().y) < 0.98 else Vector3.FORWARD
+	_laser_pivot.global_basis = Basis.looking_at(direction / distance, up).scaled_local(Vector3(1.0, 1.0, distance))
 
 
 func _disable_shadows(root: Node) -> void:
@@ -710,6 +894,8 @@ func _apply_feedback(weapon: WeaponData) -> void:
 		player.add_recoil(weapon.recoil_pitch, _rng.randf_range(-weapon.recoil_yaw, weapon.recoil_yaw))
 	if _current_model != null and is_instance_valid(_current_model):
 		_current_model.position = _model_rest + Vector3(0.0, 0.0, weapon.gun_kick * _offset_scale())
+	if weapon.hide_flash:
+		return  # глушитель: без вспышки
 	if muzzle_flash != null:
 		muzzle_flash.visible = true
 		_flash_left = MUZZLE_FLASH_TIME

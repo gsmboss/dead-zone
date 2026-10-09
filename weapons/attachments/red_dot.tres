@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttachmentData" format=3]
+
+[ext_resource type="Script" path="res://weapons/attachment_data.gd" id="1_att01"]
+
+[resource]
+script = ExtResource("1_att01")
+id = "red_dot"
+title = "КОЛЛИМАТОР"
+description = "В прицеле — красная точка: разброс −40%, чуть сильнее зум"
+slot = 1
+look = 3
+price = 250
+ads_spread = 0.6
+ads_fov = 0.9

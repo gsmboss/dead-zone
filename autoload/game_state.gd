@@ -45,6 +45,11 @@ const RAID_INTERVAL: int = 20 * 3600
 const RAID_FIRST_DELAY: int = 20 * 60
 const RAID_REWARD: float = 2.0
 const RAID_KIT: Dictionary = {"turret": 1, "bear_trap": 2, "land_mine": 2}
+## Обвесы оружия (порядок = порядок в оружейной)
+const ATTACHMENT_PATHS: Array[String] = ["res://weapons/attachments/silencer.tres",
+	"res://weapons/attachments/compensator.tres", "res://weapons/attachments/red_dot.tres",
+	"res://weapons/attachments/extended_mag.tres", "res://weapons/attachments/fast_mag.tres",
+	"res://weapons/attachments/laser.tres", "res://weapons/attachments/grip.tres"]
 ## Снаряжение (покупается один раз)
 const GEAR_PATHS: Array[String] = ["res://items/torch.tres"]
 ## Скины игрока (вид от 3-го лица и мультиплеер). Первый — по умолчанию
@@ -129,6 +134,9 @@ var _skin_id: String = ""
 var _next_raid: int = 0
 ## Идёт миссия-набег (награда ×RAID_REWARD); не сохраняется
 var raid_active: bool = false
+var attachments: Array[AttachmentData] = []
+var _attachments_owned: Dictionary = {}  # id ствола -> Array[String] купленных обвесов
+var _attachments_on: Dictionary = {}     # id ствола -> Array[String] поставленных (по одному на слот)
 
 
 func _ready() -> void:
@@ -147,6 +155,12 @@ func _ready() -> void:
 	if quest_pool == null:
 		push_warning("GameState: не найден %s, заданий не будет" % QUEST_POOL_PATH)
 		quest_pool = QuestPool.new()
+	for path: String in ATTACHMENT_PATHS:
+		var attachment := load(path) as AttachmentData if ResourceLoader.exists(path) else null
+		if attachment != null and not attachment.id.is_empty():
+			attachments.append(attachment)
+		else:
+			push_warning("GameState: не найден обвес %s" % path)
 	for path: String in ITEM_PATHS:
 		var item: ItemData = load(path) as ItemData if ResourceLoader.exists(path) else null
 		if item == null or item.id.is_empty():
@@ -220,9 +234,115 @@ func get_upgrade_cost(weapon: WeaponData, stat: String) -> int:
 
 func get_upgraded(weapon: WeaponData) -> WeaponData:
 	var upgraded: WeaponData = weapon.make_upgraded(_upgrades.get(weapon.id, {}))
+	for attachment: AttachmentData in get_attachments_on(weapon):
+		attachment.apply(upgraded)
 	if upgraded.max_reserve_ammo > 0 and get_ammo_bonus() > 0.0:
 		upgraded.max_reserve_ammo = roundi(upgraded.max_reserve_ammo * (1.0 + get_ammo_bonus()))
 	return upgraded
+
+
+# ---------- Обвесы ----------
+
+func get_attachment(attachment_id: String) -> AttachmentData:
+	for attachment: AttachmentData in attachments:
+		if attachment.id == attachment_id:
+			return attachment
+	return null
+
+
+## Обвесы, которые подходят к стволу
+func get_attachments_for(weapon: WeaponData) -> Array[AttachmentData]:
+	var result: Array[AttachmentData] = []
+	for attachment: AttachmentData in attachments:
+		if attachment.fits(weapon):
+			result.append(attachment)
+	return result
+
+
+func owns_attachment(weapon_id: String, attachment_id: String) -> bool:
+	return attachment_id in (_attachments_owned.get(weapon_id, []) as Array)
+
+
+func is_attachment_on(weapon_id: String, attachment_id: String) -> bool:
+	return attachment_id in (_attachments_on.get(weapon_id, []) as Array)
+
+
+## Поставленные на ствол обвесы (только подходящие и купленные)
+func get_attachments_on(weapon: WeaponData) -> Array[AttachmentData]:
+	var result: Array[AttachmentData] = []
+	if weapon == null:
+		return result
+	for attachment_id: Variant in (_attachments_on.get(weapon.id, []) as Array):
+		var attachment: AttachmentData = get_attachment(str(attachment_id))
+		if attachment != null and attachment.fits(weapon) and owns_attachment(weapon.id, attachment.id):
+			result.append(attachment)
+	return result
+
+
+## Купить обвес для ствола — сразу ставится (заменяя другой в том же слоте)
+func buy_attachment(weapon: WeaponData, attachment: AttachmentData) -> bool:
+	if weapon == null or attachment == null or not owns(weapon.id) or not attachment.fits(weapon) \
+			or owns_attachment(weapon.id, attachment.id):
+		return false
+	var cost: int = attachment.get_price(weapon)
+	if coins < cost:
+		return false
+	coins -= cost
+	var owned: Array = _attachments_owned.get(weapon.id, [])
+	owned.append(attachment.id)
+	_attachments_owned[weapon.id] = owned
+	_put_on(weapon.id, attachment)
+	coins_changed.emit(coins)
+	weapons_changed.emit()
+	save_game()
+	return true
+
+
+## Поставить / снять купленный обвес
+func toggle_attachment(weapon: WeaponData, attachment: AttachmentData) -> bool:
+	if weapon == null or attachment == null or not owns_attachment(weapon.id, attachment.id):
+		return false
+	if is_attachment_on(weapon.id, attachment.id):
+		var on: Array = _attachments_on.get(weapon.id, [])
+		on.erase(attachment.id)
+		_attachments_on[weapon.id] = on
+	else:
+		_put_on(weapon.id, attachment)
+	weapons_changed.emit()
+	save_game()
+	return true
+
+
+## Поставить обвес, сняв другой с того же слота
+func _put_on(weapon_id: String, attachment: AttachmentData) -> void:
+	var on: Array = _attachments_on.get(weapon_id, [])
+	for other_id: Variant in on.duplicate():
+		var other: AttachmentData = get_attachment(str(other_id))
+		if other == null or other.slot == attachment.slot:
+			on.erase(other_id)
+	on.append(attachment.id)
+	_attachments_on[weapon_id] = on
+
+
+func _load_attachments(source: Variant, check_owned: bool) -> Dictionary:
+	var result: Dictionary = {}
+	if not source is Dictionary:
+		return result
+	for weapon_id: Variant in source:
+		var list: Variant = (source as Dictionary)[weapon_id]
+		if not list is Array:
+			continue
+		var clean: Array = []
+		for attachment_id: Variant in list:
+			var id_text: String = str(attachment_id)
+			if get_attachment(id_text) == null or id_text in clean:
+				continue
+			if check_owned and not owns_attachment(str(weapon_id), id_text):
+				continue
+			clean.append(id_text)
+		if not clean.is_empty():
+			result[str(weapon_id)] = clean
+	return result
 
 
 ## Купленные стволы с улучшениями, в порядке каталога
@@ -1007,6 +1127,8 @@ func reset_progress() -> void:
 	_pending_story = ""
 	_next_raid = 0
 	raid_active = false
+	_attachments_owned.clear()
+	_attachments_on.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -1051,6 +1173,8 @@ func save_game() -> void:
 		"pending_story": _pending_story,
 		"skin": _skin_id,
 		"next_raid": _next_raid,
+		"attachments": _attachments_owned,
+		"attachments_on": _attachments_on,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1154,6 +1278,8 @@ func load_game() -> void:
 				_skins_owned.append(str(skin_id))
 	_skin_id = str(data.get("skin", ""))
 	_next_raid = maxi(int(data.get("next_raid", 0)), 0)
+	_attachments_owned = _load_attachments(data.get("attachments", {}), false)
+	_attachments_on = _load_attachments(data.get("attachments_on", {}), true)
 
 	_cutscenes_seen.clear()
 	var seen: Variant = data.get("cutscenes_seen", [])

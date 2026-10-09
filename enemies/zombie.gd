@@ -1508,10 +1508,11 @@ func _flat_distance_to(point: Vector3) -> float:
 
 # ---------- Реакции ----------
 
-func _on_player_fired(_weapon: WeaponData) -> void:
+func _on_player_fired(weapon: WeaponData) -> void:
 	if state == State.DEAD or _player == null:
 		return
-	if global_position.distance_to(_player.global_position) <= data.hearing_radius:
+	var hearing: float = data.hearing_radius * (weapon.hearing_multiplier if weapon != null else 1.0)
+	if global_position.distance_to(_player.global_position) <= hearing:
 		notify_target(_player.global_position, false)
 
 

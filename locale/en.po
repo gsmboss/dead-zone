@@ -229,6 +229,9 @@ msgstr "SPIKED BAT"
 msgid "БИТА-ПИЛА"
 msgstr "SAW BAT"
 
+msgid "БОЛЬШОЙ МАГАЗИН"
+msgstr "EXTENDED MAG"
+
 msgid "БОСС"
 msgstr "BOSS"
 
@@ -246,6 +249,9 @@ msgstr "ARMORED SPORT"
 
 msgid "БУГАЙ"
 msgstr "BRUTE"
+
+msgid "БЫСТРЫЙ МАГАЗИН"
+msgstr "QUICK MAG"
 
 msgid "Банда Барона грабит колонну выживших на стоянке контейнеров. Отбей колонну — убей 25 бандитов и зомби"
 msgstr "Baron's gang is robbing a survivor convoy at the container yard. Save the convoy — kill 25 bandits and zombies"
@@ -306,6 +312,9 @@ msgstr "TO SHELTER"
 
 msgid "В ЦЕНТРЕ — ВОСЕМЬ ВЫЖИВШИХ, ДВОЕ ДЕТЕЙ. И ДЯДЯ ГОША. С КОФЕМАШИНОЙ. БЕЗ НЕЁ ОН ЕХАТЬ ОТКАЗЫВАЕТСЯ."
 msgstr "DOWNTOWN — EIGHT SURVIVORS, TWO OF THEM KIDS. AND UNCLE GOSHA. WITH A COFFEE MACHINE. HE REFUSES TO LEAVE WITHOUT IT."
+
+msgid "В прицеле — красная точка: разброс −40%, чуть сильнее зум"
+msgstr "Red dot when aiming: spread −40%, a bit more zoom"
 
 msgid "В цехах промзоны — гнездо, откуда идёт заражение. Выдержи 5 волн и убей Громилу"
 msgstr "The industrial zone workshops hide the nest where the infection comes from. Survive 5 waves and kill the Brute"
@@ -559,6 +568,9 @@ msgstr "CHAPTER COMPLETE  •  %s"
 msgid "ГЛАВНАЯ У УЧЁНЫХ — ДОКТОР ИРИНА. ЕЙ НУЖНЫ РЕАКТИВЫ, ХОЛОДИЛЬНИК И НОРМАЛЬНЫЙ КОФЕ. ДЯДЯ ГОША ВПЕРВЫЕ ВСТРЕТИЛ РАВНОГО ПРОТИВНИКА."
 msgstr "THE SCIENTISTS' LEADER IS DOCTOR IRINA. SHE NEEDS REAGENTS, A FRIDGE AND DECENT COFFEE. UNCLE GOSHA HAS MET HIS MATCH FOR THE FIRST TIME."
 
+msgid "ГЛУШИТЕЛЬ"
+msgstr "SILENCER"
+
 msgid "ГНИЛЯК"
 msgstr "GHOUL"
 
@@ -684,6 +696,9 @@ msgstr "DRIFT PLAZA"
 
 msgid "ДРОБОВИК"
 msgstr "SHOTGUN"
+
+msgid "ДУЛО"
+msgstr "MUZZLE"
 
 msgid "ДЯДЯ ГОША"
 msgstr "UNCLE GOSHA"
@@ -832,6 +847,9 @@ msgstr "Zombies come 1.5 times more often, coins ×1.5"
 msgid "Зомби приходят реже, можно спокойно исследовать город"
 msgstr "Zombies come less often — explore the city in peace"
 
+msgid "Зомби слышат выстрел втрое ближе, нет вспышки. Урон −5%"
+msgstr "Zombies hear shots from a third of the distance, no muzzle flash. Damage −5%"
+
 msgid "И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, "
 msgstr "AND TAPS \"CREATE GAME\". FRIENDS CONNECT TO ITS NETWORK AND PICK THE GAME FROM THE LIST, "
 
@@ -979,6 +997,9 @@ msgstr "CLAWS — ZOMBIE BITE OR HIT, CROSSHAIR — PLAYER SHOT, STAR — EXPLOS
 msgid "КОКТЕЙЛЬ МОЛОТОВА"
 msgstr "MOLOTOV COCKTAIL"
 
+msgid "КОЛЛИМАТОР"
+msgstr "RED DOT"
+
 msgid "КОЛОННА БЕЖЕНЦЕВ ОТКАЗАЛАСЬ ПЛАТИТЬ БАРОНУ НАЛОГ. ТЕПЕРЬ СТЕРВЯТНИКИ ЗАБИРАЮТ У НИХ ВСЁ — ВМЕСТЕ С МАШИНАМИ И ЛЮДЬМИ."
 msgstr "A REFUGEE CONVOY REFUSED TO PAY THE BARON'S TAX. NOW THE VULTURES ARE TAKING EVERYTHING FROM THEM — CARS AND PEOPLE INCLUDED."
 
@@ -987,6 +1008,9 @@ msgstr "THE CONVOY IS SAVED: THREE ADULTS AND A GOAT NAMED ZINA. NOBODY ASKED FO
 
 msgid "КОМАНДЫ"
 msgstr "TEAMS"
+
+msgid "КОМПЕНСАТОР"
+msgstr "COMPENSATOR"
 
 msgid "КОНЕЦ"
 msgstr "THE END"
@@ -1054,6 +1078,9 @@ msgstr "COURIER"
 msgid "Корабль с юга ждёт у старого моста. Кабан ведёт орду и банду, чтобы отнять вакцину. Выдержи 5 волн и победи Кабана"
 msgstr "A ship from the south waits at the old bridge. Kaban leads a horde and his gang to steal the vaccine. Survive 5 waves and defeat Kaban"
 
+msgid "Красный луч и точка на цели: разброс от бедра −30%"
+msgstr "Red beam and a dot on the target: hip-fire spread −30%"
+
 msgid "Крепость на колёсах: таран, перед которым не устоит даже толстяк."
 msgstr "Fortress on wheels: a ram not even a fatty can stand against."
 
@@ -1065,6 +1092,9 @@ msgstr "THE CAMP. 03:00"
 
 msgid "ЛАГЕРЬ. УТРО"
 msgstr "THE CAMP. MORNING"
+
+msgid "ЛАЗЕР"
+msgstr "LASER"
 
 msgid "ЛЕВ"
 msgstr "LEV"
@@ -1131,6 +1161,9 @@ msgstr "THE DEAD RISE FROM THE GROUND HERE — THAT'S HOW IT SHOULD BE IN A GRAV
 
 msgid "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ."
 msgstr "THERE ARE STILL PLENTY OF DEAD. BUT NOW WE HAVE A HOME — AND PEOPLE WORTH COMING BACK FOR."
+
+msgid "МАГАЗИН"
+msgstr "MAGAZINE"
 
 msgid "МАКС"
 msgstr "MAX"
@@ -1239,6 +1272,9 @@ msgstr "MATT"
 
 msgid "Магазин"
 msgstr "Magazine"
+
+msgid "Магазин +50%, перезарядка на 10% дольше"
+msgstr "Magazine +50%, reload 10% slower"
 
 msgid "Медленный и тяжёлый: зомби отлетают, как кегли. Поворачивает неохотно."
 msgstr "Slow and heavy: zombies fly like bowling pins. Turns reluctantly."
@@ -1384,6 +1420,9 @@ msgstr "No missions available"
 msgid "Нужно топливо для генераторов. Удержи заправочную точку 90 секунд"
 msgstr "Generators need fuel. Hold the gas station point for 90 seconds"
 
+msgid "ОБВЕСЫ"
+msgstr "ATTACHMENTS"
+
 msgid "ОБЗОР НАКЛОНОМ ТЕЛЕФОНА"
 msgstr "AIM BY TILTING THE PHONE"
 
@@ -1474,6 +1513,12 @@ msgstr "Repel %s"
 msgid "Отбей три волны зомби"
 msgstr "Fight off three waves of zombies"
 
+msgid "Отдача −40%, прицел меньше расходится при стрельбе"
+msgstr "Recoil −40%, less crosshair bloom while firing"
+
+msgid "Отдача −45%, разброс −10%"
+msgstr "Recoil −45%, spread −10%"
+
 msgid "Открывает улучшения машин: таран и двигатель"
 msgstr "Unlocks car upgrades: ram and engine"
 
@@ -1557,6 +1602,9 @@ msgstr "TALK"
 
 msgid "ПОД МОСТОМ ПРЯТАЛАСЬ СЕМЬЯ ИЗ ЧЕТЫРЁХ. ТЕПЕРЬ ОНИ В ЛАГЕРЕ, А У ЛАГЕРЯ — НОВЫЙ ДОМ ДЛЯ ГОСТЕЙ С ЮГА."
 msgstr "A FAMILY OF FOUR WAS HIDING UNDER THE BRIDGE. NOW THEY'RE IN THE CAMP, AND THE CAMP HAS A NEW HOUSE FOR GUESTS FROM THE SOUTH."
+
+msgid "ПОД СТВОЛ"
+msgstr "UNDERBARREL"
 
 msgid "ПОДКАТ"
 msgstr "SLIDE"
@@ -1732,6 +1780,9 @@ msgstr "A medkit appears in your bag before every mission if you don't have one"
 msgid "Перезарядка"
 msgstr "Reload"
 
+msgid "Перезарядка на 30% быстрее"
+msgstr "Reload 30% faster"
+
 msgid "Пикап с решёткой на бампере: быстрее и бьёт сильнее."
 msgstr "Pickup with a bull bar: faster and hits harder."
 
@@ -1821,6 +1872,9 @@ msgstr "RUSTY PICKUP"
 
 msgid "РОЗОВЫЙ"
 msgstr "PINK"
+
+msgid "РУКОЯТЬ"
+msgstr "FOREGRIP"
 
 msgid "РУССКИЙ"
 msgstr "RUSSIAN"
@@ -1920,6 +1974,9 @@ msgstr "GEAR"
 
 msgid "СНАЧАЛА КУПИ ЭТУ МАШИНУ НА ВКЛАДКЕ «МАШИНЫ»"
 msgstr "BUY THIS CAR FIRST ON THE \"CARS\" TAB"
+
+msgid "СНЯТЬ"
+msgstr "REMOVE"
 
 msgid "СОБАКА"
 msgstr "DOG"

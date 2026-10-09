@@ -29,6 +29,8 @@ var _headshot_popup: HeadshotPopup
 var _scope: ScopeOverlay
 var _gap: float = MIN_GAP
 var _melee: bool = false
+## Коллиматор на стволе: в прицеле — красная точка
+var _red_dot: bool = false
 
 
 func _ready() -> void:
@@ -60,7 +62,7 @@ func _connect_manager() -> void:
 		layer.move_child(_scope, 0)
 	weapon_manager.weapon_changed.connect(_on_weapon_changed)
 	var weapon: WeaponData = weapon_manager.get_current_weapon()
-	_melee = weapon != null and weapon.is_melee
+	_on_weapon_changed(weapon)
 
 
 func _process(delta: float) -> void:
@@ -86,6 +88,12 @@ func _draw() -> void:
 	# Размер из настроек: длина и толщина черт, точка (зазор — по разбросу оружия)
 	var k: float = Settings.crosshair_scale
 	var center: Vector2 = size * 0.5
+	if _red_dot and weapon_manager != null and weapon_manager.get_aim_weight() > 0.5:
+		# Коллиматор: в прицеле вместо креста — красная точка со свечением
+		draw_circle(center, 7.0 * k, Color(1.0, 0.1, 0.05, 0.18))
+		draw_circle(center, 4.0 * k, Color(1.0, 0.15, 0.08, 0.45))
+		draw_circle(center, 2.2 * k, Color(1.0, 0.3, 0.2))
+		return
 	draw_circle(center, (DOT_RADIUS + 1.5) * k, OUTLINE_COLOR)
 	draw_circle(center, DOT_RADIUS * k, Color.WHITE)
 	if _melee:
@@ -117,6 +125,7 @@ func _spread_to_pixels(spread_degrees: float) -> float:
 
 func _on_weapon_changed(weapon: WeaponData) -> void:
 	_melee = weapon != null and weapon.is_melee
+	_red_dot = weapon != null and weapon.has_look(AttachmentData.Look.RED_DOT)
 
 
 func _find_hud_layer() -> Node:

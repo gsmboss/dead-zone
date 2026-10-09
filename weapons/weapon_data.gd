@@ -90,6 +90,20 @@ extends Resource
 @export_range(0.0, 0.2, 0.01) var reload_per_level: float = 0.08
 
 
+# ---------- Обвесы (ставит GameState.get_upgraded на копию, в .tres не сохраняются) ----------
+
+## Дальность слышимости выстрела зомби (глушитель < 1)
+var hearing_multiplier: float = 1.0
+## Без вспышки на стволе
+var hide_flash: bool = false
+## Что нарисовать на модели (AttachmentData.Look)
+var attachment_looks: Array[int] = []
+
+
+func has_look(look: int) -> bool:
+	return look in attachment_looks
+
+
 func get_fire_interval() -> float:
 	return 1.0 / maxf(fire_rate, 0.01)
 

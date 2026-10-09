@@ -389,3 +389,11 @@ helmet_pass проходит не как хедшот, потом слетает
 MissionManager.call_reinforcements), brute.tres (БУГАЙ: front_armor 0.35 — урон спереди по телу, нагрудник,
 рывок charge_*, без вздрагивания). Каска/броня — Hitbox.damage_filter (Zombie._filter_damage). Добавлены в specials
 обычных миссий, бесконечного режима, города, набега и глав 6, 7, «Голоса с юга», «Старый мост»; советы в boot.gd.
+Обвесы (этап 8): weapons/attachment_data.gd (AttachmentData: slot ДУЛО/ПРИЦЕЛ/МАГАЗИН/ПОД СТВОЛ, look, множители,
+fits — огнестрел без огнемёта, коллиматор не на оптику; get_price растёт с ценой ствола), weapons/attachments/*.tres
+(глушитель, компенсатор, коллиматор, большой и быстрый магазин, лазер, рукоять). GameState.ATTACHMENT_PATHS,
+_attachments_owned/_attachments_on (сохранение attachments/attachments_on), buy_attachment (сразу ставит, один на слот),
+toggle_attachment; get_upgraded применяет поставленные. WeaponData (не в .tres): hearing_multiplier (Zombie._on_player_fired),
+hide_flash, attachment_looks. WeaponManager._build_attachments — примитивы у среза ствола (узел Attachments в осях
+менеджера, константы SILENCER_SIZE, RED_DOT_BACK/UP, UNDER_BACK/DOWN — подгонка), лазер: луч к точке попадания луча
+камеры + точка LaserDot. Crosshair: с коллиматором в прицеле — красная точка. Оружейная: «ОБВЕСЫ (n) ▼» в карточке ствола.

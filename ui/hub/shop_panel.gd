@@ -1,7 +1,7 @@
 class_name ShopPanel
 extends HubWindow
-## Оружейная: улучшения выжившего (здоровье, броня), покупка стволов
-## и улучшение урона, магазина и перезарядки.
+## Оружейная: улучшения выжившего (здоровье, броня), покупка стволов,
+## улучшение урона, магазина и перезарядки и обвесы (AttachmentData).
 
 const STAT_NAMES: Dictionary = {
 	"damage": "Урон",
@@ -12,6 +12,9 @@ const PLAYER_STAT_NAMES: Dictionary = {
 	"health": "Здоровье",
 	"armor": "Броня",
 }
+
+## У какого ствола раскрыт список обвесов (переживает refresh и повторное открытие)
+static var _open_attachments: String = ""
 
 
 func _ready() -> void:
@@ -86,7 +89,56 @@ func _make_weapon_card(weapon: WeaponData) -> Control:
 		upgrade.disabled = cost < 0 or GameState.coins < cost
 		upgrade.pressed.connect(func() -> void: _play_result(GameState.upgrade_weapon(weapon, stat)))
 		row.add_child(upgrade)
+	_add_attachments(weapon, box)
 	return card
+
+
+## Обвесы ствола: кнопка раскрывает список по слотам (купить / поставить / снять)
+func _add_attachments(weapon: WeaponData, box: VBoxContainer) -> void:
+	var fitting: Array[AttachmentData] = GameState.get_attachments_for(weapon)
+	if fitting.is_empty():
+		return
+	var opened: bool = _open_attachments == weapon.id
+	var on_count: int = GameState.get_attachments_on(weapon).size()
+	var toggle := UIKit.button("%s (%d)  %s" % [UIKit.t("ОБВЕСЫ"), on_count, "▲" if opened else "▼"], 24)
+	toggle.modulate = UIKit.ACCENT
+	toggle.pressed.connect(func() -> void:
+		Sfx.click()
+		_open_attachments = "" if _open_attachments == weapon.id else weapon.id
+		refresh())
+	box.add_child(toggle)
+	if not opened:
+		return
+	var last_slot: int = -1
+	for attachment: AttachmentData in fitting:
+		if attachment.slot != last_slot:
+			last_slot = attachment.slot
+			var slot_label := UIKit.label(AttachmentData.SLOT_NAMES.get(attachment.slot, ""), 20, box)
+			slot_label.modulate = UIKit.DIM
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override(&"separation", 16)
+		box.add_child(row)
+		var texts := VBoxContainer.new()
+		texts.size_flags_horizontal = SIZE_EXPAND_FILL
+		row.add_child(texts)
+		var owned: bool = GameState.owns_attachment(weapon.id, attachment.id)
+		var on: bool = GameState.is_attachment_on(weapon.id, attachment.id)
+		var title := UIKit.label(attachment.title, 24, texts)
+		title.modulate = UIKit.GOOD if on else Color.WHITE
+		UIKit.label(attachment.description, 18, texts).modulate = UIKit.DIM
+		var button: Button
+		if not owned:
+			var price: int = attachment.get_price(weapon)
+			button = UIKit.button("+  %d" % price, 22, 200.0)
+			button.disabled = GameState.coins < price
+			button.pressed.connect(func() -> void: _play_result(GameState.buy_attachment(weapon, attachment)))
+		else:
+			button = UIKit.button("СНЯТЬ" if on else "ПОСТАВИТЬ", 22, 200.0)
+			button.pressed.connect(func() -> void:
+				Sfx.click()
+				GameState.toggle_attachment(weapon, attachment)
+				refresh())
+		row.add_child(button)
 
 
 ## Карточка «ВЫЖИВШИЙ»: здоровье и броня игрока
