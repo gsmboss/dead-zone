@@ -584,7 +584,7 @@ func _build_model() -> void:
 static func paint_body(model: Node3D, paint_color: Color) -> void:
 	if model == null or paint_color == Color.WHITE:
 		return
-	var painted: StandardMaterial3D
+	var painted: StandardMaterial3D = null
 	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() < 2:
