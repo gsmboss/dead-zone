@@ -116,18 +116,18 @@ func _physics_process(delta: float) -> void:
 			_target = _find_target()
 		_update_fetch(delta)
 
-	var speed: float = 0.0
 	if _target != null and _is_alive(_target):
-		speed = _fight(delta)
+		_fight(delta)
 	else:
 		_target = null
-		speed = _follow(delta)
-	_body.update_motion(speed, is_on_floor(), delta)
+		_follow(delta)
+	# Анимация — по настоящей скорости (упёрся в стену — не «бежит на месте»)
+	_body.update_motion(Vector2(velocity.x, velocity.z).length(), is_on_floor(), delta)
 
 
 # ---------- Следовать ----------
 
-func _follow(delta: float) -> float:
+func _follow(delta: float) -> void:
 	var forward: Vector3 = -_player.global_basis.z
 	forward.y = 0.0
 	forward = forward.normalized() if forward.length_squared() > 0.001 else Vector3.FORWARD
@@ -137,10 +137,9 @@ func _follow(delta: float) -> float:
 	if distance < ARRIVE_DISTANCE:
 		_stop()
 		_face(_player.global_position, delta)
-		return 0.0
+		return
 	var speed: float = data.run_speed if distance > 5.0 else data.walk_speed
 	_move_to(spot, speed, delta)
-	return speed
 
 
 # ---------- Бой ----------
@@ -167,13 +166,13 @@ func _find_target() -> Zombie:
 	return best
 
 
-func _fight(delta: float) -> float:
+func _fight(delta: float) -> void:
 	var target_position: Vector3 = _target.global_position
 	var distance: float = _flat(target_position - global_position).length()
 	if distance > data.attack_range or (not data.is_dog() and not _can_see(_target)):
 		var speed: float = data.run_speed
 		_move_to(target_position, speed, delta)
-		return speed
+		return
 	_stop()
 	_face(target_position, delta)
 	if _attack_timer <= 0.0:
@@ -182,7 +181,6 @@ func _fight(delta: float) -> float:
 			_bite()
 		else:
 			_shoot()
-	return 0.0
 
 
 func _bite() -> void:
@@ -249,7 +247,10 @@ func _move_to(point: Vector3, speed: float, delta: float) -> void:
 			_repath_timer = REPATH_INTERVAL
 			_agent.target_position = point
 		if not _agent.is_navigation_finished():
-			next = _agent.get_next_path_position()
+			var path_point: Vector3 = _agent.get_next_path_position()
+			# Пустой путь (точка — там же, где мы) — идём напрямую
+			if _flat(path_point - global_position).length_squared() > 0.01:
+				next = path_point
 	var direction: Vector3 = _flat(next - global_position)
 	if direction.length_squared() > 0.0001:
 		direction = direction.normalized()
@@ -284,8 +285,12 @@ func _teleport_near_player() -> void:
 	_target = null
 
 
+## Навмеш есть (в убежище его нет — там идём напрямую)
 func _is_navigation_ready() -> bool:
-	return _agent != null and NavigationServer3D.map_get_iteration_id(_agent.get_navigation_map()) > 0
+	if _agent == null:
+		return false
+	var map: RID = _agent.get_navigation_map()
+	return NavigationServer3D.map_get_iteration_id(map) > 0 and not NavigationServer3D.map_get_regions(map).is_empty()
 
 
 static func _flat(vector: Vector3) -> Vector3:
