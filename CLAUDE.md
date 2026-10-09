@@ -166,8 +166,8 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   action "jump", label "JUMP", якоря все 1, отступы -370,-170,-260,-60); последним ребёнком HUD —
   HubHUD (Control, скрипт ui/hub/hub_hud.gd, missions = [mission_waves, mission_kill, mission_survive]).
 - project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.png или 3D-зомби,
-  3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn; название DEAD ZONE — 3D TextMesh
-  Boot.Title3D в своём SubViewport; в начале логотип ui/splash/salamanderlab.png 1.6 с, он же — boot_splash/image
+  3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn; название DEAD ZONE — картинка
+  ui/splash/title.png (прозрачный фон, «дышит»), без неё — 3D TextMesh Boot.Title3D; в начале логотип ui/splash/salamanderlab.png 1.6 с, он же — boot_splash/image
   движка, фон Color(0.024, 0.09, 0.17)). Промпт картинки — ui/splash/PROMPT.md.
 - Иконка: res://icon.png (1024, углы залиты фоном, оригинал icons/icon_source.png); для экспорта Android —
   icons/icon_192.png, adaptive_foreground_432.png, adaptive_background_432.png (прописаны в export_presets.cfg,

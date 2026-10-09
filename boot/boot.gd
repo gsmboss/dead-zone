@@ -5,6 +5,8 @@ extends Control
 
 const NEXT_SCENE: String = "res://hub/hub.tscn"
 const SPLASH_IMAGE: String = "res://ui/splash/splash.png"
+## Готовая картинка названия (прозрачный фон); нет файла — 3D-текст Title3D
+const TITLE_IMAGE: String = "res://ui/splash/title.png"
 ## Логотип студии в самом начале (как и картинка движка при старте — project.godot boot_splash)
 const LOGO_IMAGE: String = "res://ui/splash/salamanderlab.png"
 const LOGO_COLOR: Color = Color(0.024, 0.09, 0.17)
@@ -87,6 +89,11 @@ func _animate(delta: float) -> void:
 		var k: float = 1.0 + ZOOM * clampf(_time / (MIN_TIME * 2.0), 0.0, 1.0)
 		_background.pivot_offset = _background.size * 0.5
 		_background.scale = Vector2.ONE * k
+	# Картинка названия «дышит» и чуть покачивается (3D-текст качается сам)
+	if _title is TextureRect:
+		_title.pivot_offset = _title.size * 0.5
+		_title.scale = Vector2.ONE * (1.0 + 0.02 * sin(_time * 1.8))
+		_title.rotation = sin(_time * 0.7) * 0.012
 	_tip_time += delta
 	if _tip_time >= TIP_TIME:
 		_tip_time = 0.0
@@ -172,13 +179,22 @@ func _build() -> void:
 	add_child(_gradient(true))
 	add_child(_gradient(false))
 
-	_title = Title3D.new()
+	var title_texture: Texture2D = load(TITLE_IMAGE) as Texture2D if ResourceLoader.exists(TITLE_IMAGE) else null
+	if title_texture != null:
+		var title_image := TextureRect.new()
+		title_image.texture = title_texture
+		title_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		title_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		title_image.mouse_filter = MOUSE_FILTER_IGNORE
+		_title = title_image
+	else:
+		_title = Title3D.new()
 	add_child(_title)
 	_title.set_anchors_and_offsets_preset(PRESET_CENTER_TOP)
-	_title.offset_left = -460.0
-	_title.offset_right = 460.0
-	_title.offset_top = 10.0
-	_title.offset_bottom = 190.0
+	_title.offset_left = -330.0
+	_title.offset_right = 330.0
+	_title.offset_top = 8.0
+	_title.offset_bottom = 278.0
 
 	var bottom := VBoxContainer.new()
 	bottom.add_theme_constant_override(&"separation", 8)
