@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="PlayerSkin" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://player/player_skin.gd" id="1_skin"]
-[ext_resource type="PackedScene" path="res://models/characters/kenney/character-female-e.glb" id="2_model"]
+[ext_resource type="PackedScene" path="res://models/characters/kenney/character-female-f.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_skin")
-id = "kenney_female_e"
-display_name = "ОХОТНИЦА"
+id = "kenney_female_f"
+display_name = "ДИДЖЕЙ"
 model_scene = ExtResource("2_model")
-price = 1500
+price = 700
 anim_idle = &"idle"
 hide_weapon = true
 anim_walk = &"walk"

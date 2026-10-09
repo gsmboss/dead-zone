@@ -25,6 +25,12 @@ var _dead: bool = false
 var _builtin_weapons: Dictionary = {}
 ## В руках огнестрел — стрелковая стойка (Idle_Gun и т.п.)
 var _armed: bool = false
+## Аксессуары (шляпы, очки): id надетых и их узлы на кости головы
+var _accessory_ids := PackedStringArray()
+var _accessory_nodes: Array[Node3D] = []
+var _shadow_only: bool = false
+## Габариты головы скина в осях скелета (считаются по вершинам один раз на скин)
+static var _head_cache: Dictionary = {}
 
 
 ## Сменить скин. null — скин по умолчанию из GameState
@@ -53,6 +59,10 @@ func set_skin(new_skin: PlayerSkin) -> void:
 	_create_hand()
 	_current_anim = &""
 	_play(new_skin.anim_idle)
+	_accessory_nodes.clear()  # старые узлы ушли вместе со старой моделью
+	_build_accessories()
+	if _shadow_only:
+		set_shadow_only(true)
 
 
 ## Оружие в руке (null — пустые руки)
@@ -153,6 +163,7 @@ func revive() -> void:
 
 ## Тени без отрисовки самого тела (вид от 1-го лица)
 func set_shadow_only(enabled: bool) -> void:
+	_shadow_only = enabled
 	if _model == null:
 		return
 	for node: Node in _model.find_children("*", "GeometryInstance3D", true, false):
@@ -275,4 +286,100 @@ func _transform_to(node: Node3D, root: Node3D) -> Transform3D:
 		if current_3d != null:
 			result = current_3d.transform * result
 		current = current.get_parent()
+	return result
+
+
+# ---------- Аксессуары ----------
+
+## Надеть аксессуары по id (шляпа — на макушку, очки и т.п. — на лицо); пусто — снять всё
+func set_accessories(ids: PackedStringArray) -> void:
+	_accessory_ids = ids.duplicate()
+	_build_accessories()
+	if _shadow_only:
+		set_shadow_only(true)
+
+
+func _build_accessories() -> void:
+	for node: Node3D in _accessory_nodes:
+		if is_instance_valid(node):
+			node.queue_free()
+	_accessory_nodes.clear()
+	if _model == null or skin == null or _accessory_ids.is_empty():
+		return
+	var skeletons: Array[Node] = _model.find_children("*", "Skeleton3D", true, false)
+	if skeletons.is_empty():
+		return
+	var skeleton := skeletons[0] as Skeleton3D
+	var bone: int = skeleton.find_bone(skin.head_bone)
+	if bone < 0:
+		push_warning("PlayerBody: у скина '%s' нет кости головы %s" % [skin.id, skin.head_bone])
+		return
+	var head: AABB = _head_bounds(skeleton, bone)
+	if head.size == Vector3.ZERO:
+		return
+	var anchor := BoneAttachment3D.new()
+	anchor.name = "AccessoryAnchor"
+	anchor.bone_name = skin.head_bone
+	skeleton.add_child(anchor)
+	_accessory_nodes.append(anchor)
+	# Узлы аксессуаров ставим в осях скелета (лицо модели — +Z), переводя в оси кости головы
+	var to_bone: Transform3D = skeleton.get_bone_global_rest(bone).affine_inverse()
+	var width: float = maxf(head.size.x, 0.01)
+	var center: Vector3 = head.get_center()
+	for accessory_id: String in _accessory_ids:
+		var data: AccessoryData = GameState.get_accessory(accessory_id)
+		var node: Node3D = AccessoryBuilder.build(data)
+		if node == null:
+			continue
+		var at: Vector3
+		if data.slot == AccessoryData.Slot.HEAD:
+			at = Vector3(center.x, head.end.y - head.size.y * 0.04, center.z)
+		else:
+			at = Vector3(center.x, head.position.y + head.size.y * 0.55, head.end.z)
+		node.transform = to_bone * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * width), at)
+		anchor.add_child(node)
+
+
+## Габариты вершин головы (вес кости головы ≥ 0.5) в осях скелета; кэш по скину
+func _head_bounds(skeleton: Skeleton3D, bone: int) -> AABB:
+	if _head_cache.has(skin.id):
+		return _head_cache[skin.id]
+	var result := AABB()
+	var has_bounds: bool = false
+	var bone_rest: Transform3D = skeleton.get_bone_global_rest(bone)
+	var bone_name: String = skeleton.get_bone_name(bone)
+	for node: Node in _model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh == null or mesh_instance.skin == null:
+			continue
+		var bind: int = -1
+		for i in mesh_instance.skin.get_bind_count():
+			if mesh_instance.skin.get_bind_bone(i) == bone or String(mesh_instance.skin.get_bind_name(i)) == bone_name:
+				bind = i
+				break
+		if bind < 0:
+			continue
+		var bind_pose: Transform3D = mesh_instance.skin.get_bind_pose(bind)
+		for surface in mesh_instance.mesh.get_surface_count():
+			var arrays: Array = mesh_instance.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES] if arrays[Mesh.ARRAY_BONES] != null else PackedInt32Array()
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS] if arrays[Mesh.ARRAY_WEIGHTS] != null else PackedFloat32Array()
+			if vertices.is_empty() or bones.size() < vertices.size():
+				continue
+			var per_vertex: int = floori(float(bones.size()) / float(vertices.size()))
+			for v in vertices.size():
+				for k in per_vertex:
+					var index: int = v * per_vertex + k
+					if bones[index] == bind and weights[index] >= 0.5:
+						var point: Vector3 = bone_rest * (bind_pose * vertices[v])
+						if has_bounds:
+							result = result.expand(point)
+						else:
+							result = AABB(point, Vector3.ZERO)
+							has_bounds = true
+						break
+	if not has_bounds:
+		push_warning("PlayerBody: не нашёл вершины головы у скина '%s'" % skin.id)
+	_head_cache[skin.id] = result
 	return result

@@ -102,6 +102,7 @@ func _add_character(peer_id: int, entry: Dictionary, at: Vector3) -> void:
 	root.add_child(body)
 	var skin: PlayerSkin = GameState.get_skin(str(entry["skin"]))
 	body.set_skin(skin if skin != null else GameState.get_selected_skin())
+	body.set_accessories(str(entry.get("acc", "")).split(",", false))
 	body.set_weapon(SkinPreview.best_weapon())
 	# Лицом к камере
 	body.rotation.y = atan2(CAMERA_POSITION.x - at.x, CAMERA_POSITION.z - at.z) + PI

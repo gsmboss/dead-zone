@@ -323,6 +323,9 @@ func _create_proxy(peer_id: int) -> void:
 	proxy.global_position = _spawn_for(peer_id, true)
 	var skin: PlayerSkin = GameState.get_skin(str(Net.players[peer_id].get("skin", "")))
 	proxy.body.set_skin(skin if skin != null else GameState.get_selected_skin())
+	var worn: String = str(Net.players[peer_id].get("acc", ""))
+	if not worn.is_empty():
+		proxy.body.set_accessories(worn.split(",", false))
 	if proxy.health != null:
 		proxy.health.damaged.connect(_on_proxy_damaged.bind(peer_id))
 	if Net.is_enemy(peer_id):

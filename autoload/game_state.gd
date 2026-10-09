@@ -13,6 +13,8 @@ signal gear_changed
 signal campaign_changed
 ## Куплена, выбрана, покрашена или затюнингована машина
 signal cars_changed
+## Куплен, надет или снят аксессуар персонажа
+signal accessories_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -44,7 +46,24 @@ const SKIN_PATHS: Array[String] = [
 	"res://player/skins/sam.tres", "res://player/skins/kenney_male_a.tres",
 	"res://player/skins/kenney_female_a.tres", "res://player/skins/kenney_male_c.tres",
 	"res://player/skins/kenney_female_c.tres", "res://player/skins/kenney_male_e.tres",
-	"res://player/skins/kenney_female_e.tres",
+	"res://player/skins/kenney_female_e.tres", "res://player/skins/kenney_male_b.tres",
+	"res://player/skins/kenney_female_b.tres", "res://player/skins/kenney_male_d.tres",
+	"res://player/skins/kenney_female_d.tres", "res://player/skins/kenney_male_f.tres",
+	"res://player/skins/kenney_female_f.tres", "res://player/skins/zombie_cosplay.tres",
+	"res://player/skins/zombie_chubby.tres",
+]
+## Аксессуары персонажа (порядок = порядок в окне ПЕРСОНАЖ)
+const ACCESSORY_PATHS: Array[String] = [
+	"res://player/accessories/cap.tres", "res://player/accessories/beanie.tres",
+	"res://player/accessories/cowboy.tres", "res://player/accessories/headphones.tres",
+	"res://player/accessories/sunglasses.tres", "res://player/accessories/glasses_round.tres",
+	"res://player/accessories/bandana.tres", "res://player/accessories/party_hat.tres",
+	"res://player/accessories/propeller.tres", "res://player/accessories/bunny_ears.tres",
+	"res://player/accessories/chef.tres", "res://player/accessories/traffic_cone.tres",
+	"res://player/accessories/pot.tres", "res://player/accessories/clown_nose.tres",
+	"res://player/accessories/mustache.tres", "res://player/accessories/top_hat.tres",
+	"res://player/accessories/viking.tres", "res://player/accessories/halo.tres",
+	"res://player/accessories/crown.tres", "res://player/accessories/eyepatch.tres",
 ]
 const BUILDING_PATHS: Array[String] = ["res://base/workshop.tres", "res://base/medbay.tres",
 	"res://base/armory.tres", "res://base/garage.tres"]
@@ -104,6 +123,10 @@ var _car_paint: Dictionary = {}   # id машины -> индекс CAR_PAINTS
 var _car_neon: Dictionary = {}    # id машины -> индекс CAR_NEONS (нет ключа — неона нет)
 var _cutscenes_seen: Array[String] = []
 var skins: Array[PlayerSkin] = []
+var accessories: Array[AccessoryData] = []
+var _accessories_owned: Array[String] = []
+## Надетые: слот (AccessoryData.Slot) -> id
+var _accessories_worn: Dictionary = {}
 var gear: Array[GearData] = []
 var campaign: CampaignData
 var _chapters_done: Array[String] = []
@@ -159,6 +182,12 @@ func _ready() -> void:
 			push_warning("GameState: не найден скин %s" % path)
 			continue
 		skins.append(skin)
+	for path: String in ACCESSORY_PATHS:
+		var accessory: AccessoryData = load(path) as AccessoryData if ResourceLoader.exists(path) else null
+		if accessory == null or accessory.id.is_empty():
+			push_warning("GameState: не найден аксессуар %s" % path)
+			continue
+		accessories.append(accessory)
 	for path: String in CAR_PATHS:
 		var car: CarData = load(path) as CarData if ResourceLoader.exists(path) else null
 		if car == null or car.id.is_empty():
@@ -592,6 +621,59 @@ func upgrade_car(stat: String) -> bool:
 	return true
 
 
+# ---------- Аксессуары ----------
+
+func get_accessory(accessory_id: String) -> AccessoryData:
+	for accessory: AccessoryData in accessories:
+		if accessory.id == accessory_id:
+			return accessory
+	return null
+
+
+func owns_accessory(accessory_id: String) -> bool:
+	var accessory: AccessoryData = get_accessory(accessory_id)
+	return accessory != null and (accessory.price <= 0 or accessory_id in _accessories_owned)
+
+
+func buy_accessory(accessory_id: String) -> bool:
+	var accessory: AccessoryData = get_accessory(accessory_id)
+	if accessory == null or owns_accessory(accessory_id) or coins < accessory.price:
+		return false
+	coins -= accessory.price
+	_accessories_owned.append(accessory_id)
+	_accessories_worn[accessory.slot] = accessory_id  # купил — сразу надел
+	coins_changed.emit(coins)
+	accessories_changed.emit()
+	save_game()
+	return true
+
+
+func is_accessory_worn(accessory_id: String) -> bool:
+	return accessory_id in _accessories_worn.values()
+
+
+## Надеть (на своё место, заменяя прежний) или снять, если уже надет
+func toggle_accessory(accessory_id: String) -> void:
+	var accessory: AccessoryData = get_accessory(accessory_id)
+	if accessory == null or not owns_accessory(accessory_id):
+		return
+	if is_accessory_worn(accessory_id):
+		_accessories_worn.erase(accessory.slot)
+	else:
+		_accessories_worn[accessory.slot] = accessory_id
+	accessories_changed.emit()
+	save_game()
+
+
+## Надетые аксессуары (id) — для тела персонажа и для сети
+func get_worn_accessories() -> PackedStringArray:
+	var result := PackedStringArray()
+	for slot: int in _accessories_worn:
+		if owns_accessory(str(_accessories_worn[slot])):
+			result.append(str(_accessories_worn[slot]))
+	return result
+
+
 # ---------- Автосалон ----------
 
 func get_car(car_id: String) -> CarData:
@@ -916,6 +998,8 @@ func reset_progress() -> void:
 	_inventory.clear()
 	_buildings_owned.clear()
 	_car_upgrades.clear()
+	_accessories_owned.clear()
+	_accessories_worn.clear()
 	_cars_owned.clear()
 	_car_id = ""
 	_car_tuning.clear()
@@ -935,6 +1019,7 @@ func reset_progress() -> void:
 	gear_changed.emit()
 	campaign_changed.emit()
 	cars_changed.emit()
+	accessories_changed.emit()
 	skin_changed.emit(get_selected_skin())
 	save_game()
 
@@ -958,6 +1043,8 @@ func save_game() -> void:
 		"inventory": _inventory,
 		"buildings": _buildings_owned,
 		"car_upgrades": _car_upgrades,
+		"accessories_owned": _accessories_owned,
+		"accessories_worn": get_worn_accessories(),
 		"cars_owned": _cars_owned,
 		"car": _car_id,
 		"car_tuning": _car_tuning,
@@ -1091,6 +1178,7 @@ func load_game() -> void:
 			_car_upgrades[stat] = stored_car[stat]
 
 	_load_cars(data)
+	_load_accessories(data)
 
 	_inventory.clear()
 	var stored: Dictionary = _load_int_dictionary(data.get("inventory", {}), 0, 99)
@@ -1098,6 +1186,23 @@ func load_game() -> void:
 		var item: ItemData = get_item(item_id)
 		if item != null:
 			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
+
+
+## Аксессуары из сохранения: купленные и надетые (по своим местам)
+func _load_accessories(data: Dictionary) -> void:
+	_accessories_owned.clear()
+	_accessories_worn.clear()
+	var owned: Variant = data.get("accessories_owned", [])
+	if owned is Array:
+		for entry: Variant in owned:
+			if get_accessory(str(entry)) != null and not str(entry) in _accessories_owned:
+				_accessories_owned.append(str(entry))
+	var worn: Variant = data.get("accessories_worn", [])
+	if worn is Array:
+		for entry: Variant in worn:
+			var accessory: AccessoryData = get_accessory(str(entry))
+			if accessory != null and owns_accessory(accessory.id):
+				_accessories_worn[accessory.slot] = accessory.id
 
 
 ## Машины автосалона из сохранения (неизвестные id отбрасываются)

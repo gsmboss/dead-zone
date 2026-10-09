@@ -29,6 +29,10 @@ extends Resource
 @export var walk_anim_speed: float = 1.6
 @export var run_anim_speed: float = 4.5
 
+@export_group("Accessories")
+## Кость головы: к ней крепятся шляпы и очки (Quaternius — Head, Kenney — head)
+@export var head_bone: StringName = &"Head"
+
 @export_group("Hand")
 ## Не показывать оружие в руках (у блочных персонажей Kenney нет кисти — ствол висит криво)
 @export var hide_weapon: bool = false

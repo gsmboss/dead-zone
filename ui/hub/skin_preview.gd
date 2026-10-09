@@ -47,10 +47,12 @@ func _ready() -> void:
 	_pivot.add_child(_body)
 
 
+## Скин с надетыми сейчас аксессуарами
 func show_skin(skin: PlayerSkin) -> void:
 	if _body == null or skin == null:
 		return
 	_body.set_skin(skin)
+	_body.set_accessories(GameState.get_worn_accessories())
 	_body.set_weapon(best_weapon())
 
 

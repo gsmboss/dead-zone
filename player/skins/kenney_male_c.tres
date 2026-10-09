@@ -27,3 +27,4 @@ hand_bone = &""
 hand_offset = Vector3(0, -0.2, 0.05)
 hand_rotation_degrees = Vector3(0, 0, 0)
 weapon_length = 0.5
+head_bone = &"head"
