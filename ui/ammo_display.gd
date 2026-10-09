@@ -54,6 +54,6 @@ func _on_reload_ended() -> void:
 
 func _refresh() -> void:
 	if _melee:
-		text = "%s\nБЛИЖНИЙ БОЙ" % _weapon_name
+		text = UIKit.t("%s\nБЛИЖНИЙ БОЙ") % UIKit.t(_weapon_name)
 		return
-	text = "%s\n%s" % [_weapon_name, "ПЕРЕЗАРЯДКА..." if _reloading else _ammo_text]
+	text = "%s\n%s" % [UIKit.t(_weapon_name), UIKit.t("ПЕРЕЗАРЯДКА...") if _reloading else _ammo_text]

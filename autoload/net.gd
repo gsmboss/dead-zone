@@ -92,7 +92,7 @@ func my_id() -> int:
 
 
 func get_player_name(peer_id: int) -> String:
-	return str((players.get(peer_id, {}) as Dictionary).get("name", "ИГРОК %d" % peer_id))
+	return str((players.get(peer_id, {}) as Dictionary).get("name", UIKit.t("ИГРОК %d") % peer_id))
 
 
 func get_team(peer_id: int) -> int:
@@ -130,7 +130,7 @@ func host_game() -> bool:
 	var err: Error = _peer.create_server(PORT, MAX_PLAYERS - 1)
 	if err != OK:
 		_peer = null
-		status_changed.emit("НЕ УДАЛОСЬ СОЗДАТЬ ИГРУ (%s)" % error_string(err))
+		status_changed.emit(UIKit.t("НЕ УДАЛОСЬ СОЗДАТЬ ИГРУ (%s)") % error_string(err))
 		return false
 	multiplayer.multiplayer_peer = _peer
 	players.clear()
@@ -145,19 +145,19 @@ func host_game() -> bool:
 func join_game(address: String) -> void:
 	address = address.strip_edges()
 	if not address.is_valid_ip_address():
-		status_changed.emit("НЕВЕРНЫЙ IP: %s" % address)
+		status_changed.emit(UIKit.t("НЕВЕРНЫЙ IP: %s") % address)
 		return
 	leave()
 	_peer = ENetMultiplayerPeer.new()
 	var err: Error = _peer.create_client(address, PORT)
 	if err != OK:
 		_peer = null
-		status_changed.emit("ОШИБКА ПОДКЛЮЧЕНИЯ (%s)" % error_string(err))
+		status_changed.emit(UIKit.t("ОШИБКА ПОДКЛЮЧЕНИЯ (%s)") % error_string(err))
 		return
 	multiplayer.multiplayer_peer = _peer
 	_host_address = address
 	_connect_left = CONNECT_TIMEOUT
-	status_changed.emit("ПОДКЛЮЧЕНИЕ К %s…" % address)
+	status_changed.emit(UIKit.t("ПОДКЛЮЧЕНИЕ К %s…") % address)
 
 
 ## Подключиться к телефону, раздающему точку доступа: он — шлюз сети (адрес x.x.x.1)
@@ -334,7 +334,7 @@ func _on_peer_disconnected(peer_id: int) -> void:
 func _on_connected_to_server() -> void:
 	_connect_left = 0.0
 	_extend_timeout(1)
-	status_changed.emit("ПОДКЛЮЧЕНО К %s" % _host_address)
+	status_changed.emit(UIKit.t("ПОДКЛЮЧЕНО К %s") % _host_address)
 	var info: Dictionary = _my_info()
 	_rpc_register.rpc_id(1, PROTOCOL, info["name"], info["skin"], info["car"])
 
@@ -492,8 +492,8 @@ func _show_loading() -> void:
 	_loading_bar.custom_minimum_size = Vector2(0.0, 24.0)
 	_loading_bar.show_percentage = false
 	box.add_child(_loading_bar)
-	var hint := UIKit.label("%s  •  %s" % [MAP_NAMES[clampi(map_index, 0, MAP_NAMES.size() - 1)],
-		MODE_NAMES[clampi(match_mode, 0, MODE_NAMES.size() - 1)]], 24, box)
+	var hint := UIKit.label("%s  •  %s" % [UIKit.t(MAP_NAMES[clampi(map_index, 0, MAP_NAMES.size() - 1)]),
+		UIKit.t(MODE_NAMES[clampi(match_mode, 0, MODE_NAMES.size() - 1)])], 24, box)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.modulate = UIKit.DIM
 

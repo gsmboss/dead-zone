@@ -140,7 +140,7 @@ func _make_tile(id: StringName, title_text: String, icon_name: String, tint: Col
 func _status(id: StringName) -> String:
 	match id:
 		&"story":
-			return "ПРОЙДЕНО %d%%" % roundi(GameState.get_campaign_progress() * 100.0)
+			return UIKit.t("ПРОЙДЕНО %d%%") % roundi(GameState.get_campaign_progress() * 100.0)
 		&"missions":
 			return "КАРТА ЗАРАЖЕНИЯ"
 		&"shop":
@@ -152,7 +152,7 @@ func _status(id: StringName) -> String:
 			var car: CarData = GameState.get_selected_car()
 			return car.title if car != null else ""
 		&"base":
-			return "СПАСЕНО: %d" % GameState.get_rescued_count()
+			return UIKit.t("СПАСЕНО: %d") % GameState.get_rescued_count()
 		&"daily":
 			return "НАГРАДА ЖДЁТ!" if GameState.has_unclaimed_rewards() else "НАГРАДЫ И ЗАДАНИЯ"
 		&"online":

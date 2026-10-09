@@ -139,7 +139,7 @@ func _process(delta: float) -> void:
 			_update_repair_target()
 		_process_repair(delta)
 	else:
-		_speed_label.text = "%d КМ/Ч" % roundi(_car.get_speed_kmh())
+		_speed_label.text = UIKit.t("%d КМ/Ч") % roundi(_car.get_speed_kmh())
 		_update_drift(delta)
 		_health_bar.value = _car.get_health_ratio()
 		_status_label.visible = _car.is_broken()
@@ -387,7 +387,7 @@ func _update_drift(delta: float) -> void:
 		_drift_pause = DRIFT_END_PAUSE
 		_drift_points += _car.get_speed_kmh() * DRIFT_POINTS_RATE * delta * 0.1
 		_drift_label.visible = true
-		_drift_label.text = "ДРИФТ  %d" % roundi(_drift_points)
+		_drift_label.text = UIKit.t("ДРИФТ  %d") % roundi(_drift_points)
 		_drift_label.modulate = UIKit.ACCENT.lerp(Color(1.0, 0.3, 0.2), clampf(_drift_points / 3000.0, 0.0, 1.0))
 	elif _drift_points > 0.0:
 		_drift_pause -= delta
@@ -402,7 +402,7 @@ func _bank_drift() -> void:
 	var points: int = roundi(_drift_points)
 	_drift_points = 0.0
 	var coins: int = 0 if Net.in_match else mini(floori(points / DRIFT_COINS_DIVISOR), DRIFT_COINS_MAX)
-	_drift_label.text = "ДРИФТ  %d  +%s" % [points, UIKit.coins_text(coins)] if coins > 0 else "ДРИФТ  %d" % points
+	_drift_label.text = UIKit.t("ДРИФТ  %d  +%s") % [points, UIKit.coins_text(coins)] if coins > 0 else UIKit.t("ДРИФТ  %d") % points
 	_drift_label.modulate = UIKit.GOOD
 	_drift_label.visible = true
 	if coins > 0:
@@ -526,8 +526,8 @@ func _process_repair(delta: float) -> void:
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), _repair_target.global_position + Vector3.UP, -6.0,
 			randf_range(1.1, 1.4))
 	_status_label.visible = true
-	_status_label.text = "РЕМОНТ %d%%%s" % [mini(roundi(_repair_progress * 100.0), 100),
-		"" if has_scrap else "  (БЕЗ ЛОМА — ДОЛЬШЕ)"]
+	_status_label.text = UIKit.t("РЕМОНТ %d%%%s") % [mini(roundi(_repair_progress * 100.0), 100),
+		"" if has_scrap else UIKit.t("  (БЕЗ ЛОМА — ДОЛЬШЕ)")]
 	if _repair_progress < 1.0:
 		return
 	if has_scrap:
@@ -615,7 +615,7 @@ class CarHealthBar extends Control:
 		draw_rect(Rect2(Vector2(3.0, 3.0), Vector2((size.x - 6.0) * clampf(value, 0.0, 1.0), size.y - 6.0)), fill)
 		draw_rect(rect, Color(1.0, 1.0, 1.0, 0.5), false, 2.0)
 		var font: Font = ThemeDB.fallback_font
-		var text: String = "КУЗОВ %d%%" % roundi(value * 100.0)
+		var text: String = UIKit.t("КУЗОВ %d%%") % roundi(value * 100.0)
 		var font_size: int = 22
 		var text_size: Vector2 = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 		var at := Vector2((size.x - text_size.x) * 0.5, (size.y + font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5)

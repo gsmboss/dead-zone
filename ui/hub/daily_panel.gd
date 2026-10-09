@@ -12,7 +12,7 @@ func _ready() -> void:
 func _build_content() -> void:
 	var event: DailyEventData = GameState.get_daily_event()
 	if event != null:
-		var banner := UIKit.label("СОБЫТИЕ ДНЯ: %s — %s" % [event.title, event.description], 24, content)
+		var banner := UIKit.label(UIKit.t("СОБЫТИЕ ДНЯ: %s — %s") % [UIKit.t(event.title), UIKit.t(event.description)], 24, content)
 		banner.modulate = UIKit.GOOD
 	content.add_child(_make_daily_card())
 	UIKit.label("ЗАДАНИЯ НА СЕГОДНЯ", 28, content).modulate = UIKit.ACCENT
@@ -31,13 +31,13 @@ func _make_daily_card() -> Control:
 
 	UIKit.label("НАГРАДА ЗА ВХОД", 30, box)
 	var streak: int = GameState.get_next_streak()
-	var info := UIKit.label("День серии: %d из %d. Заходи каждый день — награда растёт" % [
+	var info := UIKit.label(UIKit.t("День серии: %d из %d. Заходи каждый день — награда растёт") % [
 		streak, GameState.quest_pool.max_streak], 22, box)
 	info.modulate = UIKit.DIM
 
 	var can_claim: bool = GameState.can_claim_daily()
 	var claim := UIKit.button(
-		"ЗАБРАТЬ %s" % UIKit.coins_text(GameState.get_daily_reward()) if can_claim else "ПРИХОДИ ЗАВТРА", 28)
+		UIKit.t("ЗАБРАТЬ %s") % UIKit.coins_text(GameState.get_daily_reward()) if can_claim else "ПРИХОДИ ЗАВТРА", 28)
 	claim.disabled = not can_claim
 	claim.pressed.connect(_on_claim_daily)
 	box.add_child(claim)
@@ -63,7 +63,7 @@ func _make_quest_card(index: int, entry: Dictionary) -> Control:
 	var title := UIKit.label(quest.title, 26, texts)
 	title.modulate = UIKit.GOOD if complete else Color.WHITE
 	var progress: int = mini(int(entry.get("progress", 0)), quest.target)
-	UIKit.label("%d / %d  •  награда %d" % [progress, quest.target, quest.reward_coins], 22, texts).modulate = UIKit.DIM
+	UIKit.label(UIKit.t("%d / %d  •  награда %d") % [progress, quest.target, quest.reward_coins], 22, texts).modulate = UIKit.DIM
 
 	var button := UIKit.button("ПОЛУЧЕНО" if claimed else "ЗАБРАТЬ", 24, 220.0)
 	button.disabled = claimed or not complete

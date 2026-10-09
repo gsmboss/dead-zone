@@ -30,7 +30,7 @@ func _build_content() -> void:
 		var name_label := UIKit.label(shown.display_name, 32, left)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.modulate = UIKit.ACCENT
-	UIKit.label("МОНЕТЫ: %d" % GameState.coins, 24, left).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UIKit.label(UIKit.t("МОНЕТЫ: %d") % GameState.coins, 24, left).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -70,7 +70,7 @@ func _make_row(skin: PlayerSkin, selected: bool) -> Control:
 			refresh())
 		line.add_child(choose)
 	else:
-		var buy := UIKit.button("КУПИТЬ %d" % skin.price, 24, 220.0)
+		var buy := UIKit.button(UIKit.t("КУПИТЬ %d") % skin.price, 24, 220.0)
 		buy.disabled = GameState.coins < skin.price
 		buy.pressed.connect(func() -> void:
 			if GameState.buy_skin(skin.id):

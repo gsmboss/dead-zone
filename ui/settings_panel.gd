@@ -110,7 +110,7 @@ func _build_controls() -> void:
 func _build_camera() -> void:
 	_choice("ВИД", &"camera_mode", Settings.CAMERA_MODE_NAMES)
 	_slider("ДИСТАНЦИЯ КАМЕРЫ (3-Е ЛИЦО)", &"camera_distance", 1.5, 4.5, 0.1,
-		func(v: float) -> String: return "%.1f М" % v)
+		func(v: float) -> String: return UIKit.t("%.1f М") % v)
 	_slider("ТРЯСКА КАМЕРЫ (ВЗРЫВЫ, БОСС)", &"camera_shake", 0.0, 1.0, 0.05, _percent)
 
 
@@ -142,7 +142,7 @@ func _build_gyro() -> void:
 	var rate_names := PackedStringArray()
 	var rate_values: Array = []
 	for rate: int in Settings.GYRO_RATES:
-		rate_names.append("%d ГЦ" % rate)
+		rate_names.append(UIKit.t("%d ГЦ") % rate)
 		rate_values.append(rate)
 	_choice("ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)", &"gyro_rate", rate_names, rate_values)
 
@@ -154,7 +154,7 @@ func _build_effects() -> void:
 	_toggle("ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ", &"attacker_marker")
 	_toggle("ЗАМЕДЛЕНИЕ ПРИ ХЕДШОТЕ", &"headshot_slowmo")
 	var hint := UIKit.label("КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
-		+ "КАПЛЯ — КИСЛОТА", 20, content)
+		+ UIKit.t("КАПЛЯ — КИСЛОТА"), 20, content)
 	hint.modulate = UIKit.DIM
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
@@ -169,7 +169,7 @@ func _build_graphics() -> void:
 	_choice("КАЧЕСТВО ГРАФИКИ", &"graphics_quality", Settings.QUALITY_NAMES, [], refresh)
 	var hint: String = "АВТО: ПОДБИРАЕТСЯ ПОД ТЕЛЕФОН И САМО СНИЖАЕТСЯ, ЕСЛИ ИГРА ТОРМОЗИТ"
 	if Settings.graphics_quality == Settings.Quality.AUTO and Settings.auto_tier >= 0:
-		hint += "  (СЕЙЧАС: %s)" % Settings.QUALITY_NAMES[Settings.auto_tier]
+		hint += UIKit.t("  (СЕЙЧАС: %s)") % UIKit.t(Settings.QUALITY_NAMES[Settings.auto_tier])
 	UIKit.label(hint, 20, content).modulate = UIKit.DIM
 	var fps_values: Array = []
 	for limit: int in Settings.FPS_LIMITS:
@@ -187,8 +187,8 @@ func _build_story() -> void:
 	_toggle("ГОЛОСА ВЫЖИВШИХ В УБЕЖИЩЕ", &"voice_camp")
 	_slider("ГРОМКОСТЬ ГОЛОСОВ", &"voice_volume", 0.0, 1.0, 0.05, _percent)
 	var language: String = "РУССКИЙ" if VoiceOver.is_russian() else "АНГЛИЙСКИЙ"
-	var voice_hint := UIKit.label("ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s" % [language,
-		"" if VoiceOver.is_available() else " • ГОЛОС НЕ НАЙДЕН: УСТАНОВИ СИНТЕЗ РЕЧИ GOOGLE"], 20, content)
+	var voice_hint := UIKit.label(UIKit.t("ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s") % [UIKit.t(language),
+		"" if VoiceOver.is_available() else UIKit.t(" • ГОЛОС НЕ НАЙДЕН: УСТАНОВИ СИНТЕЗ РЕЧИ GOOGLE")], 20, content)
 	voice_hint.modulate = UIKit.DIM
 	voice_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var replay := UIKit.button("ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА", 22)
@@ -204,6 +204,8 @@ func _build_story() -> void:
 
 
 func _build_other() -> void:
+	# Язык: подписи меняются сразу; окна, собранные раньше, — после перезахода в убежище
+	_choice("ЯЗЫК / LANGUAGE", &"language", Settings.LANGUAGE_NAMES, [], _on_language_changed)
 	var reset := UIKit.button("СБРОСИТЬ ВСЕ НАСТРОЙКИ", 24)
 	reset.pressed.connect(_on_reset)
 	content.add_child(reset)
@@ -235,6 +237,14 @@ func _section(title: String) -> void:
 ## Выбор из вариантов (ряд кнопок, выбранная подсвечена). values — значения вариантов,
 ## по умолчанию индексы 0..N-1
 ## after — вызвать после выбора (например, перестроить окно)
+## Сменили язык: в убежище перезагружаем сцену — все окна и надписи соберутся заново
+func _on_language_changed() -> void:
+	var scene: Node = get_tree().current_scene
+	if scene != null and scene.scene_file_path == "res://hub/hub.tscn":
+		GameState.save_game()
+		get_tree().reload_current_scene.call_deferred()
+
+
 func _choice(title: String, key: StringName, names: PackedStringArray, values: Array = [],
 		after: Callable = Callable()) -> void:
 	var card := UIKit.card()
@@ -327,9 +337,9 @@ func _slider(title: String, key: StringName, min_value: float, max_value: float,
 	slider.add_theme_stylebox_override(&"grabber_area_highlight", filled)
 	box.add_child(slider)
 
-	label.text = "%s: %s" % [title, format.call(slider.value)]
+	label.text = "%s: %s" % [UIKit.t(title), format.call(slider.value)]
 	slider.value_changed.connect(func(value: float) -> void:
-		label.text = "%s: %s" % [title, format.call(value)]
+		label.text = "%s: %s" % [UIKit.t(title), format.call(value)]
 		Settings.set_value(key, value, false))
 	slider.drag_ended.connect(func(_changed: bool) -> void: Settings.save_settings())
 

@@ -76,7 +76,7 @@ func _on_damaged(_amount: float, hit_position: Vector3, _is_headshot: bool) -> v
 	_targets[slot] = source
 	_times[slot] = SHOW_TIME
 	_kinds[slot] = clampi(health.last_kind, 0, KIND_COLORS.size() - 1)
-	_names[slot] = health.last_source_name
+	_names[slot] = UIKit.t(health.last_source_name)
 	set_process(true)
 
 

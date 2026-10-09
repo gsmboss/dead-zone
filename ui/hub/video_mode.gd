@@ -166,13 +166,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if _shot != Shot.ORBIT and _shot != Shot.CLOSE:
 		return
-	# Свайп крутит камеру (на ПК — мышь с зажатой кнопкой; на телефоне мышь эмулируется — её не берём)
+	# Свайп крутит камеру (на ПК мышь превращается в касания — pointing/emulate_touch_from_mouse)
 	var drag: Vector2 = Vector2.ZERO
 	if event is InputEventScreenDrag:
 		drag = (event as InputEventScreenDrag).relative
-	elif event is InputEventMouseMotion and not DisplayServer.is_touchscreen_available() \
-			and ((event as InputEventMouseMotion).button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
-		drag = (event as InputEventMouseMotion).relative
 	if drag != Vector2.ZERO:
 		_yaw -= drag.x * SWIPE_SPEED
 		_pitch = clampf(_pitch + drag.y * SWIPE_SPEED, -0.35, 1.2)
@@ -366,7 +363,7 @@ class Viewfinder extends Control:
 		draw_string_outline(font, Vector2(left + 46.0, top + 40.0), clock, HORIZONTAL_ALIGNMENT_LEFT, -1, 28, 6,
 			Color(0.0, 0.0, 0.0, 0.7))
 		draw_string(font, Vector2(left + 46.0, top + 40.0), clock, HORIZONTAL_ALIGNMENT_LEFT, -1, 28, color)
-		var info: String = "%s   ×%.1f" % [shot_name, zoom]
+		var info: String = "%s   ×%.1f" % [UIKit.t(shot_name), zoom]
 		draw_string_outline(font, Vector2(left + 16.0, bottom - 16.0), info, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, 6,
 			Color(0.0, 0.0, 0.0, 0.7))
 		draw_string(font, Vector2(left + 16.0, bottom - 16.0), info, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, color)

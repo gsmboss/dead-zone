@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 func show_headshot() -> void:
 	_combo = _combo + 1 if _combo_left > 0.0 else 1
 	_combo_left = COMBO_TIME
-	_label.text = "ХЕДШОТ!" if _combo <= 1 else "ХЕДШОТ ×%d" % _combo
+	_label.text = "ХЕДШОТ!" if _combo <= 1 else UIKit.t("ХЕДШОТ ×%d") % _combo
 	visible = true
 	if _tween != null and _tween.is_valid():
 		_tween.kill()

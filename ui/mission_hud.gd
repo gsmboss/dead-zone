@@ -167,7 +167,7 @@ func _process(_delta: float) -> void:
 	if left <= 0.0:
 		_revive_panel.visible = false
 		return
-	_revive_timer.text = "ВТОРОЙ ШАНС: %d" % ceili(left)
+	_revive_timer.text = UIKit.t("ВТОРОЙ ШАНС: %d") % ceili(left)
 
 
 func _on_revive_offered(_seconds: float) -> void:
@@ -292,13 +292,13 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 
 	var lines := PackedStringArray()
 	var level: int = int(stats.get("level", 1))
-	lines.append(str(stats.get("title", "")) + ("" if level <= 1 else "  •  уровень %d" % level))
-	lines.append("Убито зомби: %d" % int(stats.get("kills", 0)))
+	lines.append(UIKit.t(str(stats.get("title", ""))) + ("" if level <= 1 else UIKit.t("  •  уровень %d") % level))
+	lines.append(UIKit.t("Убито зомби: %d") % int(stats.get("kills", 0)))
 	if bool(stats.get("endless", false)):
-		lines.append("Волн пройдено: %d" % int(stats.get("waves", 0)))
-	lines.append("Очки: %d" % int(stats.get("score", 0)))
-	lines.append("Время: %s" % MissionManager.format_time(float(stats.get("time", 0.0))))
-	lines.append("Точность: %d%%  •  Здоровье: %d%%" % [
+		lines.append(UIKit.t("Волн пройдено: %d") % int(stats.get("waves", 0)))
+	lines.append(UIKit.t("Очки: %d") % int(stats.get("score", 0)))
+	lines.append(UIKit.t("Время: %s") % MissionManager.format_time(float(stats.get("time", 0.0))))
+	lines.append(UIKit.t("Точность: %d%%  •  Здоровье: %d%%") % [
 		roundi(float(stats.get("accuracy", 0.0)) * 100.0), roundi(float(stats.get("health_share", 0.0)) * 100.0)])
 	_result_stats.text = "\n".join(lines)
 	_result.visible = true
@@ -323,7 +323,7 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 
 
 func _set_coins_text(value: float, total: int) -> void:
-	_result_coins.text = "МОНЕТЫ +%d  (ВСЕГО %d)" % [roundi(value), total]
+	_result_coins.text = UIKit.t("МОНЕТЫ +%d  (ВСЕГО %d)") % [roundi(value), total]
 
 
 ## После миссии — межстраничная реклама (если пора), затем переход

@@ -121,7 +121,7 @@ func _draw_node(index: int, font: Font) -> void:
 		draw_rect(Rect2(center + Vector2(-8.0, -1.0), Vector2(16.0, 12.0)), Color(0.9, 0.9, 0.9))
 		draw_arc(center + Vector2(0.0, -2.0), 6.0, PI, TAU, 10, Color(0.9, 0.9, 0.9), 3.0, false)
 	# Подпись
-	var label: String = chapter.title
+	var label: String = UIKit.t(chapter.title)
 	var label_size: Vector2 = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 	var label_pos := Vector2(center.x - label_size.x * 0.5, center.y + radius + 22.0)
 	label_pos.x = clampf(label_pos.x, 6.0, size.x - label_size.x - 6.0)

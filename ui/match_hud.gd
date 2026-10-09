@@ -110,7 +110,7 @@ func _process(delta: float) -> void:
 		_last_second = seconds
 		var mode_name: String = Net.MODE_NAMES[_match.get_mode()]
 		_top.text = mode_name if _match.get_mode() == Net.Mode.LAST_STANDING \
-			else "%s  •  %s" % [mode_name, MissionManager.format_time(seconds)]
+			else "%s  •  %s" % [UIKit.t(mode_name), MissionManager.format_time(seconds)]
 	if _announce_left > 0.0:
 		_announce_left -= delta
 		_announce.modulate.a = clampf(_announce_left / 0.5, 0.0, 1.0)
@@ -119,13 +119,13 @@ func _process(delta: float) -> void:
 		_attacker.modulate.a = clampf(_attacker_left / 0.5, 0.0, 1.0)
 	if _match.is_waiting():
 		_waiting_time += delta
-		_respawn.text = "ЖДЁМ ИГРОКОВ…  %d" % floori(_waiting_time)
+		_respawn.text = UIKit.t("ЖДЁМ ИГРОКОВ…  %d") % floori(_waiting_time)
 		# Долго нет старта — даём выйти
 		_leave_button.visible = _waiting_time > MatchManager.LOAD_TIMEOUT + 5.0
 		return
 	_leave_button.visible = false
 	var respawn_left: float = _match.get_respawn_left()
-	_respawn.text = "ВОЗРОЖДЕНИЕ ЧЕРЕЗ %d" % ceili(respawn_left) if respawn_left > 0.0 else ""
+	_respawn.text = UIKit.t("ВОЗРОЖДЕНИЕ ЧЕРЕЗ %d") % ceili(respawn_left) if respawn_left > 0.0 else ""
 	for i in range(_feed_times.size() - 1, -1, -1):
 		_feed_times[i] -= delta
 		if _feed_times[i] <= 0.0 and i < _feed_box.get_child_count():
@@ -145,7 +145,7 @@ func announce(text: String) -> void:
 func show_attacker(attacker_name: String) -> void:
 	if _attacker == null:
 		return
-	_attacker.text = "▼ В ВАС СТРЕЛЯЕТ: %s" % attacker_name
+	_attacker.text = UIKit.t("▼ В ВАС СТРЕЛЯЕТ: %s") % attacker_name
 	_attacker_left = 2.5
 	_attacker.modulate.a = 1.0
 
@@ -168,7 +168,7 @@ func refresh_scores() -> void:
 		child.queue_free()
 	var scores: Dictionary = _match.get_scores()
 	if Net.match_mode == Net.Mode.TEAMS:
-		var team_line := UIKit.label("СИНИЕ %d : %d КРАСНЫЕ" % [_team_total(scores, 0), _team_total(scores, 1)],
+		var team_line := UIKit.label(UIKit.t("СИНИЕ %d : %d КРАСНЫЕ") % [_team_total(scores, 0), _team_total(scores, 1)],
 			22, _scores_box)
 		team_line.modulate = UIKit.ACCENT
 	for peer_id: int in _sorted(scores):

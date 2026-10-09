@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 				break
 	if inside:
 		_progress += delta
-		_label.text = "ОБЫСК %d%%" % roundi(minf(_progress / SEARCH_TIME, 1.0) * 100.0)
+		_label.text = UIKit.t("ОБЫСК %d%%") % roundi(minf(_progress / SEARCH_TIME, 1.0) * 100.0)
 		if _progress >= SEARCH_TIME:
 			_loot()
 	elif _progress > 0.0:
@@ -56,16 +56,16 @@ func _loot() -> void:
 	found.append(UIKit.coins_text(coins))
 	var scrap: int = _rng.randi_range(1, 4)
 	if GameState.add_item(GameState.SCRAP_ID, scrap):
-		found.append("ЛОМ ×%d" % scrap)
+		found.append(UIKit.t("ЛОМ ×%d") % scrap)
 	var extras: Array[String] = ["medkit", "ammo_pack", "grenade", "molotov"]
 	var extra: String = extras[_rng.randi() % extras.size()]
 	if _rng.randf() < 0.75 and GameState.add_item(extra):
 		var item: ItemData = GameState.get_item(extra)
-		found.append(item.title if item != null else extra)
+		found.append(UIKit.t(item.title) if item != null else UIKit.t(extra))
 	Sfx.play_2d(Sfx.sounds.purchase, -4.0, 1.0, 0.0)
 	var manager := get_tree().get_first_node_in_group(&"mission_manager") as MissionManager
 	if manager != null:
-		manager.announcement.emit("НАЙДЕНО: " + ", ".join(found))
+		manager.announcement.emit(UIKit.t("НАЙДЕНО: ") + ", ".join(found))
 	_marker.queue_free()
 	_label.queue_free()
 

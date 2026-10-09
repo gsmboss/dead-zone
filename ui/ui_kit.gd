@@ -36,8 +36,19 @@ static func _fix_wrap(target: Label) -> void:
 		target.autowrap_mode = TextServer.AUTOWRAP_OFF
 
 
-## Число со словом в нужном падеже: count(3, "волна", "волны", "волн") → «3 волны»
+## Перевод строки (ключ — русская фраза, см. locale/en.po). Подписи Label/Button переводятся сами —
+## t() нужен для текста, который склеивается с числами или рисуется вручную (draw_string)
+static func t(text: String) -> String:
+	if text.is_empty():
+		return text
+	return String(TranslationServer.translate(text))
+
+
+## Число со словом в нужном падеже: count(3, "волна", "волны", "волн") → «3 волны».
+## По-английски: 1 — единственное число (перевод one), иначе — множественное (перевод many)
 static func count(value: int, one: String, few: String, many: String) -> String:
+	if TranslationServer.get_locale().begins_with("en"):
+		return "%d %s" % [value, t(one) if absi(value) == 1 else t(many)]
 	var tail: int = absi(value) % 100
 	var last: int = tail % 10
 	var word: String = many

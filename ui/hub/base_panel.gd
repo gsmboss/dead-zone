@@ -18,7 +18,7 @@ func _ready() -> void:
 
 
 func _build_content() -> void:
-	var coins := UIKit.label("Монеты: %d   •   Лом: %d" % [GameState.coins, GameState.get_item_count(GameState.SCRAP_ID)], 30, content)
+	var coins := UIKit.label(UIKit.t("Монеты: %d   •   Лом: %d") % [GameState.coins, GameState.get_item_count(GameState.SCRAP_ID)], 30, content)
 	coins.modulate = UIKit.ACCENT
 	var event: DailyEventData = GameState.get_daily_event()
 	if event != null:
@@ -26,7 +26,7 @@ func _build_content() -> void:
 		content.add_child(card)
 		var box := VBoxContainer.new()
 		card.add_child(box)
-		UIKit.label("СОБЫТИЕ ДНЯ: %s" % event.title, 28, box).modulate = UIKit.GOOD
+		UIKit.label(UIKit.t("СОБЫТИЕ ДНЯ: %s") % UIKit.t(event.title), 28, box).modulate = UIKit.GOOD
 		UIKit.label(event.description, 22, box).modulate = UIKit.DIM
 
 	UIKit.label("ПОСТРОЙКИ", 30, content).modulate = UIKit.ACCENT
@@ -57,7 +57,7 @@ func _make_building_card(building: BuildingData) -> Control:
 	var title := UIKit.label(building.title, 28, texts)
 	title.modulate = UIKit.GOOD if owned else Color.WHITE
 	UIKit.label(building.description, 22, texts).modulate = UIKit.DIM
-	var button := UIKit.button("ПОСТРОЕНО" if owned else "ПОСТРОИТЬ — %d" % building.price, 24, 300.0)
+	var button := UIKit.button("ПОСТРОЕНО" if owned else UIKit.t("ПОСТРОИТЬ — %d") % building.price, 24, 300.0)
 	button.disabled = owned or GameState.coins < building.price
 	button.pressed.connect(func() -> void: _play(GameState.buy_building(building.id)))
 	row.add_child(button)
@@ -69,9 +69,9 @@ func _make_craft_row(item: ItemData) -> Control:
 	row.add_theme_constant_override(&"separation", 16)
 	row.add_child(ItemIcon.create(item, 56.0))
 	var count: int = GameState.get_item_count(item.id)
-	var label := UIKit.label("%s  (в сумке %d / %d)" % [item.title, count, item.max_stack], 24, row)
+	var label := UIKit.label(UIKit.t("%s  (в сумке %d / %d)") % [UIKit.t(item.title), count, item.max_stack], 24, row)
 	label.size_flags_horizontal = SIZE_EXPAND_FILL
-	var button := UIKit.button("СОБРАТЬ — %d ЛОМА" % item.craft_cost, 22, 300.0)
+	var button := UIKit.button(UIKit.t("СОБРАТЬ — %d ЛОМА") % item.craft_cost, 22, 300.0)
 	button.disabled = GameState.get_item_count(GameState.SCRAP_ID) < item.craft_cost or count >= item.max_stack
 	button.pressed.connect(func() -> void: _play(GameState.craft_item(item.id)))
 	row.add_child(button)
@@ -82,7 +82,7 @@ func _make_car_row(stat: String) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override(&"separation", 16)
 	var level: int = GameState.get_car_upgrade_level(stat)
-	var label := UIKit.label("%s: %d / %d" % [CAR_UPGRADE_NAMES.get(stat, stat), level, GameState.CAR_UPGRADE_MAX], 24, row)
+	var label := UIKit.label("%s: %d / %d" % [UIKit.t(str(CAR_UPGRADE_NAMES.get(stat, stat))), level, GameState.CAR_UPGRADE_MAX], 24, row)
 	label.size_flags_horizontal = SIZE_EXPAND_FILL
 	var cost: int = GameState.get_car_upgrade_cost(stat)
 	var button := UIKit.button("МАКС" if cost < 0 else "+  %d" % cost, 24, 200.0)

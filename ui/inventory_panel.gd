@@ -21,7 +21,7 @@ func _build_content() -> void:
 		content.add_child(_make_item_card(item, count, player))
 	if not has_any:
 		UIKit.label("Сумка пуста. Ненужные сейчас аптечки и патроны с земли попадают сюда, "
-			+ "а купить их можно в оружейной", 24, content).modulate = UIKit.DIM
+			+ UIKit.t("а купить их можно в оружейной"), 24, content).modulate = UIKit.DIM
 
 
 func _make_item_card(item: ItemData, count: int, player: Player) -> Control:
@@ -34,7 +34,7 @@ func _make_item_card(item: ItemData, count: int, player: Player) -> Control:
 	var texts := VBoxContainer.new()
 	texts.size_flags_horizontal = SIZE_EXPAND_FILL
 	row.add_child(texts)
-	UIKit.label("%s  ×%d" % [item.title, count], 28, texts)
+	UIKit.label("%s  ×%d" % [UIKit.t(item.title), count], 28, texts)
 	UIKit.label(item.description, 22, texts).modulate = UIKit.DIM
 
 	if item.is_throwable() or item.effect == ItemData.Effect.MATERIAL:

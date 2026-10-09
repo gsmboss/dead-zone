@@ -163,10 +163,10 @@ func _start() -> void:
 	await _play_intro()
 	if not is_inside_tree():
 		return
-	var title: String = mission.title if _level <= 1 else "%s • УРОВЕНЬ %d" % [mission.title, _level]
+	var title: String = UIKit.t(mission.title) if _level <= 1 else UIKit.t("%s • УРОВЕНЬ %d") % [UIKit.t(mission.title), _level]
 	if _event != null and (not is_equal_approx(_event.coin_multiplier, 1.0)
 			or not is_equal_approx(_event.spawn_multiplier, 1.0) or not is_equal_approx(_event.drop_multiplier, 1.0)):
-		title += "\nСОБЫТИЕ ДНЯ: %s" % _event.title
+		title += UIKit.t("\nСОБЫТИЕ ДНЯ: %s") % UIKit.t(_event.title)
 	announcement.emit(title)
 	_update_objective()
 	if mission.tutorial:
@@ -213,9 +213,9 @@ func _play_intro() -> void:
 	intro.id = cutscene_id
 	intro.once = true
 	intro.shots.append(_shot(p + Vector3(18.0, 14.0, 18.0), p + Vector3(10.0, 10.0, -12.0), p, p, 3.5,
-		"ЛОКАЦИЯ: %s\n%s" % [mission.get_location_name(), mission.title]))
+		UIKit.t("ЛОКАЦИЯ: %s\n%s") % [UIKit.t(mission.get_location_name()), UIKit.t(mission.title)]))
 	intro.shots.append(_shot(p + forward * 8.0 + Vector3.UP * 2.0, p + forward * 4.0 + Vector3.UP * 1.8 + side * 2.0,
-		head, head, 3.0, "ЦЕЛЬ: %s" % mission.get_goal_text().to_upper()))
+		head, head, 3.0, UIKit.t("ЦЕЛЬ: %s") % mission.get_goal_text().to_upper()))
 	intro.shots.append(_shot(p - forward * 3.0 + Vector3.UP * 2.5, p + Vector3.UP * 1.6,
 		head + forward * 10.0, head + forward * 10.0, 1.8, "В БОЙ!"))
 	_add_intro_voices(intro)
@@ -336,16 +336,16 @@ func _start_wave(number: int) -> void:
 	if mission.type == MissionData.Type.ENDLESS:
 		# Бесконечные волны: босс каждые boss_every_waves волн
 		if mission.boss != null and number % mission.boss_every_waves == 0:
-			announcement.emit("ВОЛНА %d: %s!" % [number, mission.boss.display_name])
+			announcement.emit(UIKit.t("ВОЛНА %d: %s!") % [number, UIKit.t(mission.boss.display_name)])
 			_boss_spawned = false
 			_spawn_boss()
 		else:
-			announcement.emit("ВОЛНА %d" % number)
+			announcement.emit(UIKit.t("ВОЛНА %d") % number)
 	elif number >= mission.wave_count and mission.boss != null and not _boss_spawned:
-		announcement.emit("ПОСЛЕДНЯЯ ВОЛНА: %s!" % mission.boss.display_name)
+		announcement.emit(UIKit.t("ПОСЛЕДНЯЯ ВОЛНА: %s!") % UIKit.t(mission.boss.display_name))
 		_spawn_boss()
 	else:
-		announcement.emit("ВОЛНА %d" % number)
+		announcement.emit(UIKit.t("ВОЛНА %d") % number)
 
 
 # ---------- Спавн ----------
@@ -394,7 +394,7 @@ func _process_boss(delta: float) -> void:
 	_boss_timer += delta
 	if _boss_timer >= mission.boss_delay:
 		_boss_timer = 0.0  # в открытом мире босс приходит снова через boss_delay
-		announcement.emit("%s!" % mission.boss.display_name)
+		announcement.emit("%s!" % UIKit.t(mission.boss.display_name))
 		_spawn_boss()
 
 
@@ -480,7 +480,7 @@ func on_item_collected() -> void:
 	_items_collected += 1
 	GameState.report_event(&"item_collect")
 	if _items_collected < _items_total:
-		announcement.emit("ЯЩИК %d / %d" % [_items_collected, _items_total])
+		announcement.emit(UIKit.t("ЯЩИК %d / %d") % [_items_collected, _items_total])
 	_check_goal()
 
 
@@ -618,7 +618,7 @@ func _check_goal() -> void:
 				else:
 					state = State.BETWEEN_WAVES
 					_phase_timer = mission.time_between_waves
-					announcement.emit("ВОЛНА %d ПРОЙДЕНА" % _wave)
+					announcement.emit(UIKit.t("ВОЛНА %d ПРОЙДЕНА") % _wave)
 		MissionData.Type.KILL_COUNT:
 			if kills >= mission.kill_target:
 				_finish(true)
@@ -637,7 +637,7 @@ func _check_goal() -> void:
 				_waves_cleared = _wave
 				state = State.BETWEEN_WAVES
 				_phase_timer = mission.time_between_waves
-				announcement.emit("ВОЛНА %d ПРОЙДЕНА  +%d" % [_wave, mission.coins_per_wave])
+				announcement.emit(UIKit.t("ВОЛНА %d ПРОЙДЕНА  +%d") % [_wave, mission.coins_per_wave])
 		# FREE_ROAM: цели нет — игра до смерти или выхода в убежище
 
 
@@ -669,7 +669,7 @@ func register_survivor() -> void:
 
 func on_survivor_rescued(coins: int) -> void:
 	_survivors_rescued += 1
-	announcement.emit("ВЫЖИВШИЙ СПАСЁН  +%d" % coins)
+	announcement.emit(UIKit.t("ВЫЖИВШИЙ СПАСЁН  +%d") % coins)
 
 
 func _on_zombie_despawned(_zombie: Zombie) -> void:
@@ -816,31 +816,31 @@ func _update_objective() -> void:
 		State.LOST:
 			text = "МИССИЯ ПРОВАЛЕНА"
 		State.STARTING:
-			text = "%s • СТАРТ ЧЕРЕЗ %d" % [mission.title, ceili(_phase_timer)]
+			text = UIKit.t("%s • СТАРТ ЧЕРЕЗ %d") % [UIKit.t(mission.title), ceili(_phase_timer)]
 		State.BETWEEN_WAVES:
-			text = "СЛЕДУЮЩАЯ ВОЛНА ЧЕРЕЗ %d" % ceili(_phase_timer)
+			text = UIKit.t("СЛЕДУЮЩАЯ ВОЛНА ЧЕРЕЗ %d") % ceili(_phase_timer)
 		State.RUNNING:
 			match mission.type:
 				MissionData.Type.WAVES:
-					text = "ВОЛНА %d/%d • ЗОМБИ: %d" % [
+					text = UIKit.t("ВОЛНА %d/%d • ЗОМБИ: %d") % [
 						_wave, mission.wave_count, _wave_left_to_spawn + _alive]
 				MissionData.Type.KILL_COUNT:
-					text = "УБИТО %d / %d" % [kills, mission.kill_target]
+					text = UIKit.t("УБИТО %d / %d") % [kills, mission.kill_target]
 				MissionData.Type.SURVIVE:
-					text = "ПРОДЕРЖИСЬ %s • УБИТО %d" % [
+					text = UIKit.t("ПРОДЕРЖИСЬ %s • УБИТО %d") % [
 						format_time(mission.survive_time - elapsed), kills]
 				MissionData.Type.DEFEND:
 					var percent: int = floori(100.0 * _defend_progress / maxf(mission.defend_time, 0.1))
-					text = "УДЕРЖИВАЙ ТОЧКУ %d%%%s" % [percent, "" if _on_point else " • ВЕРНИСЬ НА ТОЧКУ!"]
+					text = UIKit.t("УДЕРЖИВАЙ ТОЧКУ %d%%%s") % [percent, "" if _on_point else UIKit.t(" • ВЕРНИСЬ НА ТОЧКУ!")]
 				MissionData.Type.COLLECT:
-					text = "ЯЩИКИ С ПРИПАСАМИ %d / %d • УБИТО %d" % [_items_collected, _items_total, kills]
+					text = UIKit.t("ЯЩИКИ С ПРИПАСАМИ %d / %d • УБИТО %d") % [_items_collected, _items_total, kills]
 				MissionData.Type.ENDLESS:
-					text = "ВОЛНА %d • ЗОМБИ: %d • РЕКОРД %d" % [
+					text = UIKit.t("ВОЛНА %d • ЗОМБИ: %d • РЕКОРД %d") % [
 						_wave, _wave_left_to_spawn + _alive, GameState.get_best_score(mission.id)]
 				MissionData.Type.FREE_ROAM:
-					text = "УБИТО %d • ОЧКИ %d • %s" % [kills, score, format_time(elapsed)]
+					text = UIKit.t("УБИТО %d • ОЧКИ %d • %s") % [kills, score, format_time(elapsed)]
 					if _survivors_total > 0:
-						text += " • СПАСЕНО %d/%d" % [_survivors_rescued, _survivors_total]
+						text += UIKit.t(" • СПАСЕНО %d/%d") % [_survivors_rescued, _survivors_total]
 	if text != _objective_text:
 		_objective_text = text
 		objective_changed.emit(text)

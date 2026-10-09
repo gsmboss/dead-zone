@@ -144,7 +144,7 @@ func _update_throw_button() -> void:
 	var count: int = GameState.get_throwable_count()
 	_throw_button.visible = count > 0
 	var molotov: bool = item != null and item.effect == ItemData.Effect.MOLOTOV
-	_throw_button.label = "%s %d" % ["МОЛОТОВ" if molotov else "ГРАНАТА", count]
+	_throw_button.label = "%s %d" % [UIKit.t("МОЛОТОВ") if molotov else UIKit.t("ГРАНАТА"), count]
 	_throw_button.badge = str(count)
 	_throw_button.set_icon_name("fire-bottle" if molotov else "flash-grenade")
 

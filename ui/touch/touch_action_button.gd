@@ -219,15 +219,16 @@ func _draw_label(center: Vector2, r: float) -> void:
 		return
 	if label.is_empty():
 		return
+	var text: String = UIKit.t(label)  # подпись — ключ перевода (СЕСТЬ, ДРИФТ…)
 	var font: Font = ThemeDB.fallback_font
 	var font_size: int = maxi(8, int(r * 0.42))
-	var text_size: Vector2 = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var text_size: Vector2 = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	# Вертикальное центрирование по базовой линии, текст с тенью
 	var baseline_y: float = center.y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
 	var text_pos := Vector2(center.x - text_size.x * 0.5, baseline_y)
-	draw_string(font, text_pos + Vector2(0.0, 2.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
+	draw_string(font, text_pos + Vector2(0.0, 2.0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
 		Color(0.0, 0.0, 0.0, 0.5))
-	draw_string(font, text_pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, label_color)
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, label_color)
 
 
 ## Значок с тенью; badge — в правом нижнем углу

@@ -121,7 +121,7 @@ func _build() -> void:
 	diorama.custom_minimum_size = Vector2(0.0, 200.0)
 	column.add_child(diorama)
 	var cars: Array[PackedScene] = GameState.get_owned_cars()
-	var stats := UIKit.label("СПАСЕНО ЛЮДЕЙ: %d   •   ДОМОВ: %d   •   МАШИН: %d" % [
+	var stats := UIKit.label(UIKit.t("СПАСЕНО ЛЮДЕЙ: %d   •   ДОМОВ: %d   •   МАШИН: %d") % [
 		GameState.get_rescued_count(), GameState.get_house_count(), cars.size()], 20, column)
 	stats.modulate = UIKit.GOOD
 	_update_progress()
@@ -130,7 +130,7 @@ func _build() -> void:
 func _update_progress() -> void:
 	var progress: float = GameState.get_campaign_progress()
 	_progress_bar.value = progress * 100.0
-	_progress_label.text = "ПРОЙДЕНО %d%%" % roundi(progress * 100.0)
+	_progress_label.text = UIKit.t("ПРОЙДЕНО %d%%") % roundi(progress * 100.0)
 
 
 func _select(index: int) -> void:
@@ -151,7 +151,7 @@ func _fill_dossier() -> void:
 	var stripe := HazardStripe.new()
 	stripe.custom_minimum_size = Vector2(0.0, 8.0)
 	_dossier.add_child(stripe)
-	UIKit.label("ГЛАВА %d  •  %s" % [_selected + 1, chapter.title], 28, _dossier).modulate = \
+	UIKit.label(UIKit.t("ГЛАВА %d  •  %s") % [_selected + 1, UIKit.t(chapter.title)], 28, _dossier).modulate = \
 		CampaignMap.DONE if done else (RUST if unlocked else UIKit.DIM)
 	UIKit.label(chapter.location_name, 20, _dossier).modulate = UIKit.DIM
 	var row := HBoxContainer.new()
@@ -170,21 +170,21 @@ func _fill_dossier() -> void:
 		start.pressed.connect(_start_chapter.bind(chapter))
 		row.add_child(start)
 
-	var status: String = "ПРОЙДЕНА" if done else ("ДОСТУПНА" if unlocked else "ЗАКРЫТА: ПРОЙДИ ГЛАВУ %d" % _selected)
-	UIKit.label("СТАТУС: %s" % status, 20, _dossier)
+	var status: String = "ПРОЙДЕНА" if done else ("ДОСТУПНА" if unlocked else UIKit.t("ЗАКРЫТА: ПРОЙДИ ГЛАВУ %d") % _selected)
+	UIKit.label(UIKit.t("СТАТУС: %s") % UIKit.t(status), 20, _dossier)
 	if chapter.mission != null:
-		UIKit.label("ЗАДАЧА: %s" % chapter.mission.description.to_upper(), 20, _dossier)
-		UIKit.label("ЦЕЛЬ: %s" % chapter.mission.get_goal_text().to_upper(), 20, _dossier)
+		UIKit.label(UIKit.t("ЗАДАЧА: %s") % UIKit.t(chapter.mission.description).to_upper(), 20, _dossier)
+		UIKit.label(UIKit.t("ЦЕЛЬ: %s") % chapter.mission.get_goal_text().to_upper(), 20, _dossier)
 	var rewards := PackedStringArray()
 	if chapter.rescued > 0:
-		rewards.append("ЛЮДИ +%d" % chapter.rescued)
+		rewards.append(UIKit.t("ЛЮДИ +%d") % chapter.rescued)
 	if chapter.unlock_house:
 		rewards.append("НОВЫЙ ДОМ")
 	if chapter.unlock_car != null:
-		rewards.append("МАШИНА «%s»" % chapter.unlock_car_name)
+		rewards.append(UIKit.t("МАШИНА «%s»") % UIKit.t(chapter.unlock_car_name))
 	if chapter.mission != null:
 		rewards.append(UIKit.coins_text(chapter.mission.reward_coins))
-	UIKit.label("НАГРАДА: %s" % ", ".join(rewards), 20, _dossier).modulate = UIKit.ACCENT
+	UIKit.label(UIKit.t("НАГРАДА: %s") % ", ".join(rewards), 20, _dossier).modulate = UIKit.ACCENT
 
 
 ## Фильм (первый раз), рассказ перед главой, затем миссия
@@ -193,7 +193,7 @@ func _start_chapter(chapter: ChapterData) -> void:
 		push_warning("CampaignPanel: у главы '%s' нет миссии" % chapter.id)
 		return
 	await _play_film(chapter.intro_film, false)
-	var panel := StoryPanel.open(get_tree(), "ГЛАВА %d  •  %s" % [_selected + 1, chapter.title],
+	var panel := StoryPanel.open(get_tree(), UIKit.t("ГЛАВА %d  •  %s") % [_selected + 1, UIKit.t(chapter.title)],
 		chapter.intro_pages, "В БОЙ")
 	panel.finished.connect(func() -> void: GameState.start_mission(chapter.mission))
 

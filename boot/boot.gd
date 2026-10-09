@@ -77,7 +77,7 @@ func _process(delta: float) -> void:
 	var target: float = minf(real, _time / MIN_TIME)
 	_shown = move_toward(_shown, target, delta * 1.5)
 	_bar.value = _shown
-	_percent.text = "ЗАГРУЗКА  %d%%" % roundi(_shown * 100.0)
+	_percent.text = UIKit.t("ЗАГРУЗКА  %d%%") % roundi(_shown * 100.0)
 	_animate(delta)
 	if _shown >= 0.999 and status == ResourceLoader.THREAD_LOAD_LOADED:
 		_finish()

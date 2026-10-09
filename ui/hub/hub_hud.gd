@@ -164,20 +164,20 @@ func _show_pending_story() -> void:
 		return
 	var rewards := PackedStringArray()
 	if chapter.rescued > 0:
-		rewards.append("СПАСЕНО ЛЮДЕЙ: %d" % chapter.rescued)
+		rewards.append(UIKit.t("СПАСЕНО ЛЮДЕЙ: %d") % chapter.rescued)
 	if chapter.unlock_house:
 		rewards.append("В ЛАГЕРЕ НОВЫЙ ДОМ")
 	if chapter.unlock_car != null:
-		rewards.append("НОВАЯ МАШИНА: %s" % chapter.unlock_car_name)
+		rewards.append(UIKit.t("НОВАЯ МАШИНА: %s") % UIKit.t(chapter.unlock_car_name))
 	var pages: PackedStringArray = chapter.outro_pages.duplicate()
 	if not rewards.is_empty():
-		pages.append("\n".join(rewards) + "\n\nПРОЙДЕНО %d%% СЮЖЕТА" % roundi(GameState.get_campaign_progress() * 100.0))
+		pages.append("\n".join(rewards) + UIKit.t("\n\nПРОЙДЕНО %d%% СЮЖЕТА") % roundi(GameState.get_campaign_progress() * 100.0))
 	# Пока идёт рассказ, игрок за ним не ходит и не прыгает (ДАЛЕЕ над кнопкой прыжка)
 	_set_player_controls(false)
 	if chapter.outro_film != null and Settings.cutscenes:
 		await StoryCinema.play(get_tree(), chapter.outro_film).finished
 		_set_player_controls(false)
-	var panel := StoryPanel.open(get_tree(), "ГЛАВА ПРОЙДЕНА  •  %s" % chapter.title, pages, "В ЛАГЕРЬ")
+	var panel := StoryPanel.open(get_tree(), UIKit.t("ГЛАВА ПРОЙДЕНА  •  %s") % UIKit.t(chapter.title), pages, "В ЛАГЕРЬ")
 	if parts.size() > 1 and parts[1] == "epilogue":
 		panel.finished.connect(func() -> void:
 			var film: StoryFilm = GameState.campaign.epilogue_film
@@ -273,7 +273,7 @@ func _connect_world() -> void:
 
 
 func _update_coins(coins: int) -> void:
-	_coins_label.text = "МОНЕТЫ: %d" % coins
+	_coins_label.text = UIKit.t("МОНЕТЫ: %d") % coins
 	# Счётчик «подпрыгивает» при изменении
 	_coins_label.pivot_offset = Vector2(_coins_label.size.x, _coins_label.size.y * 0.5)
 	_coins_label.scale = Vector2.ONE * 1.25

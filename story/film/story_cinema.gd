@@ -115,7 +115,7 @@ func _next_shot() -> void:
 		_subtitle.text = line
 		_subtitle.modulate = Color.WHITE
 	else:
-		_subtitle.text = "%s: %s" % [shot.speaker, line]
+		_subtitle.text = "%s: %s" % [UIKit.t(shot.speaker), line]
 		_subtitle.modulate = SPEAKER_COLOR
 	if Settings.voice_cutscenes and VoiceOver.is_available():
 		var pitch: float = shot.pitch if shot.pitch > 0.0 else NARRATOR_PITCH

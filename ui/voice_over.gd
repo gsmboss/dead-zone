@@ -12,7 +12,13 @@ static var _language: String = EN
 static var _voice: String = ""
 
 
-## Язык реплик ("ru"/"en") — под системный язык и наличие голоса
+## Язык сменили в настройках — заново выбрать голос
+static func reset() -> void:
+	_checked = false
+	_voice = ""
+
+
+## Язык реплик ("ru"/"en") — под язык игры (Settings) и наличие голоса
 static func language() -> String:
 	_detect()
 	return _language
@@ -70,9 +76,9 @@ static func _detect() -> void:
 		return
 	_checked = true
 	if not DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
-		_language = RU if OS.get_locale_language() == RU else EN
+		_language = RU if Settings.get_language_code() == RU else EN
 		return
-	var wanted: String = RU if OS.get_locale_language() == RU else EN
+	var wanted: String = RU if Settings.get_language_code() == RU else EN
 	var voices: PackedStringArray = DisplayServer.tts_get_voices_for_language(wanted)
 	if voices.is_empty() and wanted == RU:
 		wanted = EN

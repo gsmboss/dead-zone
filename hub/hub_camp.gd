@@ -152,7 +152,7 @@ func _build_sign() -> void:
 	add_child(title)
 	var rescued: int = maxi(GameState.get_rescued_count(), MIN_SURVIVORS)
 	var count := Label3D.new()
-	count.text = "В ЛАГЕРЕ: " + UIKit.count(rescued, "ЧЕЛОВЕК", "ЧЕЛОВЕКА", "ЧЕЛОВЕК")
+	count.text = UIKit.t("В ЛАГЕРЕ: ") + UIKit.count(rescued, "ЧЕЛОВЕК", "ЧЕЛОВЕКА", "ЧЕЛОВЕК")
 	count.font_size = 44
 	count.outline_size = 12
 	count.pixel_size = 0.005
@@ -538,7 +538,7 @@ func _show_player_line(text: String) -> void:
 		_player_line.offset_top = -280.0
 		_player_line.offset_bottom = -160.0
 		_player_line.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-	_player_line.text = "ВЫ: %s" % text if VoiceOver.is_russian() else "YOU: %s" % text
+	_player_line.text = UIKit.t("ВЫ: %s") % text if VoiceOver.is_russian() else "YOU: %s" % text
 	_player_line.modulate = Color(0.75, 0.95, 1.0, 0.0)
 	_player_line.visible = true
 	create_tween().tween_property(_player_line, "modulate:a", 1.0, 0.2)

@@ -64,7 +64,7 @@ func _build() -> void:
 	title.modulate = RUST
 	title.size_flags_horizontal = SIZE_EXPAND_FILL
 	title.autowrap_mode = TextServer.AUTOWRAP_OFF
-	_coins_label = UIKit.label("МОНЕТЫ: %d" % GameState.coins, 28, header)
+	_coins_label = UIKit.label(UIKit.t("МОНЕТЫ: %d") % GameState.coins, 28, header)
 	_coins_label.modulate = UIKit.ACCENT
 	_coins_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var close := UIKit.button("ЗАКРЫТЬ", 24, 200.0)
@@ -151,9 +151,9 @@ func _fill_dossier(mission: MissionData) -> void:
 	head.add_child(head_texts)
 	var level: int = GameState.get_mission_level(mission.id)
 	var endless: bool = _is_endless(mission)
-	var title_text: String = mission.title if level <= 1 or endless else "%s  •  УР. %d" % [mission.title, level]
+	var title_text: String = mission.title if level <= 1 or endless else UIKit.t("%s  •  УР. %d") % [UIKit.t(mission.title), level]
 	UIKit.label(title_text, 36, head_texts).modulate = color.lightened(0.25)
-	UIKit.label("%s  •  %s" % [mission.get_type_name(), mission.get_location_name()], 22, head_texts).modulate = UIKit.DIM
+	UIKit.label("%s  •  %s" % [UIKit.t(mission.get_type_name()), UIKit.t(mission.get_location_name())], 22, head_texts).modulate = UIKit.DIM
 
 	# «В БОЙ» сразу под названием — не нужно листать вниз
 	_dossier.add_child(_make_go_button(mission))
@@ -174,13 +174,13 @@ func _fill_dossier(mission: MissionData) -> void:
 	if endless:
 		var reward: String = "за каждого убитого"
 		if mission.type == MissionData.Type.ENDLESS:
-			reward = "%d за волну + за убитых" % mission.coins_per_wave
+			reward = UIKit.t("%d за волну + за убитых") % mission.coins_per_wave
 		_fact("МОНЕТЫ", reward)
 		if mission.type == MissionData.Type.ENDLESS:
 			_fact("РЕКОРД", UIKit.count(GameState.get_best_score(mission.id), "волна", "волны", "волн"))
 	else:
 		var coins: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
-		_fact("НАГРАДА", "%s + за убитых" % UIKit.count(coins, "монета", "монеты", "монет"))
+		_fact("НАГРАДА", UIKit.t("%s + за убитых") % UIKit.count(coins, "монета", "монеты", "монет"))
 		if GameState.is_mission_completed(mission.id):
 			_fact("РЕКОРД", UIKit.count(GameState.get_best_score(mission.id), "очко", "очка", "очков"))
 		var stars := StarRating.new()
@@ -225,12 +225,12 @@ func _enemies_text(mission: MissionData) -> String:
 	var names := PackedStringArray()
 	for data: ZombieData in [mission.walker, mission.runner, mission.tank]:
 		if data != null:
-			names.append(data.display_name)
+			names.append(UIKit.t(data.display_name))
 	for special: ZombieData in mission.specials:
 		if special != null and not special.display_name in names:
-			names.append(special.display_name)
+			names.append(UIKit.t(special.display_name))
 	if mission.boss != null:
-		names.append(mission.boss.display_name)
+		names.append(UIKit.t(mission.boss.display_name))
 	return ", ".join(names)
 
 

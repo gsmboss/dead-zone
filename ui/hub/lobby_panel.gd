@@ -4,8 +4,8 @@ extends HubWindow
 ## доступа или по IP; в лобби — игроки, режим, карта и СТАРТ (у хоста).
 
 const HELP: String = "КАК ИГРАТЬ ВМЕСТЕ: ОДИН ТЕЛЕФОН ВКЛЮЧАЕТ ТОЧКУ ДОСТУПА (ИЛИ ВСЕ В ОДНОЙ WI-FI СЕТИ) " \
-	+ "И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, " \
-	+ "«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ."
+	+ UIKit.t("И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, ") \
+	+ UIKit.t("«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ.")
 
 var _status: String = ""
 var _ip_text: String = ""
@@ -220,9 +220,9 @@ func _build_lobby() -> void:
 	if host:
 		var addresses: PackedStringArray = Net.get_local_addresses()
 		var ip_line: String = ", ".join(addresses) if not addresses.is_empty() else "НЕТ СЕТИ"
-		UIKit.label("IP ХОСТА: %s" % ip_line, 26, content).modulate = UIKit.GOOD
+		UIKit.label(UIKit.t("IP ХОСТА: %s") % ip_line, 26, content).modulate = UIKit.GOOD
 
-	UIKit.label("ИГРОКИ (%d/%d)" % [Net.players.size(), Net.MAX_PLAYERS], 28, content).modulate = UIKit.ACCENT
+	UIKit.label(UIKit.t("ИГРОКИ (%d/%d)") % [Net.players.size(), Net.MAX_PLAYERS], 28, content).modulate = UIKit.ACCENT
 	var ids: Array = Net.players.keys()
 	ids.sort()
 	for peer_id: int in ids:
@@ -248,7 +248,7 @@ func _build_lobby() -> void:
 		start.pressed.connect(Net.start_match)
 		content.add_child(start)
 	else:
-		UIKit.label("РЕЖИМ: %s  •  КАРТА: %s" % [Net.MODE_NAMES[Net.mode], Net.MAP_NAMES[Net.map_index]], 24, content)
+		UIKit.label(UIKit.t("РЕЖИМ: %s  •  КАРТА: %s") % [UIKit.t(Net.MODE_NAMES[Net.mode]), UIKit.t(Net.MAP_NAMES[Net.map_index])], 24, content)
 		UIKit.label("ЖДЁМ, КОГДА ХОСТ НАЖМЁТ СТАРТ…", 24, content).modulate = UIKit.DIM
 
 	var leave := UIKit.button("ВЫЙТИ ИЗ ЛОББИ", 24)

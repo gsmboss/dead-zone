@@ -50,7 +50,7 @@ const DEFAULTS: Dictionary = {
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
 	"torch_auto": true, "headshot_slowmo": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
-	"button_icons": true,
+	"button_icons": true, "language": 0,
 	"graphics_quality": 0, "auto_tier": -1, "fps_limit": 60, "msaa": false, "lod_threshold": 1.0,
 }
 
@@ -92,6 +92,10 @@ var crosshair_scale: float = 1.0
 var crosshair_color: int = 0
 
 # Камера: 0 — от первого лица, 1 — от третьего
+## Язык интерфейса: АВТО — как в телефоне (русский или английский)
+enum Language { AUTO, RUSSIAN, ENGLISH }
+const LANGUAGE_NAMES: PackedStringArray = ["АВТО", "РУССКИЙ", "ENGLISH"]
+
 enum CameraMode { FIRST_PERSON, THIRD_PERSON }
 const CAMERA_MODE_NAMES: PackedStringArray = ["1-Е ЛИЦО", "3-Е ЛИЦО"]
 var camera_mode: int = CameraMode.FIRST_PERSON
@@ -127,6 +131,7 @@ var headshot_slowmo: bool = true
 var torch_auto: bool = true
 ## Значки-«стикеры» на экранных кнопках вместо надписей
 var button_icons: bool = true
+var language: int = Language.AUTO
 # Озвучка (синтез речи устройства, язык — как в системе)
 var voice_cutscenes: bool = true
 ## Голоса выживших у костра, когда подходишь ближе
@@ -179,6 +184,7 @@ func set_value(key: StringName, value: Variant, save: bool = true) -> void:
 
 
 func apply() -> void:
+	_apply_language()
 	var bus: int = AudioServer.get_bus_index(&"Master")
 	if bus >= 0:
 		AudioServer.set_bus_volume_db(bus, linear_to_db(maxf(master_volume, 0.0001)))
@@ -257,10 +263,35 @@ func _clamp_values() -> void:
 	graphics_quality = clampi(graphics_quality, 0, QUALITY_NAMES.size() - 1)
 	auto_tier = clampi(auto_tier, -1, Quality.HIGH)
 	lod_threshold = clampf(lod_threshold, 0.5, 8.0)
+	language = clampi(language, 0, LANGUAGE_NAMES.size() - 1)
 	if not fps_limit in FPS_LIMITS:
 		fps_limit = 60
 	if not gyro_rate in GYRO_RATES:
 		gyro_rate = 60
+
+
+# ---------- Язык ----------
+
+## "ru" или "en": выбранный в настройках, для АВТО — по языку телефона
+func get_language_code() -> String:
+	match language:
+		Language.RUSSIAN:
+			return "ru"
+		Language.ENGLISH:
+			return "en"
+	return "ru" if OS.get_locale_language() == "ru" else "en"
+
+
+func is_english() -> bool:
+	return get_language_code() == "en"
+
+
+## Перевод: ключи — русские фразы, английский — locale/en.po (подписи Label/Button переводятся сами)
+func _apply_language() -> void:
+	var code: String = get_language_code()
+	if TranslationServer.get_locale() != code:
+		TranslationServer.set_locale(code)
+		VoiceOver.reset()
 
 
 # ---------- Качество графики ----------

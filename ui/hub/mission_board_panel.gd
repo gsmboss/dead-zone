@@ -29,7 +29,7 @@ func _make_mission_card(mission: MissionData) -> Control:
 
 	var level: int = GameState.get_mission_level(mission.id)
 	var endless_mode: bool = mission.type == MissionData.Type.ENDLESS or mission.type == MissionData.Type.FREE_ROAM
-	UIKit.label(mission.title if level <= 1 or endless_mode else "%s  •  УРОВЕНЬ %d" % [mission.title, level], 32, box)
+	UIKit.label(mission.title if level <= 1 or endless_mode else UIKit.t("%s  •  УРОВЕНЬ %d") % [UIKit.t(mission.title), level], 32, box)
 	if not mission.description.is_empty():
 		UIKit.label(mission.description, 22, box).modulate = UIKit.DIM
 
@@ -37,7 +37,7 @@ func _make_mission_card(mission: MissionData) -> Control:
 	if mission.type == MissionData.Type.ENDLESS or mission.type == MissionData.Type.FREE_ROAM:
 		var endless_info: String = "Монеты за каждого убитого зомби"
 		if mission.type == MissionData.Type.ENDLESS:
-			endless_info = "Монеты: %d за волну + за убитых  •  рекорд %s" % [
+			endless_info = UIKit.t("Монеты: %d за волну + за убитых  •  рекорд %s") % [
 				mission.coins_per_wave, UIKit.count(GameState.get_best_score(mission.id), "волна", "волны", "волн")]
 		UIKit.label(endless_info, 22, box).modulate = UIKit.ACCENT
 		var play := UIKit.button("ИГРАТЬ", 28)
@@ -46,9 +46,9 @@ func _make_mission_card(mission: MissionData) -> Control:
 		return card
 
 	var reward: int = roundi(mission.reward_coins * GameState.get_reward_multiplier(mission.id))
-	var info := "Награда: %s" % UIKit.count(reward, "монета", "монеты", "монет")
+	var info := UIKit.t("Награда: %s") % UIKit.count(reward, "монета", "монеты", "монет")
 	if GameState.is_mission_completed(mission.id):
-		info += "  •  рекорд %s" % UIKit.count(GameState.get_best_score(mission.id), "очко", "очка", "очков")
+		info += UIKit.t("  •  рекорд %s") % UIKit.count(GameState.get_best_score(mission.id), "очко", "очка", "очков")
 	var info_label := UIKit.label(info, 22, box)
 	info_label.modulate = UIKit.GOOD if GameState.is_mission_completed(mission.id) else UIKit.ACCENT
 	if GameState.is_mission_completed(mission.id):

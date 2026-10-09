@@ -230,7 +230,7 @@ func net_go(time_limit: float) -> void:
 	_started = true
 	_time_left = time_limit
 	_player.input_enabled = true
-	_hud.announce("В БОЙ!  %s" % Net.MODE_NAMES[Net.match_mode])
+	_hud.announce(UIKit.t("В БОЙ!  %s") % UIKit.t(Net.MODE_NAMES[Net.match_mode]))
 
 
 # ---------- Свой игрок ----------
@@ -484,7 +484,7 @@ func on_peer_left(peer_id: int) -> void:
 	_proxies.erase(peer_id)
 	_scores.erase(peer_id)
 	if _hud != null:
-		_hud.feed("%s ВЫШЕЛ" % Net.get_player_name(peer_id))
+		_hud.feed(UIKit.t("%s ВЫШЕЛ") % Net.get_player_name(peer_id))
 		_hud.refresh_scores()
 
 
@@ -513,9 +513,9 @@ func net_kill_feed(killer: int, victim: int, zombie_name: String) -> void:
 	if killer > 0:
 		_hud.feed("%s  ✖  %s" % [Net.get_player_name(killer), victim_name])
 	elif not zombie_name.is_empty():
-		_hud.feed("%s  ✖  %s" % [Net.get_player_name(victim), zombie_name])
+		_hud.feed("%s  ✖  %s" % [Net.get_player_name(victim), UIKit.t(zombie_name)])
 	else:
-		_hud.feed("%s ПОГИБ" % victim_name)
+		_hud.feed(UIKit.t("%s ПОГИБ") % victim_name)
 
 
 func net_scores(table: Dictionary) -> void:
@@ -579,10 +579,10 @@ func _winner_text() -> String:
 		var a: int = _team_kills(0)
 		var b: int = _team_kills(1)
 		if a == b:
-			return "НИЧЬЯ  %d : %d" % [a, b]
-		return "ПОБЕДА КОМАНДЫ %s  %d : %d" % ["СИНИХ" if a > b else "КРАСНЫХ", maxi(a, b), mini(a, b)]
+			return UIKit.t("НИЧЬЯ  %d : %d") % [a, b]
+		return UIKit.t("ПОБЕДА КОМАНДЫ %s  %d : %d") % [UIKit.t("СИНИХ") if a > b else UIKit.t("КРАСНЫХ"), maxi(a, b), mini(a, b)]
 	var best: int = winner_id()
-	return "ПОБЕДИТЕЛЬ: %s" % Net.get_player_name(best) if best > 0 else "НИЧЬЯ"
+	return UIKit.t("ПОБЕДИТЕЛЬ: %s") % Net.get_player_name(best) if best > 0 else "НИЧЬЯ"
 
 
 ## Лучший игрок (для «последнего живого» — кто дольше продержался)
@@ -764,7 +764,7 @@ func _process_waves(delta: float) -> void:
 				_wave += 1
 				_wave_left = 4 + _wave * 2 + players_count * 2
 				_wave_pause = 5.0
-				Net.rpc_announce.rpc("ВОЛНА %d" % _wave)
+				Net.rpc_announce.rpc(UIKit.t("ВОЛНА %d") % _wave)
 				if _wave % 4 == 0 and _types.boss != null:
 					_spawn_zombie(_types.boss, 1.0 + 0.3 * (players_count - 1))
 		return

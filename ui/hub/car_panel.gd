@@ -59,7 +59,7 @@ func _build_content() -> void:
 	right.size_flags_horizontal = SIZE_EXPAND_FILL
 	right.add_theme_constant_override(&"separation", 10)
 	row.add_child(right)
-	UIKit.label("МОНЕТЫ: %d" % GameState.coins, 26, right).modulate = UIKit.ACCENT
+	UIKit.label(UIKit.t("МОНЕТЫ: %d") % GameState.coins, 26, right).modulate = UIKit.ACCENT
 	UIKit.label("ВЫБРАННАЯ МАШИНА ЖДЁТ В ГОРОДЕ У СТАРТА И ЕДЕТ С ВАМИ В ИГРУ ПО СЕТИ", 20, right).modulate = UIKit.DIM
 	right.add_child(UIKit.tab_bar(TABS, _tab, func(index: int) -> void:
 		_tab = index
@@ -152,7 +152,7 @@ func _make_car_row(car: CarData, selected: bool) -> Control:
 			Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0))
 		line.add_child(choose)
 	else:
-		var buy := UIKit.button("КУПИТЬ %d" % car.price, 24, 240.0)
+		var buy := UIKit.button(UIKit.t("КУПИТЬ %d") % car.price, 24, 240.0)
 		buy.disabled = GameState.coins < car.price
 		buy.pressed.connect(func() -> void:
 			_shown_id = car.id
@@ -162,7 +162,7 @@ func _make_car_row(car: CarData, selected: bool) -> Control:
 
 
 func _build_tuning(car: CarData, parent: Control) -> void:
-	UIKit.label("ТЮНИНГ: %s" % car.title, 28, parent).modulate = UIKit.ACCENT
+	UIKit.label(UIKit.t("ТЮНИНГ: %s") % UIKit.t(car.title), 28, parent).modulate = UIKit.ACCENT
 	for stat: String in GameState.CAR_TUNING:
 		var names: Array = TUNING_NAMES.get(stat, [stat, ""])
 		var line := HBoxContainer.new()
@@ -172,7 +172,7 @@ func _build_tuning(car: CarData, parent: Control) -> void:
 		texts.size_flags_horizontal = SIZE_EXPAND_FILL
 		line.add_child(texts)
 		var level: int = GameState.get_car_tuning(car.id, stat)
-		UIKit.label("%s  %s" % [names[0], _level_marks(level)], 24, texts)
+		UIKit.label("%s  %s" % [UIKit.t(names[0]), _level_marks(level)], 24, texts)
 		UIKit.label(str(names[1]), 18, texts).modulate = UIKit.DIM
 		var cost: int = GameState.get_car_tuning_cost(car.id, stat)
 		var button := UIKit.button("МАКС" if cost < 0 else "+  %d" % cost, 24, 200.0)
@@ -188,7 +188,7 @@ func _level_marks(level: int) -> String:
 ## Цветные квадраты покраски: заводской — бесплатно, остальные — по цене
 func _build_paint(car: CarData, parent: Control) -> void:
 	var current: int = GameState.get_car_paint_index(car.id)
-	UIKit.label("ПОКРАСКА: %s  (%s, ЗАВОДСКОЙ — БЕСПЛАТНО)" % [GameState.CAR_PAINT_NAMES[current],
+	UIKit.label(UIKit.t("ПОКРАСКА: %s  (%s, ЗАВОДСКОЙ — БЕСПЛАТНО)") % [UIKit.t(GameState.CAR_PAINT_NAMES[current]),
 		UIKit.coins_text(GameState.CAR_PAINT_PRICE)], 24, parent).modulate = UIKit.ACCENT
 	var grid := HFlowContainer.new()
 	grid.add_theme_constant_override(&"h_separation", 10)
@@ -211,7 +211,7 @@ func _build_paint(car: CarData, parent: Control) -> void:
 func _build_neon(car: CarData, parent: Control) -> void:
 	var installed: bool = GameState.has_car_neon_installed(car.id)
 	var current: int = GameState.get_car_neon_index(car.id)
-	var caption: String = "НЕОН: ВЫБЕРИ ЦВЕТ" if installed else "НЕОН ПОД ДНИЩЕМ — %s" % UIKit.coins_text(GameState.CAR_NEON_PRICE)
+	var caption: String = "НЕОН: ВЫБЕРИ ЦВЕТ" if installed else UIKit.t("НЕОН ПОД ДНИЩЕМ — %s") % UIKit.coins_text(GameState.CAR_NEON_PRICE)
 	UIKit.label(caption, 24, parent).modulate = UIKit.ACCENT
 	var grid := HFlowContainer.new()
 	grid.add_theme_constant_override(&"h_separation", 10)

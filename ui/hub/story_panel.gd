@@ -126,7 +126,7 @@ func _show_page(index: int) -> void:
 	_text.visible_characters = 0
 	_counter.text = "%d / %d" % [index + 1, _pages.size()]
 	var last: bool = index >= _pages.size() - 1
-	_next.text = (_final_button_text + "  ▸") if last else "ДАЛЕЕ  ▸"
+	_next.text = (UIKit.t(_final_button_text) + "  ▸") if last else "ДАЛЕЕ  ▸"
 	_next.modulate = UIKit.GOOD if last else Color.WHITE
 
 

@@ -148,7 +148,7 @@ func _next_step() -> void:
 	var entry: Array = STEPS[_step]
 	_hint.text = str(entry[0] if _touch else entry[1])
 	_hint.modulate = Color.WHITE
-	_counter.text = "ОБУЧЕНИЕ  %d / %d" % [mini(_step + 1, STEPS.size()), STEPS.size()]
+	_counter.text = UIKit.t("ОБУЧЕНИЕ  %d / %d") % [mini(_step + 1, STEPS.size()), STEPS.size()]
 	_panel.scale = Vector2.ONE * 0.85
 	_panel.pivot_offset = _panel.size * 0.5
 	_panel.create_tween().tween_property(_panel, "scale", Vector2.ONE, 0.25) \
