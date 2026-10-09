@@ -7,16 +7,15 @@ signal chosen(id: StringName)
 signal closed
 
 const ICON_DIR: String = "res://ui/hub/icons/"
-const TILE_SIZE: Vector2 = Vector2(168.0, 156.0)
-const ICON_SIZE: float = 54.0
-const COLUMNS: int = 6
+const TILE_SIZE: Vector2 = Vector2(196.0, 168.0)
+const ICON_SIZE: float = 60.0
+const COLUMNS: int = 5
 ## [id, название, значок, цвет]
 const TILES: Array = [
 	[&"story", "СЮЖЕТ", "story", Color(1.0, 0.75, 0.45)],
 	[&"missions", "МИССИИ", "missions", Color(1.0, 0.5, 0.45)],
 	[&"shop", "ОРУЖЕЙНАЯ", "shop", Color(1.0, 0.85, 0.4)],
 	[&"character", "ПЕРСОНАЖ", "character", Color(0.8, 0.85, 1.0)],
-	[&"companion", "НАПАРНИК", "companion", Color(1.0, 0.8, 0.6)],
 	[&"cars", "МАШИНЫ", "cars", Color(0.75, 1.0, 0.75)],
 	[&"base", "БАЗА", "base", Color(0.9, 0.8, 0.65)],
 	[&"daily", "ЕЖЕДНЕВНО", "daily", Color(1.0, 0.9, 0.5)],
@@ -149,9 +148,6 @@ func _status(id: StringName) -> String:
 		&"character":
 			var skin: PlayerSkin = GameState.get_selected_skin()
 			return skin.display_name if skin != null else ""
-		&"companion":
-			var companion: CompanionData = GameState.get_selected_companion()
-			return companion.title if companion != null else "ИДЁШЬ ОДИН"
 		&"cars":
 			var car: CarData = GameState.get_selected_car()
 			return car.title if car != null else ""

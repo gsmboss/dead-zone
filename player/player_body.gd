@@ -135,12 +135,6 @@ func on_fired(weapon: WeaponData) -> void:
 		_flash_left = FLASH_TIME
 
 
-## Удар / укус (напарник-пёс): анимация ближнего боя скина
-func play_attack() -> void:
-	if skin != null and not _dead:
-		_play_once(skin.anim_melee)
-
-
 ## Приветствие (лобби): один раз, потом снова покой
 func play_emote() -> void:
 	if skin != null and not _dead:

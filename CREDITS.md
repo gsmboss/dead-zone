@@ -49,7 +49,7 @@
   bullets, eye-target, jump-across, machine-gun-magazine, switch-weapon, foot-trip, flash-grenade, fire-bottle,
   pause-button, video-camera, torch, knapsack, car-key, car-seat, exit-door, car-wheel, monkey-wrench
 - меню убежища (ui/hub/icons/), оттуда же: open-book, crossed-swords, ak47, cowled, city-car, castle,
-  open-treasure-chest, wifi-router, cog, graduate-cap, sniffing-dog
+  open-treasure-chest, wifi-router, cog, graduate-cap
 
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music

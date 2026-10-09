@@ -20,19 +20,7 @@ func _ready() -> void:
 	_play_intro.call_deferred()
 
 
-## Напарник ходит за игроком и в убежище; сменили в окне НАПАРНИК — появляется новый
-func _refresh_companion() -> void:
-	for node: Node in get_tree().get_nodes_in_group(&"companions"):
-		node.queue_free()
-	var player := get_tree().get_first_node_in_group(&"player") as Player
-	if player != null:
-		Companion.spawn_for(player, GameState.get_selected_companion(), true)
-
-
 func _disable_player_weapons() -> void:
-	_refresh_companion()
-	if not GameState.companion_changed.is_connected(_refresh_companion):
-		GameState.companion_changed.connect(_refresh_companion)
 	var player := get_tree().get_first_node_in_group(&"player") as Player
 	if player == null:
 		push_warning("%s: игрок (группа \"player\") не найден" % name)

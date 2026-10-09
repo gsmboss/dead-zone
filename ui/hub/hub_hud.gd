@@ -232,8 +232,6 @@ func _choose(id: StringName) -> void:
 			_open_window(ShopPanel.new())
 		&"character":
 			_open_window(SkinPanel.new())
-		&"companion":
-			_open_window(CompanionPanel.new())
 		&"cars":
 			_open_window(CarPanel.new())
 		&"base":

@@ -13,8 +13,6 @@ signal gear_changed
 signal campaign_changed
 ## Куплена, выбрана, покрашена или затюнингована машина
 signal cars_changed
-## Купили, выбрали или отпустили напарника
-signal companion_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -110,12 +108,6 @@ var _car_paint: Dictionary = {}   # id машины -> индекс CAR_PAINTS
 var _car_neon: Dictionary = {}    # id машины -> индекс CAR_NEONS (нет ключа — неона нет)
 var _cutscenes_seen: Array[String] = []
 var skins: Array[PlayerSkin] = []
-## Напарники (пёс, выжившие): каталог, купленные, выбранный ("" — без напарника)
-const COMPANION_PATHS: Array[String] = ["res://companions/data/pug.tres", "res://companions/data/marina.tres",
-	"res://companions/data/vera.tres"]
-var companions: Array[CompanionData] = []
-var _companions_owned: Array[String] = []
-var _companion_id: String = ""
 var gear: Array[GearData] = []
 var campaign: CampaignData
 var _chapters_done: Array[String] = []
@@ -171,12 +163,6 @@ func _ready() -> void:
 			push_warning("GameState: не найден скин %s" % path)
 			continue
 		skins.append(skin)
-	for path: String in COMPANION_PATHS:
-		var companion: CompanionData = load(path) as CompanionData if ResourceLoader.exists(path) else null
-		if companion == null or companion.id.is_empty():
-			push_warning("GameState: не найден напарник %s" % path)
-			continue
-		companions.append(companion)
 	for path: String in CAR_PATHS:
 		var car: CarData = load(path) as CarData if ResourceLoader.exists(path) else null
 		if car == null or car.id.is_empty():
@@ -529,53 +515,6 @@ func select_skin(skin_id: String) -> void:
 	_skin_id = skin_id
 	save_game()
 	skin_changed.emit(get_skin(skin_id))
-
-
-# ---------- Напарники ----------
-
-func get_companion(companion_id: String) -> CompanionData:
-	for companion: CompanionData in companions:
-		if companion.id == companion_id:
-			return companion
-	return null
-
-
-## Открыт сюжетом (или открыт сразу)
-func is_companion_unlocked(companion_id: String) -> bool:
-	var companion: CompanionData = get_companion(companion_id)
-	return companion != null and (companion.unlock_chapter.is_empty() or is_chapter_done(companion.unlock_chapter))
-
-
-func owns_companion(companion_id: String) -> bool:
-	var companion: CompanionData = get_companion(companion_id)
-	if companion == null or not is_companion_unlocked(companion_id):
-		return false
-	return companion.price <= 0 or companion_id in _companions_owned
-
-
-func buy_companion(companion_id: String) -> bool:
-	var companion: CompanionData = get_companion(companion_id)
-	if companion == null or owns_companion(companion_id) or not is_companion_unlocked(companion_id) \
-			or coins < companion.price:
-		return false
-	coins -= companion.price
-	_companions_owned.append(companion_id)
-	coins_changed.emit(coins)
-	select_companion(companion_id)
-	return true
-
-
-## Взять напарника в миссии ("" — идти одному)
-func select_companion(companion_id: String) -> void:
-	if not companion_id.is_empty() and not owns_companion(companion_id):
-		return
-	_companion_id = companion_id
-	save_game()
-	companion_changed.emit()
-
-
-func get_selected_companion() -> CompanionData:
-	return get_companion(_companion_id) if owns_companion(_companion_id) else null
 
 
 # ---------- Кат-сцены ----------
@@ -1000,8 +939,6 @@ func reset_progress() -> void:
 	_car_neon.clear()
 	_skins_owned.clear()
 	_skin_id = ""
-	_companions_owned.clear()
-	_companion_id = ""
 	_gear_owned.clear()
 	_chapters_done.clear()
 	_pending_story = ""
@@ -1048,8 +985,6 @@ func save_game() -> void:
 		"chapters_done": _chapters_done,
 		"pending_story": _pending_story,
 		"skin": _skin_id,
-		"companions_owned": _companions_owned,
-		"companion": _companion_id,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1152,14 +1087,6 @@ func load_game() -> void:
 			if get_skin(str(skin_id)) != null and not str(skin_id) in _skins_owned:
 				_skins_owned.append(str(skin_id))
 	_skin_id = str(data.get("skin", ""))
-
-	_companions_owned.clear()
-	var stored_companions: Variant = data.get("companions_owned", [])
-	if stored_companions is Array:
-		for companion_id: Variant in stored_companions:
-			if get_companion(str(companion_id)) != null and not str(companion_id) in _companions_owned:
-				_companions_owned.append(str(companion_id))
-	_companion_id = str(data.get("companion", ""))
 
 	_cutscenes_seen.clear()
 	var seen: Variant = data.get("cutscenes_seen", [])
