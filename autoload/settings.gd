@@ -22,6 +22,22 @@ const CROSSHAIR_COLOR_NAMES: PackedStringArray = ["БЕЛЫЙ", "ЗЕЛЁНЫЙ"
 enum GyroMode { ALWAYS, AIM_ONLY }
 const GYRO_MODE_NAMES: PackedStringArray = ["ВСЕГДА", "ТОЛЬКО В ПРИЦЕЛЕ"]
 const GYRO_RATES: PackedInt32Array = [30, 60, 90, 120]
+## Качество графики: пресет выставляет тени, разрешение 3D, сглаживание и детализацию.
+## AUTO — по железу телефона и само понижается, если FPS долго ниже цели; CUSTOM — свои значения
+enum Quality { AUTO, LOW, MEDIUM, HIGH, CUSTOM }
+const QUALITY_NAMES: PackedStringArray = ["АВТО", "НИЗКОЕ", "СРЕДНЕЕ", "ВЫСОКОЕ", "СВОЁ"]
+## Пресеты: [тени, разрешение 3D, сглаживание MSAA, порог LOD (больше — проще дальние модели)]
+const QUALITY_PRESETS: Dictionary = {
+	Quality.LOW: [false, 0.6, false, 4.0],
+	Quality.MEDIUM: [true, 0.8, false, 2.0],
+	Quality.HIGH: [true, 1.0, true, 1.0],
+}
+## Ограничение FPS (0 — без ограничения)
+const FPS_LIMITS: PackedInt32Array = [30, 45, 60, 90, 120, 0]
+const FPS_LIMIT_NAMES: PackedStringArray = ["30", "45", "60", "90", "120", "БЕЗ ОГРАНИЧЕНИЯ"]
+## Авто: средний FPS ниже этой доли от цели дольше AUTO_CHECK_TIME — качество на ступень ниже
+const AUTO_LOW_FPS_SHARE: float = 0.7
+const AUTO_CHECK_TIME: float = 8.0
 ## Все сохраняемые настройки и их значения по умолчанию
 const DEFAULTS: Dictionary = {
 	"look_sensitivity": 180.0, "invert_y": false, "auto_fire": true,
@@ -35,6 +51,7 @@ const DEFAULTS: Dictionary = {
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
 	"torch_auto": true, "headshot_slowmo": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
 	"button_icons": true,
+	"graphics_quality": 0, "auto_tier": -1, "fps_limit": 60, "msaa": false, "lod_threshold": 1.0,
 }
 
 ## Поворот в градусах за свайп на всю высоту экрана
@@ -48,6 +65,15 @@ var shadows: bool = true
 ## Разрешение 3D (0.5..1): ниже — быстрее на слабых телефонах
 var render_scale: float = 1.0
 var show_fps: bool = false
+## Качество графики (Quality) и ступень, выбранная автоматически (Quality.LOW..HIGH, -1 — ещё не выбрана)
+var graphics_quality: int = Quality.AUTO
+var auto_tier: int = -1
+## Ограничение кадров в секунду (0 — без ограничения)
+var fps_limit: int = 60
+## Сглаживание краёв (MSAA 2x)
+var msaa: bool = false
+## Порог упрощения дальних моделей (LOD)
+var lod_threshold: float = 1.0
 ## Сила тряски камеры 0..1
 var camera_shake: float = 1.0
 ## Показывать кат-сцены (вступление, интро миссий, появление босса)
@@ -107,6 +133,7 @@ var voice_cutscenes: bool = true
 var voice_camp: bool = true
 var voice_volume: float = 0.8
 
+var _low_fps_time: float = 0.0
 var _fps_layer: CanvasLayer
 var _fps_label: Label
 var _fps_timer: float = 0.0
@@ -115,12 +142,16 @@ var _fps_timer: float = 0.0
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
 	load_settings()
+	if graphics_quality == Quality.AUTO:
+		_apply_quality_preset()  # первый запуск: ступень по железу
+		save_settings()
 	_build_fps_label()
 	get_tree().node_added.connect(_on_node_added)
 	apply()
 
 
 func _process(delta: float) -> void:
+	_watch_auto_quality(delta)
 	if not show_fps:
 		return
 	_fps_timer -= delta
@@ -136,6 +167,10 @@ func set_value(key: StringName, value: Variant, save: bool = true) -> void:
 		push_warning("Settings: неизвестная настройка %s" % key)
 		return
 	set(key, value)
+	if key == &"graphics_quality":
+		_apply_quality_preset()
+	elif key in [&"shadows", &"render_scale", &"msaa"]:
+		graphics_quality = Quality.CUSTOM  # ручная правка — своё качество
 	_clamp_values()
 	apply()
 	if save:
@@ -149,6 +184,9 @@ func apply() -> void:
 		AudioServer.set_bus_volume_db(bus, linear_to_db(maxf(master_volume, 0.0001)))
 		AudioServer.set_bus_mute(bus, master_volume <= 0.001)
 	get_viewport().scaling_3d_scale = render_scale
+	get_viewport().msaa_3d = Viewport.MSAA_2X if msaa else Viewport.MSAA_DISABLED
+	get_viewport().mesh_lod_threshold = lod_threshold
+	Engine.max_fps = fps_limit
 	_fps_layer.visible = show_fps
 	var scene: Node = get_tree().current_scene
 	if scene != null:
@@ -216,8 +254,73 @@ func _clamp_values() -> void:
 	damage_flash = clampf(damage_flash, 0.0, 1.0)
 	hit_shake = clampf(hit_shake, 0.0, 1.0)
 	voice_volume = clampf(voice_volume, 0.0, 1.0)
+	graphics_quality = clampi(graphics_quality, 0, QUALITY_NAMES.size() - 1)
+	auto_tier = clampi(auto_tier, -1, Quality.HIGH)
+	lod_threshold = clampf(lod_threshold, 0.5, 8.0)
+	if not fps_limit in FPS_LIMITS:
+		fps_limit = 60
 	if not gyro_rate in GYRO_RATES:
 		gyro_rate = 60
+
+
+# ---------- Качество графики ----------
+
+## Пресет качества: для АВТО — ступень по железу (или уже пониженная по FPS)
+func _apply_quality_preset() -> void:
+	var tier: int = graphics_quality
+	if tier == Quality.CUSTOM:
+		return
+	if tier == Quality.AUTO:
+		if auto_tier < Quality.LOW:
+			auto_tier = detect_tier()
+		tier = auto_tier
+	var preset: Array = QUALITY_PRESETS.get(tier, QUALITY_PRESETS[Quality.MEDIUM])
+	shadows = preset[0]
+	render_scale = preset[1]
+	msaa = preset[2]
+	lod_threshold = preset[3]
+
+
+## Ступень по железу: ядра процессора, память, видеочип
+func detect_tier() -> int:
+	var cores: int = OS.get_processor_count()
+	var memory: Dictionary = OS.get_memory_info()
+	var gigabytes: float = float(memory.get("physical", 0)) / 1073741824.0
+	var adapter: String = RenderingServer.get_video_adapter_name().to_lower()
+	if not OS.has_feature("mobile"):
+		return Quality.HIGH
+	var tier: int = Quality.MEDIUM
+	if gigabytes > 0.0 and gigabytes < 3.5 or cores <= 4:
+		tier = Quality.LOW
+	elif gigabytes >= 7.5 and cores >= 8:
+		tier = Quality.HIGH
+	# Старые видеочипы: совсем слабые — низкое, постарше — не выше среднего
+	for weak: String in ["mali-4", "adreno (tm) 3", "adreno (tm) 4"]:
+		if adapter.contains(weak):
+			tier = Quality.LOW
+	for middle: String in ["mali-t", "mali-g5", "adreno (tm) 50", "adreno (tm) 51", "powervr"]:
+		if adapter.contains(middle):
+			tier = mini(tier, Quality.MEDIUM)
+	return tier
+
+
+## АВТО: если в бою FPS долго ниже цели — качество на ступень ниже (запоминается)
+func _watch_auto_quality(delta: float) -> void:
+	if graphics_quality != Quality.AUTO or auto_tier <= Quality.LOW or get_tree().paused:
+		_low_fps_time = 0.0
+		return
+	var target: float = float(fps_limit if fps_limit > 0 else 60)
+	if Engine.get_frames_per_second() < target * AUTO_LOW_FPS_SHARE:
+		_low_fps_time += delta
+	else:
+		_low_fps_time = maxf(_low_fps_time - delta * 2.0, 0.0)
+	if _low_fps_time >= AUTO_CHECK_TIME:
+		_low_fps_time = 0.0
+		auto_tier -= 1
+		_apply_quality_preset()
+		apply()
+		save_settings()
+		changed.emit()
 
 
 ## Позиция кнопки (центр в долях экрана) из своей раскладки; Vector2.INF — нет своей

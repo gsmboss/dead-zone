@@ -165,7 +165,18 @@ func _build_sound() -> void:
 
 
 func _build_graphics() -> void:
+	# Пресет переставляет тени и разрешение — окно перестраивается, чтобы ползунки показали новое
+	_choice("КАЧЕСТВО ГРАФИКИ", &"graphics_quality", Settings.QUALITY_NAMES, [], refresh)
+	var hint: String = "АВТО: ПОДБИРАЕТСЯ ПОД ТЕЛЕФОН И САМО СНИЖАЕТСЯ, ЕСЛИ ИГРА ТОРМОЗИТ"
+	if Settings.graphics_quality == Settings.Quality.AUTO and Settings.auto_tier >= 0:
+		hint += "  (СЕЙЧАС: %s)" % Settings.QUALITY_NAMES[Settings.auto_tier]
+	UIKit.label(hint, 20, content).modulate = UIKit.DIM
+	var fps_values: Array = []
+	for limit: int in Settings.FPS_LIMITS:
+		fps_values.append(limit)
+	_choice("ОГРАНИЧЕНИЕ FPS (МЕНЬШЕ — ТЕЛЕФОН МЕНЬШЕ ГРЕЕТСЯ)", &"fps_limit", Settings.FPS_LIMIT_NAMES, fps_values)
 	_toggle("ТЕНИ", &"shadows")
+	_toggle("СГЛАЖИВАНИЕ КРАЁВ", &"msaa")
 	_slider("РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)", &"render_scale", 0.5, 1.0, 0.05, _percent)
 	_toggle("ПОКАЗЫВАТЬ FPS", &"show_fps")
 
@@ -218,7 +229,9 @@ func _section(title: String) -> void:
 
 ## Выбор из вариантов (ряд кнопок, выбранная подсвечена). values — значения вариантов,
 ## по умолчанию индексы 0..N-1
-func _choice(title: String, key: StringName, names: PackedStringArray, values: Array = []) -> void:
+## after — вызвать после выбора (например, перестроить окно)
+func _choice(title: String, key: StringName, names: PackedStringArray, values: Array = [],
+		after: Callable = Callable()) -> void:
 	var card := UIKit.card()
 	content.add_child(card)
 	var box := VBoxContainer.new()
@@ -238,7 +251,9 @@ func _choice(title: String, key: StringName, names: PackedStringArray, values: A
 		button.pressed.connect(func() -> void:
 			Sfx.click()
 			Settings.set_value(key, value)
-			_highlight_choice(buttons, values, Settings.get(key)))
+			_highlight_choice(buttons, values, Settings.get(key))
+			if after.is_valid():
+				after.call())
 	_highlight_choice(buttons, values, Settings.get(key))
 
 
