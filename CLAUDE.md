@@ -323,9 +323,10 @@ UIKit.count(n, one, few, many) и coins_text — русские окончани
 Графика: Settings.graphics_quality (Quality AUTO/LOW/MEDIUM/HIGH/CUSTOM, QUALITY_PRESETS: тени, render_scale, msaa,
 lod_threshold), auto_tier — ступень по железу (detect_tier: память, ядра, видеочип) и снижение при FPS < 70% цели
 8 с (_watch_auto_quality); fps_limit (Engine.max_fps, FPS_LIMITS). Ручная правка теней/разрешения → СВОЁ.
-Края карт: levels/edge_cover.gd (EdgeCover, ставит MissionManager): земля 1200 м без освещения в цвет тумана,
-страховочный пол, густой экспоненциальный туман 1.5/полуразмер (по стенам Bounds; FOG_MODE_DEPTH на Compatibility
-не виден — не использовать); meta base_fog_density — основа для Weather.
+Края карт: levels/edge_cover.gd (EdgeCover, ставит MissionManager): только у границы — «стена тумана» (4 слоя
+полупрозрачных полос цвета горизонта за стенами Bounds, кверху тают), земля 1200 м без освещения того же цвета,
+страховочный пол. Туман уровня не трогает (общий густой туман пользователю не нужен; FOG_MODE_DEPTH на Compatibility
+не виден — не использовать).
 Персонажи: +6 Kenney (male/female b, d, f) и костюмы зомби (zombie_cosplay, zombie_chubby).
 Аксессуары (шляпы/очки) были и убраны по просьбе: в старых сохранениях ключи accessories_* игнорируются; Net.PROTOCOL = 4.
 Метка «стреляет в тебя» по сети: маленькая ▼ над именем (font 48, pixel_size 0.0028).

@@ -1,20 +1,21 @@
 class_name EdgeCover
 extends Node3D
-## Край карты без «пустоты»: за невидимыми стенами — земля цвета тумана (сливается с горизонтом),
-## страховочный пол (не упасть под карту) и густой туман (обычный, экспоненциальный — работает на любом
-## рендере телефона; туман «по глубине» на Compatibility не виден).
+## Край карты без «пустоты»: сразу за невидимыми стенами — «стена тумана» (несколько полупрозрачных
+## слоёв цвета горизонта, к внешнему краю плотнее, кверху тают в небо), за ней — земля того же цвета
+## и страховочный пол (не упасть под карту). Внутри карты туман не меняется — видно, как раньше.
+## Работает на любом рендере (простые прозрачные сетки, без тумана движка).
 ## Размер карты берётся из узла Bounds (StaticBody3D со стенами). Ставит MissionManager.
 
 const GROUND_SIZE: float = 1200.0
-const GROUND_COLOR: Color = Color(0.27, 0.28, 0.26)
-## Плотность тумана = FOG_PER_HALF / полуразмер карты (карта 60 м: у стены ~80% тумана, дальше — сплошной)
-const FOG_PER_HALF: float = 1.5
-const FOG_MIN_DENSITY: float = 0.008
-const FOG_MAX_DENSITY: float = 0.06
-const FOG_SKY_AFFECT: float = 1.0
-## Цвет дальней земли подстраивается под цвет тумана (день/ночь) раз в столько секунд
-const COLOR_SYNC_INTERVAL: float = 0.5
 const SAFETY_FLOOR_Y: float = -1.5
+## Слои стены тумана: отступ наружу от стены (м) и непрозрачность у земли
+const LAYER_OFFSETS: PackedFloat32Array = [0.6, 3.0, 6.0, 10.0]
+const LAYER_ALPHAS: PackedFloat32Array = [0.35, 0.55, 0.8, 1.0]
+## Высота стены тумана; верхняя часть плавно уходит в прозрачность
+const WALL_HEIGHT: float = 30.0
+## Цвет подстраивается под горизонт (день/ночь) раз в столько секунд
+const COLOR_SYNC_INTERVAL: float = 0.5
+const FALLBACK_COLOR: Color = Color(0.62, 0.64, 0.66)
 
 
 ## Добавить в сцену (один раз)
@@ -27,59 +28,131 @@ static func apply(scene: Node) -> void:
 
 
 var _environment: Environment
+var _sky_material: ProceduralSkyMaterial
+var _materials: Array[StandardMaterial3D] = []
 var _ground_material: StandardMaterial3D
 var _sync_timer: float = 0.0
 
 
 func _ready() -> void:
-	var half: float = _measure_half_size()
+	_find_environment()
+	var half: Vector2 = _measure_half_size()
 	_build_ground()
 	_build_safety_floor()
-	_setup_fog(half)
-	_sync_ground_color()
+	_build_fog_walls(half)
+	_sync_color()
 
 
 func _process(delta: float) -> void:
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
 		_sync_timer = COLOR_SYNC_INTERVAL
-		_sync_ground_color()
+		_sync_color()
 
 
-## Дальняя земля — цвета тумана: у края карты нет границы «пол / пустота»
-func _sync_ground_color() -> void:
-	if _environment == null or _ground_material == null:
-		return
-	var color: Color = _environment.fog_light_color
-	if not _ground_material.albedo_color.is_equal_approx(color):
+func _find_environment() -> void:
+	for node: Node in get_parent().find_children("*", "WorldEnvironment", true, false):
+		var world := node as WorldEnvironment
+		if world != null and world.environment != null:
+			_environment = world.environment
+			if _environment.sky != null:
+				_sky_material = _environment.sky.sky_material as ProceduralSkyMaterial
+			return
+
+
+## Цвет горизонта: небо (его меняет смена дня и ночи), иначе цвет тумана уровня
+func _horizon_color() -> Color:
+	if _sky_material != null:
+		return _sky_material.sky_horizon_color
+	if _environment != null and _environment.fog_enabled:
+		return _environment.fog_light_color
+	return FALLBACK_COLOR
+
+
+func _sync_color() -> void:
+	var color: Color = _horizon_color()
+	if _ground_material != null and not _ground_material.albedo_color.is_equal_approx(color):
 		_ground_material.albedo_color = color
+	for i in _materials.size():
+		var layer_color := Color(color, LAYER_ALPHAS[i])
+		if not _materials[i].albedo_color.is_equal_approx(layer_color):
+			_materials[i].albedo_color = layer_color
 
 
-## Полуразмер карты по стенам Bounds (самая дальняя стена); нет стен — 30 м
-func _measure_half_size() -> float:
+## Полуразмер карты по стенам Bounds: x — по боковым стенам, y — по передней/задней; нет стен — 30 м
+func _measure_half_size() -> Vector2:
 	var scene: Node = get_parent()
 	var bounds := scene.find_child("Bounds", true, false) as StaticBody3D
-	var half: float = 0.0
+	var half := Vector2.ZERO
 	if bounds != null:
 		for child: Node in bounds.get_children():
 			var shape := child as CollisionShape3D
-			if shape != null:
-				var at: Vector3 = shape.global_position
-				half = maxf(half, maxf(absf(at.x), absf(at.z)))
-	if half <= 1.0:
-		push_warning("EdgeCover: у '%s' нет стен Bounds — туман по размеру 30 м" % scene.name)
-		half = 30.0
+			if shape == null:
+				continue
+			var at: Vector3 = shape.global_position
+			if absf(at.x) > absf(at.z):
+				half.x = maxf(half.x, absf(at.x))
+			else:
+				half.y = maxf(half.y, absf(at.z))
+	if half.x <= 1.0 or half.y <= 1.0:
+		push_warning("EdgeCover: у '%s' нет стен Bounds — край по 30 м" % scene.name)
+		half = Vector2(maxf(half.x, 30.0), maxf(half.y, 30.0))
 	return half
 
 
+## Стена тумана по периметру: слои вертикальных полос с градиентом (снизу плотно, вверху прозрачно)
+func _build_fog_walls(half: Vector2) -> void:
+	var fade := Gradient.new()
+	fade.set_color(0, Color(1.0, 1.0, 1.0, 0.0))  # верх — прозрачный
+	fade.set_color(1, Color(1.0, 1.0, 1.0, 1.0))  # низ — плотный
+	fade.add_point(0.55, Color(1.0, 1.0, 1.0, 0.85))
+	var texture := GradientTexture2D.new()
+	texture.gradient = fade
+	texture.fill_from = Vector2(0.0, 0.0)
+	texture.fill_to = Vector2(0.0, 1.0)
+	texture.width = 4
+	texture.height = 64
+	for i in LAYER_OFFSETS.size():
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		material.disable_fog = true
+		material.albedo_texture = texture
+		material.albedo_color = Color(FALLBACK_COLOR, LAYER_ALPHAS[i])
+		material.render_priority = -i  # дальние слои рисуются раньше
+		_materials.append(material)
+		var offset: float = LAYER_OFFSETS[i]
+		var span_x: float = (half.x + offset) * 2.0
+		var span_z: float = (half.y + offset) * 2.0
+		# Север/юг — вдоль X, запад/восток — вдоль Z
+		_add_strip(Vector3(0.0, 0.0, -(half.y + offset)), 0.0, span_x, material)
+		_add_strip(Vector3(0.0, 0.0, half.y + offset), PI, span_x, material)
+		_add_strip(Vector3(-(half.x + offset), 0.0, 0.0), PI * 0.5, span_z, material)
+		_add_strip(Vector3(half.x + offset, 0.0, 0.0), -PI * 0.5, span_z, material)
+
+
+func _add_strip(at: Vector3, yaw: float, length: float, material: StandardMaterial3D) -> void:
+	var quad := QuadMesh.new()
+	quad.size = Vector2(length, WALL_HEIGHT)
+	var strip := MeshInstance3D.new()
+	strip.mesh = quad
+	strip.material_override = material
+	strip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	strip.position = at + Vector3.UP * (WALL_HEIGHT * 0.5 - 0.5)
+	strip.rotation.y = yaw
+	add_child(strip)
+
+
+## Земля за краем — без освещения и тумана, цвета горизонта: нет границы «пол / пустота»
 func _build_ground() -> void:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = GROUND_COLOR
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_ground_material = material
+	_ground_material = StandardMaterial3D.new()
+	_ground_material.albedo_color = FALLBACK_COLOR
+	_ground_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_ground_material.disable_fog = true
 	var plane := PlaneMesh.new()
 	plane.size = Vector2.ONE * GROUND_SIZE
-	plane.material = material
+	plane.material = _ground_material
 	var ground := MeshInstance3D.new()
 	ground.name = "FarGround"
 	ground.mesh = plane
@@ -101,26 +174,3 @@ func _build_safety_floor() -> void:
 	shape.position.y = SAFETY_FLOOR_Y - 0.5
 	body.add_child(shape)
 	add_child(body)
-
-
-## Густой туман: чем меньше карта, тем плотнее — край и всё за ним в тумане
-func _setup_fog(half: float) -> void:
-	var world: WorldEnvironment = null
-	for node: Node in get_parent().find_children("*", "WorldEnvironment", true, false):
-		world = node as WorldEnvironment
-		break
-	if world == null or world.environment == null:
-		push_warning("EdgeCover: нет WorldEnvironment — без тумана")
-		return
-	var environment: Environment = world.environment
-	if not environment.fog_enabled:
-		environment.fog_enabled = true
-		var sky_material := environment.sky.sky_material as ProceduralSkyMaterial if environment.sky != null else null
-		environment.fog_light_color = sky_material.sky_horizon_color if sky_material != null else Color(0.6, 0.62, 0.64)
-	environment.fog_mode = Environment.FOG_MODE_EXPONENTIAL
-	var density: float = clampf(FOG_PER_HALF / maxf(half, 1.0), FOG_MIN_DENSITY, FOG_MAX_DENSITY)
-	environment.fog_density = maxf(environment.fog_density, density)
-	environment.fog_sky_affect = FOG_SKY_AFFECT
-	# Погода берёт за основу эту плотность (в дождь гуще)
-	environment.set_meta(&"base_fog_density", environment.fog_density)
-	_environment = environment
