@@ -373,14 +373,15 @@ func _add_name_tag(proxy: Player, peer_id: int) -> void:
 	var marker := Label3D.new()
 	marker.name = "AttackerMarker"
 	marker.text = "▼"
-	marker.font_size = 110
-	marker.outline_size = 18
-	marker.pixel_size = 0.006
+	# Небольшая стрелка прямо над именем (размер на экране постоянный — не огромная вблизи)
+	marker.font_size = 48
+	marker.outline_size = 10
+	marker.pixel_size = 0.0028
 	marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	marker.no_depth_test = true
 	marker.fixed_size = true
 	marker.modulate = ATTACKER_COLOR
-	marker.position = Vector3(0.0, 2.6, 0.0)
+	marker.position = Vector3(0.0, 2.45, 0.0)
 	marker.visible = false
 	proxy.add_child(marker)
 	proxy.set_meta(&"mark_left", 0.0)
@@ -421,7 +422,7 @@ func _update_attacker_marks(delta: float) -> void:
 		elif marker != null:
 			# Мигание и лёгкое покачивание
 			marker.modulate.a = 0.55 + 0.45 * absf(sin(left * 9.0))
-			marker.position.y = 2.6 + 0.08 * sin(left * 6.0)
+			marker.position.y = 2.45 + 0.05 * sin(left * 6.0)
 
 
 func net_player_state(peer_id: int, state: PackedFloat32Array) -> void:
