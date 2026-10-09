@@ -84,8 +84,14 @@ const VOICE_LINES_PATH: String = "res://cutscene/voice_lines.tres"
 var _objective_timer: float = 0.0
 
 
+func _add_edge_cover() -> void:
+	EdgeCover.apply(get_tree().current_scene)
+
+
 func _ready() -> void:
 	add_to_group(&"mission_manager")
+	# Край карты: земля, страховочный пол и туман (после того, как уровень построит свои стены)
+	_add_edge_cover.call_deferred()
 	# Миссия, выбранная в убежище, важнее миссии из инспектора
 	if GameState.selected_mission != null:
 		mission = GameState.selected_mission

@@ -36,6 +36,9 @@ func _ready() -> void:
 	_find_environment.call_deferred()
 
 
+var _base_depth_end: float = 0.0
+
+
 func _find_environment() -> void:
 	for node: Node in get_tree().current_scene.find_children("*", "WorldEnvironment", true, false):
 		_environment = (node as WorldEnvironment).environment
@@ -58,7 +61,14 @@ func _process(delta: float) -> void:
 	if _rain_material != null:
 		_rain_material.albedo_color.a = RAIN_ALPHA * _intensity
 	if _environment != null and _environment.fog_enabled:
-		_environment.fog_density = _base_fog * lerpf(1.0, rain_fog_multiplier, _intensity)
+		var thicker: float = lerpf(1.0, rain_fog_multiplier, _intensity)
+		if _environment.fog_mode == Environment.FOG_MODE_DEPTH:
+			# Туман края карты (EdgeCover): в дождь стена тумана подходит ближе
+			if _base_depth_end <= 0.0:
+				_base_depth_end = _environment.fog_depth_end
+			_environment.fog_depth_end = _base_depth_end / maxf(thicker, 0.1)
+		else:
+			_environment.fog_density = _base_fog * thicker
 	if _sound.stream != null:
 		if _intensity > 0.02 and not _sound.playing:
 			_sound.play()
