@@ -87,7 +87,8 @@ func _build_rain() -> void:
 	streak.material = material
 	_particles = CPUParticles3D.new()
 	_particles.mesh = streak
-	_particles.amount = 320
+	# Дождь: на слабом железе меньше капель
+	_particles.amount = [140, 220, 320][clampi(Settings.get_detail_tier() - Settings.Quality.LOW, 0, 2)]
 	_particles.lifetime = 0.9
 	_particles.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	_particles.emission_box_extents = Vector3(14.0, 0.5, 14.0)

@@ -312,6 +312,22 @@ func _apply_quality_preset() -> void:
 	lod_threshold = preset[3]
 
 
+## Текущая ступень детализации (LOW/MEDIUM/HIGH): для АВТО — по железу, для СВОЁ — средняя.
+## Её смотрят дождь, лимит зомби на экране и дальность теней
+func get_detail_tier() -> int:
+	match graphics_quality:
+		Quality.AUTO:
+			return clampi(auto_tier, Quality.LOW, Quality.HIGH) if auto_tier >= Quality.LOW else Quality.MEDIUM
+		Quality.CUSTOM:
+			return Quality.MEDIUM
+	return graphics_quality
+
+
+## Доля «толпы»: на слабом железе меньше живых зомби одновременно (меньше ИИ и анимаций)
+func get_crowd_factor() -> float:
+	return 0.75 if get_detail_tier() == Quality.LOW else 1.0
+
+
 ## Ступень по железу: ядра процессора, память, видеочип
 func detect_tier() -> int:
 	var cores: int = OS.get_processor_count()
@@ -381,6 +397,11 @@ func _apply_light(light: DirectionalLight3D) -> void:
 	if not light.has_meta(&"default_shadow"):
 		light.set_meta(&"default_shadow", light.shadow_enabled)
 	light.shadow_enabled = shadows and bool(light.get_meta(&"default_shadow"))
+	# Тени: на средней — одна карта поближе (дешевле на телефоне), на высокой — две и дальше
+	var high: bool = get_detail_tier() == Quality.HIGH
+	light.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS if high \
+		else DirectionalLight3D.SHADOW_ORTHOGONAL
+	light.directional_shadow_max_distance = 70.0 if high else 40.0
 
 
 func _build_fps_label() -> void:

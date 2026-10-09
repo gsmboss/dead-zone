@@ -92,6 +92,10 @@ const GOLDEN_ANGLE: float = 2.39996
 ## Мультиплеер (хост): цель — ближайший живой игрок, включая чужих (ставит MatchManager)
 static var multi_target: bool = false
 const RETARGET_INTERVAL: float = 1.0
+## Дальний зомби (дальше этого от цели): анимация ~20 к/с вместо каждого кадра, хитбокс головы не двигаем
+const FAR_DISTANCE: float = 26.0
+const LOD_CHECK_INTERVAL: float = 0.5
+const FAR_ANIM_STEP: float = 0.05
 
 ## Кто сейчас атакует (общая очередь всех зомби)
 static var _attackers: Array[Zombie] = []
@@ -163,6 +167,9 @@ var state: State = State.WANDER
 var _agent: NavigationAgent3D
 var _player: Player
 var _player_health: Health
+var _far: bool = false
+var _lod_timer: float = 0.0
+var _anim_accum: float = 0.0
 ## Машина, в которой сидит цель (бьём её, а не игрока)
 var _target_car: DrivableCar
 var _car_check_left: float = 0.0
@@ -329,7 +336,9 @@ func _physics_process(delta: float) -> void:
 	if global_position.y < FALL_LIMIT_Y:
 		despawn()  # провалился за карту — убираем без награды
 		return
-	_update_head_hitbox()
+	_update_lod(delta)
+	if not _far:
+		_update_head_hitbox()
 
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -1281,6 +1290,7 @@ func _on_died() -> void:
 	_release_token()
 	state = State.DEAD
 	velocity = Vector3.ZERO
+	_set_far(false)  # анимация смерти — обычным темпом (_physics_process у мёртвых не идёт)
 	_set_flash(false)
 	# Отложенно: смерть случается внутри обработки выстрела
 	set_deferred(&"collision_layer", 0)
@@ -1689,6 +1699,31 @@ func _measure_size_factor() -> float:
 
 
 ## Хитбокс головы в текущей позе кости Head (каждый физический кадр, без аллокаций)
+## Дальние зомби дешевле: анимация обновляется вручную шагами FAR_ANIM_STEP (на телефоне — заметный выигрыш
+## при толпе), голова не отслеживается (в даль попасть точно в голову всё равно трудно)
+func _update_lod(delta: float) -> void:
+	_lod_timer -= delta
+	if _lod_timer <= 0.0:
+		_lod_timer = LOD_CHECK_INTERVAL
+		var far: bool = _player != null and is_instance_valid(_player) \
+			and global_position.distance_squared_to(_player.global_position) > FAR_DISTANCE * FAR_DISTANCE
+		if far != _far:
+			_set_far(far)
+	if _far and animation_player != null:
+		_anim_accum += delta
+		if _anim_accum >= FAR_ANIM_STEP:
+			animation_player.advance(_anim_accum)
+			_anim_accum = 0.0
+
+
+func _set_far(far: bool) -> void:
+	_far = far
+	_anim_accum = 0.0
+	if animation_player != null:
+		animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL \
+			if far else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
+
+
 func _update_head_hitbox() -> void:
 	if _head_shape == null or _skeleton == null:
 		return
@@ -1712,6 +1747,7 @@ func _transform_to_body(node: Node3D) -> Transform3D:
 func _apply_model_override() -> void:
 	if data.model_scene == null:
 		return
+	_set_far(false)  # новый AnimationPlayer — в обычном режиме
 	var instance: Node = data.model_scene.instantiate()
 	var model := instance as Node3D
 	if model == null:

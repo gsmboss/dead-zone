@@ -354,7 +354,8 @@ func _process_spawning(delta: float) -> void:
 	if not spawning_enabled:
 		return
 	_spawn_timer -= delta
-	var max_alive: int = mission.max_alive + roundi(DayNightCycle.night_amount * NIGHT_EXTRA_ALIVE)
+	var max_alive: int = maxi(roundi((mission.max_alive + DayNightCycle.night_amount * NIGHT_EXTRA_ALIVE)
+		* Settings.get_crowd_factor()), 2)
 	if _spawn_timer > 0.0 or _alive >= max_alive:
 		return
 

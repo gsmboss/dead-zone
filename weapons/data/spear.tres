@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_spear")
 display_name = "КОПЬЁ"
-damage = 60.0
+damage = 75.0
 max_range = 3.4
 spread_degrees = 0.0
 fire_rate = 1.4

@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_bat")
 display_name = "БИТА С ШИПАМИ"
-damage = 55.0
+damage = 60.0
 max_range = 2.5
 spread_degrees = 0.0
 fire_rate = 1.9

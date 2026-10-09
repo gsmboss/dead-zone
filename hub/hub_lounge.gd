@@ -43,6 +43,7 @@ const TRIPOD_LOOK: Vector3 = Vector3(11.0, 0.0, -2.8)
 const LENS_HEIGHT: float = 1.52
 ## Ближе этого к зоне — камера снимает игрока и ТВ показывает картинку
 const LIVE_DISTANCE: float = 11.0
+const FEED_FPS: float = 15.0
 
 var _player: Player
 var _sofa_zones: Array[Interactable] = []
@@ -51,6 +52,7 @@ var _feed_camera: Camera3D
 var _rec_lamp: StandardMaterial3D
 var _rec_label: Label3D
 var _live: bool = false
+var _feed_timer: float = 0.0
 var _blink: float = 0.0
 var _look_target: Vector3 = TRIPOD_LOOK + Vector3.UP
 
@@ -94,6 +96,11 @@ func _process(delta: float) -> void:
 		_set_live(near)
 	if _live:
 		_aim_feed_camera(delta)
+		# Картинка ТВ — FEED_FPS кадров в секунду, а не каждый кадр игры (второй рендер сцены дорогой)
+		_feed_timer -= delta
+		if _feed_timer <= 0.0:
+			_feed_timer = 1.0 / FEED_FPS
+			_feed_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func _exit_tree() -> void:
@@ -305,8 +312,9 @@ func _build_tv_feed() -> void:
 func _set_live(enabled: bool) -> void:
 	_live = enabled
 	if _feed_viewport != null:
-		_feed_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if enabled \
+		_feed_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE if enabled \
 			else SubViewport.UPDATE_DISABLED
+		_feed_timer = 0.0
 	# Пока камера снимает — тело игрока видно ей и от 1-го лица
 	if _player != null and is_instance_valid(_player):
 		if enabled:
