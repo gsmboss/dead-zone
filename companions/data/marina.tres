@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CompanionData" format=3]
+
+[ext_resource type="Script" path="res://companions/companion_data.gd" id="1_cd"]
+[ext_resource type="Resource" path="res://player/skins/lis.tres" id="2_skin"]
+[ext_resource type="Resource" path="res://weapons/data/pistol.tres" id="3_gun"]
+
+[resource]
+script = ExtResource("1_cd")
+id = "marina"
+title = "МАРИНА"
+description = "Спасена в первой главе. Стреляет из пистолета быстро и метко и всё время просит не трогать её брата Дениса."
+kind = 1
+price = 0
+unlock_chapter = "chapter_1"
+skin = ExtResource("2_skin")
+weapon = ExtResource("3_gun")
+damage = 16.0
+attack_interval = 0.55
+attack_range = 15.0
+sight_range = 18.0
+accuracy = 0.75
+walk_speed = 4.0
+run_speed = 6.0
+callouts_ru = PackedStringArray("СЛЕВА!", "ПРИКРЫВАЮ!", "ОДИН ГОТОВ!", "ДЕНИС, НЕ СЕЙЧАС!", "ПЕРЕЗАРЯЖАЮСЬ!")
+callouts_en = PackedStringArray("LEFT SIDE!", "COVERING YOU!", "ONE DOWN!", "DENIS, NOT NOW!", "RELOADING!")

@@ -152,6 +152,9 @@ func _start() -> void:
 		_player.weapon_manager.hit_landed.connect(_on_player_hit)
 
 	GameState.on_mission_started()  # медпункт базы
+	# Напарник (не в обучении): идёт рядом и сам атакует зомби
+	if not mission.tutorial and _player != null:
+		Companion.spawn_for(_player, GameState.get_selected_companion())
 	match mission.type:
 		MissionData.Type.DEFEND:
 			_setup_defend_point()

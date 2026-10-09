@@ -244,6 +244,9 @@ msgstr "ARMORED PICKUP"
 msgid "БРОНЕСПОРТ"
 msgstr "ARMORED SPORT"
 
+msgid "БУБЛИК"
+msgstr "BAGEL"
+
 msgid "Банда Барона грабит колонну выживших на стоянке контейнеров. Отбей колонну — убей 25 бандитов и зомби"
 msgstr "Baron's gang is robbing a survivor convoy at the container yard. Save the convoy — kill 25 bandits and zombies"
 
@@ -270,6 +273,9 @@ msgstr "FIGHT!"
 
 msgid "В БОЙ!  %s"
 msgstr "FIGHT!  %s"
+
+msgid "В КОМАНДЕ ✓"
+msgstr "IN THE TEAM ✓"
 
 msgid "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ. ТЁМА УЖЕ ПОЧИНИЛ В НЕЙ МИКРОСКОП. ЕГО НИКТО НЕ ПРОСИЛ."
 msgstr "A THIRD HOUSE WENT UP IN THE CAMP — A LAB. TYOMA HAS ALREADY FIXED THE MICROSCOPE IN IT. NOBODY ASKED HIM TO."
@@ -339,6 +345,9 @@ msgstr "EXPLODERS SWELL UP BEFORE THEY BLOW — RUN"
 
 msgid "ВЗЯЛИ ПЛЕННОГО — ШНЫРЯ. ДО АПОКАЛИПСИСА ОН БЫЛ БУХГАЛТЕРОМ И ДО СИХ ПОР СЧИТАЕТ ВСЕХ ЗОМБИ В ТЕТРАДКУ."
 msgstr "WE TOOK A PRISONER — SHNYR. BEFORE THE APOCALYPSE HE WAS AN ACCOUNTANT, AND HE STILL LOGS EVERY ZOMBIE IN A NOTEBOOK."
+
+msgid "ВЗЯТЬ С СОБОЙ"
+msgstr "TAKE ALONG"
 
 msgid "ВИД"
 msgstr "VIEW"
@@ -492,6 +501,12 @@ msgstr "All mission coins ×2"
 
 msgid "Выпадает из зомби и лежит в городе. Из лома в мастерской убежища собираются гранаты, коктейли и аптечки"
 msgstr "Dropped by zombies and lying around the city. In the shelter workshop, scrap becomes grenades, cocktails and medkits"
+
+msgid "ГАВ! ПРИНЁС АПТЕЧКУ"
+msgstr "WOOF! BROUGHT A MEDKIT"
+
+msgid "ГАВ! ПРИНЁС ПАТРОНЫ"
+msgstr "WOOF! BROUGHT AMMO"
 
 msgid "ГАЗ (ТУРБО)"
 msgstr "NITRO (TURBO)"
@@ -850,6 +865,12 @@ msgstr "PLAYER — SCORE / ZOMBIES / PLAYERS / DEATHS"
 msgid "ИГРОКИ (%d/%d)"
 msgstr "PLAYERS (%d/%d)"
 
+msgid "ИДЁШЬ ОДИН"
+msgstr "GOING SOLO"
+
+msgid "ИДТИ ОДНОМУ (ОТПУСТИТЬ НАПАРНИКА)"
+msgstr "GO SOLO (DISMISS COMPANION)"
+
 msgid "ИДУ ЗА ТОБОЙ"
 msgstr "I'M WITH YOU"
 
@@ -1026,6 +1047,9 @@ msgstr "OWNED • %s"
 
 msgid "КУРЬЕР"
 msgstr "COURIER"
+
+msgid "Командир разведчиков из лесного лагеря. Винтовка, холодная голова и любимая фраза: «Я же говорила»."
+msgstr "Leader of the forest camp scouts. A rifle, a cool head and a favorite phrase: \"Told you so.\""
 
 msgid "Корабль с юга ждёт у старого моста. Кабан ведёт орду и банду, чтобы отнять вакцину. Выдержи 5 волн и победи Кабана"
 msgstr "A ship from the south waits at the old bridge. Kaban leads a horde and his gang to steal the vaccine. Survive 5 waves and defeat Kaban"
@@ -1225,6 +1249,9 @@ msgstr "Coins: %d   •   Scrap: %d"
 msgid "Монеты: %d за волну + за убитых  •  рекорд %s"
 msgstr "Coins: %d per wave + per kill  •  record %s"
 
+msgid "Мопс с характером. Кусает зомби за пятки и раз в минуту притаскивает патроны или аптечку. Где он их берёт — загадка."
+msgstr "A pug with attitude. Bites zombies by the ankles and fetches ammo or a medkit about once a minute. Where he finds them is a mystery."
+
 msgid "Мёртвые встают из могил: скелеты быстрые, гниляки живучие. Отбей пять волн, в конце — Громила"
 msgstr "The dead rise from their graves: skeletons are fast, ghouls are tough. Hold off five waves, then the Brute"
 
@@ -1257,6 +1284,12 @@ msgstr "GAMES FOUND"
 
 msgid "НАЙДЕНО: "
 msgstr "FOUND: "
+
+msgid "НАПАРНИК"
+msgstr "COMPANION"
+
+msgid "НАПАРНИК ИДЁТ С ТОБОЙ В МИССИИ (НЕ ПО СЕТИ): САМ НАХОДИТ ЗОМБИ И АТАКУЕТ"
+msgstr "YOUR COMPANION JOINS YOU ON MISSIONS (NOT ONLINE): FINDS ZOMBIES AND ATTACKS ON ITS OWN"
 
 msgid "НАСТРОИТЬ РАСКЛАДКУ КНОПОК"
 msgstr "CUSTOMIZE BUTTON LAYOUT"
@@ -1437,6 +1470,9 @@ msgstr "An endless open city: explore the blocks, drive cars and run over zombie
 
 msgid "Очки: %d"
 msgstr "Score: %d"
+
+msgid "ПЁС БУБЛИК"
+msgstr "BAGEL THE DOG"
 
 msgid "ПАМЯТЬ"
 msgstr "MEMORY"
@@ -1981,6 +2017,9 @@ msgstr "SAM"
 msgid "СЮЖЕТ"
 msgstr "STORY"
 
+msgid "СЮЖЕТ: «%s»"
+msgstr "STORY: \"%s\""
+
 msgid "Сборка гранат, коктейлей, аптечек и патронов из лома"
 msgstr "Craft grenades, cocktails, medkits and ammo from scrap"
 
@@ -1989,6 +2028,9 @@ msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
 
 msgid "Собери %s с припасами"
 msgstr "Collect %s of supplies"
+
+msgid "Спасена в первой главе. Стреляет из пистолета быстро и метко и всё время просит не трогать её брата Дениса."
+msgstr "Rescued in chapter one. Shoots her pistol fast and true, and keeps asking everyone to leave her brother Denis alone."
 
 msgid "Старый, но заводится с пол-оборота. Мягкий зад — легко пустить в занос."
 msgstr "Old, but starts on the first try. Loose rear end — easy to drift."
@@ -2119,6 +2161,9 @@ msgstr "HOLD THE POINT %d%%%s"
 msgid "УЗНАТЬ ФАКТ"
 msgstr "LEARN A FACT"
 
+msgid "УКУС %d  •  ПРИНОСИТ ПРИПАСЫ"
+msgstr "BITE %d  •  FETCHES SUPPLIES"
+
 msgid "УЛИЦА"
 msgstr "STREET"
 
@@ -2133,6 +2178,9 @@ msgstr "THE \"JUBILEE\" DEPARTMENT STORE. THE SIGN IS LIT BACKWARDS: \"EELIBUJ\"
 
 msgid "УПРАВЛЕНИЕ"
 msgstr "HANDLING"
+
+msgid "УРОН %d  •  %.1f ВЫСТР/С  •  ДО %d М"
+msgstr "DAMAGE %d  •  %.1f SHOTS/S  •  UP TO %d M"
 
 msgid "Убей %s"
 msgstr "Kill %s"

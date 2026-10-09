@@ -54,6 +54,15 @@ func show_skin(skin: PlayerSkin) -> void:
 	_body.set_weapon(best_weapon())
 
 
+## Напарник: его оружие; маленький (пёс) — крупнее, чтобы занимал кадр как человек
+func show_companion(companion: CompanionData) -> void:
+	if _body == null or companion == null or companion.skin == null:
+		return
+	_body.set_skin(companion.skin)
+	_body.set_weapon(companion.weapon)
+	_body.scale = Vector3.ONE * clampf(1.5 / maxf(companion.skin.height, 0.3), 1.0, 2.5)
+
+
 ## Самый дорогой купленный огнестрел — для красоты в превью и лобби
 static func best_weapon() -> WeaponData:
 	var best: WeaponData = null

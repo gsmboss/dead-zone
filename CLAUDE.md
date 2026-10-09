@@ -316,6 +316,14 @@ Settings.language (АВТО/РУССКИЙ/ENGLISH, get_language_code, is_englis
 ТВ в убежище — 15 к/с (UPDATE_ONCE по таймеру). Settings.get_detail_tier (LOW/MEDIUM/HIGH): тени ORTHOGONAL 40 м
 (высокое — 2 сплита 70 м), дождь 140/220/320 капель, get_crowd_factor — на LOW живых зомби ×0.75.
 Баланс: ближний бой — нож 26×3.0 (78/с, как пистолет), топор 80, бита 60 (дуга 50°), копьё 75 (3.4 м), пила-бита 100.
+Напарник (этап 5): companions/companion_data.gd (CompanionData: kind DOG/GUNNER, price, unlock_chapter, skin, weapon,
+damage, attack_interval/range, sight_range, accuracy, fetch_interval, callouts_ru/en), companions/data/pug.tres (мопс Бублик,
+скин companions/skins/pug.tres, приносит патроны/аптечку), marina.tres (пистолет, после chapter_1), vera.tres (винтовка,
+chapter_3). companions/companion.gd (Companion: следует за игроком по навмешу, ищет зомби, кусает/стреляет без пуль —
+урон напрямую в Health, бессмертен, слой 0, догоняет рывком; peaceful — в убежище). GameState: companions,
+owns/buy/select_companion, get_selected_companion, сигнал companion_changed, сохранение companions_owned/companion.
+Окно ui/hub/companion_panel.gd (плитка НАПАРНИК в HubMenu, 6 колонок), SkinPreview.show_companion. Спавн — MissionManager._start
+(не в обучении, не по сети), убежище — hub.gd _refresh_companion. PlayerBody.play_attack.
 План улучшений по этапам: 1 обучение, 2 меню убежища, 3 английский, 4 производительность и баланс, 5 напарник,
 6 оборона убежища/ловушки/турели, 7 новые зомби, 8 обвесы оружия, 9 машины (бронелисты, мотоцикл, заезды),
 10 достижения/облако/события, 11 релиз, 12 онлайн (сервер).
