@@ -55,7 +55,7 @@ func _build() -> void:
 	stripe.custom_minimum_size = Vector2(0.0, 14.0)
 	top.add_child(stripe)
 	var bar := PanelContainer.new()
-	bar.add_theme_stylebox_override(&"panel", UIKit.panel_style(Color(0.04, 0.035, 0.03, 0.85), 0, 14.0))
+	bar.add_theme_stylebox_override(&"panel", UIKit.panel_style(Color(0.04, 0.035, 0.03, 1.0), 0, 14.0))
 	top.add_child(bar)
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override(&"separation", 20)
@@ -155,6 +155,9 @@ func _fill_dossier(mission: MissionData) -> void:
 	UIKit.label(title_text, 36, head_texts).modulate = color.lightened(0.25)
 	UIKit.label("%s  •  %s" % [mission.get_type_name(), mission.get_location_name()], 22, head_texts).modulate = UIKit.DIM
 
+	# «В БОЙ» сразу под названием — не нужно листать вниз
+	_dossier.add_child(_make_go_button(mission))
+
 	if not mission.description.is_empty():
 		UIKit.label(mission.description, 22, _dossier)
 
@@ -186,6 +189,12 @@ func _fill_dossier(mission: MissionData) -> void:
 		stars.set_stars(GameState.get_mission_stars(mission.id))
 		_dossier.add_child(stars)
 
+	var bottom := HazardStripe.new()
+	bottom.custom_minimum_size = Vector2(0.0, 10.0)
+	_dossier.add_child(bottom)
+
+
+func _make_go_button(mission: MissionData) -> Button:
 	var go := UIKit.button("В БОЙ", 34)
 	go.custom_minimum_size = Vector2(0.0, 92.0)
 	UIKit.apply_3d_style(go)
@@ -196,11 +205,7 @@ func _fill_dossier(mission: MissionData) -> void:
 			box.border_color = Color(0.3, 0.06, 0.02)
 			go.add_theme_stylebox_override(state, box)
 	go.pressed.connect(func() -> void: GameState.start_mission(mission))
-	_dossier.add_child(go)
-
-	var bottom := HazardStripe.new()
-	bottom.custom_minimum_size = Vector2(0.0, 10.0)
-	_dossier.add_child(bottom)
+	return go
 
 
 ## Строка досье «ЗАГОЛОВОК  значение»

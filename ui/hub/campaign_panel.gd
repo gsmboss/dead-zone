@@ -112,6 +112,10 @@ func _build() -> void:
 	column.add_theme_constant_override(&"separation", 10)
 	scroll.add_child(column)
 
+	# Сверху — досье главы с кнопкой старта, ниже — лагерь
+	_dossier = VBoxContainer.new()
+	_dossier.add_theme_constant_override(&"separation", 10)
+	column.add_child(_dossier)
 	UIKit.label("ЛАГЕРЬ ВЫЖИВШИХ", 24, column).modulate = RUST
 	var diorama := CampDiorama3D.new()
 	diorama.custom_minimum_size = Vector2(0.0, 200.0)
@@ -120,9 +124,6 @@ func _build() -> void:
 	var stats := UIKit.label("СПАСЕНО ЛЮДЕЙ: %d   •   ДОМОВ: %d   •   МАШИН: %d" % [
 		GameState.get_rescued_count(), GameState.get_house_count(), cars.size()], 20, column)
 	stats.modulate = UIKit.GOOD
-	_dossier = VBoxContainer.new()
-	_dossier.add_theme_constant_override(&"separation", 10)
-	column.add_child(_dossier)
 	_update_progress()
 
 
@@ -153,22 +154,6 @@ func _fill_dossier() -> void:
 	UIKit.label("ГЛАВА %d  •  %s" % [_selected + 1, chapter.title], 28, _dossier).modulate = \
 		CampaignMap.DONE if done else (RUST if unlocked else UIKit.DIM)
 	UIKit.label(chapter.location_name, 20, _dossier).modulate = UIKit.DIM
-	var status: String = "ПРОЙДЕНА" if done else ("ДОСТУПНА" if unlocked else "ЗАКРЫТА: ПРОЙДИ ГЛАВУ %d" % _selected)
-	UIKit.label("СТАТУС: %s" % status, 20, _dossier)
-	if chapter.mission != null:
-		UIKit.label("ЗАДАЧА: %s" % chapter.mission.description.to_upper(), 20, _dossier)
-		UIKit.label("ЦЕЛЬ: %s" % chapter.mission.get_goal_text().to_upper(), 20, _dossier)
-	var rewards := PackedStringArray()
-	if chapter.rescued > 0:
-		rewards.append("ЛЮДИ +%d" % chapter.rescued)
-	if chapter.unlock_house:
-		rewards.append("НОВЫЙ ДОМ")
-	if chapter.unlock_car != null:
-		rewards.append("МАШИНА «%s»" % chapter.unlock_car_name)
-	if chapter.mission != null:
-		rewards.append("%d МОНЕТ" % chapter.mission.reward_coins)
-	UIKit.label("НАГРАДА: %s" % ", ".join(rewards), 20, _dossier).modulate = UIKit.ACCENT
-
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override(&"separation", 10)
 	_dossier.add_child(row)
@@ -184,6 +169,22 @@ func _fill_dossier() -> void:
 		start.modulate = UIKit.GOOD
 		start.pressed.connect(_start_chapter.bind(chapter))
 		row.add_child(start)
+
+	var status: String = "ПРОЙДЕНА" if done else ("ДОСТУПНА" if unlocked else "ЗАКРЫТА: ПРОЙДИ ГЛАВУ %d" % _selected)
+	UIKit.label("СТАТУС: %s" % status, 20, _dossier)
+	if chapter.mission != null:
+		UIKit.label("ЗАДАЧА: %s" % chapter.mission.description.to_upper(), 20, _dossier)
+		UIKit.label("ЦЕЛЬ: %s" % chapter.mission.get_goal_text().to_upper(), 20, _dossier)
+	var rewards := PackedStringArray()
+	if chapter.rescued > 0:
+		rewards.append("ЛЮДИ +%d" % chapter.rescued)
+	if chapter.unlock_house:
+		rewards.append("НОВЫЙ ДОМ")
+	if chapter.unlock_car != null:
+		rewards.append("МАШИНА «%s»" % chapter.unlock_car_name)
+	if chapter.mission != null:
+		rewards.append("%d МОНЕТ" % chapter.mission.reward_coins)
+	UIKit.label("НАГРАДА: %s" % ", ".join(rewards), 20, _dossier).modulate = UIKit.ACCENT
 
 
 ## Фильм (первый раз), рассказ перед главой, затем миссия

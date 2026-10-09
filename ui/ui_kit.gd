@@ -18,9 +18,22 @@ static func label(text: String, font_size: int = 26, parent: Node = null) -> Lab
 	result.add_theme_font_size_override(&"font_size", font_size)
 	result.add_theme_constant_override(&"outline_size", 6)
 	result.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.8))
+	# Перенос слов в горизонтальном ряду без растяжения сжимает подпись до ширины буквы
+	# («Р/Ж/А/В/Ы/Й» столбиком) — там перенос выключаем
+	result.ready.connect(func() -> void: _fix_wrap.call_deferred(result), CONNECT_ONE_SHOT)
 	if parent != null:
 		parent.add_child(result)
 	return result
+
+
+## Подпись в HBox/HFlow без растяжения и без своей ширины — без переноса
+static func _fix_wrap(target: Label) -> void:
+	if not is_instance_valid(target) or target.autowrap_mode == TextServer.AUTOWRAP_OFF:
+		return
+	var parent: Node = target.get_parent()
+	var in_row: bool = parent is HBoxContainer or parent is HFlowContainer
+	if in_row and (target.size_flags_horizontal & Control.SIZE_EXPAND) == 0 and target.custom_minimum_size.x <= 0.0:
+		target.autowrap_mode = TextServer.AUTOWRAP_OFF
 
 
 static func button(text: String, font_size: int = 26, min_width: float = 0.0) -> Button:
