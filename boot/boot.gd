@@ -5,6 +5,11 @@ extends Control
 
 const NEXT_SCENE: String = "res://hub/hub.tscn"
 const SPLASH_IMAGE: String = "res://ui/splash/splash.png"
+## Логотип студии в самом начале (как и картинка движка при старте — project.godot boot_splash)
+const LOGO_IMAGE: String = "res://ui/splash/salamanderlab.png"
+const LOGO_COLOR: Color = Color(0.024, 0.09, 0.17)
+const LOGO_HOLD: float = 1.6
+const LOGO_FADE: float = 0.5
 const ZOMBIE_MODEL: String = "res://models/zombies/Zombie_Basic.gltf"
 ## Заставка видна не меньше этого (чтобы успеть рассмотреть)
 const MIN_TIME: float = 2.8
@@ -32,12 +37,15 @@ var _tip_time: float = 0.0
 var _tip_index: int = 0
 var _done: bool = false
 var _requested: bool = false
+var _logo: Control
+var _logo_time: float = 0.0
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	mouse_filter = MOUSE_FILTER_IGNORE
 	_build()
+	_build_logo()
 	var err: Error = ResourceLoader.load_threaded_request(NEXT_SCENE)
 	_requested = err == OK
 	if not _requested:
@@ -48,6 +56,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _done:
+		return
+	# Пока виден логотип — экран загрузки ждёт (убежище тем временем грузится в фоне)
+	if _logo != null:
+		_process_logo(delta)
 		return
 	_time += delta
 	var real: float = 1.0
@@ -75,9 +87,6 @@ func _animate(delta: float) -> void:
 		var k: float = 1.0 + ZOOM * clampf(_time / (MIN_TIME * 2.0), 0.0, 1.0)
 		_background.pivot_offset = _background.size * 0.5
 		_background.scale = Vector2.ONE * k
-	# Название «дышит»
-	_title.scale = Vector2.ONE * (1.0 + 0.015 * sin(_time * 2.0))
-	_title.pivot_offset = _title.size * 0.5
 	_tip_time += delta
 	if _tip_time >= TIP_TIME:
 		_tip_time = 0.0
@@ -106,7 +115,40 @@ func _finish() -> void:
 		get_tree().change_scene_to_file(NEXT_SCENE)
 
 
+func _process_logo(delta: float) -> void:
+	_logo_time += delta
+	if _logo_time <= LOGO_HOLD:
+		return
+	var k: float = (_logo_time - LOGO_HOLD) / LOGO_FADE
+	if k >= 1.0:
+		_logo.queue_free()
+		_logo = null
+	else:
+		_logo.modulate.a = 1.0 - k
+
+
 # ---------- Интерфейс ----------
+
+## Логотип SalamanderLab поверх всего: тот же цвет фона, что у заставки движка — без мигания
+func _build_logo() -> void:
+	var texture: Texture2D = load(LOGO_IMAGE) as Texture2D if ResourceLoader.exists(LOGO_IMAGE) else null
+	if texture == null:
+		push_warning("Boot: нет логотипа %s — пропускаю" % LOGO_IMAGE)
+		return
+	var back := ColorRect.new()
+	back.color = LOGO_COLOR
+	back.mouse_filter = MOUSE_FILTER_IGNORE
+	add_child(back)
+	back.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	var image := TextureRect.new()
+	image.texture = texture
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	image.mouse_filter = MOUSE_FILTER_IGNORE
+	back.add_child(image)
+	image.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	_logo = back
+
 
 func _build() -> void:
 	var black := ColorRect.new()
@@ -130,13 +172,13 @@ func _build() -> void:
 	add_child(_gradient(true))
 	add_child(_gradient(false))
 
-	_title = TitleText.new()
+	_title = Title3D.new()
 	add_child(_title)
 	_title.set_anchors_and_offsets_preset(PRESET_CENTER_TOP)
-	_title.offset_left = -420.0
-	_title.offset_right = 420.0
-	_title.offset_top = 30.0
-	_title.offset_bottom = 150.0
+	_title.offset_left = -460.0
+	_title.offset_right = 460.0
+	_title.offset_top = 10.0
+	_title.offset_bottom = 190.0
 
 	var bottom := VBoxContainer.new()
 	bottom.add_theme_constant_override(&"separation", 8)
@@ -266,30 +308,103 @@ class OrbitPivot extends Node3D:
 		rotation.y = sin(_time * 0.25) * 0.5
 
 
-## Название с объёмом: «выдавленные» слои снизу-справа, контур и красный отсвет
-class TitleText extends Control:
+## Название DEAD ZONE настоящим 3D-текстом (TextMesh с глубиной): золото с красным контровым светом,
+## тёмная «тень»-копия сзади, лёгкое покачивание. Свой мир в SubViewport с прозрачным фоном.
+class Title3D extends SubViewportContainer:
 	const TEXT: String = "DEAD ZONE"
-	const FONT_SIZE: int = 96
-	const DEPTH: int = 8
+	const FONT_SIZE: int = 64
+	const PIXEL_SIZE: float = 0.01
+	const DEPTH: float = 0.18
+	## Доля ширины кадра под текст
+	const FILL: float = 0.86
+	const CAMERA_FOV: float = 30.0
+
+	var _pivot: Node3D
+	var _camera: Camera3D
+	var _text_width: float = 4.0
+	var _time: float = 0.0
 
 	func _ready() -> void:
 		mouse_filter = MOUSE_FILTER_IGNORE
+		stretch = true
+		var viewport := SubViewport.new()
+		viewport.own_world_3d = true
+		viewport.transparent_bg = true
+		viewport.msaa_3d = Viewport.MSAA_2X
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		add_child(viewport)
 
-	func _draw() -> void:
+		var environment := Environment.new()
+		environment.background_mode = Environment.BG_CLEAR_COLOR
+		environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		environment.ambient_light_color = Color(0.55, 0.45, 0.4)
+		environment.ambient_light_energy = 0.6
+		var world := WorldEnvironment.new()
+		world.environment = environment
+		viewport.add_child(world)
+
+		_pivot = Node3D.new()
+		viewport.add_child(_pivot)
+		var gold := StandardMaterial3D.new()
+		gold.albedo_color = Color(1.0, 0.72, 0.22)
+		gold.metallic = 0.6
+		gold.roughness = 0.35
+		gold.emission_enabled = true
+		gold.emission = Color(0.45, 0.22, 0.02)
+		_pivot.add_child(_make_text(gold, DEPTH))
+		# Тёмная копия сзади и чуть ниже — контур и тень, текст читается на любом фоне
+		var shadow_material := StandardMaterial3D.new()
+		shadow_material.albedo_color = Color(0.18, 0.02, 0.0)
+		shadow_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		var shadow: MeshInstance3D = _make_text(shadow_material, DEPTH * 0.5)
+		shadow.position = Vector3(0.05, -0.06, -DEPTH)
+		shadow.scale = Vector3(1.03, 1.06, 1.0)
+		_pivot.add_child(shadow)
+
+		var key := DirectionalLight3D.new()
+		key.light_color = Color(1.0, 0.95, 0.85)
+		key.light_energy = 1.3
+		key.rotation_degrees = Vector3(-35.0, -25.0, 0.0)
+		viewport.add_child(key)
+		var rim := OmniLight3D.new()
+		rim.light_color = Color(1.0, 0.15, 0.05)
+		rim.light_energy = 3.0
+		rim.omni_range = 6.0
+		rim.position = Vector3(0.0, -0.8, 1.2)
+		viewport.add_child(rim)
+
 		var font: Font = ThemeDB.fallback_font
-		var text_size: Vector2 = font.get_string_size(TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE)
-		var origin := Vector2((size.x - text_size.x) * 0.5, size.y * 0.5 + font.get_ascent(FONT_SIZE) * 0.35)
-		# Тень
-		draw_string(font, origin + Vector2(DEPTH + 6.0, DEPTH + 10.0), TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1,
-			FONT_SIZE, Color(0.0, 0.0, 0.0, 0.5))
-		# Боковина: слои от тёмного к светлому
-		for i in range(DEPTH, 0, -1):
-			var shade: float = 0.25 + 0.35 * (1.0 - float(i) / DEPTH)
-			draw_string(font, origin + Vector2(i, i), TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE,
-				Color(shade * 1.4, shade * 0.35, shade * 0.2))
-		draw_string_outline(font, origin, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 6,
-			Color(0.1, 0.02, 0.0))
-		draw_string(font, origin, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color(1.0, 0.82, 0.3))
-		# Блик по верхней половине букв
-		draw_string(font, origin + Vector2(0.0, -2.0), TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE,
-			Color(1.0, 1.0, 0.85, 0.25))
+		if font != null:
+			_text_width = font.get_string_size(TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x * PIXEL_SIZE
+		_camera = Camera3D.new()
+		_camera.fov = CAMERA_FOV
+		_camera.keep_aspect = Camera3D.KEEP_WIDTH  # текст всегда влезает по ширине
+		_camera.near = 0.1
+		_camera.far = 50.0
+		_camera.position = Vector3(0.0, 0.0, _camera_distance())
+		viewport.add_child(_camera)
+		_camera.make_current()
+
+	func _make_text(material: StandardMaterial3D, depth: float) -> MeshInstance3D:
+		var mesh := TextMesh.new()
+		mesh.text = TEXT
+		mesh.font_size = FONT_SIZE
+		mesh.pixel_size = PIXEL_SIZE
+		mesh.depth = depth
+		mesh.curve_step = 1.0
+		mesh.material = material
+		var instance := MeshInstance3D.new()
+		instance.mesh = mesh
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		return instance
+
+	## Расстояние, при котором текст занимает FILL ширины кадра
+	func _camera_distance() -> float:
+		var half_width: float = _text_width * 0.5 / FILL
+		return half_width / tan(deg_to_rad(CAMERA_FOV * 0.5))
+
+	func _process(delta: float) -> void:
+		_time += delta
+		# Медленное покачивание: видна боковина букв
+		_pivot.rotation = Vector3(sin(_time * 0.9) * 0.08, sin(_time * 0.6) * 0.22, 0.0)
+		_pivot.position.y = sin(_time * 1.3) * 0.03
