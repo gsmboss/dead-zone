@@ -138,6 +138,10 @@ func _apply_time() -> void:
 				var beam_material := cone.material as StandardMaterial3D if cone != null else null
 				if beam_material != null:
 					beam_material.albedo_color.a = 0.22
+	# Край карты (EdgeCover) красится под горизонт — взять новое небо
+	var cover := scene.get_node_or_null(^"EdgeCover") as EdgeCover
+	if cover != null:
+		cover.refresh_environment()
 	_night = values[7]
 	if _night > 0.0:
 		DayNightCycle.night_amount = _night  # фонарик сам зажигается ночью (Player._update_auto_torch)

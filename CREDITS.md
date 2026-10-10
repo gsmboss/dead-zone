@@ -17,7 +17,12 @@
 - models/industrial/ — Kenney, City Kit (Industrial) 2.0: https://kenney.nl/assets/city-kit-industrial
 - models/furniture/ — Kenney, Furniture Kit 2.0: https://kenney.nl/assets/furniture-kit (диваны, ТВ, мебель убежища)
 - models/harbor/watercraft/ — Kenney, Watercraft Kit 2.1 (CC0): https://kenney.nl/assets/watercraft-kit (корабли, лодки, буи, контейнеры порта)
-- models/harbor/pirate/ — Kenney, Pirate Kit (CC0): https://kenney.nl/assets/pirate-kit (маяк, причалы, ящики, бочки, камни, затонувший парусник)
+- models/harbor/pirate/ — Kenney, Pirate Kit (CC0): https://kenney.nl/assets/pirate-kit (маяк, причалы, ящики, бочки, камни, затонувший парусник, пальмы, песок)
+- models/market/ — Kenney, Mini Market (CC0): https://kenney.nl/assets/mini-market (стеллажи, морозильники, кассы)
+- models/food/ — Kenney, Food Kit (CC0): https://kenney.nl/assets/food-kit (мороженое, кофе, торт, бананы)
+- models/holiday/ — Kenney, Holiday Kit (CC0): https://kenney.nl/assets/holiday-kit (снежные ёлки, сугробы, снеговик, фонари, подарки)
+- models/roads/ — Kenney, City Kit (Roads) (CC0): https://kenney.nl/assets/city-kit-roads (указатели, ограждения, прожекторы)
+- models/nature/ — Kenney, Nature Kit (CC0): https://kenney.nl/assets/nature-kit (скалы, высокие сосны, палатки)
 - models/weapons/AssaultRifle.glb (AssaultRifle2_1), SniperRifle.glb (SniperRifle_3) — Quaternius,
   Ultimate Gun Pack (CC0): https://opengameart.org/content/low-poly-guns-pack — OBJ перегнан в GLB:
   ствол по +Z, верх +Y, масштаб под старые модели набора Zombie Kit, цвета MTL ×2.5 светлее.

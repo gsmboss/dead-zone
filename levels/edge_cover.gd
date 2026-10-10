@@ -54,6 +54,12 @@ func _process(delta: float) -> void:
 		_sync_color()
 
 
+## Небо уровня заменили (LevelDressing: время суток) — взять новое и сразу перекрасить край
+func refresh_environment() -> void:
+	_find_environment()
+	_sync_color()
+
+
 func _find_environment() -> void:
 	for node: Node in get_parent().find_children("*", "WorldEnvironment", true, false):
 		var world := node as WorldEnvironment
