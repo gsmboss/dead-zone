@@ -149,6 +149,8 @@ var _signal_materials: Array[StandardMaterial3D] = []  # красный, жёл�
 var _signal_time: float = 0.0
 var _flames: Array[Node3D] = []
 var _harbor: Node3D
+## Места StageLocations (лес, кладбище, промзона, горы): настроение → корневой узел
+var _sets: Dictionary = {}
 
 
 func _ready() -> void:
@@ -167,7 +169,14 @@ func _process(delta: float) -> void:
 
 ## Камера-заготовка: [откуда, куда, взгляд с, взгляд на]
 static func get_camera(camera_name: String) -> Array:
-	return CAMERAS.get(camera_name, CAMERAS["aerial"])
+	if CAMERAS.has(camera_name):
+		return CAMERAS[camera_name]
+	var located: Array = StageLocations.get_camera(camera_name)
+	return located if not located.is_empty() else CAMERAS["aerial"]
+
+
+static func has_camera(camera_name: String) -> bool:
+	return CAMERAS.has(camera_name) or StageLocations.CAMERAS.has(camera_name)
 
 
 func set_mood(new_mood: int) -> void:
@@ -198,6 +207,9 @@ func set_mood(new_mood: int) -> void:
 		StoryShot.Mood.HARBOR_DAWN:
 			_build_harbor_set()
 			_build_harbor_dawn()
+		_:
+			if StageLocations.MOODS.has(new_mood):
+				StageLocations.build(self, new_mood, _sets)
 	visible = new_mood != StoryShot.Mood.BLACK
 
 
@@ -223,7 +235,7 @@ func _build_environment() -> void:
 
 
 func _apply_light(new_mood: int) -> void:
-	var values: Array = MOODS.get(new_mood, MOODS[StoryShot.Mood.LIVING])
+	var values: Array = MOODS.get(new_mood, StageLocations.MOODS.get(new_mood, MOODS[StoryShot.Mood.LIVING]))
 	_sky_material.sky_top_color = values[0]
 	_sky_material.sky_horizon_color = values[1]
 	_sky_material.ground_horizon_color = values[1]
@@ -692,6 +704,36 @@ func _build_harbor_dawn() -> void:
 		pickup.position = h + Vector3(-14.0, 0.0, 9.0)
 	for i in 4:
 		_place_actor_prop(_load(HARBOR_CRATE), h + Vector3(2.0 + i * 1.2, 0.0, 2.6 + (i % 2) * 1.1), 0.9)
+
+
+## Модель по ширине (как _place_fitted), но под parent
+func _place_fitted_into(parent: Node3D, scene: PackedScene, at: Vector3, yaw: float, width: float) -> void:
+	if scene == null:
+		return
+	var node := scene.instantiate() as Node3D
+	if node == null:
+		return
+	var bounds := AABB()
+	var has_bounds: bool = false
+	for child: Node in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance.mesh == null:
+			continue
+		var xform: Transform3D = Transform3D.IDENTITY
+		var current: Node = mesh_instance
+		while current != null and current != node:
+			var current_3d := current as Node3D
+			if current_3d != null:
+				xform = current_3d.transform * xform
+			current = current.get_parent()
+		var mesh_bounds: AABB = xform * mesh_instance.get_aabb()
+		bounds = bounds.merge(mesh_bounds) if has_bounds else mesh_bounds
+		has_bounds = true
+	var widest: float = maxf(bounds.size.x, bounds.size.z) if has_bounds else 0.0
+	node.position = at
+	node.rotation.y = yaw
+	node.scale = Vector3.ONE * (width / widest if widest > 0.01 else 1.0)
+	parent.add_child(node)
 
 
 func _place_into(parent: Node3D, scene: PackedScene, at: Vector3, yaw: float, scale_value: float) -> void:

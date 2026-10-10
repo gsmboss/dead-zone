@@ -3,8 +3,10 @@ extends Resource
 ## План сюжетного фильма (StoryFilm): настроение сцены-диорамы (живой город, мёртвый, бандиты…),
 ## точка камеры (заготовка StoryStage), надпись места/времени, голос рассказчика или героя, титр.
 
-## HARBOR — Южный порт ночью (мертвецы на причале, маяк), HARBOR_DAWN — порт на рассвете, посадка на корабль
-enum Mood { LIVING, OUTBREAK, DEAD, BANDITS, HOPE, BLACK, CAMP, HARBOR, HARBOR_DAWN }
+## HARBOR — Южный порт ночью (мертвецы на причале, маяк), HARBOR_DAWN — порт на рассвете, посадка на корабль;
+## FOREST, GRAVEYARD, INDUSTRIAL, MOUNTAIN — лес с вышкой, кладбище, промзона, горный перевал (StageLocations)
+enum Mood { LIVING, OUTBREAK, DEAD, BANDITS, HOPE, BLACK, CAMP, HARBOR, HARBOR_DAWN, FOREST, GRAVEYARD, INDUSTRIAL,
+	MOUNTAIN }
 
 @export var mood: Mood = Mood.LIVING
 ## Заготовка камеры StoryStage.CAMERAS (aerial, sidewalk, crossroad, zombie_low…)
