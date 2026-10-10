@@ -362,7 +362,7 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 Часть третья (главы 14–17, «Южный порт»): «Дорога на юг» (story_south, лес, KILL_COUNT 45; дальнобойщик Михалыч),
 «Южный порт» (story_port, порт, сбор канистр; кок Борщов), «Маяк» (story_lighthouse, порт, оборона у маяка; смотритель
 Палыч), «Последний рейс» (story_voyage, порт, 5 волн + босс enemies/drowned.tres УТОПЛЕННИК). Эпилог — после «Последнего рейса».
-Достижение chapter_all — 17 глав. Картинки глав части третьей и loc_harbor ещё не сделаны (промпты — docs/ART_PROMPTS.md, раздел 4).
+Достижение chapter_all — 17 глав. Картинки глав части третьей и loc_harbor готовы (промпты — docs/ART_PROMPTS.md, раздел 4).
 StoryShot.Mood.CAMP — ночной лагерь в кино (костёр, палатки, люди сидят — Kenney «sit»), камеры camp_orbit/camp_fire/camp_high.
 Mood.HARBOR (ночь, мертвецы на причале) и HARBOR_DAWN (рассвет, посадка): диорама порта StoryStage._build_harbor_set в
 HARBOR_ORIGIN (300, 0, 0) — строится при первом плане в порту; камеры harbor_aerial/quay/ship/gangway/sea/zombies, lighthouse.
