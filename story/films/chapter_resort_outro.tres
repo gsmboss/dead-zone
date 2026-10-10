@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "close_up"
+mood = 13
+camera = "harbor_gangway"
 duration = 5.0
 voice_ru = "Следующая дискотека — без меня. Но если надо — зовите. Я профессионал."
 voice_en = "The next disco goes on without me. But call me if you need me. I'm a professional."
@@ -15,8 +15,8 @@ pitch = 1.35
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "road_low"
+mood = 13
+camera = "harbor_quay"
 duration = 5.0
 voice_ru = "Автобус «Ласточка». Розовый, с пальмами. Денис бы заплакал. Я уже чиню."
 voice_en = "The Swallow bus. Pink, with palm trees. Denis would cry. I'm already fixing it."

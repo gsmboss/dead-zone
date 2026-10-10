@@ -103,7 +103,7 @@ const CAMERAS: Dictionary = {
 	"sky_up": [Vector3(0, 2, 12), Vector3(0, 2.5, 12), Vector3(0, 3, 0), Vector3(0, 45, -10)],
 	"street_end": [Vector3(-58, 3.5, 2), Vector3(-50, 2.5, 1), Vector3(0, 2, 0), Vector3(0, 1.5, 0)],
 	"camp_orbit": [Vector3(7.5, 3.2, 6.0), Vector3(-7.5, 3.2, 6.0), Vector3(0, 0.8, 0), Vector3(0, 0.8, 0)],
-	"camp_fire": [Vector3(0.6, 0.5, 4.6), Vector3(0.2, 0.6, 3.8), Vector3(0, 0.7, 0), Vector3(0, 0.9, -1.5)],
+	"camp_fire": [Vector3(0.5, 1.5, 5.2), Vector3(0.1, 1.4, 4.4), Vector3(0, 0.7, 0), Vector3(0, 0.9, -1.5)],
 	"camp_high": [Vector3(-14, 9, 14), Vector3(-9, 7, 10), Vector3(0, 0.5, 0), Vector3(0, 0.5, 0)],
 	# Южный порт (HARBOR_ORIGIN = 300, 0, 0): причал по z = 0, вода — к -Z, лайнер у причала, маяк на востоке
 	"harbor_aerial": [Vector3(250, 34, 62), Vector3(322, 30, 58), Vector3(296, 0, -10), Vector3(318, 0, -14)],
@@ -133,6 +133,8 @@ const MOODS: Dictionary = {
 		Color(0.26, 0.3, 0.45)],
 	StoryShot.Mood.HARBOR: [Color(0.03, 0.05, 0.12), Color(0.16, 0.2, 0.3), Color(0.55, 0.65, 0.95), 0.4, 30.0, 0.5,
 		0.006, Color(0.3, 0.36, 0.5)],
+	StoryShot.Mood.RESORT: [Color(0.3, 0.55, 0.9), Color(0.78, 0.86, 0.92), Color(1.0, 0.96, 0.86), 1.3, 55.0, 0.75,
+		0.0015, Color(0.74, 0.74, 0.72)],
 	StoryShot.Mood.HARBOR_DAWN: [Color(0.4, 0.55, 0.85), Color(1.0, 0.75, 0.55), Color(1.0, 0.82, 0.62), 1.2, 12.0, 0.7,
 		0.002, Color(0.7, 0.64, 0.6)],
 }
@@ -207,6 +209,9 @@ func set_mood(new_mood: int) -> void:
 		StoryShot.Mood.HARBOR_DAWN:
 			_build_harbor_set()
 			_build_harbor_dawn()
+		StoryShot.Mood.RESORT:
+			_build_harbor_set()
+			_build_resort()
 		_:
 			if StageLocations.MOODS.has(new_mood):
 				StageLocations.build(self, new_mood, _sets)
@@ -324,7 +329,9 @@ func _build_street() -> void:
 			if absf(x) > 8.0:
 				# Плечо фонаря (+Z модели) — к дороге
 				_place(light, Vector3(x, 0.0, side * (SIDEWALK_Z + 1.6)), 0.0 if side < 0.0 else PI, 1.0)
-				_place_fitted(tree, Vector3(x + 8.0, 0.0, side * (SIDEWALK_Z + 1.8)), _rng.randf() * TAU, 3.5)
+				# У кафе (x = -16, сторона +Z) дерева нет: там идут камеры sidewalk/close_up/window
+				if not (side > 0.0 and absf(x + 8.0 + 16.0) < 1.0):
+					_place_fitted(tree, Vector3(x + 8.0, 0.0, side * (SIDEWALK_Z + 1.8)), _rng.randf() * TAU, 3.5)
 			x += 16.0
 	_build_traffic_lights()
 
@@ -562,7 +569,8 @@ func _build_camp() -> void:
 	_place_camp_prop("bedroll", Vector3(-2.8, 0.0, -2.6), 0.9)
 	# Сидят у огня (Kenney «sit»), лицом к костру
 	for i in 6:
-		var angle: float = TAU * i / 6.0 + 0.4
+		# Просвет по +Z: там камера camp_fire, спины сидящих не закрывают огонь
+		var angle: float = TAU * i / 6.0 + PI / 3.0
 		var at := Vector3(cos(angle), 0.0, sin(angle)) * 2.1
 		var scene: PackedScene = _load(PEOPLE_KENNEY[(i * 2) % PEOPLE_KENNEY.size()])
 		var person: StageActor = _add_actor(scene, 1.7, PackedVector3Array([at]), 0.0, &"walk", &"sit", 0.0)
@@ -683,7 +691,8 @@ func _build_harbor_night() -> void:
 		if wreck != null:
 			wreck.position = h + Vector3(-20.0 + i * 13.0, 0.0, 12.0 + (i % 2) * 4.0)
 	for i in 5:
-		_place_actor_prop(_load(HARBOR_CRATE), h + Vector3(_rng.randf_range(-20.0, 20.0), 0.0,
+		# Ящики левее — справа камера harbor_zombies
+		_place_actor_prop(_load(HARBOR_CRATE), h + Vector3(_rng.randf_range(-20.0, 4.0), 0.0,
 			_rng.randf_range(2.0, 8.0)), 0.9)
 
 
@@ -734,6 +743,71 @@ func _place_fitted_into(parent: Node3D, scene: PackedScene, at: Vector3, yaw: fl
 	node.rotation.y = yaw
 	node.scale = Vector3.ONE * (width / widest if widest > 0.01 else 1.0)
 	parent.add_child(node)
+
+
+## Курорт «Чайка»: пальмы и зонты на набережной, мертвецы в купальниках бредут к воде, аниматор танцует на крыше
+func _build_resort() -> void:
+	var h: Vector3 = HARBOR_ORIGIN
+	var palms: Array[String] = ["res://models/harbor/pirate/palm-straight.glb", "res://models/harbor/pirate/palm-bend.glb",
+		"res://models/harbor/pirate/palm-detailed-straight.glb"]
+	for i in 9:
+		# Пальмы позади камер набережной (камеры стоят до z = 9)
+		_place_actor_prop(_load(palms[i % palms.size()]), h + Vector3(-26.0 + i * 6.5, 0.0, 12.0 + (i % 2) * 3.0), 1.5)
+	var colors: Array[Color] = [Color(0.95, 0.3, 0.3), Color(0.25, 0.6, 0.95), Color(1.0, 0.85, 0.2), Color(0.3, 0.85, 0.5)]
+	for i in 6:
+		var at: Vector3 = h + Vector3(-22.0 + i * 8.0, 0.0, 3.2)
+		var pole := MeshInstance3D.new()
+		var pole_mesh := BoxMesh.new()
+		pole_mesh.size = Vector3(0.08, 2.4, 0.08)
+		pole.mesh = pole_mesh
+		pole.position = at + Vector3.UP * 1.2
+		_actors.add_child(pole)
+		var dome := CylinderMesh.new()
+		dome.top_radius = 0.05
+		dome.bottom_radius = 1.5
+		dome.height = 0.5
+		var dome_material := StandardMaterial3D.new()
+		dome_material.albedo_color = colors[i % colors.size()]
+		dome.material = dome_material
+		var top := MeshInstance3D.new()
+		top.mesh = dome
+		top.position = at + Vector3.UP * 2.5
+		_actors.add_child(top)
+	for i in 10:
+		var start: Vector3 = h + Vector3(_rng.randf_range(-24.0, 6.0), 0.0, _rng.randf_range(2.5, 6.0))
+		var finish: Vector3 = start + Vector3(_rng.randf_range(-6.0, 6.0), 0.0, -1.0)
+		var zombie: StageActor = _add_actor(_load(ZOMBIES[i % ZOMBIES.size()]), _rng.randf_range(1.65, 1.85),
+			PackedVector3Array([start, finish, start]), _rng.randf_range(0.4, 0.7), &"Walk", &"Idle", _rng.randf())
+		if zombie != null and i % 3 == 0:
+			# Надувной круг на поясе
+			var ring := MeshInstance3D.new()
+			var torus := TorusMesh.new()
+			torus.inner_radius = 0.3
+			torus.outer_radius = 0.5
+			var ring_material := StandardMaterial3D.new()
+			ring_material.albedo_color = colors[(i / 3) % colors.size()]
+			torus.material = ring_material
+			ring.mesh = torus
+			ring.position = Vector3.UP * 0.9
+			zombie.add_child(ring)
+	# Аниматор Эдик танцует на крыше ларька
+	var kiosk := MeshInstance3D.new()
+	var kiosk_mesh := BoxMesh.new()
+	kiosk_mesh.size = Vector3(3.0, 2.6, 2.4)
+	var kiosk_material := StandardMaterial3D.new()
+	kiosk_material.albedo_color = Color(0.95, 0.85, 0.65)
+	kiosk_mesh.material = kiosk_material
+	kiosk.mesh = kiosk_mesh
+	kiosk.position = h + Vector3(-6.0, 1.3, 7.0)
+	_actors.add_child(kiosk)
+	var dancer: StageActor = _add_actor(_load(PEOPLE_QUATERNIUS[0]), 1.8,
+		PackedVector3Array([h + Vector3(-6.0, 2.6, 7.0)]), 0.0, &"Walk", &"Wave", 0.0)
+	if dancer != null:
+		dancer.position.y = 2.6
+		dancer.rotation.y = -0.9  # лицом к камерам набережной
+	var bus: StageCar = _add_car(_load(CARS[4]), PackedVector3Array(), 0.0, false, 0.0, 80.0)
+	if bus != null:
+		bus.position = h + Vector3(-14.0, 0.0, 12.0)
 
 
 func _place_into(parent: Node3D, scene: PackedScene, at: Vector3, yaw: float, scale_value: float) -> void:

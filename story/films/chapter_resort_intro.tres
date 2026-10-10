@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "skyline"
+mood = 13
+camera = "harbor_aerial"
 duration = 5.0
 caption = "КУРОРТ «ЧАЙКА»"
 voice_ru = "Курорт «Чайка». Море, пальмы, всё включено. Особенно зубы."
@@ -14,16 +14,16 @@ voice_en = "The Seagull resort. Sea, palm trees, all inclusive. Especially the t
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "sidewalk"
+mood = 13
+camera = "harbor_quay"
 duration = 5.0
 voice_ru = "Мертвецы в панамах и с надувными кругами. Кто-то даже в ластах. Шлёп. Шлёп. Шлёп."
 voice_en = "The dead in sun hats and inflatable rings. One is even in flippers. Slap. Slap. Slap."
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "window"
+mood = 13
+camera = "harbor_zombies"
 duration = 5.0
 voice_ru = "Танцуем! И раз, и два! Пока я танцую, они смотрят на меня! Третий день! Помогите!"
 voice_en = "Let's dance! And one, and two! While I dance, they watch me! Day three! Help!"

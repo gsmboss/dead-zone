@@ -394,7 +394,9 @@ resort, cold, kaban_base, port_depot, gas_station, nest, camp_gate, festival, ho
 pink_bus, village_queue, lodge, highway_yard) — предметы на свободных местах (_spot: не у точек спавна/подборов/обороны/игрока,
 физика WORLD), фасады с вывесками у стен (_facade), гирлянды, зонты, костры; MissionData.time_of_day (DAY/DUSK/NIGHT/DAWN) —
 небо, солнце, окружение (ночью DayNightCycle.night_amount = 0.55 — фонарик сам; EdgeCover.refresh_environment).
-Курорт — в порту (harbor_level днём). Лес под набор highway оставляет просвет под трассу (ForestBuilder).
+Курорт — в порту (harbor_level днём); в кино — Mood.RESORT (StoryStage._build_resort: пальмы, зонты, мертвецы в
+надувных кругах, аниматор на ларьке). Камера camp_fire — выше и сзади, сидящие у костра оставляют просвет к камере;
+у кафе на улице (x = -16) нет дерева — там камеры sidewalk/close_up/window. Лес под набор highway оставляет просвет под трассу (ForestBuilder).
 Модели: models/market, food, holiday, roads, nature (Kenney, CC0). Перевал: скалы и сосны Nature Kit, снежные ёлки Holiday Kit.
 Проверка без редактора: tools/validate/validate.tscn (ресурсы, сюжет, миссии, модели кино, переводы глав/титров/подписей;
 «ждут картинок» — не ошибка)
