@@ -7,7 +7,9 @@ extends CanvasLayer
 
 signal finished
 
-const BAR_SHARE: float = 0.1
+const BAR_SHARE: float = 0.12
+## Субтитры — над нижней полосой, на тёмной подложке-градиенте (не налезают на край полосы)
+const SUBTITLE_SHARE: float = 0.22
 const FADE_TIME: float = 0.45
 const NARRATOR_PITCH: float = 0.85
 const VOICE_RATE: float = 1.0
@@ -24,6 +26,7 @@ var _camera: Camera3D
 var _fade: ColorRect
 var _caption: Label
 var _subtitle: Label
+var _subtitle_shade: TextureRect
 var _title: Label
 var _index: int = -1
 var _time: float = 0.0
@@ -108,6 +111,7 @@ func _next_shot() -> void:
 		_title.create_tween().set_ignore_time_scale(true).tween_property(_title, "modulate:a", 1.0, 0.6)
 	_length = shot.duration
 	var line: String = VoiceOver.pick(shot.voice_ru, shot.voice_en)
+	_subtitle_shade.visible = not line.is_empty()
 	if line.is_empty():
 		_subtitle.text = ""
 		return
@@ -216,6 +220,8 @@ func _build() -> void:
 		add_child(bar)
 
 	_caption = UIKit.label("", 24)
+	_caption.add_theme_constant_override(&"outline_size", 6)
+	_caption.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	_caption.modulate = CAPTION_COLOR
 	add_child(_caption)
 	_caption.anchor_left = 0.04
@@ -232,17 +238,39 @@ func _build() -> void:
 	add_child(_title)
 	_title.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	_subtitle = UIKit.label("", 30)
+	# Затемнение низа кадра под субтитрами: от прозрачного к полупрозрачному чёрному у полосы
+	var shade_gradient := Gradient.new()
+	shade_gradient.set_color(0, Color(0.0, 0.0, 0.0, 0.0))
+	shade_gradient.set_color(1, Color(0.0, 0.0, 0.0, 0.6))
+	var shade_texture := GradientTexture2D.new()
+	shade_texture.gradient = shade_gradient
+	shade_texture.fill_from = Vector2(0.5, 0.0)
+	shade_texture.fill_to = Vector2(0.5, 1.0)
+	shade_texture.width = 4
+	shade_texture.height = 64
+	var shade := TextureRect.new()
+	_subtitle_shade = shade
+	shade.texture = shade_texture
+	shade.stretch_mode = TextureRect.STRETCH_SCALE
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
+	shade.anchor_right = 1.0
+	shade.anchor_top = 1.0 - BAR_SHARE - SUBTITLE_SHARE
+	shade.anchor_bottom = 1.0 - BAR_SHARE
+
+	_subtitle = UIKit.label("", 26)
 	_subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_subtitle.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_subtitle.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_subtitle.add_theme_constant_override(&"outline_size", 10)
-	_subtitle.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.9))
+	_subtitle.add_theme_constant_override(&"outline_size", 8)
+	_subtitle.add_theme_color_override(&"font_outline_color", Color(0.0, 0.0, 0.0, 0.95))
+	_subtitle.add_theme_constant_override(&"line_spacing", -2)
 	add_child(_subtitle)
-	_subtitle.anchor_left = 0.08
-	_subtitle.anchor_right = 0.92
-	_subtitle.anchor_top = 1.0 - BAR_SHARE - 0.17
-	_subtitle.anchor_bottom = 1.0 - BAR_SHARE * 0.15
+	_subtitle.anchor_left = 0.1
+	_subtitle.anchor_right = 0.9
+	_subtitle.anchor_top = 1.0 - BAR_SHARE - SUBTITLE_SHARE
+	_subtitle.anchor_bottom = 1.0 - BAR_SHARE
+	_subtitle.offset_bottom = -10.0
 
 	_fade = ColorRect.new()
 	_fade.color = Color(0.0, 0.0, 0.0, 1.0)
@@ -257,5 +285,6 @@ func _build() -> void:
 	skip_button.anchor_right = 1.0
 	skip_button.offset_left = -270.0
 	skip_button.offset_right = -24.0
-	skip_button.offset_top = 16.0
-	skip_button.offset_bottom = 16.0 + UIKit.BUTTON_HEIGHT
+	skip_button.offset_top = 4.0
+	skip_button.offset_bottom = 4.0 + UIKit.BUTTON_HEIGHT
+	skip_button.modulate.a = 0.85

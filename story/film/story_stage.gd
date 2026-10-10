@@ -81,7 +81,8 @@ const CAMERAS: Dictionary = {
 	"road_low": [Vector3(38, 0.7, -0.6), Vector3(22, 0.7, -0.6), Vector3(0, 1.2, 0), Vector3(-20, 1.2, 0)],
 	"close_up": [Vector3(-10, 1.6, 10.8), Vector3(-11.5, 1.6, 9.6), Vector3(-14, 1.3, 7.0), Vector3(-14, 1.3, 7.0)],
 	"window": [Vector3(-22, 11, 13), Vector3(-18, 10, 12.5), Vector3(-20, 0, 2), Vector3(-14, 0, 0)],
-	"chase": [Vector3(-6, 1.3, -1.2), Vector3(-30, 1.3, -1.2), Vector3(-20, 1.2, 0), Vector3(-45, 1.2, 0)],
+	# Погоня: выше крыш машин и сбоку от полосы — машина впереди не закрывает кадр
+	"chase": [Vector3(-4, 3.2, -4.2), Vector3(-26, 2.8, -4.2), Vector3(-22, 1.0, 0.5), Vector3(-46, 1.0, 0.5)],
 	"zombie_low": [Vector3(7, 0.35, 3.2), Vector3(4.5, 0.45, 2.2), Vector3(-6, 1.4, 0), Vector3(-9, 1.4, 0)],
 	"fire_wreck": [Vector3(13, 2.6, -10), Vector3(9, 2.0, -7.5), Vector3(4, 1, -2), Vector3(3, 1, -2)],
 	"bandit_orbit": [Vector3(9, 2.4, 9), Vector3(-9, 2.4, 9), Vector3(0, 1.3, 0), Vector3(0, 1.3, 0)],
@@ -94,15 +95,22 @@ const CAMERAS: Dictionary = {
 	"camp_high": [Vector3(-14, 9, 14), Vector3(-9, 7, 10), Vector3(0, 0.5, 0), Vector3(0, 0.5, 0)],
 }
 
-## Настроение: небо (верх, горизонт), солнце (цвет, сила, высота°), окружение, туман
+## Настроение: небо (верх, горизонт), солнце (цвет, сила, высота°), сила окружения, туман, цвет окружения.
+## Окружение — ровным цветом, не от неба: от синего неба дома и асфальт днём становились синими
 const MOODS: Dictionary = {
-	StoryShot.Mood.LIVING: [Color(0.3, 0.55, 0.9), Color(0.75, 0.82, 0.9), Color(1.0, 0.96, 0.88), 1.3, 50.0, 1.0, 0.002],
-	StoryShot.Mood.OUTBREAK: [Color(0.35, 0.2, 0.25), Color(1.0, 0.5, 0.25), Color(1.0, 0.55, 0.3), 1.0, 10.0, 0.6, 0.01],
-	StoryShot.Mood.DEAD: [Color(0.02, 0.03, 0.07), Color(0.1, 0.12, 0.17), Color(0.45, 0.55, 0.85), 0.25, 35.0, 0.3, 0.02],
-	StoryShot.Mood.BANDITS: [Color(0.03, 0.02, 0.05), Color(0.2, 0.08, 0.06), Color(0.5, 0.4, 0.6), 0.2, 30.0, 0.25, 0.018],
-	StoryShot.Mood.HOPE: [Color(0.35, 0.45, 0.75), Color(1.0, 0.7, 0.5), Color(1.0, 0.78, 0.55), 0.9, 12.0, 0.75, 0.006],
-	StoryShot.Mood.BLACK: [Color.BLACK, Color.BLACK, Color.BLACK, 0.0, 30.0, 0.0, 0.0],
-	StoryShot.Mood.CAMP: [Color(0.02, 0.03, 0.09), Color(0.09, 0.11, 0.22), Color(0.5, 0.6, 0.95), 0.22, 35.0, 0.3, 0.014],
+	StoryShot.Mood.LIVING: [Color(0.3, 0.55, 0.9), Color(0.75, 0.82, 0.9), Color(1.0, 0.95, 0.85), 1.5, 50.0, 0.75, 0.0015,
+		Color(0.72, 0.72, 0.7)],
+	StoryShot.Mood.OUTBREAK: [Color(0.3, 0.18, 0.22), Color(0.95, 0.5, 0.3), Color(1.0, 0.62, 0.4), 1.2, 14.0, 0.6, 0.004,
+		Color(0.62, 0.5, 0.46)],
+	StoryShot.Mood.DEAD: [Color(0.02, 0.03, 0.07), Color(0.1, 0.12, 0.17), Color(0.45, 0.55, 0.85), 0.35, 35.0, 0.5, 0.012,
+		Color(0.32, 0.36, 0.48)],
+	StoryShot.Mood.BANDITS: [Color(0.03, 0.02, 0.05), Color(0.2, 0.08, 0.06), Color(0.5, 0.4, 0.6), 0.3, 30.0, 0.45, 0.012,
+		Color(0.36, 0.3, 0.32)],
+	StoryShot.Mood.HOPE: [Color(0.35, 0.45, 0.75), Color(1.0, 0.72, 0.55), Color(1.0, 0.8, 0.6), 1.1, 14.0, 0.7, 0.003,
+		Color(0.68, 0.6, 0.55)],
+	StoryShot.Mood.BLACK: [Color.BLACK, Color.BLACK, Color.BLACK, 0.0, 30.0, 0.0, 0.0, Color.BLACK],
+	StoryShot.Mood.CAMP: [Color(0.02, 0.03, 0.09), Color(0.09, 0.11, 0.22), Color(0.5, 0.6, 0.95), 0.3, 35.0, 0.5, 0.01,
+		Color(0.26, 0.3, 0.45)],
 }
 
 var mood: int = -1
@@ -171,7 +179,7 @@ func _build_environment() -> void:
 	_environment = Environment.new()
 	_environment.background_mode = Environment.BG_SKY
 	_environment.sky = sky
-	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	_environment.fog_enabled = true
 	var world := WorldEnvironment.new()
 	world.environment = _environment
@@ -193,8 +201,10 @@ func _apply_light(new_mood: int) -> void:
 	_sun.light_energy = values[3]
 	_sun.rotation.x = deg_to_rad(-float(values[4]))
 	_environment.ambient_light_energy = values[5]
+	_environment.ambient_light_color = values[7]
 	_environment.fog_density = values[6]
-	_environment.fog_light_color = values[1]
+	# Туман темнее горизонта — не заливает улицу сплошным цветом
+	_environment.fog_light_color = (values[1] as Color).darkened(0.3)
 
 
 # ---------- Улица ----------
@@ -225,18 +235,25 @@ func _build_street() -> void:
 		if absf(z) > 0.1:
 			_place(straight, Vector3(0.0, 0.0, z), 0.0, 1.0)
 
-	# Тротуары — светлые полосы вдоль улицы
+	# Тротуары — светлые полосы вдоль улиц. Начинаются от бордюра плитки дороги (|3..4| м от оси):
+	# в атласе Quaternius бордюр сиреневый — в кино он торчал яркой полосой, тротуар его закрывает
 	var walk_material := StandardMaterial3D.new()
-	walk_material.albedo_color = Color(0.55, 0.55, 0.53)
+	walk_material.albedo_color = Color(0.56, 0.56, 0.54)
+	walk_material.roughness = 0.9
+	var walk_from: float = 2.95
+	var walk_to: float = SIDEWALK_Z + 2.75
 	for side: float in [-1.0, 1.0]:
 		for half: float in [-1.0, 1.0]:
-			var box := BoxMesh.new()
-			box.size = Vector3(STREET_HALF - 4.0, 0.12, 4.5)
-			box.material = walk_material
-			var walk := MeshInstance3D.new()
-			walk.mesh = box
-			walk.position = Vector3(half * (STREET_HALF * 0.5 + 2.0), 0.06, side * (SIDEWALK_Z + 0.5))
-			add_child(walk)
+			# Вдоль главной улицы (по X)
+			_add_walk(walk_material, Vector3(STREET_HALF - 2.95, 0.14, walk_to - walk_from),
+				Vector3(half * (STREET_HALF + 2.95) * 0.5, 0.07, side * (walk_from + walk_to) * 0.5))
+			# Вдоль поперечной улицы (по Z) — только бордюр у дороги
+			_add_walk(walk_material, Vector3(1.1, 0.14, CROSS_HALF + 4.0 - 4.0),
+				Vector3(side * 3.5, 0.07, half * (CROSS_HALF + 8.0) * 0.5))
+	# Углы перекрёстка
+	for corner_x: float in [-1.0, 1.0]:
+		for corner_z: float in [-1.0, 1.0]:
+			_add_walk(walk_material, Vector3(1.1, 0.14, 1.1), Vector3(corner_x * 3.5, 0.07, corner_z * 3.5))
 
 	# Дома вдоль улицы и небоскрёбы за ними
 	var index: int = 0
@@ -267,6 +284,16 @@ func _build_street() -> void:
 				_place_fitted(tree, Vector3(x + 8.0, 0.0, side * (SIDEWALK_Z + 1.8)), _rng.randf() * TAU, 3.5)
 			x += 16.0
 	_build_traffic_lights()
+
+
+func _add_walk(material: Material, size: Vector3, at: Vector3) -> void:
+	var box := BoxMesh.new()
+	box.size = size
+	box.material = material
+	var walk := MeshInstance3D.new()
+	walk.mesh = box
+	walk.position = at
+	add_child(walk)
 
 
 ## Светофоры на углах перекрёстка + свои огни (общие материалы — меняются все сразу)
