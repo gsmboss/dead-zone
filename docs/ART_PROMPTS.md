@@ -3,7 +3,7 @@
 Готово: splash (ui/splash/splash.jpg), обложка Google Play (store/feature_graphic.png), prologue, chapter_1, chapter_2, chapter_3, chapter_4, chapter_bandits, chapter_5, chapter_6, chapter_baron, chapter_7, chapter_pharmacy, chapter_tower, chapter_rat, chapter_bridge, epilogue; локации (ui/hub/locations/*.jpg 960×540): все 8 (loc_street, loc_yard, loc_city, loc_graveyard, loc_forest, loc_industrial, loc_polygon, loc_shelter)
 
 Часть третья (раздел 4) тоже готова: chapter_south, chapter_port, chapter_lighthouse, chapter_voyage, loc_harbor.
-Раздел 5 — готовы: chapter_pass, chapter_keys, chapter_shepherd, chapter_home, loc_mountain, chapter_resort, chapter_depot, chapter_feast, chapter_crossing, chapter_trail. Ждут: chapter_siege, chapter_cold, chapter_hospital, chapter_mother.
+Раздел 5 — все картинки готовы.
 (story/art/*.jpg — картинка главы фоном рассказа и сверху досье в окне СЮЖЕТ).
 
 Все картинки — **без текста, букв, логотипов и водяных знаков** (надписи игра рисует сама, на двух языках).
