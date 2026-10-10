@@ -211,6 +211,7 @@ const LOCATION_ART: Dictionary = {
 	"street_level": "loc_street", "yard_level": "loc_yard", "city_level": "loc_city",
 	"graveyard_level": "loc_graveyard", "forest_level": "loc_forest", "industrial_level": "loc_industrial",
 	"test_level": "loc_polygon", "harbor_level": "loc_harbor",
+	"mountain_level": "loc_mountain",
 }
 
 

@@ -111,6 +111,7 @@ const LOCATIONS: Dictionary = {
 	"forest_level": "ЛЕСНОЙ ЛАГЕРЬ",
 	"industrial_level": "ПРОМЗОНА",
 	"harbor_level": "ЮЖНЫЙ ПОРТ",
+	"mountain_level": "ГОРНЫЙ ПЕРЕВАЛ",
 }
 
 
