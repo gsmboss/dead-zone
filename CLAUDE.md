@@ -412,3 +412,15 @@ DrivableCar.make_bike_model (примитивы: WheelFront/WheelBack, Headlight
 флаг ЗАЕЗДЫ на перекрёстке, подъехать и встать → СПРИНТ/КРУГ ПО ГОРОДУ/МАРАФОН (7/12/18 чекпоинтов, случайная прогулка по
 сетке _lines с зерном), отсчёт, кольца + столб света, стрелка над машиной, медали по PAR_SPEED, монеты REWARDS,
 GameState.get_race_best/record_race (сохранение race_best); вышел из машины — заезд отменён.
+Достижения и события (этап 10): GameState.report_event копит _stats (за всю игру) → _check_achievements по
+quests/achievements.tres (AchievementList из AchievementData: event, target, record, reward — 34 шт.), награда сразу,
+плашка ui/achievement_toast.gd (AchievementToast.show_achievement, очередь) + сигнал achievement_unlocked; report_record —
+рекорды (endless_wave, daily_streak). События: kill/headshot_kill/melee_kill/screamer_kill/brute_kill/boss_kill/tank_kill,
+helmet_off (Zombie), car_kill (DrivableCar), drift_points (DriveController), race_finish/race_gold, deploy, craft,
+weapon_buy, attachment_buy, chapter, mission_win/stars3/raid_win, coins_earned (add_coins), weekly_done. Окно ДОСТИЖЕНИЯ
+ui/hub/achievements_panel.gd (вкладки ДОСТИЖЕНИЯ/СТАТИСТИКА, медали ui/achievement_badge.gd), плитка в HubMenu (6 колонок).
+Событие недели: quests/weekly_events.tres (WeeklyEventList/WeeklyEventData: zombie+zombie_chance, coin_multiplier,
+испытание challenge_*), GameState.get_week (с понедельника), get_weekly_event (по кругу), _weekly (week/progress/claimed),
+claim_weekly; MissionManager._weekly — свой зомби в _pick_zombie_type и монеты в _event_value; карточка в DailyPanel.
+Код сохранения: GameState.export_save_code/import_save_code ("DZ1-md5-base64(gzip JSON)"), вкладка настроек СОХРАНЕНИЕ
+(копировать в буфер, вставить, загрузка в два нажатия и только в убежище). Облако Google Play Games — на этапе релиза.

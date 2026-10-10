@@ -13,6 +13,8 @@ signal gear_changed
 signal campaign_changed
 ## Куплена, выбрана, покрашена или затюнингована машина
 signal cars_changed
+## Получено достижение (награда уже начислена)
+signal achievement_unlocked(achievement: AchievementData)
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -23,6 +25,11 @@ const UPGRADE_STATS: Array[String] = ["damage", "magazine", "reload"]
 const DEBUG_COINS: int = 1000
 const PLAYER_STATS_PATH: String = "res://player/player_stats.tres"
 const QUEST_POOL_PATH: String = "res://quests/quest_pool.tres"
+const ACHIEVEMENTS_PATH: String = "res://quests/achievements.tres"
+const WEEKLY_EVENTS_PATH: String = "res://quests/weekly_events.tres"
+## Код сохранения (перенос на другое устройство): "DZ1-<md5[:8]>-<base64 gzip JSON>"
+const SAVE_CODE_PREFIX: String = "DZ1"
+const SAVE_CODE_MAX_SIZE: int = 4 * 1024 * 1024
 const CAMPAIGN_PATH: String = "res://story/campaign.tres"
 const PLAYER_UPGRADES: Array[String] = ["health", "armor"]
 ## Каждое прохождение миссии: зомби сильнее на 15% (до x3), награда больше на 10% (до x2)
@@ -137,6 +144,11 @@ var _next_raid: int = 0
 var raid_active: bool = false
 var attachments: Array[AttachmentData] = []
 var _race_best: Dictionary = {}  # id трассы -> лучшее время, с
+var achievement_list: AchievementList
+var weekly_events: WeeklyEventList
+var _stats: Dictionary = {}          # событие -> счётчик за всю игру (или рекорд)
+var _achievements_done: Array[String] = []
+var _weekly: Dictionary = {}         # {"week": int, "progress": int, "claimed": bool}
 var _attachments_owned: Dictionary = {}  # id ствола -> Array[String] купленных обвесов
 var _attachments_on: Dictionary = {}     # id ствола -> Array[String] поставленных (по одному на слот)
 
@@ -152,6 +164,15 @@ func _ready() -> void:
 	if player_stats == null:
 		push_warning("GameState: не найден %s, параметры игрока по умолчанию" % PLAYER_STATS_PATH)
 		player_stats = PlayerStats.new()
+	if ResourceLoader.exists(ACHIEVEMENTS_PATH):
+		achievement_list = load(ACHIEVEMENTS_PATH) as AchievementList
+	if achievement_list == null:
+		push_warning("GameState: не найден %s, достижений не будет" % ACHIEVEMENTS_PATH)
+		achievement_list = AchievementList.new()
+	if ResourceLoader.exists(WEEKLY_EVENTS_PATH):
+		weekly_events = load(WEEKLY_EVENTS_PATH) as WeeklyEventList
+	if weekly_events == null:
+		weekly_events = WeeklyEventList.new()
 	if ResourceLoader.exists(QUEST_POOL_PATH):
 		quest_pool = load(QUEST_POOL_PATH) as QuestPool
 	if quest_pool == null:
@@ -308,6 +329,7 @@ func buy_attachment(weapon: WeaponData, attachment: AttachmentData) -> bool:
 	coins -= cost
 	var owned: Array = _attachments_owned.get(weapon.id, [])
 	owned.append(attachment.id)
+	report_event(&"attachment_buy")
 	_attachments_owned[weapon.id] = owned
 	_put_on(weapon.id, attachment)
 	coins_changed.emit(coins)
@@ -377,6 +399,7 @@ func buy_weapon(weapon: WeaponData) -> bool:
 		return false
 	coins -= weapon.price
 	_owned.append(weapon.id)
+	report_event(&"weapon_buy")
 	coins_changed.emit(coins)
 	weapons_changed.emit()
 	save_game()
@@ -406,6 +429,8 @@ func add_coins(amount: int) -> void:
 		return
 	coins = maxi(coins + amount, 0)
 	coins_changed.emit(coins)
+	if amount > 0:
+		report_event(&"coins_earned", amount)
 	save_game()
 
 
@@ -527,6 +552,7 @@ func craft_item(item_id: String) -> bool:
 		return false
 	remove_item(SCRAP_ID, item.craft_cost)
 	add_item(item_id)
+	report_event(&"craft")
 	save_game()
 	return true
 
@@ -604,6 +630,7 @@ func _on_story_mission_won(mission: MissionData) -> void:
 	if chapter == null or is_chapter_done(chapter.id):
 		return
 	_chapters_done.append(chapter.id)
+	report_event(&"chapter")
 	_pending_story = chapter.id
 	if _chapters_done.size() >= campaign.chapters.size():
 		_pending_story = chapter.id + "|epilogue"
@@ -958,6 +985,156 @@ func get_daily_event() -> DailyEventData:
 	return quest_pool.events[rng.randi() % quest_pool.events.size()]
 
 
+# ---------- Статистика и достижения ----------
+
+## Рекорд (не сумма): лучшая волна бесконечного режима, серия дней
+func report_record(event: StringName, value: int) -> void:
+	var key: String = String(event)
+	if value <= int(_stats.get(key, 0)):
+		return
+	_stats[key] = value
+	_check_achievements(event)
+
+
+func get_stat(event: StringName) -> int:
+	return int(_stats.get(String(event), 0))
+
+
+func is_achievement_done(achievement_id: String) -> bool:
+	return achievement_id in _achievements_done
+
+
+func get_achievement_count() -> int:
+	return _achievements_done.size()
+
+
+## Достижения с этим событием: дошли до цели — открыть, начислить награду, показать
+func _check_achievements(event: StringName) -> void:
+	if achievement_list == null:
+		return
+	var value: int = get_stat(event)
+	for achievement: AchievementData in achievement_list.achievements:
+		if achievement == null or achievement.event != event or value < achievement.target \
+				or is_achievement_done(achievement.id):
+			continue
+		_achievements_done.append(achievement.id)
+		coins += achievement.reward
+		coins_changed.emit(coins)
+		achievement_unlocked.emit(achievement)
+		AchievementToast.show_achievement(get_tree(), achievement)
+		save_game.call_deferred()
+
+
+# ---------- Событие недели ----------
+
+## Номер недели (с понедельника)
+func get_week() -> int:
+	return floori((get_today() + 3) / 7.0)
+
+
+## Сколько дней до смены события недели
+func get_week_days_left() -> int:
+	return 7 - posmod(get_today() + 3, 7)
+
+
+func get_weekly_event() -> WeeklyEventData:
+	if weekly_events == null or weekly_events.events.is_empty():
+		return null
+	return weekly_events.events[posmod(get_week(), weekly_events.events.size())]
+
+
+func get_weekly_progress() -> int:
+	_ensure_week()
+	return int(_weekly.get("progress", 0))
+
+
+func is_weekly_claimed() -> bool:
+	_ensure_week()
+	return bool(_weekly.get("claimed", false))
+
+
+func can_claim_weekly() -> bool:
+	var event: WeeklyEventData = get_weekly_event()
+	return event != null and not is_weekly_claimed() and get_weekly_progress() >= event.challenge_target
+
+
+## Забрать награду недельного испытания; возвращает монеты (0 — нельзя)
+func claim_weekly() -> int:
+	if not can_claim_weekly():
+		return 0
+	var reward: int = get_weekly_event().challenge_reward
+	_weekly["claimed"] = true
+	coins += reward
+	coins_changed.emit(coins)
+	report_event(&"weekly_done")
+	progress_changed.emit()
+	save_game()
+	return reward
+
+
+func _ensure_week() -> void:
+	if int(_weekly.get("week", -1)) != get_week():
+		_weekly = {"week": get_week(), "progress": 0, "claimed": false}
+
+
+func _report_weekly(event: StringName, amount: int) -> void:
+	var weekly: WeeklyEventData = get_weekly_event()
+	if weekly == null or weekly.challenge_event != event:
+		return
+	_ensure_week()
+	if bool(_weekly.get("claimed", false)):
+		return
+	_weekly["progress"] = mini(int(_weekly.get("progress", 0)) + amount, weekly.challenge_target)
+
+
+# ---------- Код сохранения (перенос прогресса) ----------
+
+## Весь прогресс одной строкой (сжатый JSON сохранения) — скопировать на другое устройство
+func export_save_code() -> String:
+	save_game()
+	var text: String = FileAccess.get_file_as_string(SAVE_PATH)
+	if text.is_empty():
+		return ""
+	var packed: PackedByteArray = text.to_utf8_buffer().compress(FileAccess.COMPRESSION_GZIP)
+	return "%s-%s-%s" % [SAVE_CODE_PREFIX, text.md5_text().substr(0, 8), Marshalls.raw_to_base64(packed)]
+
+
+## Загрузить прогресс из кода. false — код повреждён или не от этой игры (текущий прогресс не трогается)
+func import_save_code(code: String) -> bool:
+	var parts: PackedStringArray = code.strip_edges().split("-", false, 2)
+	if parts.size() != 3 or parts[0] != SAVE_CODE_PREFIX:
+		return false
+	var packed: PackedByteArray = Marshalls.base64_to_raw(parts[2])
+	if packed.is_empty():
+		return false
+	var raw: PackedByteArray = packed.decompress_dynamic(SAVE_CODE_MAX_SIZE, FileAccess.COMPRESSION_GZIP)
+	var text: String = raw.get_string_from_utf8()
+	if text.is_empty() or text.md5_text().substr(0, 8) != parts[1]:
+		return false
+	var data: Variant = JSON.parse_string(text)
+	if not data is Dictionary or not (data as Dictionary).has("coins"):
+		return false
+	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
+	if file == null:
+		push_error("GameState: не удалось записать сохранение из кода")
+		return false
+	file.store_string(text)
+	file.close()
+	if DirAccess.rename_absolute(ProjectSettings.globalize_path(TEMP_PATH),
+			ProjectSettings.globalize_path(SAVE_PATH)) != OK:
+		return false
+	load_game()
+	coins_changed.emit(coins)
+	weapons_changed.emit()
+	progress_changed.emit()
+	inventory_changed.emit()
+	gear_changed.emit()
+	campaign_changed.emit()
+	cars_changed.emit()
+	skin_changed.emit(get_selected_skin())
+	return true
+
+
 ## Возвращает выданные монеты (0 — сегодня уже получено)
 func claim_daily() -> int:
 	if not can_claim_daily():
@@ -965,6 +1142,7 @@ func claim_daily() -> int:
 	var reward: int = get_daily_reward()
 	_daily_streak = get_next_streak()
 	_daily_last_day = get_today()
+	report_record(&"daily_streak", _daily_streak)
 	coins += reward
 	coins_changed.emit(coins)
 	progress_changed.emit()
@@ -983,6 +1161,12 @@ func get_quests() -> Array[Dictionary]:
 ## Событие для заданий: kill, headshot_kill, tank_kill, boss_kill, mission_win, item_collect.
 ## Не сохраняет сразу (вызывается часто) — сохранение в конце миссии
 func report_event(event: StringName, amount: int = 1) -> void:
+	if amount <= 0:
+		return
+	var key: String = String(event)
+	_stats[key] = int(_stats.get(key, 0)) + amount
+	_report_weekly(event, amount)
+	_check_achievements(event)
 	_ensure_today_quests()
 	for entry: Dictionary in _quests:
 		if bool(entry.get("claimed", false)):
@@ -1016,7 +1200,7 @@ func claim_quest(index: int) -> bool:
 
 ## Есть что забрать (для значка на кнопке в убежище)
 func has_unclaimed_rewards() -> bool:
-	if can_claim_daily():
+	if can_claim_daily() or can_claim_weekly():
 		return true
 	for entry: Dictionary in get_quests():
 		if not bool(entry.get("claimed", false)) and is_quest_complete(entry):
@@ -1148,6 +1332,9 @@ func reset_progress() -> void:
 	_attachments_owned.clear()
 	_attachments_on.clear()
 	_race_best.clear()
+	_stats.clear()
+	_achievements_done.clear()
+	_weekly = {}
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -1195,6 +1382,9 @@ func save_game() -> void:
 		"attachments": _attachments_owned,
 		"attachments_on": _attachments_on,
 		"race_best": _race_best,
+		"stats": _stats,
+		"achievements": _achievements_done,
+		"weekly": _weekly,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1300,6 +1490,19 @@ func load_game() -> void:
 	_next_raid = maxi(int(data.get("next_raid", 0)), 0)
 	_attachments_owned = _load_attachments(data.get("attachments", {}), false)
 	_attachments_on = _load_attachments(data.get("attachments_on", {}), true)
+	_stats = _load_int_dictionary(data.get("stats", {}), 0, 2000000000)
+	_achievements_done.clear()
+	var stored_achievements: Variant = data.get("achievements", [])
+	if stored_achievements is Array:
+		for achievement_id: Variant in stored_achievements:
+			if not str(achievement_id) in _achievements_done:
+				_achievements_done.append(str(achievement_id))
+	_weekly = {}
+	var stored_weekly: Variant = data.get("weekly", {})
+	if stored_weekly is Dictionary:
+		_weekly = {"week": int((stored_weekly as Dictionary).get("week", -1)),
+			"progress": maxi(int((stored_weekly as Dictionary).get("progress", 0)), 0),
+			"claimed": bool((stored_weekly as Dictionary).get("claimed", false))}
 	_race_best.clear()
 	var stored_races: Variant = data.get("race_best", {})
 	if stored_races is Dictionary:
@@ -1334,6 +1537,14 @@ func load_game() -> void:
 		var item: ItemData = get_item(item_id)
 		if item != null:
 			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
+	# Старое сохранение без статистики: счётчики по уже сделанному (достижения откроются при следующем событии)
+	if not data.has("stats"):
+		var wins: int = 0
+		for mission_id: Variant in _mission_clears:
+			wins += int(_mission_clears[mission_id])
+		_stats["mission_win"] = wins
+		_stats["chapter"] = _chapters_done.size()
+		_stats["daily_streak"] = _daily_streak
 
 
 ## Машины автосалона из сохранения (неизвестные id отбрасываются)

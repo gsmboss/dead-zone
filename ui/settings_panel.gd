@@ -21,12 +21,17 @@ func _ready() -> void:
 
 ## Вкладки: каждая — своя страница настроек (последняя открытая запоминается)
 const TABS: PackedStringArray = ["ЯЗЫК / LANGUAGE", "УПРАВЛЕНИЕ", "КАМЕРА", "КНОПКИ", "ПРИЦЕЛ", "ГИРОСКОП", "ЭФФЕКТЫ",
-	"ЗВУК", "ГРАФИКА", "СЮЖЕТ", "ПРОЧЕЕ"]
+	"ЗВУК", "ГРАФИКА", "СЮЖЕТ", "СОХРАНЕНИЕ", "ПРОЧЕЕ"]
 const TAB_WIDTH: float = 270.0
 
 static var _tab: int = 0
 
 var _tab_buttons: Array[Button] = []
+const SAVE_CODE_HINT: String = "КОД СОХРАНЕНИЯ — ВЕСЬ ТВОЙ ПРОГРЕСС ОДНОЙ СТРОКОЙ. СКОПИРУЙ ЕГО, ОТПРАВЬ СЕБЕ (TELEGRAM, ЗАМЕТКИ) И ВСТАВЬ НА ДРУГОМ ТЕЛЕФОНЕ ИЛИ ПОСЛЕ ПЕРЕУСТАНОВКИ ИГРЫ."
+## Вкладка СОХРАНЕНИЕ: строка статуса, поле кода, подтверждение загрузки
+var _save_status: Label
+var _code_edit: LineEdit
+var _import_armed: bool = false
 
 
 func _build_content() -> void:
@@ -53,6 +58,8 @@ func _build_content() -> void:
 			_build_graphics()
 		9:
 			_build_story()
+		10:
+			_build_save()
 		_:
 			_build_other()
 
@@ -212,6 +219,76 @@ func _build_language() -> void:
 	_choice("ЯЗЫК / LANGUAGE", &"language", Settings.LANGUAGE_NAMES, [], _on_language_changed)
 	var hint := UIKit.label("АВТО — КАК В ТЕЛЕФОНЕ. В УБЕЖИЩЕ ВСЁ ПЕРЕКЛЮЧАЕТСЯ СРАЗУ.", 20, content)
 	hint.modulate = UIKit.DIM
+
+
+## Перенос прогресса на другой телефон: код сохранения (сжатый прогресс) через буфер обмена
+func _build_save() -> void:
+	var info := UIKit.label(SAVE_CODE_HINT, 20, content)
+	info.modulate = UIKit.DIM
+	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var copy := UIKit.button("СКОПИРОВАТЬ КОД СОХРАНЕНИЯ", 24)
+	copy.pressed.connect(_on_copy_save_code)
+	content.add_child(copy)
+	_save_status = UIKit.label("", 20, content)
+	_save_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if get_tree().get_first_node_in_group(&"hub_hud") == null:
+		UIKit.label("ЗАГРУЗИТЬ КОД МОЖНО ТОЛЬКО В УБЕЖИЩЕ", 20, content).modulate = UIKit.DIM
+		return
+	UIKit.label("ЗАГРУЗИТЬ ПРОГРЕСС ИЗ КОДА", 24, content).modulate = UIKit.ACCENT
+	_code_edit = LineEdit.new()
+	_code_edit.placeholder_text = UIKit.t("ВСТАВЬ КОД СЮДА")
+	_code_edit.custom_minimum_size = Vector2(0.0, UIKit.BUTTON_HEIGHT)
+	_code_edit.add_theme_font_size_override(&"font_size", 20)
+	_code_edit.text_changed.connect(func(_text: String) -> void: _import_armed = false)
+	content.add_child(_code_edit)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override(&"separation", 12)
+	content.add_child(row)
+	var paste := UIKit.button("ВСТАВИТЬ ИЗ БУФЕРА", 22)
+	paste.size_flags_horizontal = SIZE_EXPAND_FILL
+	paste.pressed.connect(func() -> void:
+		_code_edit.text = DisplayServer.clipboard_get().strip_edges()
+		_import_armed = false)
+	row.add_child(paste)
+	var load_button := UIKit.button("ЗАГРУЗИТЬ", 22)
+	load_button.size_flags_horizontal = SIZE_EXPAND_FILL
+	load_button.pressed.connect(_on_import_save_code)
+	row.add_child(load_button)
+
+
+func _on_copy_save_code() -> void:
+	var code: String = GameState.export_save_code()
+	if code.is_empty():
+		Sfx.error()
+		_save_status.text = UIKit.t("НЕ УДАЛОСЬ СОБРАТЬ КОД")
+		_save_status.modulate = Color(1.0, 0.5, 0.4)
+		return
+	DisplayServer.clipboard_set(code)
+	Sfx.play_2d(Sfx.sounds.ui_confirm, -4.0, 1.0, 0.0)
+	_save_status.text = UIKit.t("КОД СКОПИРОВАН (%d ЗНАКОВ). СОХРАНИ ЕГО В НАДЁЖНОМ МЕСТЕ") % code.length()
+	_save_status.modulate = UIKit.GOOD
+
+
+## Первое нажатие — предупреждение, второе — загрузка (текущий прогресс заменится)
+func _on_import_save_code() -> void:
+	var code: String = _code_edit.text.strip_edges() if _code_edit != null else ""
+	if code.is_empty():
+		Sfx.error()
+		return
+	if not _import_armed:
+		_import_armed = true
+		_save_status.text = UIKit.t("ТЕКУЩИЙ ПРОГРЕСС БУДЕТ ЗАМЕНЁН. НАЖМИ «ЗАГРУЗИТЬ» ЕЩЁ РАЗ")
+		_save_status.modulate = UIKit.ACCENT
+		return
+	_import_armed = false
+	if not GameState.import_save_code(code):
+		Sfx.error()
+		_save_status.text = UIKit.t("КОД НЕ ПОДХОДИТ: ПРОВЕРЬ, ЧТО СКОПИРОВАН ЦЕЛИКОМ")
+		_save_status.modulate = Color(1.0, 0.5, 0.4)
+		return
+	Sfx.play_2d(Sfx.sounds.purchase, -2.0, 1.0, 0.0)
+	# Убежище заново — с загруженным прогрессом (машины, люди у костра, постройки)
+	get_tree().reload_current_scene.call_deferred()
 
 
 func _build_other() -> void:

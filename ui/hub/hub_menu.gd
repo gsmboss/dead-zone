@@ -7,9 +7,9 @@ signal chosen(id: StringName)
 signal closed
 
 const ICON_DIR: String = "res://ui/hub/icons/"
-const TILE_SIZE: Vector2 = Vector2(196.0, 168.0)
+const TILE_SIZE: Vector2 = Vector2(176.0, 160.0)
 const ICON_SIZE: float = 60.0
-const COLUMNS: int = 5
+const COLUMNS: int = 6
 ## [id, название, значок, цвет]
 const TILES: Array = [
 	[&"story", "СЮЖЕТ", "story", Color(1.0, 0.75, 0.45)],
@@ -19,6 +19,7 @@ const TILES: Array = [
 	[&"cars", "МАШИНЫ", "cars", Color(0.75, 1.0, 0.75)],
 	[&"base", "БАЗА", "base", Color(0.9, 0.8, 0.65)],
 	[&"daily", "ЕЖЕДНЕВНО", "daily", Color(1.0, 0.9, 0.5)],
+	[&"achievements", "ДОСТИЖЕНИЯ", "achievements", Color(1.0, 0.8, 0.35)],
 	[&"online", "ПО СЕТИ", "online", Color(0.7, 0.95, 1.0)],
 	[&"settings", "НАСТРОЙКИ", "settings", Color(0.85, 0.85, 0.85)],
 	[&"tutorial", "ОБУЧЕНИЕ", "tutorial", Color(0.7, 1.0, 0.85)],
@@ -155,6 +156,8 @@ func _status(id: StringName) -> String:
 			return UIKit.t("СПАСЕНО: %d") % GameState.get_rescued_count()
 		&"daily":
 			return "НАГРАДА ЖДЁТ!" if GameState.has_unclaimed_rewards() else "НАГРАДЫ И ЗАДАНИЯ"
+		&"achievements":
+			return "%d / %d" % [GameState.get_achievement_count(), GameState.achievement_list.achievements.size()]
 		&"online":
 			return "WI-FI, ДО 4 ИГРОКОВ"
 		&"settings":

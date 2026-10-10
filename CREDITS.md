@@ -50,7 +50,7 @@
   pause-button, video-camera, torch, knapsack, car-key, car-seat, exit-door, car-wheel, monkey-wrench,
   sentry-gun, mantrap, land-mine
 - меню убежища (ui/hub/icons/), оттуда же: open-book, crossed-swords, ak47, cowled, city-car, castle,
-  open-treasure-chest, wifi-router, cog, graduate-cap
+  open-treasure-chest, wifi-router, cog, graduate-cap, laurels-trophy
 
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music

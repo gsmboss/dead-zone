@@ -401,6 +401,7 @@ func _bank_drift() -> void:
 		return
 	var points: int = roundi(_drift_points)
 	_drift_points = 0.0
+	GameState.report_event(&"drift_points", points)
 	var coins: int = 0 if Net.in_match else mini(floori(points / DRIFT_COINS_DIVISOR), DRIFT_COINS_MAX)
 	_drift_label.text = UIKit.t("ДРИФТ  %d  +%s") % [points, UIKit.coins_text(coins)] if coins > 0 else UIKit.t("ДРИФТ  %d") % points
 	_drift_label.modulate = UIKit.GOOD

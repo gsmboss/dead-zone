@@ -74,6 +74,8 @@ var _drops: Array[Pickup] = []
 var _waves_cleared: int = 0
 var _survivors_total: int = 0
 var _event: DailyEventData
+## Событие недели: свой тип зомби чаще и множитель монет
+var _weekly: WeeklyEventData
 var _survivors_rescued: int = 0
 # Воскрешение за рекламу (один раз за миссию)
 const REVIVE_DECISION_TIME: float = 8.0
@@ -126,6 +128,7 @@ func _ready() -> void:
 	if GameState.is_raid_mission(mission):
 		_reward_multiplier *= GameState.RAID_REWARD
 	_event = GameState.get_daily_event()
+	_weekly = GameState.get_weekly_event()
 	spawning_enabled = not mission.tutorial
 	_start.call_deferred()
 
@@ -522,11 +525,15 @@ func on_item_collected() -> void:
 
 ## Множитель события дня: &"coins", &"spawn", &"drops"
 func _event_value(kind: StringName) -> float:
+	# Событие недели: монеты (действует и без события дня)
+	var weekly_coins: float = 1.0
+	if kind == &"coins" and _weekly != null and not mission.tutorial:
+		weekly_coins = maxf(_weekly.coin_multiplier, 0.0)
 	if _event == null:
-		return 1.0
+		return weekly_coins
 	match kind:
 		&"coins":
-			return maxf(_event.coin_multiplier, 0.0)
+			return maxf(_event.coin_multiplier, 0.0) * weekly_coins
 		&"spawn":
 			return maxf(_event.spawn_multiplier, 0.1)
 		&"drops":
@@ -592,6 +599,9 @@ func _difficulty_level() -> int:
 
 
 func _pick_zombie_type() -> ZombieData:
+	if _weekly != null and _weekly.zombie != null and not mission.tutorial \
+			and _rng.randf() < _weekly.zombie_chance:
+		return _weekly.zombie
 	var level: float = float(_difficulty_level())
 	var tank_chance: float = 0.0
 	if mission.tank != null:
@@ -695,6 +705,7 @@ func _is_wave_mode() -> bool:
 func _record_endless() -> void:
 	if mission.type == MissionData.Type.ENDLESS and _waves_cleared > 0:
 		GameState.record_score(mission, _waves_cleared)
+		GameState.report_record(&"endless_wave", _waves_cleared)
 
 
 ## Выжившие города сообщают о себе (для цели «СПАСЕНО N / M»)
@@ -719,7 +730,15 @@ func _on_zombie_died(zombie: Zombie) -> void:
 	GameState.report_event(&"kill")
 	if zombie.killed_by_headshot:
 		GameState.report_event(&"headshot_kill")
+	if _player != null and _player.weapon_manager != null:
+		var weapon: WeaponData = _player.weapon_manager.get_current_weapon()
+		if weapon != null and weapon.is_melee:
+			GameState.report_event(&"melee_kill")
 	if zombie.data != null:
+		if zombie.data.behavior == ZombieData.Behavior.SCREAMER:
+			GameState.report_event(&"screamer_kill")
+		elif zombie.data.front_armor < 1.0 and not zombie.data.is_boss:
+			GameState.report_event(&"brute_kill")
 		score += zombie.data.score
 		if zombie.data.is_boss:
 			GameState.report_event(&"boss_kill")
@@ -794,6 +813,10 @@ func _finish(won: bool) -> void:
 		if accuracy >= mission.star_accuracy:
 			stars += 1
 		GameState.report_event(&"mission_win")
+		if stars >= 3:
+			GameState.report_event(&"stars3")
+		if GameState.is_raid_mission(mission):
+			GameState.report_event(&"raid_win")
 
 	# Монеты: очки за убитых всегда + награда за победу (растёт с уровнем миссии)
 	# + за пройденные волны бесконечного режима

@@ -282,6 +282,8 @@ func _choose(id: StringName) -> void:
 			_open_window(BasePanel.new())
 		&"daily":
 			_open_window(DailyPanel.new())
+		&"achievements":
+			_open_window(AchievementsPanel.new())
 		&"online":
 			_open_window(LobbyPanel.new())
 		&"settings":

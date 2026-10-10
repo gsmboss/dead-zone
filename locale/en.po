@@ -61,6 +61,9 @@ msgstr "%s\nMELEE"
 msgid "%s  (в сумке %d / %d)"
 msgstr "%s  (%d / %d in bag)"
 
+msgid "%s  •  ОСТАЛОСЬ ДНЕЙ: %d"
+msgstr "%s  •  DAYS LEFT: %d"
+
 msgid "%s  •  УР. %d"
 msgstr "%s  •  LV. %d"
 
@@ -106,6 +109,12 @@ msgstr ", final one: %s"
 msgid "1-Е ЛИЦО"
 msgstr "1ST PERSON"
 
+msgid "10 миссий на три звезды"
+msgstr "10 missions with three stars"
+
+msgid "100 убийств оружием ближнего боя"
+msgstr "100 melee kills"
+
 msgid "15 УБИЙСТВ В ГОЛОВУ"
 msgstr "15 HEADSHOT KILLS"
 
@@ -118,11 +127,23 @@ msgstr "2 MINUTES"
 msgid "2031 ГОД. ВИРУС ПРЕВРАТИЛ ГОРОДА В КЛАДБИЩА."
 msgstr "2031. A VIRUS TURNED CITIES INTO GRAVEYARDS."
 
+msgid "3 золотые медали в заездах"
+msgstr "3 gold medals in races"
+
 msgid "3-Е ЛИЦО"
 msgstr "3RD PERSON"
 
+msgid "300 УБИЙСТВ В ГОЛОВУ"
+msgstr "300 HEADSHOT KILLS"
+
 msgid "40 УБИЙСТВ В ГОЛОВУ"
 msgstr "40 HEADSHOT KILLS"
+
+msgid "50 убийств в голову"
+msgstr "50 headshot kills"
+
+msgid "500 убийств в голову"
+msgstr "500 headshot kills"
 
 msgid "IP ХОСТА: %s"
 msgstr "HOST IP: %s"
@@ -172,11 +193,17 @@ msgstr "CAR DEALERSHIP"
 msgid "АНГЛИЙСКИЙ"
 msgstr "ENGLISH"
 
+msgid "АПОКАЛИПСИС ОТМЕНЁН"
+msgstr "APOCALYPSE CANCELLED"
+
 msgid "АПТЕЧКА"
 msgstr "MEDKIT"
 
 msgid "АПТЕЧНЫЙ СКЛАД"
 msgstr "PHARMACY WAREHOUSE"
+
+msgid "АРСЕНАЛ"
+msgstr "ARSENAL"
 
 msgid "АРХИВ ВЫШКИ. ДЕНЬ НОЛЬ"
 msgstr "TOWER ARCHIVE. DAY ZERO"
@@ -235,11 +262,20 @@ msgstr "SPIKED BAT"
 msgid "БИТА-ПИЛА"
 msgstr "SAW BAT"
 
+msgid "БЛИЖНИМ БОЕМ"
+msgstr "MELEE KILLS"
+
+msgid "БОГАЧ"
+msgstr "MONEYBAGS"
+
 msgid "БОЛЬШОЙ МАГАЗИН"
 msgstr "EXTENDED MAG"
 
 msgid "БОСС"
 msgstr "BOSS"
+
+msgid "БОССОВ ПОБЕЖДЕНО"
+msgstr "BOSSES DEFEATED"
 
 msgid "БОЧКИ С КРАСНОЙ ПОЛОСОЙ ВЗРЫВАЮТСЯ. ИСПОЛЬЗУЙ ЭТО. ГЛАВНОЕ — НЕ СТОЙ РЯДОМ."
 msgstr "BARRELS WITH A RED STRIPE EXPLODE. USE THAT. JUST DON'T STAND NEXT TO THEM."
@@ -259,8 +295,17 @@ msgstr "ARMORED SPORT"
 msgid "БРОНЗА"
 msgstr "BRONZE"
 
+msgid "БУГАЁВ"
+msgstr "BRUTES"
+
+msgid "БУГАИ НА УЛИЦАХ"
+msgstr "BRUTES ON THE STREETS"
+
 msgid "БУГАЙ"
 msgstr "BRUTE"
+
+msgid "БЫВАЛЫЙ"
+msgstr "SEASONED"
 
 msgid "БЫСТРЫЙ МАГАЗИН"
 msgstr "QUICK MAG"
@@ -273,6 +318,9 @@ msgstr "Kaban's gang stole the vaccine and is hiding at the container yard. Kill
 
 msgid "Барон держит пленных на улице у старого универмага. Выдержи 4 волны его банды и победи Барона"
 msgstr "Baron holds prisoners on the street by the old department store. Survive 4 waves of his gang and defeat Baron"
+
+msgid "Бронированные бугаи вышли на охоту"
+msgstr "Armored brutes are on the hunt"
 
 msgid "Броня"
 msgstr "Armor"
@@ -291,6 +339,12 @@ msgstr "FIGHT!"
 
 msgid "В БОЙ!  %s"
 msgstr "FIGHT!  %s"
+
+msgid "В ГОЛОВУ"
+msgstr "HEADSHOTS"
+
+msgid "В ГУЩЕ СОБЫТИЙ"
+msgstr "IN THE THICK OF IT"
 
 msgid "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ. ТЁМА УЖЕ ПОЧИНИЛ В НЕЙ МИКРОСКОП. ЕГО НИКТО НЕ ПРОСИЛ."
 msgstr "A THIRD HOUSE WENT UP IN THE CAMP — A LAB. TYOMA HAS ALREADY FIXED THE MICROSCOPE IN IT. NOBODY ASKED HIM TO."
@@ -354,6 +408,15 @@ msgstr "VERA TOLD US WHAT MATTERS: TYOMA WAS TAKEN BY PEOPLE IN RED BANDANAS. A 
 
 msgid "ВЕРНИСЬ НА ТОЧКУ!"
 msgstr "GET BACK TO THE POINT!"
+
+msgid "ВЕТЕРАН"
+msgstr "VETERAN"
+
+msgid "ВЕЧНАЯ ОБОРОНА"
+msgstr "ETERNAL DEFENSE"
+
+msgid "ВЗРЫВНАЯ НЕДЕЛЯ"
+msgstr "EXPLOSIVE WEEK"
 
 msgid "ВЗРЫВНОЙ"
 msgstr "EXPLODER"
@@ -439,6 +502,12 @@ msgstr "ALL EIGHT ARE IN THE CAMP. UNCLE GOSHA BREWED COFFEE IN THE TRUCK BED, O
 msgid "ВСЕГДА"
 msgstr "ALWAYS"
 
+msgid "ВСТАВИТЬ ИЗ БУФЕРА"
+msgstr "PASTE FROM CLIPBOARD"
+
+msgid "ВСТАВЬ КОД СЮДА"
+msgstr "PASTE THE CODE HERE"
+
 msgid "ВСТАТЬ"
 msgstr "STAND UP"
 
@@ -478,6 +547,9 @@ msgstr "SURVIVOR"
 msgid "ВЫЖИВШИЙ СПАСЁН  +%d"
 msgstr "SURVIVOR RESCUED  +%d"
 
+msgid "ВЫИГРАЙ 15 МИССИЙ"
+msgstr "WIN 15 MISSIONS"
+
 msgid "ВЫЙТИ"
 msgstr "EXIT"
 
@@ -502,6 +574,9 @@ msgstr "HIGH"
 msgid "ВЫХОД"
 msgstr "EXIT"
 
+msgid "Взрывные зомби на каждом углу"
+msgstr "Exploding zombies on every corner"
+
 msgid "Волн пройдено: %d"
 msgstr "Waves cleared: %d"
 
@@ -517,8 +592,17 @@ msgstr "Time: %s"
 msgid "Все монеты за миссии ×2"
 msgstr "All mission coins ×2"
 
+msgid "Выиграй 10 миссий"
+msgstr "Win 10 missions"
+
+msgid "Выиграй 100 миссий"
+msgstr "Win 100 missions"
+
 msgid "Выпадает из зомби и лежит в городе. Из лома в мастерской убежища собираются гранаты, коктейли и аптечки"
 msgstr "Dropped by zombies and lying around the city. In the shelter workshop, scrap becomes grenades, cocktails and medkits"
+
+msgid "Выполни 3 недельных испытания"
+msgstr "Complete 3 weekly challenges"
 
 msgid "ГАЗ (ТУРБО)"
 msgstr "NITRO (TURBO)"
@@ -538,11 +622,17 @@ msgstr "GENKA AND KABAN WASH THE DISHES AND ARGUE OVER WHOSE PLATE IS CLEANER. I
 msgid "ГЕНКА, БЫВШИЙ БАРОН, ПРОСИТСЯ С ТОБОЙ: «КАБАН БЫЛ МОИМ ЗАМОМ. ЭТО МОЙ ПОЗОР — Я ЕГО И ОТМОЮ». ОН ТЕПЕРЬ МОЕТ ПОСУДУ И ВЕРИТ В ОТМЫВАНИЕ."
 msgstr "GENKA, THE FORMER BARON, ASKS TO COME WITH YOU: \"KABAN WAS MY DEPUTY. HE'S MY SHAME — I'LL SCRUB HIM CLEAN MYSELF.\" HE WASHES DISHES NOW AND BELIEVES IN SCRUBBING."
 
+msgid "ГЕРОЙ СЕВЕРА-9"
+msgstr "HERO OF NORTH-9"
+
 msgid "ГИРОСКОП"
 msgstr "GYROSCOPE"
 
 msgid "ГИРОСКОП РАБОТАЕТ НА ТЕЛЕФОНЕ"
 msgstr "GYROSCOPE WORKS ON PHONES"
+
+msgid "ГЛАВ СЮЖЕТА"
+msgstr "STORY CHAPTERS"
 
 msgid "ГЛАВА %d  •  %s"
 msgstr "CHAPTER %d  •  %s"
@@ -619,6 +709,9 @@ msgstr "GRAPHICS, CONTROLS"
 msgid "ГРАФИТ"
 msgstr "GRAPHITE"
 
+msgid "ГРОЗА МЕРТВЕЦОВ"
+msgstr "BANE OF THE DEAD"
+
 msgid "ГРОМИЛА"
 msgstr "BRUTE"
 
@@ -636,6 +729,9 @@ msgstr "TRUCK"
 
 msgid "Город кишит мёртвыми. Пробейся к людям — убей 45 зомби, машина поможет"
 msgstr "The city is crawling with the dead. Fight through to the people — kill 45 zombies, the car will help"
+
+msgid "ДАВИЛКА"
+msgstr "ROADKILL"
 
 msgid "ДАЛЕЕ"
 msgstr "NEXT"
@@ -694,6 +790,12 @@ msgstr "FOR THE WORKSHOP"
 msgid "ДОКТОР ИРИНА СОБИРАЕТ ВАКЦИНУ ИЗ ТОГО, ЧТО ЕСТЬ: МИКРОСКОП ТЁМЫ, ХОЛОДИЛЬНИК ДЕНИСА И КОФЕМАШИНА ДЯДИ ГОШИ — «ДЛЯ НАСТРОЕНИЯ»."
 msgstr "DOCTOR IRINA IS BUILDING A VACCINE FROM WHAT WE'VE GOT: TYOMA'S MICROSCOPE, DENIS'S FRIDGE AND UNCLE GOSHA'S COFFEE MACHINE — \"FOR MORALE\"."
 
+msgid "ДОСТИЖЕНИЕ!"
+msgstr "ACHIEVEMENT!"
+
+msgid "ДОСТИЖЕНИЯ"
+msgstr "ACHIEVEMENTS"
+
 msgid "ДОСТУПНА"
 msgstr "AVAILABLE"
 
@@ -732,6 +834,9 @@ msgstr "Hold out as long as you can: endless waves"
 
 msgid "Для вакцины нужны реактивы с аптечного склада у проспекта. Собери 6 ящиков, пока их не нашли плевуны"
 msgstr "The vaccine needs reagents from the pharmacy warehouse by the avenue. Collect 6 crates before the spitters find them"
+
+msgid "Доедь до финиша заезда"
+msgstr "Finish a race"
 
 msgid "ЕЖЕДНЕВНО"
 msgstr "DAILY"
@@ -784,6 +889,15 @@ msgstr "FACTORY"
 msgid "ЗАВТРА — МОСТ"
 msgstr "TOMORROW — THE BRIDGE"
 
+msgid "ЗАГРУЗИТЬ"
+msgstr "LOAD"
+
+msgid "ЗАГРУЗИТЬ КОД МОЖНО ТОЛЬКО В УБЕЖИЩЕ"
+msgstr "A CODE CAN ONLY BE LOADED IN THE SHELTER"
+
+msgid "ЗАГРУЗИТЬ ПРОГРЕСС ИЗ КОДА"
+msgstr "LOAD PROGRESS FROM A CODE"
+
 msgid "ЗАГРУЗКА  %d%%"
 msgstr "LOADING  %d%%"
 
@@ -798,6 +912,9 @@ msgstr "TASK: %s"
 
 msgid "ЗАЕЗД ОТМЕНЁН"
 msgstr "RACE CANCELLED"
+
+msgid "ЗАЕЗДОВ"
+msgstr "RACES"
 
 msgid "ЗАЕЗДЫ"
 msgstr "RACES"
@@ -820,6 +937,9 @@ msgstr "HEADSHOT SLOW-MO"
 msgid "ЗАНОВО"
 msgstr "RESTART"
 
+msgid "ЗАРАБОТАНО МОНЕТ"
+msgstr "COINS EARNED"
+
 msgid "ЗАХОДИ В «ЕЖЕДНЕВНО» ЗА НАГРАДОЙ"
 msgstr "CHECK \"DAILY\" FOR A REWARD"
 
@@ -838,8 +958,17 @@ msgstr "MIRROR"
 msgid "ЗНАЧКИ НА КНОПКАХ ВМЕСТО НАДПИСЕЙ"
 msgstr "ICONS ON BUTTONS INSTEAD OF TEXT"
 
+msgid "ЗОЛОТАЯ ЛИХОРАДКА"
+msgstr "GOLD RUSH"
+
 msgid "ЗОЛОТО"
 msgstr "GOLD"
+
+msgid "ЗОЛОТЫЕ КОЛЁСА"
+msgstr "GOLDEN WHEELS"
+
+msgid "ЗОЛОТЫХ МЕДАЛЕЙ"
+msgstr "GOLD MEDALS"
 
 msgid "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s"
 msgstr "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s"
@@ -858,6 +987,12 @@ msgstr "No quests"
 
 msgid "Запас патронов всех стволов +30%"
 msgstr "Ammo reserve of all guns +30%"
+
+msgid "Заработай 50000 монет"
+msgstr "Earn 50000 coins"
+
+msgid "Заходи 7 дней подряд"
+msgstr "Log in 7 days in a row"
 
 msgid "Здоровье"
 msgstr "Health"
@@ -901,6 +1036,9 @@ msgstr "PLAYER — SCORE / ZOMBIES / PLAYERS / DEATHS"
 msgid "ИГРОКИ (%d/%d)"
 msgstr "PLAYERS (%d/%d)"
 
+msgid "ИДЕАЛЬНО"
+msgstr "FLAWLESS"
+
 msgid "ИДУ ЗА ТОБОЙ"
 msgstr "I'M WITH YOU"
 
@@ -919,11 +1057,17 @@ msgstr "INVERT VERTICAL"
 msgid "ИНВЕРСИЯ ПО ГОРИЗОНТАЛИ"
 msgstr "INVERT HORIZONTAL"
 
+msgid "ИНЖЕНЕР"
+msgstr "ENGINEER"
+
 msgid "ИРИНА"
 msgstr "IRINA"
 
 msgid "ИСПОЛЬЗОВАТЬ"
 msgstr "USE"
+
+msgid "ИСПЫТАНИЕ: %s"
+msgstr "CHALLENGE: %s"
 
 msgid "ИСТОРИЯ"
 msgstr "STORY"
@@ -994,6 +1138,12 @@ msgstr "INFECTION MAP"
 msgid "КАСКА"
 msgstr "HELMET"
 
+msgid "КАСКИ И ДУБИНКИ"
+msgstr "HARD HATS AND CLUBS"
+
+msgid "КАСКОБОЙ"
+msgstr "HELMET BREAKER"
+
 msgid "КАСКУ СБИВАЮТ ДВА ВЫСТРЕЛА В ГОЛОВУ"
 msgstr "TWO HEADSHOTS KNOCK A HELMET OFF"
 
@@ -1017,6 +1167,15 @@ msgstr "WHEN ACTIVE"
 
 msgid "КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
 msgstr "CLAWS — ZOMBIE BITE OR HIT, CROSSHAIR — PLAYER SHOT, STAR — EXPLOSION OR FIRE, "
+
+msgid "КОД НЕ ПОДХОДИТ: ПРОВЕРЬ, ЧТО СКОПИРОВАН ЦЕЛИКОМ"
+msgstr "THE CODE DOESN'T WORK: MAKE SURE IT WAS COPIED IN FULL"
+
+msgid "КОД СКОПИРОВАН (%d ЗНАКОВ). СОХРАНИ ЕГО В НАДЁЖНОМ МЕСТЕ"
+msgstr "CODE COPIED (%d CHARACTERS). KEEP IT SOMEWHERE SAFE"
+
+msgid "КОД СОХРАНЕНИЯ — ВЕСЬ ТВОЙ ПРОГРЕСС ОДНОЙ СТРОКОЙ. СКОПИРУЙ ЕГО, ОТПРАВЬ СЕБЕ (TELEGRAM, ЗАМЕТКИ) И ВСТАВЬ НА ДРУГОМ ТЕЛЕФОНЕ ИЛИ ПОСЛЕ ПЕРЕУСТАНОВКИ ИГРЫ."
+msgstr "THE SAVE CODE IS ALL YOUR PROGRESS IN ONE LINE. COPY IT, SEND IT TO YOURSELF (TELEGRAM, NOTES) AND PASTE IT ON ANOTHER PHONE OR AFTER REINSTALLING THE GAME."
 
 msgid "КОКТЕЙЛЬ МОЛОТОВА"
 msgstr "MOLOTOV COCKTAIL"
@@ -1054,6 +1213,9 @@ msgstr "SPEAR"
 msgid "КОРАБЛЬ УШЁЛ НА ЮГ С ВАКЦИНОЙ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ."
 msgstr "THE SHIP SAILED SOUTH WITH THE VACCINE. A MONTH LATER LEV PICKED UP VOICES FROM THREE MORE CITIES: PEOPLE ARE LIVING THERE TOO."
 
+msgid "КОРОЛЬ ДРИФТА"
+msgstr "DRIFT KING"
+
 msgid "КРАСНЫЕ"
 msgstr "RED"
 
@@ -1074,6 +1236,9 @@ msgstr "SCREAMER"
 
 msgid "КРИКУН ЗОВЁТ ОРДУ — УБЕЙ ЕГО ПЕРВЫМ"
 msgstr "THE SCREAMER CALLS THE HORDE — KILL IT FIRST"
+
+msgid "КРИКУНОВ"
+msgstr "SCREAMERS"
 
 msgid "КРУГ ПО ГОРОДУ"
 msgstr "CITY LOOP"
@@ -1110,6 +1275,15 @@ msgstr "Red beam and a dot on the target: hip-fire spread −30%"
 
 msgid "Крепость на колёсах: таран, перед которым не устоит даже толстяк."
 msgstr "Fortress on wheels: a ram not even a fatty can stand against."
+
+msgid "Крикуны повсюду: орда приходит быстрее"
+msgstr "Screamers everywhere: the horde arrives faster"
+
+msgid "Купи 10 обвесов"
+msgstr "Buy 10 attachments"
+
+msgid "Купи 5 стволов"
+msgstr "Buy 5 guns"
 
 msgid "ЛАГЕРЬ ВЫЖИВШИХ"
 msgstr "SURVIVOR CAMP"
@@ -1168,6 +1342,12 @@ msgstr "SCRAP"
 msgid "ЛОМ ×%d"
 msgstr "SCRAP ×%d"
 
+msgid "ЛУЧШАЯ ВОЛНА"
+msgstr "BEST WAVE"
+
+msgid "ЛУЧШАЯ СЕРИЯ ДНЕЙ"
+msgstr "BEST DAY STREAK"
+
 msgid "ЛЮДИ +%d"
 msgstr "PEOPLE +%d"
 
@@ -1213,6 +1393,9 @@ msgstr "A WEEK AGO MARINA SAW A KID WITH A RED BACKPACK. HE WAS HEADING FOR SILE
 msgid "МАРИНА И ЕЁ БРАТ ДЕНИС ТЕПЕРЬ В УБЕЖИЩЕ. ДЕНИС — МЕХАНИК: ОН ОБЕЩАЕТ ПОЧИНИТЬ ЛЮБУЮ МАШИНУ. ДАЖЕ ТУ, ЧТО БЕЗ КОЛЁС."
 msgstr "MARINA AND HER BROTHER DENIS ARE IN THE SHELTER NOW. DENIS IS A MECHANIC: HE PROMISES TO FIX ANY CAR. EVEN ONE WITH NO WHEELS."
 
+msgid "МАСТЕР НА ВСЕ РУКИ"
+msgstr "JACK OF ALL TRADES"
+
 msgid "МАСТЕРСКАЯ"
 msgstr "WORKSHOP"
 
@@ -1249,6 +1432,9 @@ msgstr "FIRST AID POST"
 msgid "МЕДСЕСТРА"
 msgstr "NURSE"
 
+msgid "МЕТКИЙ ГЛАЗ"
+msgstr "SHARP EYE"
+
 msgid "МЕХАНИК"
 msgstr "MECHANIC"
 
@@ -1257,6 +1443,9 @@ msgstr "MINE"
 
 msgid "МИССИИ"
 msgstr "MISSIONS"
+
+msgid "МИССИЙ НА 3 ЗВЕЗДЫ"
+msgstr "3-STAR MISSIONS"
 
 msgid "МИССИЯ"
 msgstr "MISSION"
@@ -1312,8 +1501,14 @@ msgstr "Magazine +50%, reload 10% slower"
 msgid "Медленный и тяжёлый: зомби отлетают, как кегли. Поворачивает неохотно."
 msgstr "Slow and heavy: zombies fly like bowling pins. Turns reluctantly."
 
+msgid "Монеты ×1.2, цель — головы"
+msgstr "Coins ×1.2, aim for the heads"
+
 msgid "Монеты за каждого убитого зомби"
 msgstr "Coins for every zombie killed"
+
+msgid "Монеты за миссии ×1.5"
+msgstr "Mission coins ×1.5"
 
 msgid "Монеты: %d"
 msgstr "Coins: %d"
@@ -1369,6 +1564,9 @@ msgstr "SETTINGS"
 msgid "НАСТРОЙКИ КОНФИДЕНЦИАЛЬНОСТИ"
 msgstr "PRIVACY SETTINGS"
 
+msgid "НАЧАЛО ПУТИ"
+msgstr "FIRST STEPS"
+
 msgid "НАЧАТЬ"
 msgstr "START"
 
@@ -1377,6 +1575,9 @@ msgstr "START CHAPTER"
 
 msgid "НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ"
 msgstr "COULDN'T CONNECT"
+
+msgid "НЕ УДАЛОСЬ СОБРАТЬ КОД"
+msgstr "COULDN'T BUILD THE CODE"
 
 msgid "НЕ УДАЛОСЬ СОЗДАТЬ ИГРУ (%s)"
 msgstr "COULDN'T CREATE GAME (%s)"
@@ -1387,6 +1588,9 @@ msgstr "WE'RE SIX REAGENTS SHORT. THEY'RE AT THE PHARMACY WAREHOUSE ON THE AVENU
 msgid "НЕВЕРНЫЙ IP: %s"
 msgstr "INVALID IP: %s"
 
+msgid "НЕДЕЛЯ КРИКУНОВ"
+msgstr "SCREAMER WEEK"
+
 msgid "НЕОН ПОД ДНИЩЕМ — %s"
 msgstr "UNDERGLOW NEON — %s"
 
@@ -1395,6 +1599,9 @@ msgstr "NEON: PICK A COLOR"
 
 msgid "НЕПРОЗРАЧНОСТЬ КНОПОК"
 msgstr "BUTTON OPACITY"
+
+msgid "НЕСГИБАЕМЫЙ"
+msgstr "UNBREAKABLE"
 
 msgid "НЕТ СЕТИ"
 msgstr "NO NETWORK"
@@ -1440,6 +1647,9 @@ msgstr "NIGHT: ZOMBIES MORE ACTIVE"
 
 msgid "НОЧЬЮ ЗОМБИ ИДУТ НА ОГОНЬ. ПРОДЕРЖИСЬ, ПОКА РАЗВЕДЧИКИ СОБИРАЮТ ЛАГЕРЬ. ФАКЕЛ БУДЕТ КСТАТИ."
 msgstr "AT NIGHT ZOMBIES COME TO THE FIRE. HOLD OUT WHILE THE SCOUTS PACK UP THE CAMP. A TORCH WILL COME IN HANDY."
+
+msgid "Набери 10000 очков дрифта"
+msgstr "Score 10000 drift points"
 
 msgid "Награда: %s"
 msgstr "Reward: %s"
@@ -1519,6 +1729,9 @@ msgstr "LOOK AROUND: MOVE THE MOUSE"
 msgid "ОСТАТЬСЯ"
 msgstr "STAY"
 
+msgid "ОТБИТО НАБЕГОВ"
+msgstr "RAIDS REPELLED"
+
 msgid "ОТБИТЬ"
 msgstr "FIGHT BACK"
 
@@ -1534,8 +1747,17 @@ msgstr "CANCEL"
 msgid "ОХОТА"
 msgstr "HUNT"
 
+msgid "ОХОТА НА ГОЛОВЫ"
+msgstr "HEAD HUNT"
+
+msgid "ОХОТНИК НА БОССОВ"
+msgstr "BOSS HUNTER"
+
 msgid "ОХОТНИЦА"
 msgstr "HUNTRESS"
+
+msgid "ОЧКОВ ДРИФТА"
+msgstr "DRIFT POINTS"
 
 msgid "ОШИБКА ПОДКЛЮЧЕНИЯ (%s)"
 msgstr "CONNECTION ERROR (%s)"
@@ -1545,6 +1767,9 @@ msgstr "A horde is heading for the gates. Set up turrets, bear traps and mines (
 
 msgid "Отбей %s"
 msgstr "Repel %s"
+
+msgid "Отбей 5 набегов на убежище"
+msgstr "Repel 5 raids on the shelter"
 
 msgid "Отбей три волны зомби"
 msgstr "Fight off three waves of zombies"
@@ -1564,6 +1789,9 @@ msgstr "An endless open city: explore the blocks, drive cars and run over zombie
 msgid "Очки: %d"
 msgstr "Score: %d"
 
+msgid "ПАДШИЙ ГИГАНТ"
+msgstr "FALLEN GIANT"
+
 msgid "ПАМЯТЬ"
 msgstr "MEMORY"
 
@@ -1576,11 +1804,17 @@ msgstr "AMMO"
 msgid "ПАУЗА"
 msgstr "PAUSED"
 
+msgid "ПЕРВАЯ КРОВЬ"
+msgstr "FIRST BLOOD"
+
 msgid "ПЕРВУЮ ДОЗУ ВЫЗВАЛСЯ ПРОВЕРИТЬ ШНЫРЬ: «Я БУХГАЛТЕР, Я ВСЮ ЖИЗНЬ РИСКУЮ». К УТРУ У НЕГО ОТРОСЛА БОРОДА. ИРИНА ГОВОРИТ, ЭТО ПОБОЧНОЕ И ПРОЙДЁТ."
 msgstr "SHNYR VOLUNTEERED TO TEST THE FIRST DOSE: \"I'M AN ACCOUNTANT, I'VE BEEN TAKING RISKS MY WHOLE LIFE.\" BY MORNING HE HAD GROWN A BEARD. IRINA SAYS IT'S A SIDE EFFECT AND WILL PASS."
 
 msgid "ПЕРВЫЙ ДЕНЬ"
 msgstr "DAY ONE"
+
+msgid "ПЕРВЫЙ ЗАЕЗД"
+msgstr "FIRST RACE"
 
 msgid "ПЕРЕЗАРЯДКА..."
 msgstr "RELOADING..."
@@ -1620,6 +1854,9 @@ msgstr "ONLINE"
 
 msgid "ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ"
 msgstr "ONLINE: MARKER OVER WHOEVER SHOOTS AT YOU"
+
+msgid "ПОБЕД В МИССИЯХ"
+msgstr "MISSIONS WON"
 
 msgid "ПОБЕДА КОМАНДЫ %s  %d : %d"
 msgstr "%s TEAM WINS  %d : %d"
@@ -1687,6 +1924,9 @@ msgstr "FULL"
 msgid "ПОЛУЧЕНО"
 msgstr "CLAIMED"
 
+msgid "ПОЛУЧЕНО %d ИЗ %d"
+msgstr "UNLOCKED %d OF %d"
+
 msgid "ПОМОГИТЕ!"
 msgstr "HELP!"
 
@@ -1704,6 +1944,12 @@ msgstr "FINAL WAVE: %s!"
 
 msgid "ПОСТАВИТЬ"
 msgstr "PLACE"
+
+msgid "ПОСТАВЛЕНО ЛОВУШЕК"
+msgstr "TRAPS PLACED"
+
+msgid "ПОСТОЯННЫЙ ГОСТЬ"
+msgstr "REGULAR"
 
 msgid "ПОСТРОЕНО"
 msgstr "BUILT"
@@ -1822,11 +2068,23 @@ msgstr "Reload 30% faster"
 msgid "Пикап с решёткой на бампере: быстрее и бьёт сильнее."
 msgstr "Pickup with a bull bar: faster and hits harder."
 
+msgid "Победи 10 боссов"
+msgstr "Defeat 10 bosses"
+
+msgid "Победи первого босса"
+msgstr "Defeat your first boss"
+
 msgid "Полигон: ходьба, обзор, бег, стрельба, прицел и первые зомби. Две минуты — и ты готов"
 msgstr "Proving ground: walking, looking, sprinting, shooting, aiming and your first zombies. Two minutes and you're ready"
 
+msgid "Половина зомби — бывшие строители"
+msgstr "Half the zombies used to be builders"
+
 msgid "Пополняет запас всех стволов на 35%"
 msgstr "Refills all guns' reserve by 35%"
+
+msgid "Поставь 25 ловушек и турелей"
+msgstr "Place 25 traps and turrets"
 
 msgid "Появление босса"
 msgstr "Boss entrance"
@@ -1834,11 +2092,23 @@ msgstr "Boss entrance"
 msgid "Продержись %d:%02d"
 msgstr "Survive %d:%02d"
 
+msgid "Продержись 10 волн в бесконечном режиме"
+msgstr "Survive 10 waves in endless mode"
+
+msgid "Продержись 25 волн в бесконечном режиме"
+msgstr "Survive 25 waves in endless mode"
+
 msgid "Продержись 90 секунд"
 msgstr "Hold out for 90 seconds"
 
 msgid "Продержись на точке %s"
 msgstr "Hold the point for %s"
+
+msgid "Пройди все главы сюжета"
+msgstr "Complete every story chapter"
+
+msgid "Пройди первую главу сюжета"
+msgstr "Complete the first story chapter"
 
 msgid "РАБОЧИЕ С НАМИ. ОНИ ПРИГНАЛИ БРОНЕГРУЗОВИК СТЕРВЯТНИКОВ И ПОСТРОИЛИ ВТОРОЙ ДОМ."
 msgstr "THE WORKERS ARE WITH US. THEY BROUGHT IN THE VULTURES' ARMORED TRUCK AND BUILT A SECOND HOUSE."
@@ -1866,6 +2136,9 @@ msgstr "GAME VERSIONS DIFFER — UPDATE THE GAME"
 
 msgid "РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)"
 msgstr "3D RESOLUTION (LOWER — FASTER)"
+
+msgid "РАЗРУШИТЕЛЬ БРОНИ"
+msgstr "ARMOR BREAKER"
 
 msgid "РАНЬШЕ ЭТО БЫЛА САДОВАЯ: МОРОЖЕНОЕ, ВЕЛОМАСТЕРСКАЯ, БАБУШКИ НА ЛАВОЧКАХ. ТЕПЕРЬ ЕЁ ЗОВУТ УЛИЦЕЙ МОЛЧАНИЯ."
 msgstr "THIS USED TO BE SADOVAYA STREET: ICE CREAM, A BIKE SHOP, GRANNIES ON THE BENCHES. NOW THEY CALL IT SILENCE STREET."
@@ -1921,8 +2194,17 @@ msgstr "Radio operator hides in a crypt. Collect 5 radio parts among the graves"
 msgid "Разведчики держат лагерь в лесу. Продержись 2 минуты, пока они собирают вещи"
 msgstr "Scouts are holding a camp in the forest. Hold out for 2 minutes while they pack up"
 
+msgid "СБИТО КАСОК"
+msgstr "HELMETS KNOCKED OFF"
+
+msgid "СБИТО МАШИНОЙ"
+msgstr "RUN OVER"
+
 msgid "СБОР ПРИПАСОВ"
 msgstr "SUPPLY RUN"
+
+msgid "СБОРЩИК"
+msgstr "COLLECTOR"
 
 msgid "СБРОС"
 msgstr "RESET"
@@ -1990,6 +2272,9 @@ msgstr "AMMO DEPOT"
 msgid "СКЛАД ПУСТ: ПЛЕННЫХ УВЕЗЛИ ЗА ЧАС ДО НАС. НА ПОЛУ — ФАНТИК ОТ ШОКОЛАДКИ. ТЁМА ВСЕГДА БРОСАЕТ ИХ ГДЕ ПОПАЛО."
 msgstr "THE WAREHOUSE IS EMPTY: THE PRISONERS WERE MOVED AN HOUR BEFORE WE GOT HERE. ON THE FLOOR — A CHOCOLATE BAR WRAPPER. TYOMA ALWAYS DROPS THEM EVERYWHERE."
 
+msgid "СКОПИРОВАТЬ КОД СОХРАНЕНИЯ"
+msgstr "COPY SAVE CODE"
+
 msgid "СКОРОСТЬ"
 msgstr "SPEED"
 
@@ -2008,6 +2293,9 @@ msgstr "SWITCH WEAPON: Q KEY"
 msgid "СМЕНИ ОРУЖИЕ: НОЖ ↔ ПИСТОЛЕТ"
 msgstr "SWITCH WEAPON: KNIFE ↔ PISTOL"
 
+msgid "СНАЙПЕР"
+msgstr "SNIPER"
+
 msgid "СНАРЯЖЕНИЕ"
 msgstr "GEAR"
 
@@ -2020,11 +2308,17 @@ msgstr "REMOVE"
 msgid "СОБАКА"
 msgstr "DOG"
 
+msgid "СОБЕЙ 60 КАСОК"
+msgstr "KNOCK OFF 60 HELMETS"
+
 msgid "СОБЕРИ 5 ЯЩИКОВ С ПРИПАСАМИ"
 msgstr "COLLECT 5 SUPPLY CRATES"
 
 msgid "СОБЕРИ ЯЩИКИ С РЕАКТИВАМИ. ПЛЕВУНЫ ЛЮБЯТ ХИМИЮ — НЕ ДАЙ ИМ ДОБРАТЬСЯ ДО НЕЁ ПЕРВЫМИ."
 msgstr "COLLECT THE REAGENT CRATES. SPITTERS LOVE CHEMICALS — DON'T LET THEM GET THERE FIRST."
+
+msgid "СОБРАНО В МАСТЕРСКОЙ"
+msgstr "CRAFTED IN THE WORKSHOP"
 
 msgid "СОБРАТЬ — %d ЛОМА"
 msgstr "CRAFT — %d SCRAP"
@@ -2035,8 +2329,14 @@ msgstr "EVENT OF THE DAY: %s"
 msgid "СОБЫТИЕ ДНЯ: %s — %s"
 msgstr "EVENT OF THE DAY: %s — %s"
 
+msgid "СОБЫТИЕ НЕДЕЛИ: %s"
+msgstr "WEEKLY EVENT: %s"
+
 msgid "СОЗДАТЬ ИГРУ"
 msgstr "CREATE GAME"
+
+msgid "СОХРАНЕНИЕ"
+msgstr "SAVE"
 
 msgid "СОХРАНИТЬ"
 msgstr "SAVE"
@@ -2046,6 +2346,12 @@ msgstr "RESCUED!"
 
 msgid "СПАСЁННЫЕ"
 msgstr "RESCUED"
+
+msgid "СПАСАТЕЛЬ"
+msgstr "RESCUER"
+
+msgid "СПАСЕНО ВЫЖИВШИХ"
+msgstr "SURVIVORS RESCUED"
 
 msgid "СПАСЕНО ЛЮДЕЙ: %d"
 msgstr "PEOPLE SAVED: %d"
@@ -2092,6 +2398,9 @@ msgstr "THE OLD BRIDGE. DAWN"
 msgid "СТАРЫЙ МОСТ. СЕГОДНЯ"
 msgstr "THE OLD BRIDGE. TODAY"
 
+msgid "СТАТИСТИКА"
+msgstr "STATISTICS"
+
 msgid "СТАТУС: %s"
 msgstr "STATUS: %s"
 
@@ -2112,6 +2421,9 @@ msgstr "THE YARD IS TWO KILOMETERS AWAY. THE ZOMBIES ARE ALREADY THERE — THEY 
 
 msgid "СТОЯНКА КОНТЕЙНЕРОВ"
 msgstr "CONTAINER YARD"
+
+msgid "СТРАЖ ВОРОТ"
+msgstr "GATEKEEPER"
 
 msgid "СТРЕЛОК БАНДЫ"
 msgstr "GANG SHOOTER"
@@ -2134,14 +2446,29 @@ msgstr "STORY"
 msgid "Самый быстрый разгон и юркий руль, протиснется где угодно. Но ты на виду: зомби бьют тебя, а не кузов. Можно стрелять на ходу."
 msgstr "Fastest acceleration and nimble steering, squeezes through anywhere. But you're exposed: zombies hit you, not the bodywork. You can shoot while riding."
 
+msgid "Сбей машиной 100 зомби"
+msgstr "Run over 100 zombies"
+
 msgid "Сборка гранат, коктейлей, аптечек и патронов из лома"
 msgstr "Craft grenades, cocktails, medkits and ammo from scrap"
 
 msgid "Семья заперлась в магазине. Расчисти улицу — убей 30 зомби"
 msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
 
+msgid "Собей 30 касок"
+msgstr "Knock off 30 helmets"
+
 msgid "Собери %s с припасами"
 msgstr "Collect %s of supplies"
+
+msgid "Собери 20 предметов в мастерской"
+msgstr "Craft 20 items in the workshop"
+
+msgid "Собери 50 предметов миссий"
+msgstr "Collect 50 mission items"
+
+msgid "Спаси 10 выживших в городе"
+msgstr "Rescue 10 survivors in the city"
 
 msgid "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби"
 msgstr "Placed with the TRAP button: arms in 1.5 seconds, blows up under zombies"
@@ -2188,6 +2515,9 @@ msgstr "RAM (ram damage +25%)"
 msgid "ТВОЯ ПЕРВАЯ МАШИНА. В АВТОСАЛОНЕ ОНА УЖЕ ТВОЯ, А В ГОРОДЕ ЖДЁТ У СТАРТА."
 msgstr "YOUR FIRST CAR. IN THE CAR DEALERSHIP IT'S ALREADY YOURS, AND IN THE CITY IT'S WAITING AT THE START."
 
+msgid "ТЕКУЩИЙ ПРОГРЕСС БУДЕТ ЗАМЕНЁН. НАЖМИ «ЗАГРУЗИТЬ» ЕЩЁ РАЗ"
+msgstr "YOUR CURRENT PROGRESS WILL BE REPLACED. PRESS «LOAD» AGAIN"
+
 msgid "ТЕНИ"
 msgstr "SHADOWS"
 
@@ -2196,6 +2526,12 @@ msgstr "BARON'S TERRITORY"
 
 msgid "ТИХИЙ ДЕНЬ"
 msgstr "QUIET DAY"
+
+msgid "ТИХИЙ УБИЙЦА"
+msgstr "SILENT KILLER"
+
+msgid "ТИШИНА!"
+msgstr "SILENCE!"
 
 msgid "ТОЛСТЯК-ЗОМБИ"
 msgstr "FAT ZOMBIE"
@@ -2230,8 +2566,14 @@ msgstr "TURRET"
 msgid "ТЮНИНГ"
 msgstr "TUNING"
 
+msgid "ТЮНИНГ СТВОЛА"
+msgstr "GUN TUNER"
+
 msgid "ТЮНИНГ: %s"
 msgstr "TUNING: %s"
+
+msgid "ТЯЖЁЛЫЙ ВЕС"
+msgstr "HEAVYWEIGHT"
 
 msgid "Точность: %d%%  •  Здоровье: %d%%"
 msgstr "Accuracy: %d%%  •  Health: %d%%"
@@ -2260,8 +2602,14 @@ msgstr "THE SHELTER. FIRST NIGHT"
 msgid "УБЕЙ 100 ЗОМБИ"
 msgstr "KILL 100 ZOMBIES"
 
+msgid "УБЕЙ 25 БУГАЁВ"
+msgstr "KILL 25 BRUTES"
+
 msgid "УБЕЙ 40 ЗОМБИ"
 msgstr "KILL 40 ZOMBIES"
+
+msgid "УБЕЙ 40 КРИКУНОВ"
+msgstr "KILL 40 SCREAMERS"
 
 msgid "УБЕЙ 5 ТАНКОВ"
 msgstr "KILL 5 TANKS"
@@ -2269,11 +2617,17 @@ msgstr "KILL 5 TANKS"
 msgid "УБЕЙ 50 ЗОМБИ"
 msgstr "KILL 50 ZOMBIES"
 
+msgid "УБЕЙ 600 ЗОМБИ"
+msgstr "KILL 600 ZOMBIES"
+
 msgid "УБИТО %d / %d"
 msgstr "KILLS %d / %d"
 
 msgid "УБИТО %d • ОЧКИ %d • %s"
 msgstr "KILLS %d • SCORE %d • %s"
+
+msgid "УБИТО ЗОМБИ"
+msgstr "ZOMBIES KILLED"
 
 msgid "УДЕРЖИ ВЫШКУ, ПОКА ИДЁТ ПЕРЕДАЧА. ЗОМБИ ИДУТ НА ЗВУК, СОБАКИ — НА ЗАПАХ, А ЛЕВ РУГАЕТСЯ НА ПОМЕХИ."
 msgstr "HOLD THE TOWER WHILE THE TRANSMISSION RUNS. ZOMBIES FOLLOW THE SOUND, DOGS FOLLOW THE SMELL, AND LEV CURSES AT THE STATIC."
@@ -2304,6 +2658,27 @@ msgstr "HANDLING"
 
 msgid "Убей %s"
 msgstr "Kill %s"
+
+msgid "Убей 100 зомби"
+msgstr "Kill 100 zombies"
+
+msgid "Убей 1000 зомби"
+msgstr "Kill 1000 zombies"
+
+msgid "Убей 20 бугаёв"
+msgstr "Kill 20 brutes"
+
+msgid "Убей 20 крикунов"
+msgstr "Kill 20 screamers"
+
+msgid "Убей 25 танков"
+msgstr "Kill 25 tanks"
+
+msgid "Убей 5000 зомби"
+msgstr "Kill 5000 zombies"
+
+msgid "Убей первого зомби"
+msgstr "Kill your first zombie"
 
 msgid "Убито зомби: %d"
 msgstr "Zombies killed: %d"
@@ -2403,6 +2778,9 @@ msgstr "FOUR WAVES, THEN THE BARON HIMSELF — HUGE, WITH AN ASSAULT RIFLE, IN A
 
 msgid "ЧИНИТЬ"
 msgstr "REPAIR"
+
+msgid "ЧИСТИЛЬЩИК"
+msgstr "CLEANER"
 
 msgid "ЧТОБЫ ДОКРИЧАТЬСЯ ДО ПОРТА, НУЖНА ВЫШКА СВЯЗИ В ЛЕСУ. ЛЕВ ПЕРЕДАСТ РЕЦЕПТ ВАКЦИНЫ — ЭТО ЗАЙМЁТ ВРЕМЯ. И НАДЕЛАЕТ ШУМА."
 msgstr "TO REACH THE PORT, WE NEED THE RADIO TOWER IN THE FOREST. LEV WILL TRANSMIT THE VACCINE RECIPE — IT'LL TAKE TIME. AND MAKE A LOT OF NOISE."

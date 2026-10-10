@@ -1001,6 +1001,8 @@ func _knock_off_helmet(hit_position: Vector3) -> void:
 		return
 	var helmet: Node3D = _helmet
 	_helmet = null
+	if not net_puppet and state != State.DEAD:
+		GameState.report_event(&"helmet_off")
 	var start: Transform3D = helmet.global_transform
 	helmet.top_level = true
 	helmet.global_transform = start

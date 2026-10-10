@@ -61,6 +61,7 @@ static func place(item_data: ItemData, player: Player) -> bool:
 	deployable.global_position = hit["position"]
 	deployable.rotation.y = atan2(forward.x, forward.z)
 	Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), deployable.global_position, -4.0, 0.8)
+	GameState.report_event(&"deploy")
 	return true
 
 

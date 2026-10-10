@@ -475,6 +475,8 @@ func _run_over() -> void:
 		_recent_hits[id] = _time
 		var push: Vector3 = velocity * Vector3(1.0, 0.0, 1.0)
 		zombie.hit_by_vehicle(impact_speed * run_over_damage_factor, push)
+		if zombie.state == Zombie.State.DEAD:
+			GameState.report_event(&"car_kill")
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.flesh_hits), zombie.global_position, 0.0, 0.8)
 		Sfx.play_3d(Sfx.pick(Sfx.sounds.metal_hits), global_position, -6.0)
 		speed *= _hit_slowdown

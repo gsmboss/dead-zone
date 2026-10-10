@@ -186,6 +186,9 @@ func _finish() -> void:
 			break
 	var route_id: String = str(ROUTES[_route]["id"])
 	var record: bool = GameState.record_race(route_id, _time)
+	GameState.report_event(&"race_finish")
+	if medal == 0:
+		GameState.report_event(&"race_gold")
 	var coins: int = REWARDS[medal]
 	GameState.add_coins(coins)
 	_big.visible = true
