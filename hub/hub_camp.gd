@@ -127,7 +127,8 @@ func _build_fence(batch: PropBatch) -> void:
 	var basis_x := Basis.IDENTITY.scaled(Vector3.ONE * PROP_SCALE)
 	var basis_z := Basis(Vector3.UP, PI * 0.5).scaled(Vector3.ONE * PROP_SCALE)
 	# Вдоль X (северная сторона уголка), от западной стены до угла
-	var x: float = -15.5 + FENCE_SEGMENT * 0.5
+	# От западной стены (она отодвигается при расширении убежища)
+	var x: float = -GameState.shelter.get_half_size() + 0.5 + FENCE_SEGMENT * 0.5
 	while x < FENCE_X:
 		batch.add(scene, Transform3D(basis_x, Vector3(x, 0.0, FENCE_Z + FENCE_EDGE)), true)
 		x += FENCE_SEGMENT
@@ -150,22 +151,66 @@ func _build_sign() -> void:
 	title.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	title.position = ENTRANCE + Vector3(0.0, 2.9, 0.0)
 	add_child(title)
-	var rescued: int = maxi(GameState.get_rescued_count(), MIN_SURVIVORS)
-	var count := Label3D.new()
-	count.text = UIKit.t("В ЛАГЕРЕ: ") + UIKit.count(rescued, "ЧЕЛОВЕК", "ЧЕЛОВЕКА", "ЧЕЛОВЕК")
-	count.font_size = 44
-	count.outline_size = 12
-	count.pixel_size = 0.005
-	count.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	count.position = ENTRANCE + Vector3(0.0, 2.45, 0.0)
-	add_child(count)
+	_sign_count = Label3D.new()
+	_sign_count.font_size = 44
+	_sign_count.outline_size = 12
+	_sign_count.pixel_size = 0.005
+	_sign_count.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_sign_count.position = ENTRANCE + Vector3(0.0, 2.45, 0.0)
+	add_child(_sign_count)
+	_sign_mood = Label3D.new()
+	_sign_mood.font_size = 40
+	_sign_mood.outline_size = 12
+	_sign_mood.pixel_size = 0.005
+	_sign_mood.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_sign_mood.position = ENTRANCE + Vector3(0.0, 2.08, 0.0)
+	add_child(_sign_mood)
+	_update_sign()
+	GameState.shelter_changed.connect(_update_sign)
 
 
-## Спасённые в сюжете люди греются у костра (до MAX_SURVIVORS фигур); двое — всегда (первая группа).
-## Остальные отдыхают на диване (до трёх; один — всегда)
+## Табличка: сколько людей и их настроение (обновляется после обеда, покупок)
+func _update_sign() -> void:
+	if _sign_count == null:
+		return
+	var shelter: ShelterState = GameState.shelter
+	_sign_count.text = UIKit.t("В ЛАГЕРЕ: ") + UIKit.count(shelter.get_population(), "ЧЕЛОВЕК", "ЧЕЛОВЕКА", "ЧЕЛОВЕК")
+	_sign_mood.text = UIKit.t("НАСТРОЕНИЕ: %s") % UIKit.t(shelter.get_mood_text())
+	_sign_mood.modulate = shelter.get_mood_color()
+
+
+## Обед: все у костра радуются и благодарят (HubBase после «НАКОРМИТЬ»)
+func cheer() -> void:
+	_abort_dialogue()
+	for i in _survivors.size():
+		_survivors[i].play_emote()
+		var bubble: Label3D = _bubbles[i]
+		bubble.text = UIKit.t(THANKS_LINES[(i + _rng.randi()) % THANKS_LINES.size()])
+		bubble.visible = true
+		bubble.modulate.a = 1.0
+		var tween := create_tween()
+		tween.tween_interval(2.6)
+		tween.tween_property(bubble, "modulate:a", 0.0, 0.3)
+		tween.tween_callback(func() -> void: bubble.visible = false)
+	_chat_wait = 4.0
+
+
+## Жильцы убежища (спасённые в сюжете и позванные по радио) греются у костра (до MAX_SURVIVORS фигур);
+## двое — всегда. Остальные отдыхают на диване (до трёх; один — всегда); дальше — у построек (HubBase)
 const MAX_SURVIVORS: int = 5
 const MIN_SURVIVORS: int = 2
+## Сколько людей показывает лагерь (костёр + диван) — остальных расставляет HubBase
+const SHOWN_IN_CAMP: int = MAX_SURVIVORS + 3
+## Голодные жалобы (не обедали сегодня) и благодарность за обед
+const HUNGRY_LINES: PackedStringArray = ["ЕСТЬ ХОЧЕТСЯ… ДАЖЕ ЗОМБИ ПАХНУТ КОТЛЕТОЙ.",
+	"КТО-НИБУДЬ ВИДЕЛ ЕДУ? ХОТЬ КОНСЕРВУ?", "У МЕНЯ ЖИВОТ УРЧИТ ГРОМЧЕ ОРДЫ.",
+	"ЕСЛИ НЕ ПООБЕДАЕМ, Я СЪЕМ ДИВАН.", "ДЯДЯ ГОША, А ЧТО НА ОБЕД? «НИЧЕГО»? ОПЯТЬ?"]
+const THANKS_LINES: PackedStringArray = ["СПАСИБО! ВКУСНО!", "ВОТ ЭТО ОБЕД!", "ДОБАВКИ МОЖНО?",
+	"ЖИЗНЬ НАЛАЖИВАЕТСЯ!", "ГОША, ТЫ ГЕНИЙ!"]
+const HUNGRY_CHANCE: float = 0.4
 var _survivors: Array[PlayerBody] = []
+var _sign_count: Label3D
+var _sign_mood: Label3D
 
 # Разговоры у костра: реплика — текст над головой (и голос, если игрок рядом)
 const CHATTER_PATH: String = "res://hub/camp_chatter.tres"
@@ -206,8 +251,8 @@ func _build_resting(has_couch: bool) -> void:
 	var skins: Array[PlayerSkin] = _camp_skins()
 	if skins.is_empty():
 		return
-	var at_fire: int = clampi(GameState.get_rescued_count(), MIN_SURVIVORS, MAX_SURVIVORS)
-	var count: int = clampi(GameState.get_rescued_count() - at_fire, 1, COUCH_SEATS.size())
+	var at_fire: int = clampi(GameState.shelter.get_population(), MIN_SURVIVORS, MAX_SURVIVORS)
+	var count: int = clampi(GameState.shelter.get_population() - at_fire, 1, COUCH_SEATS.size())
 	var couch := Transform3D(Basis.IDENTITY, FIRE + COUCH_OFFSET)
 	for i in count:
 		var body := PlayerBody.new()
@@ -229,7 +274,7 @@ func _camp_skins() -> Array[PlayerSkin]:
 
 
 func _build_survivors(fire: Vector3) -> void:
-	var count: int = clampi(GameState.get_rescued_count(), MIN_SURVIVORS, MAX_SURVIVORS)
+	var count: int = clampi(GameState.shelter.get_population(), MIN_SURVIVORS, MAX_SURVIVORS)
 	if count <= 0:
 		return
 	var skins: Array[PlayerSkin] = _camp_skins()
@@ -304,6 +349,13 @@ func _update_chatter(delta: float) -> void:
 
 
 func _start_dialogue() -> void:
+	# Не обедали — жалуются
+	if not GameState.shelter.is_fed_today() and _rng.randf() < HUNGRY_CHANCE:
+		_dialogue = PackedStringArray([UIKit.t(HUNGRY_LINES[_rng.randi() % HUNGRY_LINES.size()])])
+		_owners = PackedInt32Array([_rng.randi() % _survivors.size()])
+		_line = 0
+		_say_line()
+		return
 	if _survivors.size() >= 2:
 		var first: int = _rng.randi() % _survivors.size()
 		var second: int = (first + 1 + _rng.randi() % (_survivors.size() - 1)) % _survivors.size()

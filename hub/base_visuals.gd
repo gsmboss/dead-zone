@@ -1,7 +1,7 @@
 class_name BaseVisuals
 extends Node3D
-## Постройки базы во дворе убежища: дочерние Marker3D — места (по порядку
-## GameState.buildings). Построенное появляется с моделью и табличкой, без — пустое место.
+## Постройки базы во дворе убежища: дочерние Marker3D — места (по порядку GameState.buildings,
+## без сборщика builder — их строит HubBase). Построенное появляется с моделью и табличкой, без — пустое место.
 
 const LABEL_HEIGHT: float = 2.4
 
@@ -18,8 +18,12 @@ func _refresh() -> void:
 	for child: Node in get_children():
 		if child is Marker3D:
 			slots.append(child as Marker3D)
-	for i in GameState.buildings.size():
-		var building: BuildingData = GameState.buildings[i]
+	var slotted: Array[BuildingData] = []
+	for building: BuildingData in GameState.buildings:
+		if building.builder == &"":
+			slotted.append(building)
+	for i in slotted.size():
+		var building: BuildingData = slotted[i]
 		if i >= slots.size():
 			push_warning("BaseVisuals: мест (Marker3D) меньше, чем построек")
 			return
