@@ -94,6 +94,9 @@ func _check_campaign() -> void:
 			_problem("%s: нет миссии" % name_text)
 		else:
 			_check_mission(chapter.mission, name_text)
+		for text: String in [chapter.title, chapter.location_name]:
+			if not _has_english(text):
+				_problem("%s: нет перевода «%s»" % [name_text, text])
 		_check_pages(name_text + " (до)", chapter.intro_pages)
 		_check_pages(name_text + " (после)", chapter.outro_pages)
 		_check_film(name_text + " фильм до", chapter.intro_film)
@@ -113,6 +116,8 @@ func _check_pages(where: String, pages: PackedStringArray) -> void:
 	for page: String in pages:
 		if page.strip_edges().is_empty():
 			_problem("%s: пустая страница" % where)
+		elif not _has_english(page):
+			_problem("%s: нет перевода страницы «%s…»" % [where, page.left(40)])
 
 
 func _check_film(where: String, film: StoryFilm) -> void:
@@ -127,7 +132,7 @@ func _check_film(where: String, film: StoryFilm) -> void:
 			_problem("%s: план %d пустой" % [where, i + 1])
 			continue
 		total += shot.duration
-		if not StoryStage.CAMERAS.has(shot.camera):
+		if not StoryStage.has_camera(shot.camera):
 			_problem("%s: план %d — нет камеры «%s»" % [where, i + 1, shot.camera])
 		if shot.voice_ru.is_empty() != shot.voice_en.is_empty():
 			_problem("%s: план %d — реплика только на одном языке" % [where, i + 1])
@@ -135,8 +140,17 @@ func _check_film(where: String, film: StoryFilm) -> void:
 			_problem("%s: план %d — странная длительность %.1f" % [where, i + 1, shot.duration])
 		if not shot.speaker.is_empty() and shot.voice_ru.is_empty():
 			_problem("%s: план %d — говорящий без реплики" % [where, i + 1])
+		for text: String in [shot.caption, shot.title, shot.speaker]:
+			if not text.is_empty() and not _has_english(text):
+				_problem("%s: план %d — нет перевода «%s»" % [where, i + 1, text.replace("\n", " / ")])
 	if total > 120.0:
 		_problem("%s: фильм длиннее 2 минут (%.0f с)" % [where, total])
+
+
+## Есть ли английский перевод строки (locale/en.po)
+func _has_english(text: String) -> bool:
+	var english: Translation = TranslationServer.get_translation_object("en")
+	return english != null and not String(english.get_message(text)).is_empty()
 
 
 func _check_art(art_id: String) -> void:
@@ -193,15 +207,16 @@ func _check_mission(mission: MissionData, where: String) -> void:
 ## Все модели, которые берёт диорама StoryStage (константы с путями res://)
 func _check_stage_models() -> void:
 	var paths: PackedStringArray = []
-	var constants: Dictionary = (StoryStage as Script).get_script_constant_map()
-	for key: String in constants:
-		var value: Variant = constants[key]
-		if value is String and (value as String).begins_with("res://"):
-			paths.append(value)
-		elif value is Array:
-			for item: Variant in value:
-				if item is String and (item as String).begins_with("res://"):
-					paths.append(item)
+	for script: Script in [StoryStage as Script, StageLocations as Script]:
+		var constants: Dictionary = script.get_script_constant_map()
+		for key: String in constants:
+			var value: Variant = constants[key]
+			if value is String and (value as String).begins_with("res://"):
+				paths.append(value)
+			elif value is Array:
+				for item: Variant in value:
+					if item is String and (item as String).begins_with("res://"):
+						paths.append(item)
 	for model: String in ["campfire-pit", "campfire-stand", "tent-canvas", "tent", "box-large", "barrel", "bedroll"]:
 		paths.append(StoryStage.CAMP_DIR + model + ".glb")
 	var count: int = 0

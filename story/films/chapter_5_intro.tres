@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "aerial"
+mood = 11
+camera = "ind_wide"
 duration = 5.0
 caption = "ПРОМЗОНА"
 voice_ru = "Промзона. Раньше здесь делали трубы, бетон и ругательства на трёх языках."
@@ -14,8 +14,8 @@ voice_en = "The industrial zone. They used to make pipes, concrete and swear wor
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "zombie_low"
+mood = 11
+camera = "ind_low"
 duration = 5.5
 voice_ru = "Пятеро рабочих держат заправку. Им нужно топливо, нам — склад Барона за забором. Совместим приятное с полезным."
 voice_en = "Five workers are holding a gas station. They need fuel, and we need the Baron's depot behind the fence. Business and pleasure."

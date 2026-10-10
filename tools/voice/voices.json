@@ -29,7 +29,13 @@
       "БАНДИТ":    {"model": "ru_RU-denis-medium", "pitch": 0.9, "length": 0.95},
       "МИХАЛЫЧ":   {"model": "ru_RU-ruslan-medium", "pitch": 0.86, "length": 1.06},
       "БОРЩОВ":    {"model": "ru_RU-denis-medium", "pitch": 0.92, "length": 1.0},
-      "ПАЛЫЧ":     {"model": "ru_RU-dmitri-medium", "pitch": 0.84, "length": 1.12}
+      "ПАЛЫЧ":     {"model": "ru_RU-dmitri-medium", "pitch": 0.84, "length": 1.12},
+      "ЛЮБА":      {"model": "ru_RU-irina-medium", "pitch": 1.1, "length": 0.98},
+      "КОСТЯ":     {"model": "ru_RU-denis-medium", "pitch": 1.1, "length": 0.95},
+      "ЭДИК":      {"model": "ru_RU-ruslan-medium", "pitch": 1.12, "length": 0.9},
+      "БАБА ШУРА": {"model": "ru_RU-irina-medium", "pitch": 0.88, "length": 1.12},
+      "ТЁЩА":      {"model": "ru_RU-irina-medium", "pitch": 0.92, "length": 0.95},
+      "ДИСПЕТЧЕР": {"model": "ru_RU-dmitri-medium", "pitch": 1.04, "length": 1.0}
     },
     "en": {
       "narrator":  {"model": "en_US-libritts_r-medium", "speaker": "auto:male:0", "pitch": 0.97, "length": 1.0},
@@ -55,7 +61,13 @@
       "БАНДИТ":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:12", "pitch": 0.9, "length": 0.95},
       "МИХАЛЫЧ":   {"model": "en_US-libritts_r-medium", "speaker": "auto:male:13", "pitch": 0.88, "length": 1.05},
       "БОРЩОВ":    {"model": "en_US-libritts_r-medium", "speaker": "auto:male:14", "pitch": 0.94, "length": 1.0},
-      "ПАЛЫЧ":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:15", "pitch": 0.86, "length": 1.1}
+      "ПАЛЫЧ":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:15", "pitch": 0.86, "length": 1.1},
+      "ЛЮБА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:8", "pitch": 1.05, "length": 1.0},
+      "КОСТЯ":     {"model": "en_US-libritts_r-medium", "speaker": "auto:male:16", "pitch": 1.05, "length": 0.95},
+      "ЭДИК":      {"model": "en_US-libritts_r-medium", "speaker": "auto:male:17", "pitch": 1.1, "length": 0.9},
+      "БАБА ШУРА": {"model": "en_US-libritts_r-medium", "speaker": "auto:female:9", "pitch": 0.9, "length": 1.1},
+      "ТЁЩА":      {"model": "en_US-libritts_r-medium", "speaker": "auto:female:10", "pitch": 0.95, "length": 0.95},
+      "ДИСПЕТЧЕР": {"model": "en_US-libritts_r-medium", "speaker": "auto:male:18", "pitch": 1.0, "length": 1.0}
     }
   }
 }

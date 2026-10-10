@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "road_low"
+mood = 9
+camera = "forest_road"
 duration = 5.0
 caption = "ТРАССА НА ЮГ. ВЕЧЕР"
 voice_ru = "В фуре с надписью «Мороженое» три месяца жил дальнобойщик Михалыч. С женой. И с тёщей."

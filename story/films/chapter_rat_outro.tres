@@ -37,16 +37,16 @@ script = ExtResource("2_shot")
 mood = 6
 camera = "camp_high"
 duration = 5.0
-caption = "НОЧЬ ПЕРЕД МОСТОМ"
-voice_ru = "Завтра мост. Тот самый. Я обещал себе туда не возвращаться. Но обещание маме важнее."
-voice_en = "Tomorrow, the bridge. That bridge. I promised myself I'd never go back. But a promise to Mom matters more."
+caption = "НОЧЬ ПОСЛЕ КОНТЕЙНЕРОВ"
+voice_ru = "До моста три дня. Кабан сбежал на свою базу в промзоне. И он не из тех, кто сдаётся."
+voice_en = "Three days until the bridge. Kaban ran off to his base in the industrial zone. And he's not the type to give up."
 
 [sub_resource type="Resource" id="Shot_5"]
 script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "ЗАВТРА — МОСТ"
+title = "КАБАН ЕЩЁ ВЕРНЁТСЯ"
 
 [resource]
 script = ExtResource("1_film")

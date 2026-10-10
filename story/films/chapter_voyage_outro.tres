@@ -37,8 +37,8 @@ script = ExtResource("2_shot")
 mood = 8
 camera = "harbor_ship"
 duration = 5.0
-voice_ru = "Курс на юг! Двести человек ждут вакцину в горах. Мы вернёмся, обещаю."
-voice_en = "Heading south! Two hundred people are waiting for the vaccine in the mountains. We will come back, I promise."
+voice_ru = "Курс на юг! Двести человек ждут вакцину в горах. Высажу вас в бухте у курорта — дальше пешком."
+voice_en = "Heading south! Two hundred people are waiting for the vaccine in the mountains. I'll drop you in the bay by the resort, then it's on foot."
 speaker = "КАПИТАН"
 pitch = 0.65
 
@@ -47,15 +47,15 @@ script = ExtResource("2_shot")
 mood = 8
 camera = "harbor_aerial"
 duration = 6.0
-voice_ru = "«Надежда» дала длинный гудок. Маяк мигнул ей в ответ. А мы поехали домой. У нас теперь есть свой порт."
-voice_en = "The Nadezhda gave a long horn blast. The lighthouse blinked back. And we drove home. Now we have a port of our own."
+voice_ru = "«Надежда» дала длинный гудок. Маяк мигнул ей в ответ. Мы с Тёмой стояли на палубе. Впереди был юг."
+voice_en = "The Nadezhda gave a long horn blast. The lighthouse blinked back. Tyoma and I stood on deck. The south lay ahead."
 
 [sub_resource type="Resource" id="Shot_6"]
 script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "КОНЕЦ ТРЕТЬЕЙ ЧАСТИ"
+title = "КУРС НА ЮГ"
 
 [resource]
 script = ExtResource("1_film")

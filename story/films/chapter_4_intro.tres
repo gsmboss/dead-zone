@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "sky_up"
+mood = 10
+camera = "grave_wide"
 duration = 6.0
 caption = "СТАРОЕ КЛАДБИЩЕ"
 voice_ru = "Сигнал идёт с кладбища. Того самого, у часовни. Где я оставил маму."
@@ -25,8 +25,8 @@ pitch = 1.2
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "zombie_low"
+mood = 10
+camera = "grave_chapel"
 duration = 5.5
 voice_ru = "В склепе прячется радист Лев с дочкой. Рация разбита, детали разбросаны по могилам. Отличное место для ночной прогулки."
 voice_en = "A radio operator named Lev is hiding in the crypt with his daughter. His radio is smashed, the parts scattered among the graves. A lovely spot for a night walk."

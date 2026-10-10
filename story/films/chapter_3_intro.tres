@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "aerial"
+mood = 9
+camera = "forest_wide"
 duration = 5.0
 caption = "ЗА ТРАССОЙ"
 voice_ru = "Из леса поднимается дым. Где дым — там костёр. Где костёр — там люди. Или очень умные зомби."
@@ -14,8 +14,8 @@ voice_en = "Smoke is rising from the forest. Smoke means fire. Fire means people
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "road_low"
+mood = 9
+camera = "forest_camp"
 duration = 5.0
 voice_ru = "Мы разведчики, нас четверо. Мальчик с красным рюкзаком? Был. Ушёл три дня назад. Не один."
 voice_en = "We're scouts, four of us. A boy with a red backpack? He was here. Left three days ago. Not alone."
@@ -24,8 +24,8 @@ pitch = 1.1
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "zombie_low"
+mood = 9
+camera = "forest_low"
 duration = 5.0
 voice_ru = "Ночью мёртвые идут на огонь, как мотыльки. Только мотыльки не кусаются."
 voice_en = "At night the dead come to the fire like moths. Except moths don't bite."

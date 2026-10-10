@@ -26,10 +26,15 @@ const ROADS: Array = [
 ]
 const RIVER_POINTS: Array[Vector2] = [Vector2(0.0, 0.42), Vector2(0.22, 0.38), Vector2(0.4, 0.46),
 	Vector2(0.58, 0.32), Vector2(0.8, 0.36), Vector2(1.0, 0.28)]
-## Часть 3 «Южный порт»: море в правом нижнем углу (доли карты)
+## Часть 3 «Южный порт»: море вдоль нижнего края и горы справа вверху (доли карты)
 const SEA_PART: int = 3
-const SEA_POINTS: Array[Vector2] = [Vector2(1.0, 0.38), Vector2(0.82, 0.44), Vector2(0.7, 0.62), Vector2(0.5, 0.8),
-	Vector2(0.42, 1.0), Vector2(1.0, 1.0)]
+const SEA_POINTS: Array[Vector2] = [Vector2(0.16, 1.0), Vector2(0.34, 0.88), Vector2(0.55, 0.8), Vector2(0.75, 0.82),
+	Vector2(1.0, 0.78), Vector2(1.0, 1.0)]
+## Горы: [вершина, полуширина основания, высота] в долях карты
+const MOUNTAINS: Array = [[Vector2(0.66, 0.14), 0.07, 0.16], [Vector2(0.78, 0.22), 0.09, 0.2], [Vector2(0.95, 0.24), 0.07, 0.17],
+	[Vector2(0.98, 0.56), 0.06, 0.13], [Vector2(0.56, 0.42), 0.05, 0.1]]
+const MOUNTAIN: Color = Color(0.3, 0.3, 0.33, 0.55)
+const SNOW: Color = Color(0.85, 0.88, 0.92, 0.5)
 const SEA: Color = Color(0.12, 0.26, 0.36, 0.7)
 const SEA_EDGE: Color = Color(0.35, 0.55, 0.65, 0.6)
 
@@ -96,6 +101,14 @@ func _draw() -> void:
 		draw_colored_polygon(sea, SEA)
 		sea.resize(SEA_POINTS.size() - 1)
 		draw_polyline(sea, SEA_EDGE, 4.0)
+		for mountain: Array in MOUNTAINS:
+			var peak: Vector2 = (mountain[0] as Vector2) * size
+			var half_width: float = float(mountain[1]) * size.x
+			var height: float = float(mountain[2]) * size.y
+			draw_colored_polygon(PackedVector2Array([peak, peak + Vector2(half_width, height),
+				peak + Vector2(-half_width, height)]), MOUNTAIN)
+			draw_colored_polygon(PackedVector2Array([peak, peak + Vector2(half_width * 0.35, height * 0.35),
+				peak + Vector2(-half_width * 0.35, height * 0.35)]), SNOW)
 	draw_polyline(_points, RIVER, 10.0)
 	for road: Array in ROADS:
 		_points.resize(road.size())

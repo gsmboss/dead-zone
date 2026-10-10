@@ -179,7 +179,7 @@ id = "chapter_all"
 title = "ГЕРОЙ СЕВЕРА-9"
 description = "Пройди все главы сюжета"
 event = &"chapter"
-target = 17
+target = 30
 reward = 3000
 icon_color = Color(1, 0.8, 0.3, 1)
 

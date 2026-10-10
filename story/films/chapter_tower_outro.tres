@@ -16,8 +16,8 @@ pitch = 0.65
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "hope_walk"
+mood = 9
+camera = "forest_camp"
 duration = 5.0
 voice_ru = "У вышки прятались четверо лесников. Месяц ели шишки. Говорят, невкусно, но полезно."
 voice_en = "Four forest rangers were hiding by the tower. They lived on pine cones for a month. Not tasty, they say, but healthy."

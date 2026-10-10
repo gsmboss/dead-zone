@@ -53,7 +53,7 @@ script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "КОНЕЦ ВТОРОЙ ЧАСТИ"
+title = "МЫ НАШЛИСЬ"
 
 [resource]
 script = ExtResource("1_film")

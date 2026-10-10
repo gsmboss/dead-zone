@@ -99,6 +99,29 @@ darker for the game title. High contrast, readable at small size.
 
 ---
 
+## 5. НОВОЕ — 30 глав (13 новых глав + карточка гор, 14 шт.)
+
+Главы — **1600×900**, карточка локации — **1280×720**. Общий стиль — как выше.
+
+| Файл | Глава | Промпт (после общего стиля) |
+|---|---|---|
+| `chapter_siege.png` | Осада (ч.1) | `Night siege of a survivor camp made of shipping containers: a big bearded bandit leader with a red bandana banging two cooking pots, a zombie horde pushing against the welded gate, a former security guard in an old uniform holding the gate, a boy with a radio on a container roof, flares in the sky.` |
+| `chapter_cold.png` | Холодная цепь (ч.2) | `Inside a frozen cold storage plant: frosty industrial freezers, icicles, pallets of ice cream boxes, a cheerful woman technologist in a puffy coat eating an ice cream cone, a young mechanic pulling a cooling unit, slow frozen zombies in the blue cold light.` |
+| `chapter_hospital.png` | Больница (ч.2) | `Abandoned city hospital entrance at dusk, "appointments only" style sign without text, a nervous young male nurse in scrubs holding an aspirin bottle, a female doctor carrying a bag of syringes and a steel autoclave, zombies in hospital gowns behind the glass doors.` |
+| `chapter_mother.png` | Голос мамы (ч.2) | `Night cemetery near an old ambulance station, scattered handwritten diary pages glowing in flashlight beams among gravestones, a young man and his little brother kneeling at a grave with candles, a warm ghostly image of their mother in a paramedic uniform in the clouds, emotional.` |
+| `chapter_trail.png` | По следу Кабана (ч.2) | `Bandit hideout in an old industrial garage: a huge rusty air-raid siren on a truck, a fat bandit with a red bandana escaping through a hole behind a big barrel, a former guard swinging a wrench at the siren, sparks, smoke, orange industrial light.` |
+| `chapter_crossing.png` | Переправа (ч.2) | `Old steel bridge jammed with wrecked cars from day zero: a bus, two trucks and a motorhome with garden gnomes on the roof, an armored truck towing a wreck with a chain, survivors defending the approach from zombies, a blue scarf tied to the railing.` |
+| `chapter_feast.png` | Праздник (ч.2) | `Survivor camp coffee festival at night: string lights, a big coffee machine on a table, people dancing, a girl with a guitar, a goat, colorful flare fireworks in the sky, and a zombie horde appearing at the edge of the light, comedic chaos.` |
+| `chapter_depot.png` | Портовые склады (ч.3) | `Long rows of port warehouses at sunset, a refrigerator truck with an ice cream picture, a trucker in a cap and his strict mother-in-law shouting from the cab with a radio, zombie dockers in overalls and hard hats, cranes visible in the distance.` |
+| `chapter_resort.png` | Курорт «Чайка» (ч.3) | `Sunny seaside resort town promenade overrun by zombies in swimsuits, sun hats, flippers and inflatable rings, a resort animator in a bright costume dancing on a cafe roof to distract them, a pink tourist bus with palm trees painted on it, a white ship in the bay.` |
+| `chapter_pass.png` | Горный перевал (ч.3) | `Snowy mountain pass with switchback road, a pink resort bus stuck in a snowdrift, a boy fixing the engine under the open hood, a young survivor with a rifle defending it, slow frosted zombies and zombie dogs coming down the slope, cold blue light.` |
+| `chapter_keys.png` | Верхние Ключи (ч.3) | `Mountain village behind a wooden stockade with a big gate, a strict old woman former school principal in a shawl directing a queue of villagers, a boy giving vaccine shots at a table, cows, chimney smoke, a horde coming up the road below.` |
+| `chapter_shepherd.png` | Пастух (ч.3) | `Top of a snowy mountain pass at an old ruined hikers lodge, a giant pale snow-white zombie twice human height howling at the sky, a herd of zombies following him like sheep, a young survivor and a dancer in a bright costume facing them, dramatic stormy sky.` |
+| `chapter_home.png` | Домой (ч.3) | `Dawn over a survivor camp of containers by the sea with a small lighthouse, a white ship at the pier, everyone defending together: a mechanic on an armored truck, two former bandits with a gate and a serving tray, an old man with a thermos, a goat, a huge horde on the horizon, heroic final battle.` |
+| `loc_mountain.png` | Горный перевал (карточка) | `Snowy mountain pass between huge grey rocks and pine trees, a dark road leading to a wooden stockade gate of a small village with smoking chimneys, wrecked cars and campfires on the pass, zombies on the slopes, cold clear day.` |
+
+---
+
 ## Как прислать
 Прикрепи картинки в чат с именами файлов из таблиц (или просто напиши, какая что). Я сам:
 подрежу и сожму под телефон, положу в проект и подключу в окна сюжета и досье миссий.

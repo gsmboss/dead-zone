@@ -42,8 +42,8 @@ pitch = 1.6
 
 [sub_resource type="Resource" id="Shot_5"]
 script = ExtResource("2_shot")
-mood = 4
-camera = "chase"
+mood = 9
+camera = "forest_road"
 duration = 6.0
 caption = "ЛЕСНАЯ ТРАССА. УТРО"
 voice_ru = "Денис за рулём, Генка с термосом дяди Гоши, Тёма на рации. Двести километров на юг — и одна большая пробка из мертвецов."
@@ -51,8 +51,8 @@ voice_en = "Denis driving, Genka with Uncle Gosha's thermos, Tyoma on the radio.
 
 [sub_resource type="Resource" id="Shot_6"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "road_low"
+mood = 9
+camera = "forest_low"
 duration = 5.0
 voice_ru = "Объезда нет. Значит, расчищаем. Вручную."
 voice_en = "No way around. So we clear it. By hand."

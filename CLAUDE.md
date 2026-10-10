@@ -362,7 +362,14 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 Часть третья (главы 14–17, «Южный порт»): «Дорога на юг» (story_south, лес, KILL_COUNT 45; дальнобойщик Михалыч),
 «Южный порт» (story_port, порт, сбор канистр; кок Борщов), «Маяк» (story_lighthouse, порт, оборона у маяка; смотритель
 Палыч), «Последний рейс» (story_voyage, порт, 5 волн + босс enemies/drowned.tres УТОПЛЕННИК). Эпилог — после «Последнего рейса».
-Достижение chapter_all — 17 глав. Части: ChapterData.part (1–3), CampaignData.part_titles (СЕВЕР-9 / ВАКЦИНА /
+30 глав, по 10 в части (story/campaign.tres, порядок — массив chapters). Новые главы: ч.1 «Осада» (story_siege, стоянка,
+DEFEND; Кабан впервые), ч.2 «Холодная цепь» (story_cold, промзона, сбор; Люба), «Больница» (story_hospital, улица, SURVIVE;
+медбрат Костя), «Голос мамы» (story_mother, кладбище, сбор страниц дневника), «По следу Кабана» (story_trail, промзона, KILL),
+«Переправа» (story_crossing, улица, DEFEND), «Праздник» (story_feast, стоянка, 4 волны; конец ч.2); ч.3 «Портовые склады»
+(story_depot), «Курорт «Чайка»» (story_resort; аниматор Эдик), «Горный перевал» (story_pass), «Верхние Ключи» (story_keys;
+баба Шура), «Пастух» (story_shepherd, босс enemies/shepherd.tres), «Домой» (story_home, стоянка; конец ч.3, потом эпилог).
+Номера глав в титрах фильмов («ГЛАВА N\n…») — по порядку кампании; при вставке глав их надо перенумеровать (и en.json).
+Достижение chapter_all — 30 глав. Части: ChapterData.part (1–3), CampaignData.part_titles (СЕВЕР-9 / ВАКЦИНА /
 ЮЖНЫЙ ПОРТ); окно СЮЖЕТ — вкладки ЧАСТЬ 1/2/3 над картой (CampaignPanel._part, static), CampaignMap.set_part рисует
 только главы части (map_position — в карте своей части, номера сквозные), у части 3 — море. Картинки глав части третьей и loc_harbor готовы (промпты — docs/ART_PROMPTS.md, раздел 4).
 StoryShot.Mood.CAMP — ночной лагерь в кино (костёр, палатки, люди сидят — Kenney «sit»), камеры camp_orbit/camp_fire/camp_high.
@@ -373,7 +380,14 @@ HARBOR_ORIGIN (300, 0, 0) — строится при первом плане в
 причала (_edge_wall) с жёлтым бордюром и кнехтами; кран из примитивов (static make_crane), маяк с лучом (make_lighthouse_light),
 сухогруз, буксир, лодки, затонувший парусник; модели models/harbor/ (Kenney Watercraft и Pirate Kit). Корень уровня —
 metadata/edge_cover_y = -2 (EdgeCover опускает землю и стены тумана под воду); LocationBuilder.outside_ground = false.
-Проверка без редактора: tools/validate/validate.tscn (ресурсы, сюжет, миссии, модели кино; «ждут картинок» — не ошибка)
+Кино по местам: story/film/stage_locations.gd (StageLocations) — диорамы FOREST (лес, трасса, вышка связи, лагерь),
+GRAVEYARD (могилы, часовня, мамина могила), INDUSTRIAL (цеха, трубы, бочки с огнём), MOUNTAIN (снег, скалы, частокол, деревня)
+в своих точках мира (ORIGINS), камеры forest_*/grave_*/ind_*/mount_* (StoryStage.get_camera/has_camera ищет и там).
+Локация «Горный перевал»: levels/mountain_level.tscn + levels/mountain/mountain_builder.gd (MountainBuilder): снег, стена скал,
+дорога, частокол с воротами деревни на севере (GATE_Z, DefendPoint у ворот), дома за частоколом, спавн только с юга и боков.
+Карта части 3 (CampaignMap): море внизу и горы справа вверху.
+Проверка без редактора: tools/validate/validate.tscn (ресурсы, сюжет, миссии, модели кино, переводы глав/титров/подписей;
+«ждут картинок» — не ошибка)
 и runtime_test.tscn (все фильмы ускоренно и все уровни по 6 с). Godot 4.7.2 для Linux: --headless --path . <сцена>.
 На выходе после прогона движок иногда падает (double free при завершении) — это завершение движка, не наш код.
 Значки на экранных кнопках: ui/touch/icons/*.svg (game-icons.net, CC BY 3.0 — атрибуция в CREDITS.md);

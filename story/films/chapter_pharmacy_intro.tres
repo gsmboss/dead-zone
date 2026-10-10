@@ -54,7 +54,7 @@ script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "ГЛАВА 10
+title = "ГЛАВА 11
 РЕЦЕПТ ВАКЦИНЫ"
 
 [resource]

@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Без холода вакцина живёт сутки. Как молоко. Только молоко не спасает человечество."
+voice_en = "Without cold the vaccine lasts a day. Like milk. Except milk doesn't save humanity."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_wide"
+duration = 5.0
+caption = "ХЛАДОКОМБИНАТ №3"
+voice_ru = "Хладокомбинат номер три. Самое холодное место в городе. Даже зомби здесь двигаются медленнее."
+voice_en = "Cold storage plant number three. The coldest place in town. Even the zombies move slower here."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_gate"
+duration = 5.0
+voice_ru = "Мне нужны шесть блоков охлаждения. Целых. Не погнутых. Ну, можно чуть-чуть погнутых."
+voice_en = "I need six cooling units. Intact. Not bent. Well, a little bent is fine."
+speaker = "ДЕНИС"
+pitch = 0.9
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_low"
+duration = 4.0
+voice_ru = "А внутри кто-то пел. Красиво. Это пугало больше всего."
+voice_en = "And inside, someone was singing. Beautifully. That was the scariest part."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 12\nХОЛОДНАЯ ЦЕПЬ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_cold_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

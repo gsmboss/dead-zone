@@ -26,8 +26,8 @@ pitch = 1.6
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "sky_up"
+mood = 9
+camera = "forest_tower"
 duration = 5.0
 caption = "ЛЕСНАЯ ВЫШКА"
 voice_ru = "Чтобы докричаться до юга, нужна вышка в лесу. Сорок метров ржавого железа и одна очень плохая идея."
@@ -35,8 +35,8 @@ voice_en = "To reach the south we need the tower in the forest. Forty meters of 
 
 [sub_resource type="Resource" id="Shot_4"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "zombie_low"
+mood = 9
+camera = "forest_low"
 duration = 5.0
 voice_ru = "Передача займёт пару минут. Пара минут — это вечность, когда весь лес слышит твоё радио."
 voice_en = "The broadcast takes a couple of minutes. A couple of minutes is forever when the whole forest can hear your radio."
@@ -46,7 +46,7 @@ script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "ГЛАВА 11
+title = "ГЛАВА 14
 ГОЛОСА С ЮГА"
 
 [resource]

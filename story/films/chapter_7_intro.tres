@@ -5,8 +5,8 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "aerial"
+mood = 11
+camera = "ind_wide"
 duration = 5.0
 caption = "ЦЕХА «ГЕНОМ»"
 voice_ru = "Цеха «Генома». Здесь всё началось. Здесь должно и закончиться."
@@ -23,8 +23,8 @@ voice_en = "On day zero a truck carrying samples of Rot-7 left this place. It ne
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "zombie_low"
+mood = 11
+camera = "ind_low"
 duration = 5.5
 voice_ru = "Я иду с тобой. Нет, не спорь. Мама сказала слушаться брата, а брат идёт туда. Значит, и я."
 voice_en = "I'm coming with you. No, don't argue. Mom said to listen to my brother, and my brother is going there. So am I."
@@ -33,8 +33,8 @@ pitch = 1.6
 
 [sub_resource type="Resource" id="Shot_4"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "crossroad"
+mood = 11
+camera = "ind_fire"
 duration = 5.0
 voice_ru = "Пять волн, а потом Громила — первый заражённый. Правило последнее: возвращайся домой."
 voice_en = "Five waves, then the Brute, the first infected. Final rule: come back home."
@@ -44,7 +44,7 @@ script = ExtResource("2_shot")
 mood = 5
 camera = "aerial"
 duration = 3.0
-title = "ГЛАВА 9\nИСТОЧНИК"
+title = "ГЛАВА 10\nИСТОЧНИК"
 
 [resource]
 script = ExtResource("1_film")

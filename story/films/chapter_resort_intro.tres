@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "skyline"
+duration = 5.0
+caption = "КУРОРТ «ЧАЙКА»"
+voice_ru = "Курорт «Чайка». Море, пальмы, всё включено. Особенно зубы."
+voice_en = "The Seagull resort. Sea, palm trees, all inclusive. Especially the teeth."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "sidewalk"
+duration = 5.0
+voice_ru = "Мертвецы в панамах и с надувными кругами. Кто-то даже в ластах. Шлёп. Шлёп. Шлёп."
+voice_en = "The dead in sun hats and inflatable rings. One is even in flippers. Slap. Slap. Slap."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "window"
+duration = 5.0
+voice_ru = "Танцуем! И раз, и два! Пока я танцую, они смотрят на меня! Третий день! Помогите!"
+voice_en = "Let's dance! And one, and two! While I dance, they watch me! Day three! Help!"
+speaker = "ЭДИК"
+pitch = 1.35
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 26\nКУРОРТ «ЧАЙКА»"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_resort_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

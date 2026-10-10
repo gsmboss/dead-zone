@@ -5,16 +5,16 @@
 
 [sub_resource type="Resource" id="Shot_1"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "fire_wreck"
+mood = 11
+camera = "ind_fire"
 duration = 6.0
 voice_ru = "Склад пуст. Пленных увезли за час до нас. На полу — фантик от шоколадки. Тёма всегда бросает их где попало."
 voice_en = "The depot's empty. The prisoners were moved an hour before we got there. On the floor, a candy wrapper. Tyoma always drops them everywhere."
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "road_low"
+mood = 11
+camera = "ind_gate"
 duration = 5.0
 voice_ru = "Зато мы взяли их бронегрузовик. Барон будет очень, очень расстроен."
 voice_en = "But we took their armored truck. The Baron is going to be very, very upset."

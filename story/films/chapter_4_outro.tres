@@ -16,8 +16,8 @@ pitch = 0.6
 
 [sub_resource type="Resource" id="Shot_2"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "crossroad"
+mood = 10
+camera = "grave_chapel"
 duration = 5.5
 voice_ru = "Ещё он хвастался мальчишкой, который чинит любую рацию. Ест за троих, всех бесит, но руки золотые."
 voice_en = "He also bragged about a kid who can fix any radio. Eats like three men, annoys everyone, but has golden hands."
@@ -26,8 +26,8 @@ pitch = 0.75
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
-mood = 2
-camera = "sky_up"
+mood = 10
+camera = "grave_mom"
 duration = 4.5
 voice_ru = "Тёма. Это точно Тёма."
 voice_en = "Tyoma. That's definitely Tyoma."

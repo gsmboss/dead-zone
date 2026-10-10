@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_fire"
+duration = 5.0
+voice_ru = "В складе бананов прятались двое диспетчеров. Бананов не осталось. Диспетчеры пожелтели."
+voice_en = "Two dispatchers were hiding in the banana warehouse. No bananas left. The dispatchers turned yellow."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_gate"
+duration = 5.0
+voice_ru = "Вот ключи и карта. Канистры, маяк, «Надежда». Ночью к маяку не ходите. Хотя вам, кажется, всё равно."
+voice_en = "Here are the keys and the map. Fuel cans, lighthouse, Nadezhda. Don't go to the lighthouse at night. Though you don't seem to care."
+speaker = "ДИСПЕТЧЕР"
+pitch = 0.95
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_aerial"
+duration = 5.0
+caption = "ЮЖНЫЙ ПОРТ"
+voice_ru = "Ворота открылись на закате. За ними — краны, контейнеры и белый корабль."
+voice_en = "The gate opened at sunset. Beyond it: cranes, containers and a white ship."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_depot_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])
