@@ -362,7 +362,9 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 Часть третья (главы 14–17, «Южный порт»): «Дорога на юг» (story_south, лес, KILL_COUNT 45; дальнобойщик Михалыч),
 «Южный порт» (story_port, порт, сбор канистр; кок Борщов), «Маяк» (story_lighthouse, порт, оборона у маяка; смотритель
 Палыч), «Последний рейс» (story_voyage, порт, 5 волн + босс enemies/drowned.tres УТОПЛЕННИК). Эпилог — после «Последнего рейса».
-Достижение chapter_all — 17 глав. Картинки глав части третьей и loc_harbor готовы (промпты — docs/ART_PROMPTS.md, раздел 4).
+Достижение chapter_all — 17 глав. Части: ChapterData.part (1–3), CampaignData.part_titles (СЕВЕР-9 / ВАКЦИНА /
+ЮЖНЫЙ ПОРТ); окно СЮЖЕТ — вкладки ЧАСТЬ 1/2/3 над картой (CampaignPanel._part, static), CampaignMap.set_part рисует
+только главы части (map_position — в карте своей части, номера сквозные), у части 3 — море. Картинки глав части третьей и loc_harbor готовы (промпты — docs/ART_PROMPTS.md, раздел 4).
 StoryShot.Mood.CAMP — ночной лагерь в кино (костёр, палатки, люди сидят — Kenney «sit»), камеры camp_orbit/camp_fire/camp_high.
 Mood.HARBOR (ночь, мертвецы на причале) и HARBOR_DAWN (рассвет, посадка): диорама порта StoryStage._build_harbor_set в
 HARBOR_ORIGIN (300, 0, 0) — строится при первом плане в порту; камеры harbor_aerial/quay/ship/gangway/sea/zombies, lighthouse.

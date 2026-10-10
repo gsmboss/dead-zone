@@ -403,6 +403,9 @@ msgstr "Red dot when aiming: spread −40%, a bit more zoom"
 msgid "В цехах промзоны — гнездо, откуда идёт заражение. Выдержи 5 волн и убей Громилу"
 msgstr "The industrial zone workshops hide the nest where the infection comes from. Survive 5 waves and kill the Brute"
 
+msgid "ВАКЦИНА"
+msgstr "THE VACCINE"
+
 msgid "ВАКЦИНА РАБОТАЕТ"
 msgstr "THE VACCINE WORKS"
 
@@ -2329,6 +2332,9 @@ msgstr "ANTI-ALIASING"
 msgid "СДАТЬСЯ"
 msgstr "GIVE UP"
 
+msgid "СЕВЕР-9"
+msgstr "NORTH-9"
+
 msgid "СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО"
 msgstr "NORTH-9. A YEAR BEFORE ALL THIS"
 
@@ -2877,6 +2883,9 @@ msgstr "THE \"GENOME\" PLANT. THIS IS WHERE THEY KEPT \"ROT-7\" — THE MEDICINE
 
 msgid "ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)"
 msgstr "POLLING RATE (GYRO FPS)"
+
+msgid "ЧАСТЬ %d"
+msgstr "PART %d"
 
 msgid "ЧАСТЬ ТРЕТЬЯ"
 msgstr "PART THREE"

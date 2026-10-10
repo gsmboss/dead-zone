@@ -1,9 +1,9 @@
 class_name CampaignMap
 extends Control
-## Карта области для сюжета (рисуется кодом): тёмная карта с сеткой, дорогами и рекой,
+## Карта одной части сюжета (рисуется кодом): тёмная карта с сеткой, дорогами и рекой (у части 3 — море),
 ## путь между главами (пройденный — оранжевый, дальше — пунктир), точки глав:
 ## пройдена — зелёная с галочкой, текущая — пульсирует, закрыта — серая с замком.
-## Тап по точке — сигнал chapter_selected.
+## Показываются только главы части part (set_part), номера — сквозные. Тап по точке — сигнал chapter_selected.
 
 signal chapter_selected(index: int)
 
@@ -26,10 +26,20 @@ const ROADS: Array = [
 ]
 const RIVER_POINTS: Array[Vector2] = [Vector2(0.0, 0.42), Vector2(0.22, 0.38), Vector2(0.4, 0.46),
 	Vector2(0.58, 0.32), Vector2(0.8, 0.36), Vector2(1.0, 0.28)]
+## Часть 3 «Южный порт»: море в правом нижнем углу (доли карты)
+const SEA_PART: int = 3
+const SEA_POINTS: Array[Vector2] = [Vector2(1.0, 0.38), Vector2(0.82, 0.44), Vector2(0.7, 0.62), Vector2(0.5, 0.8),
+	Vector2(0.42, 1.0), Vector2(1.0, 1.0)]
+const SEA: Color = Color(0.12, 0.26, 0.36, 0.7)
+const SEA_EDGE: Color = Color(0.35, 0.55, 0.65, 0.6)
 
 var selected: int = 0
+## Показываемая часть сюжета (ChapterData.part)
+var part: int = 1
 
 var _chapters: Array[ChapterData] = []
+## Индексы глав (в общем списке кампании) показываемой части
+var _indices: Array[int] = []
 var _time: float = 0.0
 var _points := PackedVector2Array()
 
@@ -38,7 +48,17 @@ func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_STOP
 	clip_contents = true
 	_chapters = GameState.campaign.chapters
+	set_part(part)
 	resized.connect(queue_redraw)
+
+
+func set_part(new_part: int) -> void:
+	part = new_part
+	_indices.clear()
+	for i in _chapters.size():
+		if _chapters[i] != null and _chapters[i].part == part:
+			_indices.append(i)
+	queue_redraw()
 
 
 func _process(delta: float) -> void:
@@ -69,6 +89,13 @@ func _draw() -> void:
 	_points.resize(RIVER_POINTS.size())
 	for i in RIVER_POINTS.size():
 		_points[i] = RIVER_POINTS[i] * size
+	if part == SEA_PART:
+		var sea := PackedVector2Array()
+		for point: Vector2 in SEA_POINTS:
+			sea.append(point * size)
+		draw_colored_polygon(sea, SEA)
+		sea.resize(SEA_POINTS.size() - 1)
+		draw_polyline(sea, SEA_EDGE, 4.0)
 	draw_polyline(_points, RIVER, 10.0)
 	for road: Array in ROADS:
 		_points.resize(road.size())
@@ -78,18 +105,26 @@ func _draw() -> void:
 	# Рамка
 	draw_rect(Rect2(Vector2(4.0, 4.0), size - Vector2(8.0, 8.0)), Color(0.85, 0.42, 0.12, 0.6), false, 3.0)
 
-	# Путь между главами
-	for i in range(1, _chapters.size()):
-		var from: Vector2 = get_point(i - 1)
-		var to: Vector2 = get_point(i)
-		if GameState.is_chapter_done(_chapters[i - 1].id) and GameState.is_chapter_unlocked(i):
+	# Путь между главами части
+	for k in range(1, _indices.size()):
+		var previous: int = _indices[k - 1]
+		var current: int = _indices[k]
+		var from: Vector2 = get_point(previous)
+		var to: Vector2 = get_point(current)
+		if GameState.is_chapter_done(_chapters[previous].id) and GameState.is_chapter_unlocked(current):
 			draw_line(from, to, PATH_DONE, 5.0)
 		else:
 			draw_dashed_line(from, to, PATH_TODO, 3.0, 12.0)
 
 	var font: Font = ThemeDB.fallback_font
-	for i in _chapters.size():
-		_draw_node(i, font)
+	for index: int in _indices:
+		_draw_node(index, font)
+	# Название части в левом верхнем углу
+	var title: String = UIKit.t(GameState.campaign.get_part_title(part))
+	if not title.is_empty():
+		var at := Vector2(18.0, 34.0)
+		draw_string_outline(font, at, title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, 6, Color(0.0, 0.0, 0.0, 0.85))
+		draw_string(font, at, title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(0.85, 0.42, 0.12))
 
 
 func _draw_node(index: int, font: Font) -> void:
@@ -134,7 +169,7 @@ func _gui_input(event: InputEvent) -> void:
 	var mouse := event as InputEventMouseButton
 	if mouse == null or not mouse.pressed or mouse.button_index != MOUSE_BUTTON_LEFT:
 		return
-	for i in _chapters.size():
+	for i: int in _indices:
 		if mouse.position.distance_to(get_point(i)) <= NODE_RADIUS + 14.0:
 			selected = i
 			Sfx.click()

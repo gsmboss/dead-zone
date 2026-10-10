@@ -10,6 +10,21 @@ extends Resource
 @export var prologue_film: StoryFilm
 @export var epilogue_film: StoryFilm
 @export var chapters: Array[ChapterData] = []
+## Названия частей (вкладки окна СЮЖЕТ): индекс 0 — часть 1
+@export var part_titles: PackedStringArray = []
+
+
+## Номер последней части (по главам)
+func get_part_count() -> int:
+	var result: int = 1
+	for chapter: ChapterData in chapters:
+		if chapter != null:
+			result = maxi(result, chapter.part)
+	return result
+
+
+func get_part_title(part: int) -> String:
+	return part_titles[part - 1] if part >= 1 and part <= part_titles.size() else ""
 
 
 func find_by_mission(mission_id: String) -> ChapterData:

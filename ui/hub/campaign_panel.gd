@@ -9,6 +9,11 @@ const RUST: Color = Color(0.85, 0.42, 0.12)
 const PANEL_BG: Color = Color(0.06, 0.055, 0.05, 0.9)
 const SIDE_WIDTH: float = 470.0
 const PROLOGUE_ID: String = "story_prologue"
+## Высота ряда вкладок частей над картой
+const TABS_HEIGHT: float = 84.0
+
+## Открытая часть (вкладка) — запоминается между открытиями окна; 0 — часть текущей главы
+static var _part: int = 0
 
 var _map: CampaignMap
 var _dossier: VBoxContainer
@@ -22,6 +27,11 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	add_theme_stylebox_override(&"panel", StyleBoxEmpty.new())
 	_selected = _current_chapter()
+	var chapters: Array[ChapterData] = GameState.campaign.chapters
+	if _part < 1 or _part > GameState.campaign.get_part_count():
+		_part = chapters[_selected].part if _selected < chapters.size() else 1
+	elif _selected < chapters.size() and chapters[_selected].part != _part:
+		_selected = _first_in_part(_part)
 	_build()
 	_select(_selected)
 	if not GameState.has_seen_cutscene(PROLOGUE_ID):
@@ -81,12 +91,23 @@ func _build() -> void:
 	close.pressed.connect(close_window)
 	header.add_child(close)
 
-	# Слева — карта области
+	# Слева — вкладки частей и карта выбранной части
+	var names := PackedStringArray()
+	for i in GameState.campaign.get_part_count():
+		names.append(UIKit.t("ЧАСТЬ %d") % (i + 1))
+	var tabs: HFlowContainer = UIKit.tab_bar(names, _part - 1, _on_part_selected)
+	root.add_child(tabs)
+	tabs.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
+	tabs.offset_left = 16.0
+	tabs.offset_top = 112.0
+	tabs.offset_right = -SIDE_WIDTH - 32.0
+	tabs.offset_bottom = 112.0 + TABS_HEIGHT
 	_map = CampaignMap.new()
+	_map.part = _part
 	root.add_child(_map)
 	_map.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_map.offset_left = 16.0
-	_map.offset_top = 112.0
+	_map.offset_top = 112.0 + TABS_HEIGHT
 	_map.offset_right = -SIDE_WIDTH - 32.0
 	_map.offset_bottom = -16.0
 	_map.chapter_selected.connect(_select)
@@ -125,6 +146,27 @@ func _build() -> void:
 		GameState.get_rescued_count(), GameState.get_house_count(), cars.size()], 20, column)
 	stats.modulate = UIKit.GOOD
 	_update_progress()
+
+
+## Вкладка части: окно строится заново (вкладки), выбрана текущая глава части или первая
+func _on_part_selected(index: int) -> void:
+	_part = index + 1
+	for child: Node in get_children():
+		child.queue_free()
+	_dossier = null
+	var current: int = _current_chapter()
+	var chapters: Array[ChapterData] = GameState.campaign.chapters
+	_selected = current if current < chapters.size() and chapters[current].part == _part else _first_in_part(_part)
+	_build()
+	_select(_selected)
+
+
+func _first_in_part(part: int) -> int:
+	var chapters: Array[ChapterData] = GameState.campaign.chapters
+	for i in chapters.size():
+		if chapters[i] != null and chapters[i].part == part:
+			return i
+	return 0
 
 
 func _update_progress() -> void:

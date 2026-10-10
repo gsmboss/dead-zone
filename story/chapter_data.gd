@@ -6,7 +6,9 @@ extends Resource
 @export var id: String = ""
 @export var title: String = ""
 @export var location_name: String = ""
-## Положение на карте области (0..1 по ширине и высоте)
+## Часть сюжета (вкладка ЧАСТЬ 1/2/3 в окне СЮЖЕТ: на карте — только главы этой части)
+@export_range(1, 9) var part: int = 1
+## Положение на карте своей части (0..1 по ширине и высоте)
 @export var map_position: Vector2 = Vector2(0.5, 0.5)
 @export var mission: MissionData
 ## Страницы рассказа перед главой и после победы
