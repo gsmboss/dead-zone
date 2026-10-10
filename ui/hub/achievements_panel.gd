@@ -96,12 +96,7 @@ func _make_card(achievement: AchievementData) -> Control:
 	UIKit.label(achievement.description, 20, texts).modulate = UIKit.DIM
 	if not done:
 		var value: int = mini(GameState.get_stat(achievement.event), achievement.target)
-		var bar := ProgressBar.new()
-		bar.max_value = achievement.target
-		bar.value = value
-		bar.show_percentage = false
-		bar.custom_minimum_size = Vector2(0.0, 14.0)
-		texts.add_child(bar)
+		texts.add_child(make_bar(value, achievement.target, achievement.icon_color))
 		UIKit.label("%d / %d" % [value, achievement.target], 18, texts).modulate = UIKit.DIM
 	var reward := UIKit.label(UIKit.t("ПОЛУЧЕНО") if done else "+" + UIKit.coins_text(achievement.reward), 22, row)
 	reward.modulate = UIKit.GOOD if done else UIKit.ACCENT
@@ -109,6 +104,24 @@ func _make_card(achievement: AchievementData) -> Control:
 	reward.custom_minimum_size.x = 170.0
 	reward.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	return card
+
+
+## Полоска прогресса: тёмная подложка и цветная заливка
+static func make_bar(value: int, target: int, color: Color) -> ProgressBar:
+	var bar := ProgressBar.new()
+	bar.max_value = maxi(target, 1)
+	bar.value = value
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0.0, 14.0)
+	var back := StyleBoxFlat.new()
+	back.bg_color = Color(0.0, 0.0, 0.0, 0.45)
+	back.set_corner_radius_all(7)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = color
+	fill.set_corner_radius_all(7)
+	bar.add_theme_stylebox_override(&"background", back)
+	bar.add_theme_stylebox_override(&"fill", fill)
+	return bar
 
 
 func _build_stats() -> void:

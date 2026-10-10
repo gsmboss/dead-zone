@@ -302,6 +302,7 @@ func _add_menu_button(text: String, callback: Callable) -> Button:
 
 func _connect_world() -> void:
 	_show_pending_story.call_deferred()
+	GameState.check_all_achievements()
 	# Вернулись из матча по сети — сразу в лобби
 	if Net.is_online():
 		_open_window.call_deferred(LobbyPanel.new())

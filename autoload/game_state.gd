@@ -1008,14 +1008,18 @@ func get_achievement_count() -> int:
 	return _achievements_done.size()
 
 
-## Достижения с этим событием: дошли до цели — открыть, начислить награду, показать
+## Проверить все достижения (вход в убежище: счётчики из старого сохранения или загруженного кода)
+func check_all_achievements() -> void:
+	_check_achievements(&"")
+
+
+## Достижения с этим событием (пустое — все): дошли до цели — открыть, начислить награду, показать
 func _check_achievements(event: StringName) -> void:
 	if achievement_list == null:
 		return
-	var value: int = get_stat(event)
 	for achievement: AchievementData in achievement_list.achievements:
-		if achievement == null or achievement.event != event or value < achievement.target \
-				or is_achievement_done(achievement.id):
+		if achievement == null or (event != &"" and achievement.event != event) \
+				or get_stat(achievement.event) < achievement.target or is_achievement_done(achievement.id):
 			continue
 		_achievements_done.append(achievement.id)
 		coins += achievement.reward

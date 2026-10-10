@@ -66,12 +66,7 @@ func _make_weekly_card(weekly: WeeklyEventData) -> Control:
 	var progress: int = GameState.get_weekly_progress()
 	var claimed: bool = GameState.is_weekly_claimed()
 	UIKit.label(UIKit.t("ИСПЫТАНИЕ: %s") % UIKit.t(weekly.challenge_text), 24, texts)
-	var bar := ProgressBar.new()
-	bar.max_value = weekly.challenge_target
-	bar.value = progress
-	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(0.0, 16.0)
-	texts.add_child(bar)
+	texts.add_child(AchievementsPanel.make_bar(progress, weekly.challenge_target, Color(1.0, 0.6, 0.35)))
 	UIKit.label("%d / %d" % [progress, weekly.challenge_target], 20, texts).modulate = UIKit.DIM
 	var can_claim: bool = GameState.can_claim_weekly()
 	var button := UIKit.button("ПОЛУЧЕНО" if claimed else "+" + UIKit.coins_text(weekly.challenge_reward), 24, 240.0)
