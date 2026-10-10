@@ -153,7 +153,10 @@ func _status(id: StringName) -> String:
 			var car: CarData = GameState.get_selected_car()
 			return car.title if car != null else ""
 		&"base":
-			return UIKit.t("СПАСЕНО: %d") % GameState.get_rescued_count()
+			var shelter: ShelterState = GameState.shelter
+			if shelter.can_feed():
+				return "ЛЮДИ ГОЛОДНЫ!"
+			return UIKit.t("УР. %d • ЖИЛЬЦОВ %d") % [shelter.level, shelter.get_population()]
 		&"daily":
 			return "НАГРАДА ЖДЁТ!" if GameState.has_unclaimed_rewards() else "НАГРАДЫ И ЗАДАНИЯ"
 		&"achievements":
@@ -171,6 +174,8 @@ func _is_highlighted(id: StringName) -> bool:
 	match id:
 		&"daily":
 			return GameState.has_unclaimed_rewards()
+		&"base":
+			return GameState.shelter.needs_attention()
 		&"tutorial":
 			return not GameState.has_seen_cutscene(TutorialDirector.DONE_FLAG)
 	return false

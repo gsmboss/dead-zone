@@ -400,7 +400,7 @@ pink_bus, village_queue, lodge, highway_yard) — предметы на своб
 Модели: models/market, food, holiday, roads, nature (Kenney, CC0). Перевал: скалы и сосны Nature Kit, снежные ёлки Holiday Kit.
 Проверка без редактора: tools/validate/validate.tscn (ресурсы, сюжет, миссии, модели кино, переводы глав/титров/подписей;
 «ждут картинок» — не ошибка)
-и runtime_test.tscn (все фильмы ускоренно и все уровни по 6 с). Godot 4.7.2 для Linux: --headless --path . <сцена>.
+и runtime_test.tscn (все фильмы ускоренно и все уровни по 6 с), shelter_test.tscn (убежище). Godot 4.7.2 для Linux: --headless --path . <сцена>.
 На выходе после прогона движок иногда падает (double free при завершении) — это завершение движка, не наш код.
 Значки на экранных кнопках: ui/touch/icons/*.svg (game-icons.net, CC BY 3.0 — атрибуция в CREDITS.md);
 TouchActionButton.ACTION_ICONS (действие → значок), icon, badge (счётчик гранат), set_icon_name(), load_icon();
@@ -471,3 +471,26 @@ StoryPanel.art_for(id): фон рассказа (затемнение 0.72) и �
 Магазин: store/ (.gdignore, в игру не попадает) — feature_graphic.png 1024×500 для Google Play.
 Карточки локаций: ui/hub/locations/loc_<локация>.jpg (960×540) — MissionSelect.location_art (по сцене уровня, набег — loc_shelter),
 сверху досье миссии на КАРТЕ ЗАРАЖЕНИЯ; нет файла — без картинки.
+
+Развитие убежища: base/shelter_state.gd (ShelterState — GameState.shelter, сохранение "shelter", сигнал
+GameState.shelter_changed), параметры base/shelter_config.tres (ShelterConfig). Уровни ЛАГЕРЬ/ДВОР/ФОРТ/БАЗА/КРЕПОСТЬ
+(монеты + лом): полуразмер двора 16/20/20/22.8/22.8 (кратно контейнеру 5.71 — hub.gd двигает Room/Floor, Room/Bounds и
+Props/Outside, HubYard и HubCamp пересобираются), места для жильцов (больше — «тесно», потолок настроения ниже), часы кассы.
+Жильцы = спасённые в сюжете (не меньше 2) + позванные по радио (recruit). Провизия (ящики): обед раз в день «НАКОРМИТЬ»
+(ящик кормит 5, со столовой 8), день без обеда — настроение −20; провизия — покупка в окне БАЗА, победа (MissionManager →
+add_mission_food, строка в итогах), огород +4/день. Настроение 0–100, потолок = 50 + уют (comfort построек и обустройства);
+≥ 75 — награда за миссии ×1.1 (get_reward_multiplier). Касса лагеря: монет в час (база + люди) × настроение × генератор,
+копится до часов уровня (_bank_income перед сменой скорости). Новые постройки (BuildingData.builder/hub_position/
+required_level/comfort): garden, watchtower (набег — tower_raid_kit), radio, generator (+25% кассы, гирлянды), canteen.
+Обустройство: base/decor_list.tres (DecorList из DecorData: zone, price, comfort, required_level, builder, position, yaw) —
+16 вещей (флаг, клумбы, гирлянды, шезлонги, спортуголок, качели, ёлка, мангал, душ, баскетбол, автоматы, бар, бильярд,
+бассейн, ветряк, кинотеатр). Сборщики моделей — hub/hub_decor.gd (HubDecor.build: модели Kenney через PropBatch и
+примитивы, возвращают места жильцов {pos, yaw, seated}). Во дворе всё ставит hub/hub_base.gd (HubBase): постройки и
+обустройство (пересборка по подписи набора), жильцы сверх лагеря (HubCamp.SHOWN_IN_CAMP) на местах, лимит по
+Settings.get_detail_tier, двое гуляют по STROLL_PATH; кухня «НАКОРМИТЬ» (KITCHEN), касса «ЗАБРАТЬ» (CASH_BOX, сундук),
+штабель ящиков провизии, котёл на костре после обеда. HubCamp: табличка с настроением, жалобы голодных, cheer() после обеда.
+BaseVisuals ставит в слоты BaseBuildings только постройки без builder. HubHUD подключает Interactable, созданные позже
+(node_added). Окно БАЗА — вкладки УБЕЖИЩЕ/ПОСТРОЙКИ/ОБУСТРОЙСТВО/МАСТЕРСКАЯ/ГАРАЖ; плитка БАЗА подсвечена, если голодны
+или касса полна (needs_attention). Достижения shelter_level (record), camp_meal, decor_buy, camp_recruit.
+Отладка: F10 в debug — убежище на максимум. Тест: tools/validate/shelter_test.tscn (логика и сборка на всех уровнях,
+сохранение игрока возвращает).

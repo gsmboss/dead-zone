@@ -314,11 +314,25 @@ func _connect_world() -> void:
 	_update_coins(GameState.coins)
 	_update_daily_badge()
 	for node: Node in get_tree().get_nodes_in_group(&"interactables"):
-		var interactable := node as Interactable
-		if interactable != null:
-			interactable.player_entered.connect(_on_player_entered)
-			interactable.player_exited.connect(_on_player_exited)
-			interactable.prompt_changed.connect(_on_prompt_changed)
+		_register_interactable(node as Interactable)
+	# Зоны, созданные позже (постройки убежища, пересобранный лагерь)
+	get_tree().node_added.connect(_on_node_added)
+
+
+func _on_node_added(node: Node) -> void:
+	if node is Interactable:
+		_register_interactable.call_deferred(node as Interactable)
+
+
+func _register_interactable(interactable: Interactable) -> void:
+	if interactable == null or not is_instance_valid(interactable) \
+			or interactable.player_entered.is_connected(_on_player_entered):
+		return
+	interactable.player_entered.connect(_on_player_entered)
+	interactable.player_exited.connect(_on_player_exited)
+	interactable.prompt_changed.connect(_on_prompt_changed)
+	# Зону убрали, пока игрок в ней (пересборка) — спрятать кнопку
+	interactable.tree_exiting.connect(_on_player_exited.bind(interactable))
 
 
 func _update_coins(coins: int) -> void:
@@ -355,6 +369,8 @@ func _on_player_exited(interactable: Interactable) -> void:
 
 
 func _interact() -> void:
+	if _current != null and not is_instance_valid(_current):
+		_current = null
 	if _current == null or _window != null or _menu != null:
 		return
 	match _current.action_id:
