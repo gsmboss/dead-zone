@@ -22,6 +22,7 @@ title = "МАЯК"
 description = "Палыч чинит маяк, а генератор ревёт на весь порт. Удержи точку у маяка 110 секунд"
 type = 3
 level_scene = "res://levels/harbor_level.tscn"
+time_of_day = 3
 location_name = "МАЯК НА МОЛУ"
 defend_time = 110.0
 defend_radius = 6.0

@@ -26,6 +26,10 @@ func _init() -> void:
 
 
 func _build_location() -> void:
+	# Глава «Дорога на юг»: через лес идёт трасса (LevelDressing, набор highway) — деревья на неё не ставим
+	var mission: MissionData = GameState.selected_mission
+	if mission != null and mission.dressing == &"highway":
+		_reserved.append(Rect2(-half_size - 4.0, -4.5, half_size * 2.0 + 8.0, 9.0))
 	# Стена леса: два ряда сосен по краю (видно, что дальше не пройти)
 	for row in 2:
 		var edge: float = half_size - 0.5 - row * 2.2

@@ -460,6 +460,9 @@ msgstr "THE VACCINE HAS GONE SOUTH, KABAN WASHES DISHES, TYOMA IS HERE. UNCLE GO
 msgid "ВВЕДИ ИМЯ"
 msgstr "ENTER NAME"
 
+msgid "ВЕЛОМАСТЕРСКАЯ"
+msgstr "BIKE REPAIR"
+
 msgid "ВЕРА"
 msgstr "VERA"
 
@@ -852,6 +855,9 @@ msgstr "THE CITY IS HUGE. TAKE A CAR: THE BUMPER IS A WEAPON TOO, AND DRIFTING O
 
 msgid "ГОРОДСКАЯ БОЛЬНИЦА"
 msgstr "CITY HOSPITAL"
+
+msgid "ГОРОДСКАЯ БОЛЬНИЦА №1"
+msgstr "CITY HOSPITAL NO. 1"
 
 msgid "ГОРОДСКАЯ БОЛЬНИЦА №1. НА ДВЕРЯХ ТАБЛИЧКА: «ПРИЁМ ПО ЗАПИСИ». НИЖЕ МАРКЕРОМ: «КУСАЮЩИХ НЕ ПРИНИМАЕМ»."
 msgstr "CITY HOSPITAL NO. 1. A SIGN ON THE DOOR: \"APPOINTMENTS ONLY\". BELOW, IN MARKER: \"NO BITERS ALLOWED\"."
@@ -1327,6 +1333,9 @@ msgstr "Irina is gathering syringes and the autoclave in the city hospital. Hold
 msgid "Исследуй город, спасай выживших, катайся и сбивай зомби"
 msgstr "Explore the city, rescue survivors, cruise around and run down zombies"
 
+msgid "ЙЫНЙЕЛИБЮ"
+msgstr "EELIBUJ"
+
 msgid "К ВЕЧЕРУ НА ГОРИЗОНТЕ ПОКАЗАЛОСЬ МОРЕ. ТЁМА ВИДЕЛ ЕГО ВПЕРВЫЕ И МОЛЧАЛ ЦЕЛЫХ ДВЕ МИНУТЫ. ЭТО РЕКОРД."
 msgstr "BY EVENING THE SEA APPEARED ON THE HORIZON. TYOMA SAW IT FOR THE FIRST TIME AND STAYED QUIET FOR TWO WHOLE MINUTES. A RECORD."
 
@@ -1401,6 +1410,9 @@ msgstr "HELMET BREAKER"
 
 msgid "КАСКУ СБИВАЮТ ДВА ВЫСТРЕЛА В ГОЛОВУ"
 msgstr "TWO HEADSHOTS KNOCK A HELMET OFF"
+
+msgid "КАФЕ «ЧАЙКА»"
+msgstr "SEAGULL CAFE"
 
 msgid "КАЧЕСТВО ГРАФИКИ"
 msgstr "GRAPHICS QUALITY"
@@ -1803,6 +1815,9 @@ msgstr "COINS +%d  (TOTAL %d)"
 
 msgid "МОНЕТЫ: %d"
 msgstr "COINS: %d"
+
+msgid "МОРОЖЕНОЕ"
+msgstr "ICE CREAM"
 
 msgid "МОТОР РАЗБУДИЛ ВЕСЬ ПОРТ. МЕРТВЕЦЫ ЛЕЗУТ ИЗ КОНТЕЙНЕРОВ, А ИЗ ВОДЫ ПОДНИМАЕТСЯ УТОПЛЕННИК — ВЫСОТОЙ С ПОЛКРАНА."
 msgstr "THE ENGINE WOKE THE WHOLE PORT. THE DEAD CRAWL OUT OF THE CONTAINERS, AND THE DROWNED ONE RISES FROM THE WATER, HALF AS TALL AS A CRANE."
@@ -2470,6 +2485,9 @@ msgstr "SURVIVE %s • KILLS %d"
 msgid "ПРОДОЛЖИТЬ"
 msgstr "CONTINUE"
 
+msgid "ПРОДУКТЫ"
+msgstr "GROCERIES"
+
 msgid "ПРОЙДЕНА"
 msgstr "COMPLETED"
 
@@ -2646,6 +2664,9 @@ msgstr "CLEAR THE STREET. AND LOOK AROUND: IF TYOMA WAS HERE, HE LEFT A TRAIL. H
 
 msgid "РАЦИЯ. ПЕРЕХВАТ"
 msgstr "RADIO. INTERCEPT"
+
+msgid "РЕВУН"
+msgstr "HOWLER"
 
 msgid "РЕВУН РАЗБИТ. ГЕНКА СЛОМАЛ ЕГО ГАЕЧНЫМ КЛЮЧОМ И СКАЗАЛ: «ЭТО ЗА ПАРКОВКУ». НИКТО НЕ ПОНЯЛ, НО ВСЕ ЗААПЛОДИРОВАЛИ."
 msgstr "THE HOWLER IS SMASHED. GENKA BROKE IT WITH A WRENCH AND SAID: \"THAT'S FOR THE PARKING LOT.\" NOBODY UNDERSTOOD, BUT EVERYONE CLAPPED."
@@ -3096,6 +3117,9 @@ msgstr "KABAN'S THREE PRISONERS ARE WITH US NOW. GENKA WASHED DISHES UNTIL MORNI
 
 msgid "ТРЯСКА КАМЕРЫ (ВЗРЫВЫ, БОСС)"
 msgstr "CAMERA SHAKE (EXPLOSIONS, BOSS)"
+
+msgid "ТУРБАЗА"
+msgstr "HIKERS' LODGE"
 
 msgid "ТУРЕЛЬ"
 msgstr "TURRET"

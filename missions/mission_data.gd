@@ -15,6 +15,11 @@ enum Type { WAVES, KILL_COUNT, SURVIVE, DEFEND, COLLECT, ENDLESS, FREE_ROAM }
 @export_file("*.tscn") var level_scene: String = "res://levels/test_level.tscn"
 ## Своё название места в досье (пусто — по сцене уровня, LOCATIONS)
 @export var location_name: String = ""
+## Оформление уровня под рассказ главы (LevelDressing.SETS: hospital, resort, festival…); пусто — уровень как есть
+@export var dressing: StringName = &""
+## Время суток уровня (LevelDressing): как в сцене, день, закат, ночь, рассвет
+enum TimeOfDay { SCENE, DAY, DUSK, NIGHT, DAWN }
+@export var time_of_day: TimeOfDay = TimeOfDay.SCENE
 
 @export_group("Goal")
 ## WAVES: количество волн

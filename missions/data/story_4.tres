@@ -15,6 +15,7 @@ title = "НОЧЬ НА КЛАДБИЩЕ"
 description = "Радист прячется в склепе. Собери 5 деталей рации среди могил"
 type = 4
 level_scene = "res://levels/graveyard_level.tscn"
+time_of_day = 3
 collect_target = 5
 walker = ExtResource("z_walker")
 runner = ExtResource("z_skeleton")

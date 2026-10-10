@@ -22,6 +22,7 @@ title = "ПОСЛЕДНИЙ РЕЙС"
 description = "Посадка на «Надежду». Удержи причал 5 волн, пока все поднимаются на борт, и победи Утопленника"
 type = 0
 level_scene = "res://levels/harbor_level.tscn"
+time_of_day = 4
 location_name = "ПРИЧАЛ «НАДЕЖДЫ»"
 wave_count = 5
 first_wave_size = 10

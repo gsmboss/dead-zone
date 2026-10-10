@@ -15,6 +15,7 @@ title = "ЛЕСНОЙ ЛАГЕРЬ"
 description = "Разведчики держат лагерь в лесу. Продержись 2 минуты, пока они собирают вещи"
 type = 2
 level_scene = "res://levels/forest_level.tscn"
+time_of_day = 3
 survive_time = 120.0
 walker = ExtResource("z_walker")
 runner = ExtResource("z_skeleton")

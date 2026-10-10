@@ -103,6 +103,8 @@ func _ready() -> void:
 		push_error("MissionManager: не назначена mission")
 		set_process(false)
 		return
+	# Оформление уровня под главу и время суток (до сборки навмеша — он ждёт пару физических кадров)
+	LevelDressing.apply.call_deferred(get_tree().current_scene, mission)
 	if spawner == null:
 		for child: Node in get_children():
 			if child is ZombieSpawner:

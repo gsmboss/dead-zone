@@ -8,9 +8,15 @@ extends LocationBuilder
 const GRAVE: String = "res://models/graveyard/"
 const SURV: String = "res://models/survival/"
 const ENV: String = "res://models/environment/"
-const PINES: Array[String] = ["res://models/graveyard/pine.glb", "res://models/graveyard/pine-crooked.glb"]
-const BIG_ROCKS: Array[String] = ["res://models/harbor/pirate/rocks-a.glb", "res://models/harbor/pirate/rocks-b.glb",
-	"res://models/harbor/pirate/rocks-c.glb"]
+const PINES: Array[String] = ["res://models/nature/tree_pineTallA.glb", "res://models/nature/tree_pineTallB.glb",
+	"res://models/nature/tree_pineTallC.glb"]
+## Заснеженные ёлки (Kenney Holiday Kit, высота 1.9 → ~6 м)
+const SNOW_TREES: Array[String] = ["res://models/holiday/tree-snow-a.glb", "res://models/holiday/tree-snow-b.glb",
+	"res://models/holiday/tree-snow-c.glb"]
+## Скалы (Kenney Nature Kit): стена — cliff_large (1×1×0.42 → 10 м), валуны — rock_tall
+const CLIFFS: Array[String] = ["res://models/nature/cliff_large_rock.glb", "res://models/nature/cliff_block_rock.glb"]
+const BIG_ROCKS: Array[String] = ["res://models/nature/rock_tallA.glb", "res://models/nature/rock_tallB.glb",
+	"res://models/nature/rock_tallE.glb"]
 const SMALL_ROCKS: Array[String] = ["res://models/graveyard/rocks.glb", "res://models/graveyard/rocks-tall.glb",
 	"res://models/graveyard/trunk.glb"]
 const HOUSES: Array[String] = ["res://models/city/suburban/building-type-a.glb",
@@ -20,6 +26,11 @@ const WRECKS: Array[String] = ["res://models/vehicles/Vehicle_Pickup.gltf", "res
 const COVER: Array[String] = ["res://models/survival/box-large.glb", "res://models/survival/barrel.glb",
 	"res://models/environment/Pallet.gltf"]
 const KENNEY_SCALE: float = 2.2
+## Деревья и скалы Nature Kit маленькие: сосна 1.5–1.9 → 11–14 м, скала 1 → 10 м, валун 1 → 3.5 м
+const PINE_SCALE: float = 7.0
+const CLIFF_SCALE: float = 10.0
+const ROCK_SCALE: float = 3.5
+const SNOW_TREE_SCALE: float = 3.0
 const SURVIVAL_SCALE: float = 3.4
 const PINE_TRUNK: Vector3 = Vector3(0.6, 4.0, 0.6)
 ## Частокол деревни: линия по z и полуширина проёма ворот
@@ -42,8 +53,9 @@ func _build_location() -> void:
 	_build_road()
 	_build_village()
 	# Укрытия на перевале
-	_scatter(BIG_ROCKS, 7, Vector2(0.9, 1.3), 3.0)
-	_scatter(PINES, 16, Vector2(KENNEY_SCALE * 1.1, KENNEY_SCALE * 1.5), 2.4, true, PINE_TRUNK, 5.0)
+	_scatter(BIG_ROCKS, 9, Vector2(ROCK_SCALE * 0.8, ROCK_SCALE * 1.2), 2.4)
+	_scatter(PINES, 10, Vector2(PINE_SCALE * 0.8, PINE_SCALE * 1.0), 2.4, true, PINE_TRUNK, 5.0)
+	_scatter(SNOW_TREES, 10, Vector2(SNOW_TREE_SCALE * 0.8, SNOW_TREE_SCALE * 1.2), 2.0, true, Vector3(1.0, 4.0, 1.0), 4.0)
 	_scatter(SMALL_ROCKS, 14, Vector2(KENNEY_SCALE, KENNEY_SCALE * 1.4), 1.6)
 	_scatter(WRECKS, 3, Vector2(1.0, 1.0), 4.0)
 	_scatter(COVER, 12, Vector2(1.0, 1.0), 1.4)
@@ -58,7 +70,7 @@ func _build_location() -> void:
 
 ## Скалы по краю площадки — сразу за стенами Bounds (только вид)
 func _build_rock_wall() -> void:
-	var edge: float = half_size + 4.0
+	var edge: float = half_size + 3.0  # скалы видны до стены тумана (EdgeCover — с +0.6 м за стенами)
 	for side in 4:
 		var yaw: float = side * PI * 0.5
 		var along: float = -edge
@@ -68,13 +80,15 @@ func _build_rock_wall() -> void:
 			if side == 2 and absf(along) < 20.0:
 				along += 5.0
 				continue
-			_place(BIG_ROCKS[_rng.randi() % BIG_ROCKS.size()], at, _rng.randf() * TAU, _rng.randf_range(1.6, 2.4), false)
-			along += 5.0 + _rng.randf_range(0.0, 2.0)
+			# Скальная стена лицом внутрь площадки, высота разная — неровный гребень
+			_place(CLIFFS[_rng.randi() % CLIFFS.size()], at, yaw + PI + _rng.randf_range(-0.25, 0.25),
+				CLIFF_SCALE * _rng.randf_range(0.8, 1.3), false)
+			along += 7.0 + _rng.randf_range(0.0, 2.0)
 	# Сосны за скалами — силуэт леса на склонах
 	for i in 40:
 		var angle: float = _rng.randf() * TAU
 		var at := Vector3(cos(angle), 0.0, sin(angle)) * _rng.randf_range(half_size + 8.0, half_size + 26.0)
-		_place(PINES[i % PINES.size()], at, _rng.randf() * TAU, KENNEY_SCALE * _rng.randf_range(1.3, 1.9), false)
+		_place(PINES[i % PINES.size()], at, _rng.randf() * TAU, PINE_SCALE * _rng.randf_range(0.9, 1.3), false)
 
 
 ## Дорога через перевал: тёмная полоса по снегу (вид), с юга к воротам
