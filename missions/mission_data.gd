@@ -110,6 +110,7 @@ const LOCATIONS: Dictionary = {
 	"graveyard_level": "КЛАДБИЩЕ",
 	"forest_level": "ЛЕСНОЙ ЛАГЕРЬ",
 	"industrial_level": "ПРОМЗОНА",
+	"harbor_level": "ЮЖНЫЙ ПОРТ",
 }
 
 

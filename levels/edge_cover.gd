@@ -35,6 +35,10 @@ var _sync_timer: float = 0.0
 
 
 func _ready() -> void:
+	# Уровень с водой (порт) опускает край ниже воды: метаданные корня edge_cover_y
+	var scene_root: Node = get_parent()
+	if scene_root != null and scene_root.has_meta(&"edge_cover_y"):
+		position.y = float(scene_root.get_meta(&"edge_cover_y"))
 	_find_environment()
 	var half: Vector2 = _measure_half_size()
 	_build_ground()

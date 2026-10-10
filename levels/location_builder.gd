@@ -10,6 +10,8 @@ extends Node3D
 ## Свободный радиус вокруг точек спавна, подборов, обороны и игрока
 @export var clear_radius: float = 3.5
 @export var generation_seed: int = 7
+## Земля за краем площадки (порт рисует вместо неё воду и свою землю)
+@export var outside_ground: bool = true
 @export_group("Mood")
 @export var fog_color: Color = Color(0.3, 0.32, 0.3)
 @export var fog_density: float = 0.02
@@ -165,6 +167,9 @@ func _apply_mood() -> void:
 		var sun := node as DirectionalLight3D
 		sun.light_color = sun_color
 		sun.light_energy = sun_energy
+	_apply_floor_material()
+	if not outside_ground:
+		return
 	# Земля за краем площадки (только вид), чтобы здания и лес за стенами не висели в пустоте
 	var outside := MeshInstance3D.new()
 	var plane := PlaneMesh.new()
@@ -177,6 +182,9 @@ func _apply_mood() -> void:
 	outside.position = Vector3(0.0, -0.03, 0.0)
 	outside.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(outside)
+
+
+func _apply_floor_material() -> void:
 	var floor_box := get_parent().get_node_or_null(^"Floor") as CSGBox3D
 	if floor_box != null:
 		var material := StandardMaterial3D.new()
