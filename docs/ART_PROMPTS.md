@@ -1,6 +1,6 @@
 # Картинки для Dead Zone — что нужно и промпты
 
-Готово: splash (ui/splash/splash.jpg), обложка Google Play (store/feature_graphic.png), prologue и chapter_1
+Готово: splash (ui/splash/splash.jpg), обложка Google Play (store/feature_graphic.png), prologue, chapter_1, chapter_2, chapter_3, chapter_4, chapter_bandits
 (story/art/*.jpg — картинка главы фоном рассказа и сверху досье в окне СЮЖЕТ).
 
 Все картинки — **без текста, букв, логотипов и водяных знаков** (надписи игра рисует сама, на двух языках).
