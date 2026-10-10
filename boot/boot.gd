@@ -1,10 +1,10 @@
 extends Control
-## Экран загрузки при запуске: картинка-заставка (ui/splash/splash.png) с медленным наездом
+## Экран загрузки при запуске: картинка-заставка (ui/splash/splash.jpg) с медленным наездом
 ## или, если картинки нет, живая 3D-сцена (зомби в тумане), объёмное название DEAD ZONE,
 ## 3D-полоса загрузки с процентами и советами. Убежище грузится в фоне (load_threaded_request).
 
 const NEXT_SCENE: String = "res://hub/hub.tscn"
-const SPLASH_IMAGE: String = "res://ui/splash/splash.png"
+const SPLASH_IMAGE: String = "res://ui/splash/splash.jpg"
 ## Готовая картинка названия (прозрачный фон); нет файла — 3D-текст Title3D
 const TITLE_IMAGE: String = "res://ui/splash/title.png"
 ## Логотип студии в самом начале (как и картинка движка при старте — project.godot boot_splash)

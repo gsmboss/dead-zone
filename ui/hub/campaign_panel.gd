@@ -148,6 +148,17 @@ func _fill_dossier() -> void:
 	var chapter: ChapterData = GameState.campaign.chapters[_selected]
 	var done: bool = GameState.is_chapter_done(chapter.id)
 	var unlocked: bool = GameState.is_chapter_unlocked(_selected)
+	var art: Texture2D = StoryPanel.art_for(chapter.id)
+	if art != null:
+		# Картинка главы сверху досье (закрытая — затемнена)
+		var picture := TextureRect.new()
+		picture.texture = art
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		picture.custom_minimum_size = Vector2(0.0, 170.0)
+		picture.clip_contents = true
+		picture.modulate = Color.WHITE if unlocked else Color(0.35, 0.35, 0.38)
+		_dossier.add_child(picture)
 	var stripe := HazardStripe.new()
 	stripe.custom_minimum_size = Vector2(0.0, 8.0)
 	_dossier.add_child(stripe)
@@ -161,7 +172,7 @@ func _fill_dossier() -> void:
 		var story := UIKit.button("ИСТОРИЯ", 22, 150.0)
 		story.pressed.connect(func() -> void:
 			await _play_film(chapter.intro_film, true)
-			StoryPanel.open(get_tree(), chapter.title, chapter.intro_pages, "ПОНЯТНО"))
+			StoryPanel.open(get_tree(), chapter.title, chapter.intro_pages, "ПОНЯТНО", chapter.id))
 		row.add_child(story)
 		var start := UIKit.button("ПЕРЕИГРАТЬ" if done else "НАЧАТЬ ГЛАВУ", 24)
 		start.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -194,7 +205,7 @@ func _start_chapter(chapter: ChapterData) -> void:
 		return
 	await _play_film(chapter.intro_film, false)
 	var panel := StoryPanel.open(get_tree(), UIKit.t("ГЛАВА %d  •  %s") % [_selected + 1, UIKit.t(chapter.title)],
-		chapter.intro_pages, "В БОЙ")
+		chapter.intro_pages, "В БОЙ", chapter.id)
 	panel.finished.connect(func() -> void: GameState.start_mission(chapter.mission))
 
 
@@ -202,7 +213,7 @@ func _start_chapter(chapter: ChapterData) -> void:
 func _show_prologue(always: bool = true) -> void:
 	GameState.mark_cutscene_seen(PROLOGUE_ID)
 	await _play_film(GameState.campaign.prologue_film, always)
-	StoryPanel.open(get_tree(), "КАК ВСЁ НАЧАЛОСЬ", GameState.campaign.prologue_pages, "К КАРТЕ")
+	StoryPanel.open(get_tree(), "КАК ВСЁ НАЧАЛОСЬ", GameState.campaign.prologue_pages, "К КАРТЕ", "prologue")
 
 
 ## Сюжетный фильм: always — показать и повторно (кнопки ИСТОРИЯ/ПРОЛОГ), иначе только первый раз

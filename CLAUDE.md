@@ -173,7 +173,7 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   с детьми Joystick (TouchJoystick, якоря 0,0,0.4,1, отступы 0) и JumpButton (TouchActionButton,
   action "jump", label "JUMP", якоря все 1, отступы -370,-170,-260,-60); последним ребёнком HUD —
   HubHUD (Control, скрипт ui/hub/hub_hud.gd, missions = [mission_waves, mission_kill, mission_survive]).
-- project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.png или 3D-зомби,
+- project.godot: run/main_scene = boot/boot.tscn (экран загрузки: ui/splash/splash.jpg или 3D-зомби,
   3D-полоса boot/loading_bar_3d.gd, фоновая загрузка hub/hub.tscn; название DEAD ZONE — картинка
   ui/splash/title.png (прозрачный фон, «дышит»), без неё — 3D TextMesh Boot.Title3D; в начале логотип ui/splash/salamanderlab.png 1.6 с, он же — boot_splash/image
   движка, фон Color(0.024, 0.09, 0.17)). Промпт картинки — ui/splash/PROMPT.md.
@@ -424,3 +424,6 @@ ui/hub/achievements_panel.gd (вкладки ДОСТИЖЕНИЯ/СТАТИСТ
 claim_weekly; MissionManager._weekly — свой зомби в _pick_zombie_type и монеты в _event_value; карточка в DailyPanel.
 Код сохранения: GameState.export_save_code/import_save_code ("DZ1-md5-base64(gzip JSON)"), вкладка настроек СОХРАНЕНИЕ
 (копировать в буфер, вставить, загрузка в два нажатия и только в убежище). Облако Google Play Games — на этапе релиза.
+Картинки: промпты — docs/ART_PROMPTS.md. Главы: story/art/<id главы>.jpg, prologue.jpg, epilogue.jpg (1280×720, JPG q85) —
+StoryPanel.art_for(id): фон рассказа (затемнение 0.72) и картинка сверху досье в CampaignPanel; нет файла — как раньше.
+Магазин: store/ (.gdignore, в игру не попадает) — feature_graphic.png 1024×500 для Google Play.

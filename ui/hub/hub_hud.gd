@@ -221,14 +221,16 @@ func _show_pending_story() -> void:
 	if chapter.outro_film != null and Settings.cutscenes:
 		await StoryCinema.play(get_tree(), chapter.outro_film).finished
 		_set_player_controls(false)
-	var panel := StoryPanel.open(get_tree(), UIKit.t("ГЛАВА ПРОЙДЕНА  •  %s") % UIKit.t(chapter.title), pages, "В ЛАГЕРЬ")
+	var panel := StoryPanel.open(get_tree(), UIKit.t("ГЛАВА ПРОЙДЕНА  •  %s") % UIKit.t(chapter.title), pages, "В ЛАГЕРЬ",
+		chapter.id)
 	if parts.size() > 1 and parts[1] == "epilogue":
 		panel.finished.connect(func() -> void:
 			var film: StoryFilm = GameState.campaign.epilogue_film
 			if film != null and Settings.cutscenes:
 				await StoryCinema.play(get_tree(), film).finished
 				_set_player_controls(false)
-			var epilogue := StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ")
+			var epilogue := StoryPanel.open(get_tree(), "ЭПИЛОГ", GameState.campaign.epilogue_pages, "КОНЕЦ",
+				"epilogue")
 			epilogue.finished.connect(_on_story_closed))
 	else:
 		panel.finished.connect(_on_story_closed)

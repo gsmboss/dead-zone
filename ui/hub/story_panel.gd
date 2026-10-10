@@ -12,11 +12,14 @@ static var is_open: bool = false
 static var _open_count: int = 0
 
 const CHARS_PER_SECOND: float = 42.0
+## Картинки глав: story/art/<id главы>.jpg (и prologue.jpg, epilogue.jpg)
+const ART_DIR: String = "res://story/art/"
 const RUST: Color = Color(0.85, 0.42, 0.12)
 
 var _title_text: String = ""
 var _pages: PackedStringArray = []
 var _final_button_text: String = "ДАЛЕЕ"
+var _art: Texture2D
 var _page: int = 0
 var _visible_chars: float = 0.0
 var _root: Control
@@ -25,13 +28,21 @@ var _counter: Label
 var _next: Button
 
 
-## Открыть рассказ: title — заголовок, pages — страницы, final_text — надпись последней кнопки
+## Картинка главы по id (null — нет файла)
+static func art_for(art_id: String) -> Texture2D:
+	var path: String = ART_DIR + art_id + ".jpg"
+	return load(path) as Texture2D if not art_id.is_empty() and ResourceLoader.exists(path) else null
+
+
+## Открыть рассказ: title — заголовок, pages — страницы, final_text — надпись последней кнопки,
+## art_id — картинка фоном (story/art/<art_id>.jpg, если есть)
 static func open(tree: SceneTree, title: String, pages: PackedStringArray,
-		final_text: String = "ДАЛЕЕ") -> StoryPanel:
+		final_text: String = "ДАЛЕЕ", art_id: String = "") -> StoryPanel:
 	var panel := StoryPanel.new()
 	panel._title_text = title
 	panel._pages = pages
 	panel._final_button_text = final_text
+	panel._art = art_for(art_id)
 	var parent: Node = tree.current_scene if tree.current_scene != null else tree.root
 	parent.add_child(panel)
 	return panel
@@ -67,8 +78,17 @@ func _build() -> void:
 	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(_root)
+	if _art != null:
+		# Картинка главы фоном, поверх — затемнение, чтобы текст читался
+		var picture := TextureRect.new()
+		picture.texture = _art
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_root.add_child(picture)
 	var background := ColorRect.new()
-	background.color = Color(0.03, 0.025, 0.025, 0.96)
+	background.color = Color(0.03, 0.025, 0.025, 0.72 if _art != null else 0.96)
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(background)
