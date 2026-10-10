@@ -152,6 +152,8 @@ MissionIcon, досье (тип, локация, цель, враги, DangerMet
   (открытый двор убежища), чтобы не было темно на Compatibility.
 - Room: пол CSGBox3D 32×0.5×32 (y = -0.25, use_collision); стены — невидимые коллизии Room/Bounds
   (StaticBody3D, 4 бокса по краям ±16); OutsideGround — земля вокруг без коллизии.
+- Надпись DEAD ZONE в небе на севере — hub/hub_sky_title.gd (HubSkyTitle: ui/splash/title.png на плоскости без света и тумана,
+  (0, 21, -62), ширина 46 м, покачивается; без картинки — Label3D).
 - Ограда — кодом hub/hub_yard.gd (HubYard: контейнеры за стенами, ворота-грузовик, склад у севера, фонари).
 - Уголок спасённых (запад, за забором, вход с табличкой СПАСЁННЫЕ) — hub/hub_camp.gd (HubCamp.FIRE): костёр,
   палатки, спальники, кухня с кофемашиной, диван Couch.gltf — на нём сидят спасённые (PlayerBody.set_seated).

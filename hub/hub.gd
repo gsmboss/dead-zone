@@ -18,6 +18,9 @@ func _ready() -> void:
 	var lounge := HubLounge.new()
 	lounge.name = "Lounge"
 	add_child(lounge)
+	var sky_title := HubSkyTitle.new()
+	sky_title.name = "SkyTitle"
+	add_child(sky_title)
 	_play_intro.call_deferred()
 
 
