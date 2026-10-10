@@ -427,3 +427,5 @@ claim_weekly; MissionManager._weekly — свой зомби в _pick_zombie_typ
 Картинки: промпты — docs/ART_PROMPTS.md. Главы: story/art/<id главы>.jpg, prologue.jpg, epilogue.jpg (1280×720, JPG q85) —
 StoryPanel.art_for(id): фон рассказа (затемнение 0.72) и картинка сверху досье в CampaignPanel; нет файла — как раньше.
 Магазин: store/ (.gdignore, в игру не попадает) — feature_graphic.png 1024×500 для Google Play.
+Карточки локаций: ui/hub/locations/loc_<локация>.jpg (960×540) — MissionSelect.location_art (по сцене уровня, набег — loc_shelter),
+сверху досье миссии на КАРТЕ ЗАРАЖЕНИЯ; нет файла — без картинки.

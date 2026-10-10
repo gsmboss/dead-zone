@@ -138,6 +138,17 @@ func _fill_dossier(mission: MissionData) -> void:
 		child.queue_free()
 	var color: Color = MissionIcon.color_for(mission)
 
+	# Карточка локации сверху (ui/hub/locations/loc_*.jpg; нет файла — без картинки)
+	var art: Texture2D = location_art(mission)
+	if art != null:
+		var picture := TextureRect.new()
+		picture.texture = art
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		picture.custom_minimum_size = Vector2(0.0, 160.0)
+		picture.clip_contents = true
+		_dossier.add_child(picture)
+
 	var stripe := HazardStripe.new()
 	stripe.custom_minimum_size = Vector2(0.0, 10.0)
 	_dossier.add_child(stripe)
@@ -192,6 +203,30 @@ func _fill_dossier(mission: MissionData) -> void:
 	var bottom := HazardStripe.new()
 	bottom.custom_minimum_size = Vector2(0.0, 10.0)
 	_dossier.add_child(bottom)
+
+
+## Картинка локации миссии: по сцене уровня (street_level → loc_street), набег — ворота убежища
+const LOCATION_ART_DIR: String = "res://ui/hub/locations/"
+const LOCATION_ART: Dictionary = {
+	"street_level": "loc_street", "yard_level": "loc_yard", "city_level": "loc_city",
+	"graveyard_level": "loc_graveyard", "forest_level": "loc_forest", "industrial_level": "loc_industrial",
+	"test_level": "loc_polygon",
+}
+
+
+static func location_art(mission: MissionData) -> Texture2D:
+	if mission == null:
+		return null
+	var art_name: String = "loc_shelter" if mission.id == "shelter" else ""
+	if art_name.is_empty():
+		var path: String = mission.level_scene
+		if path.begins_with("uid://"):
+			var uid: int = ResourceUID.text_to_id(path)
+			if ResourceUID.has_id(uid):
+				path = ResourceUID.get_id_path(uid)
+		art_name = str(LOCATION_ART.get(path.get_file().get_basename(), ""))
+	var file: String = LOCATION_ART_DIR + art_name + ".jpg"
+	return load(file) as Texture2D if not art_name.is_empty() and ResourceLoader.exists(file) else null
 
 
 func _make_go_button(mission: MissionData) -> Button:
