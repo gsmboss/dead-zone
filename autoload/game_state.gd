@@ -74,7 +74,8 @@ const CAR_UPGRADE_GROWTH: float = 1.6
 ## Автосалон: машины классов D/C/B/A (первая — бесплатная)
 const CAR_PATHS: Array[String] = ["res://vehicles/cars/pickup.tres", "res://vehicles/cars/truck.tres",
 	"res://vehicles/cars/pickup_armored.tres", "res://vehicles/cars/sports.tres",
-	"res://vehicles/cars/truck_armored.tres", "res://vehicles/cars/sports_armored.tres"]
+	"res://vehicles/cars/truck_armored.tres", "res://vehicles/cars/sports_armored.tres",
+	"res://vehicles/cars/bike.tres"]
 ## Тюнинг машины: двигатель — макс. скорость, газ — разгон, управление — руль и сцепление, таран — урон
 const CAR_TUNING: Array[String] = ["engine", "turbo", "handling", "ram", "armor", "spikes"]
 const CAR_TUNING_MAX: int = 5
@@ -135,6 +136,7 @@ var _next_raid: int = 0
 ## Идёт миссия-набег (награда ×RAID_REWARD); не сохраняется
 var raid_active: bool = false
 var attachments: Array[AttachmentData] = []
+var _race_best: Dictionary = {}  # id трассы -> лучшее время, с
 var _attachments_owned: Dictionary = {}  # id ствола -> Array[String] купленных обвесов
 var _attachments_on: Dictionary = {}     # id ствола -> Array[String] поставленных (по одному на слот)
 
@@ -239,6 +241,22 @@ func get_upgraded(weapon: WeaponData) -> WeaponData:
 	if upgraded.max_reserve_ammo > 0 and get_ammo_bonus() > 0.0:
 		upgraded.max_reserve_ammo = roundi(upgraded.max_reserve_ammo * (1.0 + get_ammo_bonus()))
 	return upgraded
+
+
+# ---------- Заезды (город) ----------
+
+func get_race_best(route_id: String) -> float:
+	return float(_race_best.get(route_id, 0.0))
+
+
+## Записать время заезда; true — новый рекорд
+func record_race(route_id: String, seconds: float) -> bool:
+	var best: float = get_race_best(route_id)
+	if best > 0.0 and seconds >= best:
+		return false
+	_race_best[route_id] = snappedf(seconds, 0.1)
+	save_game()
+	return true
 
 
 # ---------- Обвесы ----------
@@ -1129,6 +1147,7 @@ func reset_progress() -> void:
 	raid_active = false
 	_attachments_owned.clear()
 	_attachments_on.clear()
+	_race_best.clear()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -1175,6 +1194,7 @@ func save_game() -> void:
 		"next_raid": _next_raid,
 		"attachments": _attachments_owned,
 		"attachments_on": _attachments_on,
+		"race_best": _race_best,
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1280,6 +1300,13 @@ func load_game() -> void:
 	_next_raid = maxi(int(data.get("next_raid", 0)), 0)
 	_attachments_owned = _load_attachments(data.get("attachments", {}), false)
 	_attachments_on = _load_attachments(data.get("attachments_on", {}), true)
+	_race_best.clear()
+	var stored_races: Variant = data.get("race_best", {})
+	if stored_races is Dictionary:
+		for route_id: Variant in stored_races:
+			var seconds: float = float((stored_races as Dictionary)[route_id])
+			if seconds > 0.0:
+				_race_best[str(route_id)] = seconds
 
 	_cutscenes_seen.clear()
 	var seen: Variant = data.get("cutscenes_seen", [])

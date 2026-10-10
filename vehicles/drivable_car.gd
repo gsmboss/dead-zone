@@ -174,6 +174,11 @@ var _damage_smoke: CPUParticles3D
 var _damage_fade: Gradient
 var _fire_light: OmniLight3D
 var _hit_sound_left: float = 0.0
+## Мотоцикл: наклон, колёса, водитель на виду
+var _lean: Node3D
+var _wheels: Array[Node3D] = []
+var _rider: PlayerBody
+var _lean_angle: float = 0.0
 ## Бронелисты и шипы (тюнинг armor / spikes)
 var _damage_taken_factor: float = 1.0
 var _spike_damage: float = 0.0
@@ -234,7 +239,8 @@ func _ready() -> void:
 	_build_neon()
 	_apply_garage()
 	_apply_tuning()
-	add_armor_visuals(self, _box_size, _box_center, int(tuning.get("armor", 0)), int(tuning.get("spikes", 0)))
+	if not is_bike():  # на мотоцикл листы не вешаем — только прочность
+		add_armor_visuals(self, _box_size, _box_center, int(tuning.get("armor", 0)), int(tuning.get("spikes", 0)))
 	_build_damage_smoke()
 	health = max_health
 	_safe_position = global_position
@@ -253,7 +259,18 @@ func has_driver() -> bool:
 
 ## По сети: есть свободное место (водителя или пассажира)
 func has_free_seat() -> bool:
+	if is_bike():
+		return seats[0] == 0  # на мотоцикле одно место
 	return seats.has(0)
+
+
+func is_bike() -> bool:
+	return car_data != null and car_data.bike
+
+
+## Кузов прикрывает игрока от зомби (на мотоцикле — нет: бьют водителя)
+func protects_rider() -> bool:
+	return not is_bike()
 
 
 ## Свой игрок едет пассажиром
@@ -405,6 +422,8 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	_update_lights()
 	_update_smoke()
+	if _lean != null:
+		_update_bike(delta)
 	_hit_sound_left = maxf(_hit_sound_left - delta, 0.0)
 	if _fire_light != null and _fire_light.visible:
 		_fire_light.light_energy = 1.6 + sin(_time * 23.0) * 0.4 + sin(_time * 7.0) * 0.3
@@ -777,6 +796,9 @@ func _apply_car_data() -> void:
 
 
 func _build_model() -> void:
+	if is_bike():
+		_build_bike()
+		return
 	if model_scene == null:
 		push_warning("DrivableCar '%s': не задана model_scene" % name)
 		return
@@ -868,6 +890,141 @@ func _build_bumper() -> void:
 	add_child(_bumper)
 
 
+# ---------- Мотоцикл ----------
+
+## Наклон в поворотах (по рулю и скорости)
+const BIKE_LEAN: float = 0.42
+const BIKE_WHEEL_RADIUS: float = 0.33
+## Где сидит водитель (поза anim_sit: начало тела — на сиденье)
+const RIDER_OFFSET: Vector3 = Vector3(0.0, 0.86, 0.28)
+
+
+## Мотоцикл из примитивов, перед — −Z. Узел Lean наклоняется, колёса крутятся
+func _build_bike() -> void:
+	var paint_color: Color = car_data.bike_color * paint if paint != Color.WHITE else car_data.bike_color
+	_lean = make_bike_model(paint_color)
+	_lean.name = "Model"
+	add_child(_lean)
+	for wheel_name: String in ["WheelFront", "WheelBack"]:
+		var wheel := _lean.get_node_or_null(wheel_name) as Node3D
+		if wheel != null:
+			_wheels.append(wheel)
+	# Фара и стоп-сигнал — те же материалы, что у машин (зажигает _update_lights)
+	var headlight := _lean.get_node_or_null(^"Headlight") as MeshInstance3D
+	if headlight != null:
+		_headlight_material = headlight.material_override as StandardMaterial3D
+	var brake := _lean.get_node_or_null(^"BrakeLight") as MeshInstance3D
+	if brake != null:
+		_brake_material = brake.material_override as StandardMaterial3D
+	# Водитель (виден, пока кто-то за рулём)
+	_rider = PlayerBody.new()
+	_rider.name = "Rider"
+	_rider.position = RIDER_OFFSET
+	_lean.add_child(_rider)
+	_rider.set_skin(GameState.get_selected_skin())
+	_rider.set_seated(true)
+	_rider.visible = false
+	# Габариты (по ним коллизия, бампер, фары, камера)
+	_box_size = Vector3(0.7, 1.15, 2.1)
+	_box_center = Vector3(0.0, 0.6, 0.0)
+	camera_distance = 5.0
+	camera_height = 2.3
+
+
+## Модель мотоцикла (и для превью в автосалоне): узлы WheelFront/WheelBack, Headlight, BrakeLight
+static func make_bike_model(paint_color: Color) -> Node3D:
+	var root := Node3D.new()
+	var body_material := _bike_material(paint_color, 0.3, 0.45)
+	var dark := _bike_material(Color(0.08, 0.08, 0.09), 0.1, 0.8)
+	var metal := _bike_material(Color(0.62, 0.63, 0.66), 0.85, 0.3)
+	# Колёса: шина, диск и спица (видно, что крутятся), ось вдоль X
+	var wheel_names: Array[String] = ["WheelFront", "WheelBack"]
+	var wheel_z: Array[float] = [-0.72, 0.68]
+	for i in 2:
+		var wheel := Node3D.new()
+		wheel.name = wheel_names[i]
+		wheel.position = Vector3(0.0, BIKE_WHEEL_RADIUS, wheel_z[i])
+		root.add_child(wheel)
+		_bike_part(wheel, _cylinder(BIKE_WHEEL_RADIUS, 0.14), dark, Vector3.ZERO, Vector3(0.0, 0.0, PI * 0.5))
+		_bike_part(wheel, _cylinder(0.19, 0.16), metal, Vector3.ZERO, Vector3(0.0, 0.0, PI * 0.5))
+		_bike_part(wheel, BoxMesh.new(), metal, Vector3.ZERO, Vector3.ZERO, Vector3(0.17, 0.36, 0.05))
+	_bike_part(root, BoxMesh.new(), body_material, Vector3(0.0, 0.62, 0.0), Vector3.ZERO, Vector3(0.28, 0.3, 0.95))
+	_bike_part(root, BoxMesh.new(), body_material, Vector3(0.0, 0.84, -0.22), Vector3(0.12, 0.0, 0.0),
+		Vector3(0.36, 0.22, 0.45))
+	_bike_part(root, BoxMesh.new(), dark, Vector3(0.0, 0.84, 0.3), Vector3(-0.06, 0.0, 0.0), Vector3(0.3, 0.1, 0.55))
+	_bike_part(root, BoxMesh.new(), metal, Vector3(0.0, 0.42, 0.02), Vector3.ZERO, Vector3(0.3, 0.28, 0.36))
+	# Вилка, руль, выхлопная труба, крыло
+	for side: float in [-1.0, 1.0]:
+		_bike_part(root, BoxMesh.new(), metal, Vector3(side * 0.1, 0.68, -0.62), Vector3(0.35, 0.0, 0.0),
+			Vector3(0.05, 0.78, 0.05))
+	_bike_part(root, _cylinder(0.025, 0.72), dark, Vector3(0.0, 1.06, -0.48), Vector3(0.0, 0.0, PI * 0.5))
+	_bike_part(root, _cylinder(0.05, 0.62), metal, Vector3(0.2, 0.36, 0.38), Vector3(PI * 0.5, 0.0, 0.0))
+	_bike_part(root, BoxMesh.new(), body_material, Vector3(0.0, 0.72, 0.66), Vector3(-0.3, 0.0, 0.0),
+		Vector3(0.24, 0.04, 0.4))
+	var headlight_material := _bike_material(Color(0.9, 0.9, 0.85), 0.0, 0.3)
+	headlight_material.emission_enabled = true
+	headlight_material.emission = HEADLIGHT_COLOR
+	headlight_material.emission_energy_multiplier = 0.0
+	var lamp := SphereMesh.new()
+	lamp.radius = 0.09
+	lamp.height = 0.18
+	_bike_part(root, lamp, headlight_material, Vector3(0.0, 0.94, -0.66)).name = "Headlight"
+	var brake_material := _bike_material(Color(0.5, 0.05, 0.03), 0.0, 0.4)
+	brake_material.emission_enabled = true
+	brake_material.emission = BRAKE_COLOR
+	brake_material.emission_energy_multiplier = 0.6
+	_bike_part(root, BoxMesh.new(), brake_material, Vector3(0.0, 0.8, 0.86), Vector3.ZERO,
+		Vector3(0.16, 0.06, 0.04)).name = "BrakeLight"
+	return root
+
+
+func _update_bike(delta: float) -> void:
+	var speed_share: float = clampf(absf(speed) / maxf(max_speed, 1.0), 0.0, 1.0)
+	var target: float = -_steer * BIKE_LEAN * speed_share if _driven else 0.0
+	if not _driven and has_driver():
+		target = clampf(-lateral * 0.08, -BIKE_LEAN, BIKE_LEAN)  # копия по сети — по заносу
+	_lean_angle = lerpf(_lean_angle, target, clampf(6.0 * delta, 0.0, 1.0))
+	_lean.rotation.z = _lean_angle
+	var spin: float = speed / BIKE_WHEEL_RADIUS * delta
+	for wheel: Node3D in _wheels:
+		wheel.rotation.x -= spin
+	var show_rider: bool = has_driver()
+	if _rider != null and _rider.visible != show_rider:
+		_rider.visible = show_rider
+
+
+static func _bike_material(color: Color, metallic: float, roughness: float) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.metallic = metallic
+	material.roughness = roughness
+	return material
+
+
+static func _cylinder(radius: float, height: float) -> CylinderMesh:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = radius
+	mesh.bottom_radius = radius
+	mesh.height = height
+	mesh.radial_segments = 12
+	mesh.rings = 1
+	return mesh
+
+
+static func _bike_part(parent: Node3D, mesh: Mesh, material: Material, at: Vector3, rotation_value: Vector3 = Vector3.ZERO,
+		box_size: Vector3 = Vector3.ZERO) -> MeshInstance3D:
+	var box := mesh as BoxMesh
+	if box != null and box_size != Vector3.ZERO:
+		box.size = box_size
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	instance.material_override = material
+	instance.position = at
+	instance.rotation = rotation_value
+	parent.add_child(instance)
+	return instance
+
+
 ## Улучшения гаража базы из GameState (на все машины)
 func _apply_garage() -> void:
 	var engine: int = GameState.get_car_upgrade_level("engine")
@@ -875,7 +1032,8 @@ func _apply_garage() -> void:
 	max_speed *= 1.0 + ENGINE_PER_LEVEL * engine
 	acceleration *= 1.0 + ENGINE_PER_LEVEL * engine
 	run_over_damage_factor *= 1.0 + RAM_PER_LEVEL * ram
-	_hit_slowdown = minf(HIT_SLOWDOWN + 0.015 * ram, 0.98)
+	# Мотоцикл сильно теряет скорость, сбив зомби
+	_hit_slowdown = minf((0.72 if is_bike() else HIT_SLOWDOWN) + 0.015 * ram, 0.98)
 	# Гараж с тараном укрепляет и кузов
 	max_health *= 1.0 + 0.1 * ram
 

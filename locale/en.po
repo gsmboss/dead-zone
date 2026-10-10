@@ -256,6 +256,9 @@ msgstr "ARMORED PICKUP"
 msgid "БРОНЕСПОРТ"
 msgstr "ARMORED SPORT"
 
+msgid "БРОНЗА"
+msgstr "BRONZE"
+
 msgid "БУГАЙ"
 msgstr "BRUTE"
 
@@ -793,6 +796,12 @@ msgstr "TODAY'S QUESTS"
 msgid "ЗАДАЧА: %s"
 msgstr "TASK: %s"
 
+msgid "ЗАЕЗД ОТМЕНЁН"
+msgstr "RACE CANCELLED"
+
+msgid "ЗАЕЗДЫ"
+msgstr "RACES"
+
 msgid "ЗАЖИГАЕТСЯ САМ НОЧЬЮ"
 msgstr "LIGHTS UP AUTOMATICALLY AT NIGHT"
 
@@ -828,6 +837,9 @@ msgstr "MIRROR"
 
 msgid "ЗНАЧКИ НА КНОПКАХ ВМЕСТО НАДПИСЕЙ"
 msgstr "ICONS ON BUTTONS INSTEAD OF TEXT"
+
+msgid "ЗОЛОТО"
+msgstr "GOLD"
 
 msgid "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s"
 msgstr "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s"
@@ -1063,6 +1075,9 @@ msgstr "SCREAMER"
 msgid "КРИКУН ЗОВЁТ ОРДУ — УБЕЙ ЕГО ПЕРВЫМ"
 msgstr "THE SCREAMER CALLS THE HORDE — KILL IT FIRST"
 
+msgid "КРУГ ПО ГОРОДУ"
+msgstr "CITY LOOP"
+
 msgid "КРУПНО"
 msgstr "CLOSE-UP"
 
@@ -1186,6 +1201,9 @@ msgstr "MOM"
 msgid "МАМА ОСТАЛАСЬ, ЧТОБЫ МЫ УСПЕЛИ К МОСТУ. ОНА НЕ ДОГНАЛА. А ПОТОМ ТОЛПА РАЗОРВАЛА НАС С ТЁМОЙ."
 msgstr "MOM STAYED BEHIND SO WE COULD MAKE IT TO THE BRIDGE. SHE NEVER CAUGHT UP. THEN THE CROWD TORE TYOMA AND ME APART."
 
+msgid "МАРАФОН"
+msgstr "MARATHON"
+
 msgid "МАРИНА"
 msgstr "MARINA"
 
@@ -1266,6 +1284,9 @@ msgstr "COINS +%d  (TOTAL %d)"
 
 msgid "МОНЕТЫ: %d"
 msgstr "COINS: %d"
+
+msgid "МОТОЦИКЛ"
+msgstr "MOTORBIKE"
 
 msgid "МУЗЫКА"
 msgstr "MUSIC"
@@ -1401,6 +1422,9 @@ msgstr "NEW CAR: %s"
 
 msgid "НОВЫЙ ДОМ"
 msgstr "NEW HOUSE"
+
+msgid "НОВЫЙ РЕКОРД!"
+msgstr "NEW RECORD!"
 
 msgid "НОЖ"
 msgstr "KNIFE"
@@ -1939,6 +1963,9 @@ msgstr "NOW"
 msgid "СЕМЬЯ СПАСЕНА. А НА СТЕНЕ МАГАЗИНА — НАДПИСЬ МАРКЕРОМ: «Я ЖИВ. ИДУ К ЛЕСУ. Т.»"
 msgstr "THE FAMILY IS SAVED. AND ON THE STORE WALL, IN MARKER: \"I'M ALIVE. HEADING TO THE FOREST. T.\""
 
+msgid "СЕРЕБРО"
+msgstr "SILVER"
+
 msgid "СЕСТЬ"
 msgstr "SIT"
 
@@ -2038,6 +2065,9 @@ msgstr "SPORTS CAR"
 msgid "СПОРТКАР КАБАНА"
 msgstr "KABAN'S SPORTS CAR"
 
+msgid "СПРИНТ"
+msgstr "SPRINT"
+
 msgid "СРЕДНЕЕ"
 msgstr "MEDIUM"
 
@@ -2100,6 +2130,9 @@ msgstr "SAM"
 
 msgid "СЮЖЕТ"
 msgstr "STORY"
+
+msgid "Самый быстрый разгон и юркий руль, протиснется где угодно. Но ты на виду: зомби бьют тебя, а не кузов. Можно стрелять на ходу."
+msgstr "Fastest acceleration and nimble steering, squeezes through anywhere. But you're exposed: zombies hit you, not the bodywork. You can shoot while riding."
 
 msgid "Сборка гранат, коктейлей, аптечек и патронов из лома"
 msgstr "Craft grenades, cocktails, medkits and ammo from scrap"
@@ -2295,6 +2328,9 @@ msgstr "TORCH"
 
 msgid "ФАКЕЛ САМ ЗАЖИГАЕТСЯ НОЧЬЮ"
 msgstr "TORCH LIGHTS ITSELF AT NIGHT"
+
+msgid "ФИНИШ"
+msgstr "FINISH"
 
 msgid "ФИОЛЕТОВЫЙ"
 msgstr "PURPLE"

@@ -78,9 +78,16 @@ func show_car(car: CarData, paint_color: Color, neon_color: Color, armor: int = 
 	_model = Node3D.new()
 	_pivot.add_child(_model)
 	var body: Node3D = null
-	if car.model_scene != null:
+	if car.bike:
+		var bike_color: Color = car.bike_color * paint_color if paint_color != Color.WHITE else car.bike_color
+		body = DrivableCar.make_bike_model(bike_color)
+		body.scale = Vector3.ONE * 2.0  # маленький рядом с машинами — крупнее на подиуме
+		_model.add_child(body)
+		armor = 0
+		spikes = 0
+	elif car.model_scene != null:
 		body = car.model_scene.instantiate() as Node3D
-	if body != null:
+	if body != null and not car.bike:
 		body.scale = Vector3.ONE * car.model_scale
 		body.rotation.y = PI
 		_model.add_child(body)

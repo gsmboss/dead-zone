@@ -403,3 +403,12 @@ camp_1..4; auto:female/male:N — подбор голоса многоголос
 audio/voice/<ru|en>/<md5[:16]>.ogg + voice_pack.tres, manifest.json. VoiceOver: find_recording(text) — сначала запись
 (свой AudioStreamPlayer в корне, громкость voice_volume, estimate_duration — длина записи), иначе TTS устройства.
 Голоса качаются с huggingface.co в tools/voice/models/ (.gitignore); лицензии — MODEL_CARD рядом с моделью.
+Машины (этап 9): тюнинг CAR_TUNING + armor (БРОНЕЛИСТЫ: прочность +15%, удар −6%/ур.) и spikes (ШИПЫ: DrivableCar.take_damage
+(amount, from, attacker) ранит бьющего зомби, таран +10%/ур.); DrivableCar.add_armor_visuals — листы/таран/шипы примитивами
+(и в CarPreview.show_car(…, armor, spikes)); Net.PROTOCOL = 6. Мотоцикл: CarData.bike (vehicles/cars/bike.tres, класс C) —
+DrivableCar.make_bike_model (примитивы: WheelFront/WheelBack, Headlight, BrakeLight), наклон _update_bike, водитель PlayerBody
+в позе anim_sit (RIDER_OFFSET), одно место, protects_rider() = false — Zombie бьёт водителя, а не кузов.
+Заезды: levels/city/race_director.gd (RaceDirector, ставит CityGenerator._add_races у MyCar только в FREE_ROAM одиночной игры):
+флаг ЗАЕЗДЫ на перекрёстке, подъехать и встать → СПРИНТ/КРУГ ПО ГОРОДУ/МАРАФОН (7/12/18 чекпоинтов, случайная прогулка по
+сетке _lines с зерном), отсчёт, кольца + столб света, стрелка над машиной, медали по PAR_SPEED, монеты REWARDS,
+GameState.get_race_best/record_race (сохранение race_best); вышел из машины — заезд отменён.

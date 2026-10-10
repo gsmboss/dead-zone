@@ -15,6 +15,10 @@ const CLASS_COLORS: Array[Color] = [Color(0.7, 0.72, 0.75), Color(0.45, 0.85, 0.
 @export var price: int = 0
 @export var model_scene: PackedScene
 @export var model_scale: float = 1.0
+## Мотоцикл: модель из примитивов (model_scene не нужна), одно место, водитель на виду —
+## зомби бьют его, а не кузов; наклон в поворотах
+@export var bike: bool = false
+@export var bike_color: Color = Color(0.75, 0.12, 0.1)
 
 @export_group("Driving")
 ## Максимальная скорость, м/с (20 м/с = 72 км/ч)

@@ -518,6 +518,7 @@ func _spawn_drivable_cars() -> void:
 			own.rotation.y = PI * 0.5
 			add_child(own)
 			start_yard = 1
+			_add_races(own.position)
 	if config.drivable_cars.is_empty():
 		return
 	# Остальные — на дорогах (по сети у всех одинаковые: тот же _rng)
@@ -531,6 +532,20 @@ func _spawn_drivable_cars() -> void:
 		car.position = (spot["position"] as Vector3) + Vector3.UP * 0.3
 		car.rotation.y = spot["yaw"]
 		add_child(car)
+
+
+## Заезды по городу — только в открытом мире одиночной игры (не в сюжетных миссиях)
+func _add_races(near: Vector3) -> void:
+	var mission: MissionData = GameState.selected_mission
+	if mission != null and mission.type != MissionData.Type.FREE_ROAM:
+		return
+	var races := RaceDirector.new()
+	races.name = "Races"
+	races.lines = _lines.duplicate()
+	races.half_widths = _half_widths.duplicate()
+	races.start_point = near
+	races.route_seed = config.generation_seed if config.generation_seed != 0 else 1337
+	add_child(races)
 
 
 ## По сети: у каждого игрока его машина из автосалона (покраска, неон, тюнинг) — в ближних дворах.

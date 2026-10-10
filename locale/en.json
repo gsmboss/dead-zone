@@ -828,5 +828,17 @@
  "БРОНЕЛИСТЫ": "ARMOR PLATES",
  "+15% ПРОЧНОСТИ, −6% УРОНА ОТ ЗОМБИ": "+15% DURABILITY, −6% DAMAGE FROM ZOMBIES",
  "ШИПЫ": "SPIKES",
- "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА": "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM"
+ "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА": "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM",
+ "БРОНЗА": "BRONZE",
+ "ЗАЕЗД ОТМЕНЁН": "RACE CANCELLED",
+ "ЗАЕЗДЫ": "RACES",
+ "ЗОЛОТО": "GOLD",
+ "КРУГ ПО ГОРОДУ": "CITY LOOP",
+ "МАРАФОН": "MARATHON",
+ "МОТОЦИКЛ": "MOTORBIKE",
+ "НОВЫЙ РЕКОРД!": "NEW RECORD!",
+ "СЕРЕБРО": "SILVER",
+ "СПРИНТ": "SPRINT",
+ "ФИНИШ": "FINISH",
+ "Самый быстрый разгон и юркий руль, протиснется где угодно. Но ты на виду: зомби бьют тебя, а не кузов. Можно стрелять на ходу.": "Fastest acceleration and nimble steering, squeezes through anywhere. But you're exposed: zombies hit you, not the bodywork. You can shoot while riding."
 }

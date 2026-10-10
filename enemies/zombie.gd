@@ -696,7 +696,7 @@ func _process_attack(delta: float) -> void:
 	if not _attack_hit_done and _attack_elapsed >= data.attack_windup:
 		_attack_hit_done = true
 		var car: DrivableCar = DrivableCar.find_car_with(_player)
-		if car != null and not car.is_broken():
+		if car != null and car.protects_rider() and not car.is_broken():
 			# Игрок в машине — достаётся кузову (сломанная уже не защищает)
 			if car.distance_to_body(global_position) <= data.attack_range * ATTACK_HIT_TOLERANCE:
 				car.take_damage(data.attack_damage * damage_multiplier, global_position, self)
