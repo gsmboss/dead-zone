@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "radio"
+title = "РАДИОСТАНЦИЯ"
+description = "Мачта и рация: можно звать новых выживших в убежище"
+price = 1600
+icon_color = Color(0.4, 0.75, 1, 1)
+required_level = 3
+comfort = 2
+builder = &"radio"
+hub_position = Vector3(-17.4, 0, -17.4)
+hub_yaw_degrees = 0.0

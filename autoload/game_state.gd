@@ -15,6 +15,8 @@ signal campaign_changed
 signal cars_changed
 ## Получено достижение (награда уже начислена)
 signal achievement_unlocked(achievement: AchievementData)
+## Убежище: уровень, провизия, настроение, касса, обустройство (shelter)
+signal shelter_changed
 
 const SAVE_PATH: String = "user://save.json"
 const TEMP_PATH: String = "user://save.json.tmp"
@@ -72,7 +74,8 @@ const SKIN_PATHS: Array[String] = [
 	"res://player/skins/zombie_chubby.tres",
 ]
 const BUILDING_PATHS: Array[String] = ["res://base/workshop.tres", "res://base/medbay.tres",
-	"res://base/armory.tres", "res://base/garage.tres"]
+	"res://base/armory.tres", "res://base/garage.tres", "res://base/garden.tres", "res://base/watchtower.tres",
+	"res://base/radio.tres", "res://base/generator.tres", "res://base/canteen.tres"]
 ## Улучшения машин (гараж): таран — урон сбивания, двигатель — скорость
 const CAR_UPGRADES: Array[String] = ["ram", "engine"]
 const CAR_UPGRADE_MAX: int = 5
@@ -108,6 +111,8 @@ var player_stats: PlayerStats
 var quest_pool: QuestPool
 var items: Array[ItemData] = []
 var buildings: Array[BuildingData] = []
+## Развитие убежища (base/shelter_state.gd)
+var shelter: ShelterState
 
 var _owned: Array[String] = []
 var _upgrades: Dictionary = {}     # id оружия -> {"damage": int, "magazine": int, "reload": int}
@@ -219,6 +224,7 @@ func _ready() -> void:
 			push_warning("GameState: не найдена машина %s" % path)
 			continue
 		cars.append(car)
+	shelter = ShelterState.new()
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -238,6 +244,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	if key != null and key.pressed and not key.echo and key.keycode == KEY_F9:
 		add_coins(DEBUG_COINS)
 		print("GameState: +%d монет (отладка)" % DEBUG_COINS)
+	elif key != null and key.pressed and not key.echo and key.keycode == KEY_F10:
+		debug_max_shelter()
+
+
+## Только для отладки (F10): убежище на максимум — все постройки, обустройство, провизия
+func debug_max_shelter() -> void:
+	shelter.level = shelter.config.get_level_count()
+	for building: BuildingData in buildings:
+		if not has_building(building.id):
+			_buildings_owned.append(building.id)
+	for item: DecorData in shelter.decor_list.decor:
+		if not shelter.owns_decor(item.id):
+			shelter.decor_owned.append(item.id)
+	shelter.food = shelter.config.max_food
+	shelter.recruited = maxi(shelter.recruited, 20)
+	progress_changed.emit()
+	shelter_changed.emit()
+	save_game()
+	print("GameState: убежище на максимум (отладка)")
 
 
 # ---------- Оружие ----------
@@ -434,6 +459,14 @@ func add_coins(amount: int) -> void:
 	save_game()
 
 
+## Списать монеты (покупки в убежище); сохраняет вызывающий
+func spend_coins(amount: int) -> void:
+	if amount <= 0:
+		return
+	coins = maxi(coins - amount, 0)
+	coins_changed.emit(coins)
+
+
 func complete_mission(mission: MissionData, score: int, stars: int = 1) -> void:
 	if mission == null or mission.id.is_empty():
 		return
@@ -469,7 +502,9 @@ func get_difficulty_multiplier(mission_id: String) -> float:
 
 
 func get_reward_multiplier(mission_id: String) -> float:
-	return minf(1.0 + REWARD_PER_CLEAR * (get_mission_level(mission_id) - 1), MAX_REWARD_MULTIPLIER)
+	# Довольные жильцы убежища — бонус к награде
+	return minf(1.0 + REWARD_PER_CLEAR * (get_mission_level(mission_id) - 1), MAX_REWARD_MULTIPLIER) \
+		* shelter.get_reward_bonus()
 
 
 # ---------- Инвентарь ----------
@@ -737,12 +772,14 @@ func get_building(building_id: String) -> BuildingData:
 
 func buy_building(building_id: String) -> bool:
 	var building: BuildingData = get_building(building_id)
-	if building == null or has_building(building_id) or coins < building.price:
+	if building == null or has_building(building_id) or coins < building.price \
+			or shelter.level < building.required_level:
 		return false
 	coins -= building.price
 	_buildings_owned.append(building_id)
 	coins_changed.emit(coins)
 	progress_changed.emit()
+	shelter_changed.emit()  # уют и доход зависят от построек
 	save_game()
 	return true
 
@@ -1136,6 +1173,7 @@ func import_save_code(code: String) -> bool:
 	campaign_changed.emit()
 	cars_changed.emit()
 	skin_changed.emit(get_selected_skin())
+	shelter_changed.emit()
 	return true
 
 
@@ -1280,6 +1318,10 @@ func start_raid() -> void:
 		return
 	for item_id: String in RAID_KIT:
 		add_item(item_id, int(RAID_KIT[item_id]))
+	# Сторожевая вышка: ещё турель и мины
+	if has_building("watchtower"):
+		for item_id: Variant in shelter.config.tower_raid_kit:
+			add_item(str(item_id), int(shelter.config.tower_raid_kit[item_id]))
 	_next_raid = int(Time.get_unix_time_from_system()) + RAID_INTERVAL
 	raid_active = true
 	save_game()
@@ -1339,6 +1381,7 @@ func reset_progress() -> void:
 	_stats.clear()
 	_achievements_done.clear()
 	_weekly = {}
+	shelter.reset()
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -1349,6 +1392,7 @@ func reset_progress() -> void:
 	campaign_changed.emit()
 	cars_changed.emit()
 	skin_changed.emit(get_selected_skin())
+	shelter_changed.emit()
 	save_game()
 
 
@@ -1389,6 +1433,7 @@ func save_game() -> void:
 		"stats": _stats,
 		"achievements": _achievements_done,
 		"weekly": _weekly,
+		"shelter": shelter.to_dict(),
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1541,6 +1586,7 @@ func load_game() -> void:
 		var item: ItemData = get_item(item_id)
 		if item != null:
 			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
+	shelter.from_dict(data.get("shelter", {}))
 	# Старое сохранение без статистики: счётчики по уже сделанному (достижения откроются при следующем событии)
 	if not data.has("stats"):
 		var wins: int = 0

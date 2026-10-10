@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "watchtower"
+title = "СТОРОЖЕВАЯ ВЫШКА"
+description = "Прожектор и дозорный. В набег — турель и 2 мины в сумку, жильцам спокойнее"
+price = 1100
+icon_color = Color(0.75, 0.6, 0.4, 1)
+required_level = 2
+comfort = 6
+builder = &"watchtower"
+hub_position = Vector3(17.6, 0, -17.6)
+hub_yaw_degrees = 0.0

@@ -300,6 +300,8 @@ func _show_result(won: bool, stats: Dictionary) -> void:
 	lines.append(UIKit.t("Время: %s") % MissionManager.format_time(float(stats.get("time", 0.0))))
 	lines.append(UIKit.t("Точность: %d%%  •  Здоровье: %d%%") % [
 		roundi(float(stats.get("accuracy", 0.0)) * 100.0), roundi(float(stats.get("health_share", 0.0)) * 100.0)])
+	if int(stats.get("food", 0)) > 0:
+		lines.append(UIKit.t("Провизия в убежище: +%d") % int(stats.get("food", 0)))
 	_result_stats.text = "\n".join(lines)
 	_result.visible = true
 	_revive_panel.visible = false

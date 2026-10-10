@@ -825,9 +825,11 @@ func _finish(won: bool) -> void:
 	var earned: int = roundi((score + (roundi(mission.reward_coins * _reward_multiplier) if won else 0)
 		+ _waves_cleared * mission.coins_per_wave) * _event_value(&"coins"))
 	_record_endless()
+	var food: int = 0
 	if won:
 		GameState.end_raid()
 		GameState.complete_mission(mission, score, stars)
+		food = GameState.shelter.add_mission_food(stars)  # ящики провизии в убежище
 		if mission.tutorial:
 			GameState.mark_cutscene_seen(TutorialDirector.DONE_FLAG)
 	GameState.add_coins(earned)
@@ -847,6 +849,7 @@ func _finish(won: bool) -> void:
 		"level": _level,
 		"waves": _waves_cleared,
 		"endless": mission.type == MissionData.Type.ENDLESS,
+		"food": food,
 	}
 	await create_tween().tween_interval(RESULT_DELAY).finished  # твин умирает вместе с узлом
 	if not is_inside_tree():

@@ -10,3 +10,12 @@ extends Resource
 @export var hub_model: PackedScene
 @export var hub_model_scale: float = 1.0
 @export var icon_color: Color = Color(0.6, 0.6, 0.65)
+## Нужен уровень убежища (расширение двора)
+@export var required_level: int = 1
+## Уют: +потолок настроения жильцов
+@export var comfort: int = 0
+## Сборщик модели из частей (HubDecor._build_<builder>) — тогда постройка стоит в hub_position,
+## а не в местах BaseBuildings (Marker3D) и hub_model не нужен
+@export var builder: StringName = &""
+@export var hub_position: Vector3 = Vector3.ZERO
+@export var hub_yaw_degrees: float = 0.0

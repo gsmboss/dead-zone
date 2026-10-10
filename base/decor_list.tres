@@ -1,0 +1,232 @@
+[gd_resource type="Resource" script_class="DecorList" format=3]
+
+[ext_resource type="Script" path="res://base/decor_data.gd" id="1_dec01"]
+[ext_resource type="Script" path="res://base/decor_list.gd" id="2_dec02"]
+
+[sub_resource type="Resource" id="Decor_flag"]
+script = ExtResource("1_dec01")
+id = "flag"
+title = "ФЛАГ УБЕЖИЩА"
+description = "Наш флаг над двором: видно издалека, что здесь живые"
+price = 150
+comfort = 3
+required_level = 1
+zone = 2
+builder = &"flag"
+position = Vector3(-4, 0, -11.5)
+yaw_degrees = 0.0
+icon_color = Color(0.9, 0.3, 0.25, 1)
+
+[sub_resource type="Resource" id="Decor_flowers"]
+script = ExtResource("1_dec01")
+id = "flowers"
+title = "КЛУМБЫ"
+description = "Цветы в ящиках вокруг флага. Вера поливает их кофе — растут"
+price = 250
+comfort = 4
+required_level = 1
+zone = 2
+builder = &"flowers"
+position = Vector3(-4, 0, -11.5)
+yaw_degrees = 0.0
+icon_color = Color(0.95, 0.5, 0.75, 1)
+
+[sub_resource type="Resource" id="Decor_garlands"]
+script = ExtResource("1_dec01")
+id = "garlands"
+title = "ГИРЛЯНДЫ"
+description = "Разноцветные лампочки над костром — вечером как праздник"
+price = 300
+comfort = 5
+required_level = 1
+zone = 1
+builder = &"garlands"
+position = Vector3(-11.5, 0, 6.5)
+yaw_degrees = 0.0
+icon_color = Color(1.0, 0.8, 0.3, 1)
+
+[sub_resource type="Resource" id="Decor_loungers"]
+script = ExtResource("1_dec01")
+id = "loungers"
+title = "ШЕЗЛОНГИ"
+description = "Два шезлонга у зоны отдыха — загорать под вой зомби"
+price = 350
+comfort = 4
+required_level = 1
+zone = 0
+builder = &"loungers"
+position = Vector3(10.6, 0, 4.4)
+yaw_degrees = 0.0
+icon_color = Color(0.4, 0.75, 0.95, 1)
+
+[sub_resource type="Resource" id="Decor_pullup"]
+script = ExtResource("1_dec01")
+id = "pullup"
+title = "СПОРТУГОЛОК"
+description = "Турник и брусья: кто подтягивается, тот убегает"
+price = 300
+comfort = 3
+required_level = 1
+zone = 2
+builder = &"pullup"
+position = Vector3(3, 0, -12.6)
+yaw_degrees = 180.0
+icon_color = Color(0.6, 0.65, 0.7, 1)
+
+[sub_resource type="Resource" id="Decor_swings"]
+script = ExtResource("1_dec01")
+id = "swings"
+title = "КАЧЕЛИ"
+description = "Для детей и для дяди Гоши. Скрипят на весь двор"
+price = 400
+comfort = 6
+required_level = 1
+zone = 2
+builder = &"swings"
+position = Vector3(-12, 0, -9.5)
+yaw_degrees = 0.0
+icon_color = Color(0.95, 0.6, 0.3, 1)
+
+[sub_resource type="Resource" id="Decor_christmas"]
+script = ExtResource("1_dec01")
+id = "christmas"
+title = "ЁЛКА"
+description = "Ёлка с огоньками и подарками — Новый год по своему календарю"
+price = 400
+comfort = 4
+required_level = 1
+zone = 2
+builder = &"christmas"
+position = Vector3(6, 0, -11.5)
+yaw_degrees = 0.0
+icon_color = Color(0.3, 0.75, 0.4, 1)
+
+[sub_resource type="Resource" id="Decor_grill"]
+script = ExtResource("1_dec01")
+id = "grill"
+title = "МАНГАЛ"
+description = "Шашлык по воскресеньям. Запах слышат даже зомби"
+price = 450
+comfort = 6
+required_level = 1
+zone = 1
+builder = &"grill"
+position = Vector3(-5.4, 0, 11.2)
+yaw_degrees = 90.0
+icon_color = Color(0.85, 0.45, 0.25, 1)
+
+[sub_resource type="Resource" id="Decor_shower"]
+script = ExtResource("1_dec01")
+id = "shower"
+title = "ЛЕТНИЙ ДУШ"
+description = "Бочка на крыше греется на солнце — горячая вода к обеду"
+price = 500
+comfort = 5
+required_level = 1
+zone = 2
+builder = &"shower"
+position = Vector3(-9, 0, -12.2)
+yaw_degrees = 0.0
+icon_color = Color(0.45, 0.7, 0.9, 1)
+
+[sub_resource type="Resource" id="Decor_basketball"]
+script = ExtResource("1_dec01")
+id = "basketball"
+title = "БАСКЕТБОЛ"
+description = "Кольцо и разметка: три очка — неделя без дежурства"
+price = 500
+comfort = 5
+required_level = 1
+zone = 2
+builder = &"basketball"
+position = Vector3(-15, 0, -4)
+yaw_degrees = 90.0
+icon_color = Color(1.0, 0.55, 0.2, 1)
+
+[sub_resource type="Resource" id="Decor_arcade"]
+script = ExtResource("1_dec01")
+id = "arcade"
+title = "ИГРОВЫЕ АВТОМАТЫ"
+description = "Два автомата из торгового центра. Рекорд у Тёмы"
+price = 600
+comfort = 6
+required_level = 1
+zone = 0
+builder = &"arcade"
+position = Vector3(15.2, 0, 9.4)
+yaw_degrees = -90.0
+icon_color = Color(0.6, 0.4, 1.0, 1)
+
+[sub_resource type="Resource" id="Decor_bar"]
+script = ExtResource("1_dec01")
+id = "bar"
+title = "БАРНАЯ СТОЙКА"
+description = "Стойка, табуреты и газировка. Наливают только компот"
+price = 700
+comfort = 7
+required_level = 1
+zone = 0
+builder = &"bar"
+position = Vector3(14.6, 0, 6.3)
+yaw_degrees = -90.0
+icon_color = Color(0.75, 0.5, 0.3, 1)
+
+[sub_resource type="Resource" id="Decor_billiard"]
+script = ExtResource("1_dec01")
+id = "billiard"
+title = "БИЛЬЯРД"
+description = "Стол с зелёным сукном. Шары — настоящие, кии — швабры"
+price = 800
+comfort = 7
+required_level = 1
+zone = 0
+builder = &"billiard"
+position = Vector3(11, 0, 7.6)
+yaw_degrees = 0.0
+icon_color = Color(0.25, 0.7, 0.35, 1)
+
+[sub_resource type="Resource" id="Decor_pool"]
+script = ExtResource("1_dec01")
+id = "pool"
+title = "НАДУВНОЙ БАССЕЙН"
+description = "Летом — главное место двора. Нужен уровень ФОРТ"
+price = 1200
+comfort = 8
+required_level = 3
+zone = 2
+builder = &"pool"
+position = Vector3(18, 0, -8.5)
+yaw_degrees = 0.0
+icon_color = Color(0.3, 0.8, 1.0, 1)
+
+[sub_resource type="Resource" id="Decor_windmill"]
+script = ExtResource("1_dec01")
+id = "windmill"
+title = "ВЕТРЯК"
+description = "Крутится и скрипит. Ток не даёт, зато красиво. Нужен уровень БАЗА"
+price = 900
+comfort = 4
+required_level = 4
+zone = 2
+builder = &"windmill"
+position = Vector3(20.8, 0, -1)
+yaw_degrees = -90.0
+icon_color = Color(0.85, 0.85, 0.9, 1)
+
+[sub_resource type="Resource" id="Decor_cinema"]
+script = ExtResource("1_dec01")
+id = "cinema"
+title = "ЛЕТНИЙ КИНОТЕАТР"
+description = "Экран, проектор и скамейки: кино по пятницам. Нужен уровень БАЗА"
+price = 1500
+comfort = 10
+required_level = 4
+zone = 0
+builder = &"cinema"
+position = Vector3(-12, 0, 19.6)
+yaw_degrees = 0.0
+icon_color = Color(0.9, 0.85, 0.5, 1)
+
+[resource]
+script = ExtResource("2_dec02")
+decor = Array[ExtResource("1_dec01")]([SubResource("Decor_flag"), SubResource("Decor_flowers"), SubResource("Decor_garlands"), SubResource("Decor_loungers"), SubResource("Decor_pullup"), SubResource("Decor_swings"), SubResource("Decor_christmas"), SubResource("Decor_grill"), SubResource("Decor_shower"), SubResource("Decor_basketball"), SubResource("Decor_arcade"), SubResource("Decor_bar"), SubResource("Decor_billiard"), SubResource("Decor_pool"), SubResource("Decor_windmill"), SubResource("Decor_cinema")])
