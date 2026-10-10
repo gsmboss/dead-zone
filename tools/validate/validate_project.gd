@@ -8,6 +8,8 @@ extends Node
 const SKIP_DIRS: PackedStringArray = [".godot", "addons", "android", "store", ".git"]
 
 var _problems: PackedStringArray = []
+## Картинки, которых ещё нет (игра работает и без них) — отдельным списком, не ошибка
+var _art_missing: PackedStringArray = []
 var _checked: int = 0
 
 
@@ -23,7 +25,13 @@ func _run() -> void:
 	_check_campaign()
 	print("=== Проверка миссий ===")
 	_check_missions()
+	print("=== Модели сюжетного кино ===")
+	_check_stage_models()
 	print("")
+	if not _art_missing.is_empty():
+		print("Ждут картинок (%d):" % _art_missing.size())
+		for art: String in _art_missing:
+			print("  · " + art)
 	if _problems.is_empty():
 		print("ИТОГ: проблем нет")
 	else:
@@ -132,8 +140,9 @@ func _check_film(where: String, film: StoryFilm) -> void:
 
 
 func _check_art(art_id: String) -> void:
-	if not ResourceLoader.exists("res://story/art/%s.jpg" % art_id):
-		_problem("нет картинки story/art/%s.jpg" % art_id)
+	var path: String = "res://story/art/%s.jpg" % art_id
+	if not ResourceLoader.exists(path) and not _art_missing.has(path):
+		_art_missing.append(path)
 
 
 # ---------- Миссии ----------
@@ -159,7 +168,9 @@ func _check_mission(mission: MissionData, where: String) -> void:
 	if not ResourceLoader.exists(mission.level_scene):
 		_problem("%s: нет сцены уровня %s" % [where, mission.level_scene])
 	if MissionSelect.location_art(mission) == null:
-		_problem("%s: нет карточки локации" % where)
+		var art: String = "карточка локации для %s" % mission.level_scene.get_file()
+		if not _art_missing.has(art):
+			_art_missing.append(art)
 	var types: Array[ZombieData] = [mission.walker, mission.runner, mission.tank, mission.boss]
 	types.append_array(mission.specials)
 	var any: bool = false
@@ -175,3 +186,29 @@ func _check_mission(mission: MissionData, where: String) -> void:
 				model.free()
 	if not any:
 		_problem("%s: нет ни одного типа зомби" % where)
+
+
+# ---------- Кино ----------
+
+## Все модели, которые берёт диорама StoryStage (константы с путями res://)
+func _check_stage_models() -> void:
+	var paths: PackedStringArray = []
+	var constants: Dictionary = (StoryStage as Script).get_script_constant_map()
+	for key: String in constants:
+		var value: Variant = constants[key]
+		if value is String and (value as String).begins_with("res://"):
+			paths.append(value)
+		elif value is Array:
+			for item: Variant in value:
+				if item is String and (item as String).begins_with("res://"):
+					paths.append(item)
+	for model: String in ["campfire-pit", "campfire-stand", "tent-canvas", "tent", "box-large", "barrel", "bedroll"]:
+		paths.append(StoryStage.CAMP_DIR + model + ".glb")
+	var count: int = 0
+	for path: String in paths:
+		if path.ends_with("/"):
+			continue
+		count += 1
+		if not ResourceLoader.exists(path) or load(path) == null:
+			_problem("кино: нет модели %s" % path)
+	print("Моделей кино: %d" % count)

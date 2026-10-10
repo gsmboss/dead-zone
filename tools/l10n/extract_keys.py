@@ -26,7 +26,7 @@ def unescape(s):
 def collect():
     keys = set()
     for f in glob.glob('**/*.gd', recursive=True):
-        if f.startswith('addons/'):
+        if f.startswith(('addons/', 'tools/')):
             continue
         for line in open(f, encoding='utf-8'):
             if line.strip().startswith('#') or any(k in line for k in SKIP):
@@ -44,7 +44,7 @@ def collect():
                 if cyr.search(value):
                     keys.add(value)
     for f in glob.glob('**/*.tres', recursive=True) + glob.glob('**/*.tscn', recursive=True):
-        if f.startswith('addons/'):
+        if f.startswith(('addons/', 'tools/')):
             continue
         for line in open(f, encoding='utf-8'):
             if re.match(r'^\w*_ru\s*=', line):

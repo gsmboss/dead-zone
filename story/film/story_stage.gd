@@ -71,6 +71,18 @@ const BARREL: String = "res://models/environment/Barrel.gltf"
 ## Лагерь (Kenney Survival Kit, модели маленькие — масштаб)
 const CAMP_DIR: String = "res://models/survival/"
 const CAMP_SCALE: float = 3.4
+## Южный порт — отдельная диорама в стороне от улицы (строится при первом плане в порту)
+const HARBOR_ORIGIN: Vector3 = Vector3(300.0, 0.0, 0.0)
+const HARBOR_WATER_Y: float = -0.9
+const LINER: String = "res://models/harbor/watercraft/ship-ocean-liner.glb"
+const LIGHTHOUSE: String = "res://models/harbor/pirate/tower-complete-large.glb"
+const HARBOR_ROCKS: Array[String] = ["res://models/harbor/pirate/rocks-a.glb", "res://models/harbor/pirate/rocks-b.glb",
+	"res://models/harbor/pirate/rocks-c.glb"]
+const HARBOR_CONTAINERS: Array[String] = ["res://models/harbor/watercraft/cargo-container-a.glb",
+	"res://models/harbor/watercraft/cargo-container-b.glb", "res://models/harbor/watercraft/cargo-container-c.glb"]
+const HARBOR_BOATS: Array[String] = ["res://models/harbor/watercraft/boat-tug-a.glb",
+	"res://models/harbor/watercraft/boat-fishing-small.glb", "res://models/harbor/watercraft/boat-row-large.glb"]
+const HARBOR_CRATE: String = "res://models/harbor/pirate/crate.glb"
 
 ## Камеры: [откуда, куда, взгляд в начале, взгляд в конце]
 const CAMERAS: Dictionary = {
@@ -93,6 +105,14 @@ const CAMERAS: Dictionary = {
 	"camp_orbit": [Vector3(7.5, 3.2, 6.0), Vector3(-7.5, 3.2, 6.0), Vector3(0, 0.8, 0), Vector3(0, 0.8, 0)],
 	"camp_fire": [Vector3(0.6, 0.5, 4.6), Vector3(0.2, 0.6, 3.8), Vector3(0, 0.7, 0), Vector3(0, 0.9, -1.5)],
 	"camp_high": [Vector3(-14, 9, 14), Vector3(-9, 7, 10), Vector3(0, 0.5, 0), Vector3(0, 0.5, 0)],
+	# Южный порт (HARBOR_ORIGIN = 300, 0, 0): причал по z = 0, вода — к -Z, лайнер у причала, маяк на востоке
+	"harbor_aerial": [Vector3(250, 34, 62), Vector3(322, 30, 58), Vector3(296, 0, -10), Vector3(318, 0, -14)],
+	"harbor_quay": [Vector3(268, 1.7, 5.0), Vector3(284, 1.7, 5.0), Vector3(296, 1.6, -2.0), Vector3(312, 2.4, -4.0)],
+	"harbor_ship": [Vector3(296, 1.4, 7.0), Vector3(300, 1.4, 6.0), Vector3(296, 9, -14), Vector3(302, 15, -14)],
+	"lighthouse": [Vector3(332, 3, -2), Vector3(335, 5, -6), Vector3(346, 9, -30), Vector3(346, 19, -30)],
+	"harbor_sea": [Vector3(332, 4, -70), Vector3(318, 3.5, -60), Vector3(300, 4, -6), Vector3(298, 6, -6)],
+	"harbor_gangway": [Vector3(301, 2.3, 9.0), Vector3(303, 2.1, 8.0), Vector3(297, 1.2, 1.0), Vector3(296, 3.0, -5.0)],
+	"harbor_zombies": [Vector3(314, 0.5, 8.0), Vector3(310, 0.6, 7.0), Vector3(300, 1.3, 2.0), Vector3(296, 1.3, 2.0)],
 }
 
 ## Настроение: небо (верх, горизонт), солнце (цвет, сила, высота°), сила окружения, туман, цвет окружения.
@@ -111,6 +131,10 @@ const MOODS: Dictionary = {
 	StoryShot.Mood.BLACK: [Color.BLACK, Color.BLACK, Color.BLACK, 0.0, 30.0, 0.0, 0.0, Color.BLACK],
 	StoryShot.Mood.CAMP: [Color(0.02, 0.03, 0.09), Color(0.09, 0.11, 0.22), Color(0.5, 0.6, 0.95), 0.3, 35.0, 0.5, 0.01,
 		Color(0.26, 0.3, 0.45)],
+	StoryShot.Mood.HARBOR: [Color(0.03, 0.05, 0.12), Color(0.16, 0.2, 0.3), Color(0.55, 0.65, 0.95), 0.4, 30.0, 0.5,
+		0.006, Color(0.3, 0.36, 0.5)],
+	StoryShot.Mood.HARBOR_DAWN: [Color(0.4, 0.55, 0.85), Color(1.0, 0.75, 0.55), Color(1.0, 0.82, 0.62), 1.2, 12.0, 0.7,
+		0.002, Color(0.7, 0.64, 0.6)],
 }
 
 var mood: int = -1
@@ -124,6 +148,7 @@ var _rng := RandomNumberGenerator.new()
 var _signal_materials: Array[StandardMaterial3D] = []  # красный, жёлтый, зелёный на всех светофорах
 var _signal_time: float = 0.0
 var _flames: Array[Node3D] = []
+var _harbor: Node3D
 
 
 func _ready() -> void:
@@ -167,6 +192,12 @@ func set_mood(new_mood: int) -> void:
 			_build_hope()
 		StoryShot.Mood.CAMP:
 			_build_camp()
+		StoryShot.Mood.HARBOR:
+			_build_harbor_set()
+			_build_harbor_night()
+		StoryShot.Mood.HARBOR_DAWN:
+			_build_harbor_set()
+			_build_harbor_dawn()
 	visible = new_mood != StoryShot.Mood.BLACK
 
 
@@ -548,6 +579,131 @@ func _place_camp_prop(model: String, at: Vector3, yaw: float) -> void:
 	prop.rotation.y = yaw
 	prop.scale = Vector3.ONE * CAMP_SCALE
 	_actors.add_child(prop)
+
+
+# ---------- Южный порт ----------
+
+## Причал, вода, лайнер «Надежда», маяк, кран, контейнеры, лодки — один раз, дальше общие для обоих настроений
+func _build_harbor_set() -> void:
+	if _harbor != null:
+		return
+	_harbor = Node3D.new()
+	_harbor.name = "Harbor"
+	add_child(_harbor)
+	var h: Vector3 = HARBOR_ORIGIN
+	var sea := MeshInstance3D.new()
+	var sea_plane := PlaneMesh.new()
+	sea_plane.size = Vector2(600.0, 400.0)
+	sea_plane.material = HarborBuilder.make_water_material()
+	sea.mesh = sea_plane
+	sea.position = h + Vector3(0.0, HARBOR_WATER_Y, -180.0)
+	sea.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_harbor.add_child(sea)
+	# Набережная: бетон на суше (z > 0) и жёлтый край причала
+	var concrete := StandardMaterial3D.new()
+	concrete.albedo_color = Color(0.42, 0.42, 0.43)
+	concrete.roughness = 1.0
+	var quay := MeshInstance3D.new()
+	var quay_box := BoxMesh.new()
+	quay_box.size = Vector3(200.0, 1.0, 120.0)
+	quay_box.material = concrete
+	quay.mesh = quay_box
+	quay.position = h + Vector3(0.0, -0.5, 60.0)
+	_harbor.add_child(quay)
+	var curb_material := StandardMaterial3D.new()
+	curb_material.albedo_color = Color(0.92, 0.75, 0.15)
+	var curb := MeshInstance3D.new()
+	var curb_box := BoxMesh.new()
+	curb_box.size = Vector3(200.0, 0.16, 0.4)
+	curb_box.material = curb_material
+	curb.mesh = curb_box
+	curb.position = h + Vector3(0.0, 0.08, 0.2)
+	_harbor.add_child(curb)
+	# Лайнер у причала (длинная ось вдоль X), трап к борту
+	_place_into(_harbor, _load(LINER), h + Vector3(0.0, HARBOR_WATER_Y - 0.3, -14.0), PI * 0.5, 2.4)
+	var plank_material := StandardMaterial3D.new()
+	plank_material.albedo_color = Color(0.45, 0.32, 0.2)
+	var gangway := MeshInstance3D.new()
+	var gangway_box := BoxMesh.new()
+	gangway_box.size = Vector3(1.6, 0.15, 10.5)
+	gangway_box.material = plank_material
+	gangway.mesh = gangway_box
+	gangway.position = h + Vector3(-2.0, 3.0, -3.8)
+	gangway.rotation.x = 0.55
+	_harbor.add_child(gangway)
+	# Маяк на камнях восточнее лайнера, луч крутится
+	for i in 5:
+		var rock_at: Vector3 = h + Vector3(46.0 + _rng.randf_range(-4.0, 4.0), HARBOR_WATER_Y - 1.0,
+			-30.0 + _rng.randf_range(-4.0, 4.0))
+		_place_into(_harbor, _load(HARBOR_ROCKS[i % HARBOR_ROCKS.size()]), rock_at, _rng.randf() * TAU, 1.6)
+	_place_into(_harbor, _load(LIGHTHOUSE), h + Vector3(46.0, 0.6, -30.0), 0.3, 2.0)
+	HarborBuilder.make_lighthouse_light(_harbor, h + Vector3(46.0, 21.6, -30.0), 45.0)
+	# Кран западнее лайнера, штабеля контейнеров на набережной
+	HarborBuilder.make_crane(_harbor, h + Vector3(-38.0, 0.0, 4.0), 20.0, -20.0)
+	for i in 10:
+		var at: Vector3 = h + Vector3(-30.0 + (i % 5) * 7.5, 0.0, 14.0 + floorf(i / 5.0) * 9.0)
+		var levels: int = 1 + (i * 7) % 3
+		for level in levels:
+			_place_into(_harbor, _load(HARBOR_CONTAINERS[(i + level) % HARBOR_CONTAINERS.size()]),
+				at + Vector3.UP * 2.43 * level, PI * 0.5 + _rng.randf_range(-0.05, 0.05), 2.2)
+	for i in HARBOR_BOATS.size():
+		_place_into(_harbor, _load(HARBOR_BOATS[i]), h + Vector3(-30.0 - i * 9.0, HARBOR_WATER_Y, -8.0 - i * 3.0),
+			_rng.randf_range(-0.4, 0.4), 2.2)
+	for i in 6:
+		# Не напротив трапа (там камера harbor_ship)
+		_place_into(_harbor, _load(STREET_LIGHT), h + Vector3(-31.0 + i * 12.0, 0.0, 3.0), PI, 1.0)
+
+
+## Ночь: порт захвачен — мертвецы бродят по причалу, бочки с огнём, на трапе пусто
+func _build_harbor_night() -> void:
+	var h: Vector3 = HARBOR_ORIGIN
+	for i in 12:
+		var start: Vector3 = h + Vector3(_rng.randf_range(-24.0, 24.0), 0.0, _rng.randf_range(1.5, 10.0))
+		var finish: Vector3 = start + Vector3(_rng.randf_range(-8.0, 8.0), 0.0, _rng.randf_range(-1.0, 3.0))
+		_add_actor(_load(ZOMBIES[i % ZOMBIES.size()]), _rng.randf_range(1.65, 1.9),
+			PackedVector3Array([start, finish, start]), _rng.randf_range(0.5, 0.9), &"Walk", &"Idle", _rng.randf())
+	for at: Vector3 in [Vector3(-8.0, 0.0, 6.0), Vector3(14.0, 0.0, 9.0)]:
+		_place_actor_prop(_load(BARREL), h + at, 1.0)
+		_add_fire(h + at + Vector3.UP * 1.1, 0.9)
+	for i in 4:
+		var wreck: StageCar = _add_car(_load(CARS[i % CARS.size()]), PackedVector3Array(), 0.0, true, 0.0,
+			_rng.randf_range(-180.0, 180.0))
+		if wreck != null:
+			wreck.position = h + Vector3(-20.0 + i * 13.0, 0.0, 12.0 + (i % 2) * 4.0)
+	for i in 5:
+		_place_actor_prop(_load(HARBOR_CRATE), h + Vector3(_rng.randf_range(-20.0, 20.0), 0.0,
+			_rng.randf_range(2.0, 8.0)), 0.9)
+
+
+## Рассвет: выжившие идут к трапу, у трапа капитан, бронепикап привёз последних
+func _build_harbor_dawn() -> void:
+	var h: Vector3 = HARBOR_ORIGIN
+	var foot: Vector3 = h + Vector3(-2.0, 0.0, 1.6)
+	for i in 10:
+		var start: Vector3 = h + Vector3(-26.0 + (i % 5) * 1.4, 0.0, 4.0 + floorf(i / 5.0) * 1.4)
+		_add_person(PackedVector3Array([start, foot]), 1.3, false, _rng.randf() * 0.8)
+	_add_actor(_load(DOG), 0.55, PackedVector3Array([h + Vector3(-22.0, 0.0, 6.5), foot]), 1.3, &"Walk", &"Idle", 0.0)
+	var captain: StageActor = _add_actor(_load(PEOPLE_QUATERNIUS[2]), 1.85,
+		PackedVector3Array([h + Vector3(0.5, 0.0, 2.2)]), 0.0, &"Walk", &"Wave", 0.0)
+	if captain != null:
+		captain.rotation.y = PI * 0.5
+	var pickup: StageCar = _add_car(_load(ARMORED_PICKUP), PackedVector3Array(), 0.0, false, 0.0, 90.0)
+	if pickup != null:
+		pickup.position = h + Vector3(-14.0, 0.0, 9.0)
+	for i in 4:
+		_place_actor_prop(_load(HARBOR_CRATE), h + Vector3(2.0 + i * 1.2, 0.0, 2.6 + (i % 2) * 1.1), 0.9)
+
+
+func _place_into(parent: Node3D, scene: PackedScene, at: Vector3, yaw: float, scale_value: float) -> void:
+	if scene == null:
+		return
+	var node := scene.instantiate() as Node3D
+	if node == null:
+		return
+	node.position = at
+	node.rotation.y = yaw
+	node.scale = Vector3.ONE * scale_value
+	parent.add_child(node)
 
 
 # ---------- Актёры ----------

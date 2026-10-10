@@ -358,8 +358,22 @@ StoryStage.CAMERAS, caption, voice_ru/en, speaker+pitch, title, effect), StorySt
 Часть вторая (главы 10–13): «Рецепт вакцины» (story_pharmacy, улица, сбор; доктор Ирина, аптекарша Нина),
 «Голоса с юга» (story_tower, лес, оборона вышки; капитан Якорев, запись мамы из архива), «Крыса» (story_rat,
 стоянка, бандиты Кабана; Шнырь и калькулятор, спорткар Кабана — Vehicle_Sports), «Старый мост» (story_bridge, улица,
-5 волн + босс enemies/kaban.tres). Концовки у глав 1 и 9 тоже с фильмами. Эпилог — после «Старого моста».
+5 волн + босс enemies/kaban.tres). Концовки у глав 1 и 9 тоже с фильмами.
+Часть третья (главы 14–17, «Южный порт»): «Дорога на юг» (story_south, лес, KILL_COUNT 45; дальнобойщик Михалыч),
+«Южный порт» (story_port, порт, сбор канистр; кок Борщов), «Маяк» (story_lighthouse, порт, оборона у маяка; смотритель
+Палыч), «Последний рейс» (story_voyage, порт, 5 волн + босс enemies/drowned.tres УТОПЛЕННИК). Эпилог — после «Последнего рейса».
+Достижение chapter_all — 17 глав. Картинки глав части третьей и loc_harbor ещё не сделаны (промпты — docs/ART_PROMPTS.md, раздел 4).
 StoryShot.Mood.CAMP — ночной лагерь в кино (костёр, палатки, люди сидят — Kenney «sit»), камеры camp_orbit/camp_fire/camp_high.
+Mood.HARBOR (ночь, мертвецы на причале) и HARBOR_DAWN (рассвет, посадка): диорама порта StoryStage._build_harbor_set в
+HARBOR_ORIGIN (300, 0, 0) — строится при первом плане в порту; камеры harbor_aerial/quay/ship/gangway/sea/zombies, lighthouse.
+Локация «Южный порт»: levels/harbor_level.tscn + levels/harbor/harbor_builder.gd (HarborBuilder): вода севернее QUAY_Z = -10
+(шейдер WATER_SHADER, без вершин), пол — CSGBox Floor (суша), Pier (пирс), Mole (мол с маяком); невидимые стены по кромке
+причала (_edge_wall) с жёлтым бордюром и кнехтами; кран из примитивов (static make_crane), маяк с лучом (make_lighthouse_light),
+сухогруз, буксир, лодки, затонувший парусник; модели models/harbor/ (Kenney Watercraft и Pirate Kit). Корень уровня —
+metadata/edge_cover_y = -2 (EdgeCover опускает землю и стены тумана под воду); LocationBuilder.outside_ground = false.
+Проверка без редактора: tools/validate/validate.tscn (ресурсы, сюжет, миссии, модели кино; «ждут картинок» — не ошибка)
+и runtime_test.tscn (все фильмы ускоренно и все уровни по 6 с). Godot 4.7.2 для Linux: --headless --path . <сцена>.
+На выходе после прогона движок иногда падает (double free при завершении) — это завершение движка, не наш код.
 Значки на экранных кнопках: ui/touch/icons/*.svg (game-icons.net, CC BY 3.0 — атрибуция в CREDITS.md);
 TouchActionButton.ACTION_ICONS (действие → значок), icon, badge (счётчик гранат), set_icon_name(), load_icon();
 Settings.button_icons (вкладка УПРАВЛЕНИЕ) — значки или старые надписи. Машина: ключ/сиденье/дверь, дрифт — колесо.

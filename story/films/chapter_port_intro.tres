@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_aerial"
+duration = 6.0
+caption = "ЮЖНЫЙ ПОРТ. НОЧЬ"
+voice_ru = "Краны замерли над водой. Контейнеры стоят, как домино. А на причале — те, кто когда-то здесь работал."
+voice_en = "Cranes frozen over the water. Containers standing like dominoes. And on the pier, the ones who used to work here."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_zombies"
+duration = 5.0
+voice_ru = "Один до сих пор в спасательном жилете. Не утонул. Ему повезло меньше."
+voice_en = "One of them still wears a life jacket. He didn't drown. He was less lucky."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_ship"
+duration = 6.0
+voice_ru = "Вижу вас с мостика! Баки пустые. Канистры с топливом — по всему порту. Только не шумите… хотя уже поздно."
+voice_en = "I can see you from the bridge! The tanks are empty. Fuel cans are all over the port. Just don't make noise... too late, never mind."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_ship"
+duration = 5.0
+voice_ru = "За каждую канистру — тарелка борща! Кок Борщов, фамилия обязывает."
+voice_en = "A bowl of borscht for every can! Cook Borshchov, the name says it all."
+speaker = "БОРЩОВ"
+pitch = 0.85
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_quay"
+duration = 4.0
+voice_ru = "За каждую — две тарелки. Мы торгуемся."
+voice_en = "Two bowls for each. We're negotiating."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_port_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

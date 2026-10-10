@@ -1,6 +1,8 @@
 # Картинки для Dead Zone — что нужно и промпты
 
 Готово: splash (ui/splash/splash.jpg), обложка Google Play (store/feature_graphic.png), prologue, chapter_1, chapter_2, chapter_3, chapter_4, chapter_bandits, chapter_5, chapter_6, chapter_baron, chapter_7, chapter_pharmacy, chapter_tower, chapter_rat, chapter_bridge, epilogue; локации (ui/hub/locations/*.jpg 960×540): все 8 (loc_street, loc_yard, loc_city, loc_graveyard, loc_forest, loc_industrial, loc_polygon, loc_shelter)
+
+**Нужны новые (часть третья, Южный порт):** chapter_south, chapter_port, chapter_lighthouse, chapter_voyage, loc_harbor — промпты в разделе 4.
 (story/art/*.jpg — картинка главы фоном рассказа и сверху досье в окне СЮЖЕТ).
 
 Все картинки — **без текста, букв, логотипов и водяных знаков** (надписи игра рисует сама, на двух языках).
@@ -80,6 +82,20 @@ darker for the game title. High contrast, readable at small size.
 | `loc_industrial.png` | Промзона | `Industrial zone with factory buildings, pipes, tanks, chimneys, a gas station, conveyor belts, zombies, hazy yellow light.` |
 | `loc_polygon.png` | Полигон | `Training ground with targets, sandbags, wooden walls, a small watchtower, military style, bright day.` |
 | `loc_shelter.png` | Ворота убежища | `Survivor shelter gates made of shipping containers and a parked truck, floodlights, barbed wire, sandbags, a turret, a horde approaching at night.` |
+
+---
+
+## 4. НОВОЕ — часть третья «Южный порт» (5 шт.)
+
+Главы — **1600×900**, карточка локации — **1280×720**. Общий стиль — как выше.
+
+| Файл | Что | Промпт (после общего стиля) |
+|---|---|---|
+| `chapter_south.png` | Дорога на юг | `Forest highway heading south at morning, an armored pickup truck leading a small convoy, a big old refrigerator truck with an ice cream picture parked on the roadside, zombies blocking the road between tall pines, the sea faintly visible far ahead, hopeful light through fog.` |
+| `chapter_port.png` | Южный порт | `Night seaport: frozen orange gantry crane over dark water, stacks of colorful shipping containers like dominoes, a big white passenger ship docked at the pier with one flashlight blinking on the bridge, zombies in dock worker overalls and a life vest shambling on the quay, fuel canisters scattered around.` |
+| `chapter_lighthouse.png` | Маяк | `Stone lighthouse at the end of a breakwater at night, its rotating beam sweeping over the sea, an old bearded keeper in a knitted sweater at the top, survivors defending the base against a horde coming along the breakwater, in the beam far in the water a giant dark silhouette standing waist-deep.` |
+| `chapter_voyage.png` | Последний рейс | `Dawn at the port: a white passenger ship with smoke from its funnels, people walking up the gangway, a captain in a white cap waving, a giant swollen sea-green zombie covered in seaweed and ropes rising from the water next to the pier, a young survivor and his little brother standing on the pier facing it.` |
+| `loc_harbor.png` | Южный порт (карточка) | `Seaport quay at overcast day: orange gantry crane, stacked containers, a cargo ship at the pier, a wooden jetty with boats, a stone lighthouse on a breakwater, sunken sailing ship wreck, zombies on the docks.` |
 
 ---
 

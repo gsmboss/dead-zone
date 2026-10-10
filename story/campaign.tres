@@ -46,6 +46,18 @@
 [ext_resource type="Resource" path="res://missions/data/story_bridge.tres" id="m_chapter_bridge"]
 [ext_resource type="Resource" path="res://story/films/chapter_bridge_intro.tres" id="f_chapter_bridge_intro"]
 [ext_resource type="Resource" path="res://story/films/chapter_bridge_outro.tres" id="f_chapter_bridge_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_south.tres" id="m_chapter_south"]
+[ext_resource type="Resource" path="res://story/films/chapter_south_intro.tres" id="f_chapter_south_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_south_outro.tres" id="f_chapter_south_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_port.tres" id="m_chapter_port"]
+[ext_resource type="Resource" path="res://story/films/chapter_port_intro.tres" id="f_chapter_port_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_port_outro.tres" id="f_chapter_port_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_lighthouse.tres" id="m_chapter_lighthouse"]
+[ext_resource type="Resource" path="res://story/films/chapter_lighthouse_intro.tres" id="f_chapter_lighthouse_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_lighthouse_outro.tres" id="f_chapter_lighthouse_outro"]
+[ext_resource type="Resource" path="res://missions/data/story_voyage.tres" id="m_chapter_voyage"]
+[ext_resource type="Resource" path="res://story/films/chapter_voyage_intro.tres" id="f_chapter_voyage_intro"]
+[ext_resource type="Resource" path="res://story/films/chapter_voyage_outro.tres" id="f_chapter_voyage_outro"]
 
 [sub_resource type="Resource" id="chapter_1"]
 script = ExtResource("2_chap")
@@ -227,10 +239,63 @@ outro_film = ExtResource("f_chapter_bridge_outro")
 rescued = 4
 unlock_house = true
 
+[sub_resource type="Resource" id="chapter_south"]
+script = ExtResource("2_chap")
+id = "chapter_south"
+title = "ДОРОГА НА ЮГ"
+location_name = "ЛЕСНАЯ ТРАССА"
+map_position = Vector2(0.76, 0.8)
+mission = ExtResource("m_chapter_south")
+intro_pages = PackedStringArray("ЧЕРЕЗ ДВЕ НЕДЕЛИ ПОСЛЕ МОСТА ЛЕВ ПОЙМАЛ ЮЖНЫЙ ПОРТ. ГОЛОС КАПИТАНА ЯКОРЕВА БЫЛ ХРИПЛЫМ: «ПОРТ ПАЛ. КОРАБЛЬ У ПРИЧАЛА. ВАКЦИНА НА БОРТУ. НАС ДЕСЯТЕРО. ПРИЁМ».", "ДВЕСТИ ЖИТЕЛЕЙ ПОРТА УСПЕЛИ УЙТИ В ГОРЫ И ЖДУТ ВАКЦИНУ. А «НАДЕЖДА» ЗАСТРЯЛА У ПРИЧАЛА: НИ ТОПЛИВА, НИ ДОРОГИ К НЕЙ.", "МЫ ЕДЕМ НА ЮГ: Я, ТЁМА, ДЕНИС ЗА РУЛЁМ И ГЕНКА С ТЕРМОСОМ ДЯДИ ГОШИ. ЛЕСНАЯ ТРАССА ЗАБИТА МЕРТВЕЦАМИ — РАСЧИСТИ ДОРОГУ КОЛОННЕ.")
+outro_pages = PackedStringArray("НА ОБОЧИНЕ СТОЯЛА ФУРА С НАДПИСЬЮ «МОРОЖЕНОЕ». ВНУТРИ ТРИ МЕСЯЦА ЖИЛ ДАЛЬНОБОЙЩИК МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ. МОРОЖЕНОЕ КОНЧИЛОСЬ В ПЕРВУЮ НЕДЕЛЮ. ТЁЩА — НЕТ.", "МИХАЛЫЧ ЗНАЕТ ПОРТ КАК СВОИ ПЯТЬ ПАЛЬЦЕВ: «ТОПЛИВО — В КАНИСТРАХ НА ПРИЧАЛАХ. ТОЛЬКО ТАМ ТЕПЕРЬ НЕ ГРУЗЧИКИ, А ЭТИ…»", "К ВЕЧЕРУ НА ГОРИЗОНТЕ ПОКАЗАЛОСЬ МОРЕ. ТЁМА ВИДЕЛ ЕГО ВПЕРВЫЕ И МОЛЧАЛ ЦЕЛЫХ ДВЕ МИНУТЫ. ЭТО РЕКОРД.")
+intro_film = ExtResource("f_chapter_south_intro")
+outro_film = ExtResource("f_chapter_south_outro")
+rescued = 3
+
+[sub_resource type="Resource" id="chapter_port"]
+script = ExtResource("2_chap")
+id = "chapter_port"
+title = "ЮЖНЫЙ ПОРТ"
+location_name = "ЮЖНЫЙ ПОРТ"
+map_position = Vector2(0.84, 0.97)
+mission = ExtResource("m_chapter_port")
+intro_pages = PackedStringArray("ЮЖНЫЙ ПОРТ. КРАНЫ ЗАМЕРЛИ НАД ВОДОЙ, КОНТЕЙНЕРЫ СТОЯТ, КАК ДОМИНО. У ПРИЧАЛА — БЕЛЫЙ КОРАБЛЬ «НАДЕЖДА». НА МОСТИКЕ МИГАЕТ ФОНАРИК: ЯКОРЕВ ЖИВ.", "БАКИ ПУСТЫ. ТОПЛИВО — В КАНИСТРАХ ПО ВСЕМУ ПОРТУ: НА ПИРСЕ, У МАЯКА, МЕЖДУ КОНТЕЙНЕРАМИ. МЕРТВЕЦЫ ИДУТ НА ЗАПАХ СОЛЯРКИ — НЕ СПРАШИВАЙ ПОЧЕМУ.", "СОБЕРИ ШЕСТЬ КАНИСТР. КОК БОРЩОВ ОБЕЩАЛ ЗА КАЖДУЮ ТАРЕЛКУ БОРЩА. ТЁМА ТОРГУЕТСЯ НА ДВЕ.")
+outro_pages = PackedStringArray("ЯКОРЕВ ОБНЯЛ МЕНЯ ТАК, ЧТО ХРУСТНУЛА РАЦИЯ. ЭКИПАЖ ДВЕ НЕДЕЛИ ДЕРЖАЛСЯ НА МОСТИКЕ НА СУХАРЯХ И МОРСКИХ АНЕКДОТАХ. АНЕКДОТЫ КОНЧИЛИСЬ РАНЬШЕ.", "БОРЩОВ СДЕРЖАЛ СЛОВО: БОРЩ БЫЛ ИЗ КОНСЕРВОВ, НО ГОРЯЧИЙ. ТЁМА СЪЕЛ ДВЕ ТАРЕЛКИ И ПОТРЕБОВАЛ ТРЕТЬЮ «ЗА ПЕРЕГОВОРЫ».", "ОСТАЛАСЬ БЕДА: ВЫХОД ИЗ ГАВАНИ — МЕЖДУ РИФАМИ. НОЧЬЮ БЕЗ МАЯКА НЕ ПРОЙТИ, А ДНЁМ МЕРТВЕЦЫ ЛЕЗУТ НА ПРИЧАЛ. НУЖЕН СВЕТ.")
+intro_film = ExtResource("f_chapter_port_intro")
+outro_film = ExtResource("f_chapter_port_outro")
+rescued = 4
+
+[sub_resource type="Resource" id="chapter_lighthouse"]
+script = ExtResource("2_chap")
+id = "chapter_lighthouse"
+title = "МАЯК"
+location_name = "МАЯК НА МОЛУ"
+map_position = Vector2(0.97, 0.97)
+mission = ExtResource("m_chapter_lighthouse")
+intro_pages = PackedStringArray("НА МАЯКЕ ГОРИТ ОКНО. ВНУТРИ — СМОТРИТЕЛЬ ПАЛЫЧ. ТРИ МЕСЯЦА ОН НЕ ВЫХОДИЛ НАРУЖУ И ДУМАЛ, ЧТО В ГОРОДЕ ЗАБАСТОВКА.", "«ЗОМБИ? — ПЕРЕСПРОСИЛ ПАЛЫЧ. — А Я ДУМАЛ, ГРУЗЧИКИ БЕЗ ЗАРПЛАТЫ». ГЕНЕРАТОР МАЯКА ЗАВЕДЁТСЯ, НО РЕВЁТ ТАК, ЧТО ЕГО СЛЫШНО НА ТОМ СВЕТЕ.", "НОЧЬ. ПАЛЫЧ ЧИНИТ ЛАМПУ, А ТЫ ДЕРЖИШЬ МОЛ. ВСЕ МЕРТВЕЦЫ ПОРТА ИДУТ НА ШУМ. И НЕ ТОЛЬКО ПОРТА.")
+outro_pages = PackedStringArray("МАЯК ЗАЖЁГСЯ. ЛУЧ ПРОШЁЛ ПО ВОДЕ, ПО КРАНАМ, ПО НАШИМ ЛИЦАМ. ПАЛЫЧ ПРОСЛЕЗИЛСЯ: «ТРИ МЕСЯЦА НИКТО НЕ ВИДЕЛ МОЙ СВЕТ».", "А ПОТОМ ЛУЧ ВЫХВАТИЛ ИЗ ВОДЫ ЧТО-ТО ОГРОМНОЕ. ОНО СТОЯЛО ПО ПОЯС В МОРЕ И СМОТРЕЛО НА МАЯК. ПАЛЫЧ СКАЗАЛ, ЧТО ЭТО ГРУЗЧИК. ЯКОРЕВ СКАЗАЛ: «УТОПЛЕННИК».", "ОТПЛЫВАЕМ НА РАССВЕТЕ. ПАЛЫЧ ВЫВЕДЕТ КОРАБЛЬ ЗА РИФЫ НА СВОЕЙ ЛОДКЕ. МАЯК ОСТАВИЛИ ГОРЕТЬ: ПУСТЬ ТЕ, КТО ЕЩЁ В ПУТИ, ЗНАЮТ, КУДА ИДТИ.")
+intro_film = ExtResource("f_chapter_lighthouse_intro")
+outro_film = ExtResource("f_chapter_lighthouse_outro")
+rescued = 1
+
+[sub_resource type="Resource" id="chapter_voyage"]
+script = ExtResource("2_chap")
+id = "chapter_voyage"
+title = "ПОСЛЕДНИЙ РЕЙС"
+location_name = "ПРИЧАЛ «НАДЕЖДЫ»"
+map_position = Vector2(0.72, 0.99)
+mission = ExtResource("m_chapter_voyage")
+intro_pages = PackedStringArray("РАССВЕТ. «НАДЕЖДА» ДЫМИТ ТРУБОЙ ВПЕРВЫЕ ЗА МЕСЯЦ. ПО ТРАПУ ИДУТ ЛЮДИ: ЭКИПАЖ, МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ, КОК БОРЩОВ С КАСТРЮЛЕЙ.", "МОТОР РАЗБУДИЛ ВЕСЬ ПОРТ. МЕРТВЕЦЫ ЛЕЗУТ ИЗ КОНТЕЙНЕРОВ, А ИЗ ВОДЫ ПОДНИМАЕТСЯ УТОПЛЕННИК — ВЫСОТОЙ С ПОЛКРАНА.", "ДЕРЖИ ПРИЧАЛ, ПОКА ВСЕ НЕ ПОДНИМУТСЯ НА БОРТ. ПЯТЬ ВОЛН — И УТОПЛЕННИК. ПРАВИЛО №1 ТЕПЕРЬ ЗВУЧИТ ТАК: ПРОВЕРЯЙ ЗАДНЮЮ ПАЛУБУ.")
+outro_pages = PackedStringArray("УТОПЛЕННИК РУХНУЛ В ВОДУ, И ВОЛНА ОКАТИЛА ПРИЧАЛ. ТЁМА КРИКНУЛ: «ПОЗДРАВЛЯЮ, ТЫ ПОБЕДИЛ ГРУЗЧИКА!» ПАЛЫЧ ОБИДЕЛСЯ ЗА ГРУЗЧИКОВ.", "ЯКОРЕВ ДАЛ ГУДОК — ДЛИННЫЙ, НА ВЕСЬ ПОРТ. «НАДЕЖДА» УШЛА НА ЮГ С ВАКЦИНОЙ, К ДВУМ СОТНЯМ ЛЮДЕЙ В ГОРАХ. МАЯК МИГНУЛ ЕЙ ВСЛЕД.", "ПАЛЫЧ ВЫВЕЛ КОРАБЛЬ ЗА РИФЫ И ВЕРНУЛСЯ: В МОРЕ ЕГО УКАЧИВАЕТ. ТЕПЕРЬ ОН ЖИВЁТ В ЛАГЕРЕ И ОХРАНЯЕТ ГЕРАНЬ. У ЛАГЕРЯ — НОВЫЙ ДОМ И СВОЙ ПОРТ.")
+intro_film = ExtResource("f_chapter_voyage_intro")
+outro_film = ExtResource("f_chapter_voyage_outro")
+rescued = 6
+unlock_house = true
+
 [resource]
 script = ExtResource("1_camp")
 prologue_pages = PackedStringArray("СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО. ГОРОД, ГДЕ СВЕТОФОРЫ РАБОТАЛИ, АВТОБУСЫ ХОДИЛИ ПО РАСПИСАНИЮ, А САМОЙ СТРАШНОЙ БЕДОЙ БЫЛА ПРОБКА НА ПРОСПЕКТЕ.", "МЫ ЖИЛИ НА САДОВОЙ: МАМА, Я И МОЙ МЛАДШИЙ БРАТ ТЁМА. ДВЕНАДЦАТЬ ЛЕТ, СОРОК КИЛОГРАММОВ УПРЯМСТВА И ВЕЧНО РАЗРЯЖЕННЫЙ ТЕЛЕФОН.", "ЗА РЕКОЙ РАБОТАЛА ЛАБОРАТОРИЯ «ГЕНОМ». ОНИ ИСКАЛИ ЛЕКАРСТВО ОТ СТАРОСТИ — И НАШЛИ «ГНИЛЬ-7». ОНА НЕ ЛЕЧИЛА СТАРОСТЬ. ОНА ОТМЕНЯЛА СМЕРТЬ.", "ДЕНЬ НОЛЬ, 18:40. ПОЖАР В «ГЕНОМЕ». ЧЕРЕЗ ЧАС ПО ГОРОДУ БЕЖАЛИ ЛЮДИ. ЧЕРЕЗ ДВА — ЗА НИМИ БЕЖАЛИ ТЕ, КТО УЖЕ НЕ БЫЛ ЛЮДЬМИ.", "МАМА ОСТАЛАСЬ, ЧТОБЫ МЫ УСПЕЛИ К МОСТУ. ОНА НЕ ДОГНАЛА. А ПОТОМ ТОЛПА РАЗОРВАЛА НАС С ТЁМОЙ.", "ТРИ МЕСЯЦА СПУСТЯ. МАМУ Я ПОХОРОНИЛ У СТАРОЙ ЧАСОВНИ. ТЁМУ НЕ НАШЁЛ. А РАЗ НЕ НАШЁЛ — ЗНАЧИТ, ОН ЖИВ.", "У МЕНЯ ЕСТЬ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ, НОЖ, ПИСТОЛЕТ И ПРАВИЛА ВЫЖИВАНИЯ. ПРАВИЛО №1: ВСЕГДА ПРОВЕРЯЙ ЗАДНЕЕ СИДЕНЬЕ.", "Я НАЙДУ БРАТА. И ВСЕХ, КТО ЕЩЁ ДЫШИТ.")
-epilogue_pages = PackedStringArray("КОРАБЛЬ УШЁЛ НА ЮГ С ВАКЦИНОЙ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ.", "ДЯДЯ ГОША ОТКРЫЛ В ЛАГЕРЕ КОФЕЙНЮ «ПОСЛЕДНЯЯ КАПЛЯ». ШНЫРЬ ВЕДЁТ БУХГАЛТЕРИЮ НА СОВЕТСКОМ КАЛЬКУЛЯТОРЕ И НОСИТ БОРОДУ С ГОРДОСТЬЮ.", "ГЕНКА И КАБАН МОЮТ ПОСУДУ И СПОРЯТ, ЧЬЯ ТАРЕЛКА ЧИЩЕ. ИРИНА ДЕЛАЕТ ВАКЦИНУ ПАРТИЯМИ. НИНА ВЫДАЁТ ЕЁ СТРОГО ПО РЕЦЕПТУ.", "ТЁМА ЧИНИТ ВСЁ, ЧТО ВИДИТ, И СПОРИТ С ДЕНИСОМ, КАКАЯ МАШИНА ЛУЧШЕ ДРИФТУЕТ. МАМА БЫ СМЕЯЛАСЬ.", "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ.", "КАМПАНИЯ ПРОЙДЕНА. ГОРОД, БЕСКОНЕЧНАЯ ОБОРОНА И ИГРА С ДРУЗЬЯМИ ЖДУТ.")
+epilogue_pages = PackedStringArray("«НАДЕЖДА» ДОВЕЗЛА ВАКЦИНУ ДО ЛЮДЕЙ В ГОРАХ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ.", "ДЯДЯ ГОША ОТКРЫЛ В ЛАГЕРЕ КОФЕЙНЮ «ПОСЛЕДНЯЯ КАПЛЯ». ШНЫРЬ ВЕДЁТ БУХГАЛТЕРИЮ НА СОВЕТСКОМ КАЛЬКУЛЯТОРЕ И НОСИТ БОРОДУ С ГОРДОСТЬЮ.", "ГЕНКА И КАБАН МОЮТ ПОСУДУ И СПОРЯТ, ЧЬЯ ТАРЕЛКА ЧИЩЕ. ИРИНА ДЕЛАЕТ ВАКЦИНУ ПАРТИЯМИ. НИНА ВЫДАЁТ ЕЁ СТРОГО ПО РЕЦЕПТУ.", "ТЁМА ЧИНИТ ВСЁ, ЧТО ВИДИТ, И СПОРИТ С ДЕНИСОМ, КАКАЯ МАШИНА ЛУЧШЕ ДРИФТУЕТ. МАМА БЫ СМЕЯЛАСЬ.", "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ.", "КАМПАНИЯ ПРОЙДЕНА. ГОРОД, БЕСКОНЕЧНАЯ ОБОРОНА И ИГРА С ДРУЗЬЯМИ ЖДУТ.")
 prologue_film = ExtResource("f_prologue")
 epilogue_film = ExtResource("f_epilogue")
-chapters = Array[ExtResource("2_chap")]([SubResource("chapter_1"), SubResource("chapter_2"), SubResource("chapter_3"), SubResource("chapter_4"), SubResource("chapter_bandits"), SubResource("chapter_5"), SubResource("chapter_6"), SubResource("chapter_baron"), SubResource("chapter_7"), SubResource("chapter_pharmacy"), SubResource("chapter_tower"), SubResource("chapter_rat"), SubResource("chapter_bridge")])
+chapters = Array[ExtResource("2_chap")]([SubResource("chapter_1"), SubResource("chapter_2"), SubResource("chapter_3"), SubResource("chapter_4"), SubResource("chapter_bandits"), SubResource("chapter_5"), SubResource("chapter_6"), SubResource("chapter_baron"), SubResource("chapter_7"), SubResource("chapter_pharmacy"), SubResource("chapter_tower"), SubResource("chapter_rat"), SubResource("chapter_bridge"), SubResource("chapter_south"), SubResource("chapter_port"), SubResource("chapter_lighthouse"), SubResource("chapter_voyage")])

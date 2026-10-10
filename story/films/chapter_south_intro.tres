@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 3.5
+title = "ЧАСТЬ ТРЕТЬЯ"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 6.0
+voice_ru = "Говорит «Надежда», Южный порт. Порт пал. Нас десятеро, вакцина на борту, топлива нет. Если кто слышит — приём."
+voice_en = "This is the Nadezhda, Southern Port. The port has fallen. Ten of us left, the vaccine is aboard, no fuel. If anyone hears us, over."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Это Якорев. Живой. Хриплый, но живой."
+voice_en = "That's Yakorev. Alive. Hoarse, but alive."
+speaker = "ЛЕВ"
+pitch = 0.75
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Я еду. И не спорь — я уже собрал рюкзак. Красный."
+voice_en = "I'm going. Don't argue, I've already packed my backpack. The red one."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "chase"
+duration = 6.0
+caption = "ЛЕСНАЯ ТРАССА. УТРО"
+voice_ru = "Денис за рулём, Генка с термосом дяди Гоши, Тёма на рации. Двести километров на юг — и одна большая пробка из мертвецов."
+voice_en = "Denis driving, Genka with Uncle Gosha's thermos, Tyoma on the radio. Two hundred kilometers south, and one big traffic jam of the dead."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "road_low"
+duration = 5.0
+voice_ru = "Объезда нет. Значит, расчищаем. Вручную."
+voice_en = "No way around. So we clear it. By hand."
+speaker = "ДЕНИС"
+pitch = 0.9
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_south_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

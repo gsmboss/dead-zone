@@ -163,14 +163,23 @@ msgstr "WI-FI, UP TO 4 PLAYERS"
 msgid "x2 МОНЕТЫ  ▶ РЕКЛАМА"
 msgstr "x2 COINS  ▶ AD"
 
+msgid "«ЗОМБИ? — ПЕРЕСПРОСИЛ ПАЛЫЧ. — А Я ДУМАЛ, ГРУЗЧИКИ БЕЗ ЗАРПЛАТЫ». ГЕНЕРАТОР МАЯКА ЗАВЕДЁТСЯ, НО РЕВЁТ ТАК, ЧТО ЕГО СЛЫШНО НА ТОМ СВЕТЕ."
+msgstr "\"ZOMBIES?\" PALYCH ASKED. \"I THOUGHT THEY WERE DOCKERS WHO NEVER GOT PAID.\" THE LIGHTHOUSE GENERATOR WILL START, BUT IT ROARS LOUD ENOUGH TO BE HEARD IN THE AFTERLIFE."
+
 msgid "«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ."
 msgstr "\"TO HOTSPOT\" OR ENTER THE HOST IP. UP TO 4 PLAYERS."
+
+msgid "«НАДЕЖДА» ДОВЕЗЛА ВАКЦИНУ ДО ЛЮДЕЙ В ГОРАХ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ."
+msgstr "THE NADEZHDA DELIVERED THE VACCINE TO THE PEOPLE IN THE MOUNTAINS. A MONTH LATER LEV PICKED UP VOICES FROM THREE MORE CITIES: PEOPLE LIVE THERE TOO."
 
 msgid "«Я ЖИВ. ИДУ К ЛЕСУ. Т.»"
 msgstr "\"I'M ALIVE. HEADING TO THE FOREST. T.\""
 
 msgid "А В АРХИВЕ ВЫШКИ ЛЕВ НАШЁЛ ЗАПИСЬ ДНЯ НОЛЬ. ЖЕНСКИЙ ГОЛОС НА АВАРИЙНОЙ ЧАСТОТЕ: «ЕСЛИ КТО-ТО НАЙДЁТ МОИХ МАЛЬЧИКОВ…» ЭТО МАМА."
 msgstr "AND IN THE TOWER ARCHIVE LEV FOUND A RECORDING FROM DAY ZERO. A WOMAN'S VOICE ON THE EMERGENCY FREQUENCY: \"IF ANYONE FINDS MY BOYS…\" IT'S MOM."
+
+msgid "А ПОТОМ ЛУЧ ВЫХВАТИЛ ИЗ ВОДЫ ЧТО-ТО ОГРОМНОЕ. ОНО СТОЯЛО ПО ПОЯС В МОРЕ И СМОТРЕЛО НА МАЯК. ПАЛЫЧ СКАЗАЛ, ЧТО ЭТО ГРУЗЧИК. ЯКОРЕВ СКАЗАЛ: «УТОПЛЕННИК»."
+msgstr "THEN THE BEAM CAUGHT SOMETHING HUGE IN THE WATER. IT STOOD WAIST-DEEP IN THE SEA, STARING AT THE LIGHTHOUSE. PALYCH SAID IT WAS A DOCKER. YAKOREV SAID: \"THE DROWNED ONE.\""
 
 msgid "А ПОТОМ ОН УСЛЫШАЛ ГОЛОС БАРОНА ПО РАЦИИ И ЗАХОХОТАЛ: «ДА ЭТО ЖЕ ГЕНКА! ОХРАННИК ИЗ УНИВЕРМАГА! ОН НА ПАРКОВКЕ ШТРАФЫ ВЫПИСЫВАЛ!»"
 msgstr "THEN HE HEARD BARON'S VOICE ON THE RADIO AND BURST OUT LAUGHING: \"THAT'S GENKA! THE SECURITY GUARD FROM THE DEPARTMENT STORE! HE USED TO WRITE PARKING TICKETS!\""
@@ -210,6 +219,9 @@ msgstr "TOWER ARCHIVE. DAY ZERO"
 
 msgid "БАЗА"
 msgstr "BASE"
+
+msgid "БАКИ ПУСТЫ. ТОПЛИВО — В КАНИСТРАХ ПО ВСЕМУ ПОРТУ: НА ПИРСЕ, У МАЯКА, МЕЖДУ КОНТЕЙНЕРАМИ. МЕРТВЕЦЫ ИДУТ НА ЗАПАХ СОЛЯРКИ — НЕ СПРАШИВАЙ ПОЧЕМУ."
+msgstr "THE TANKS ARE EMPTY. THE FUEL IS IN CANS ALL OVER THE PORT: ON THE PIER, BY THE LIGHTHOUSE, BETWEEN THE CONTAINERS. THE DEAD FOLLOW THE SMELL OF DIESEL. DON'T ASK WHY."
 
 msgid "БАНДИТ"
 msgstr "BANDIT"
@@ -270,6 +282,12 @@ msgstr "MONEYBAGS"
 
 msgid "БОЛЬШОЙ МАГАЗИН"
 msgstr "EXTENDED MAG"
+
+msgid "БОРЩОВ"
+msgstr "BORSHCHOV"
+
+msgid "БОРЩОВ СДЕРЖАЛ СЛОВО: БОРЩ БЫЛ ИЗ КОНСЕРВОВ, НО ГОРЯЧИЙ. ТЁМА СЪЕЛ ДВЕ ТАРЕЛКИ И ПОТРЕБОВАЛ ТРЕТЬЮ «ЗА ПЕРЕГОВОРЫ»."
+msgstr "BORSHCHOV KEPT HIS WORD: THE BORSCHT CAME FROM CANS, BUT IT WAS HOT. TYOMA ATE TWO BOWLS AND DEMANDED A THIRD \"FOR THE NEGOTIATIONS\"."
 
 msgid "БОСС"
 msgstr "BOSS"
@@ -742,6 +760,9 @@ msgstr "NEXT  ▸"
 msgid "ДВЕ МИНУТЫ НА ПОЛИГОНЕ: ХОДЬБА, ОБЗОР, СТРЕЛЬБА, ПРИЦЕЛ И ПЕРВЫЕ ЗОМБИ. НАГРАДА — 150 МОНЕТ."
 msgstr "TWO MINUTES ON THE PROVING GROUND: WALKING, LOOKING, SHOOTING, AIMING AND YOUR FIRST ZOMBIES. REWARD — 150 COINS."
 
+msgid "ДВЕСТИ ЖИТЕЛЕЙ ПОРТА УСПЕЛИ УЙТИ В ГОРЫ И ЖДУТ ВАКЦИНУ. А «НАДЕЖДА» ЗАСТРЯЛА У ПРИЧАЛА: НИ ТОПЛИВА, НИ ДОРОГИ К НЕЙ."
+msgstr "TWO HUNDRED PEOPLE FROM THE PORT ESCAPED INTO THE MOUNTAINS AND ARE WAITING FOR THE VACCINE. BUT THE NADEZHDA IS STUCK AT THE PIER: NO FUEL, NO WAY TO REACH HER."
+
 msgid "ДВИГАЙСЯ: ВЕДИ ДЖОЙСТИК СЛЕВА"
 msgstr "MOVE: DRAG THE JOYSTICK ON THE LEFT"
 
@@ -775,6 +796,9 @@ msgstr "DAY ZERO"
 msgid "ДЕНЬ НОЛЬ, 18:40. ПОЖАР В «ГЕНОМЕ». ЧЕРЕЗ ЧАС ПО ГОРОДУ БЕЖАЛИ ЛЮДИ. ЧЕРЕЗ ДВА — ЗА НИМИ БЕЖАЛИ ТЕ, КТО УЖЕ НЕ БЫЛ ЛЮДЬМИ."
 msgstr "DAY ZERO, 18:40. A FIRE AT \"GENOME\". AN HOUR LATER PEOPLE WERE RUNNING THROUGH THE CITY. TWO HOURS LATER THEY WERE BEING CHASED BY THOSE WHO WERE NO LONGER PEOPLE."
 
+msgid "ДЕРЖИ ПРИЧАЛ, ПОКА ВСЕ НЕ ПОДНИМУТСЯ НА БОРТ. ПЯТЬ ВОЛН — И УТОПЛЕННИК. ПРАВИЛО №1 ТЕПЕРЬ ЗВУЧИТ ТАК: ПРОВЕРЯЙ ЗАДНЮЮ ПАЛУБУ."
+msgstr "HOLD THE PIER UNTIL EVERYONE IS ABOARD. FIVE WAVES, THEN THE DROWNED ONE. RULE NO. 1 NOW GOES LIKE THIS: ALWAYS CHECK THE BACK DECK."
+
 msgid "ДЖОЙСТИК\n(ПЕРЕТАЩИ НА ДРУГУЮ СТОРОНУ)"
 msgstr "JOYSTICK\n(DRAG TO THE OTHER SIDE)"
 
@@ -789,6 +813,9 @@ msgstr "FOR THE WORKSHOP"
 
 msgid "ДОКТОР ИРИНА СОБИРАЕТ ВАКЦИНУ ИЗ ТОГО, ЧТО ЕСТЬ: МИКРОСКОП ТЁМЫ, ХОЛОДИЛЬНИК ДЕНИСА И КОФЕМАШИНА ДЯДИ ГОШИ — «ДЛЯ НАСТРОЕНИЯ»."
 msgstr "DOCTOR IRINA IS BUILDING A VACCINE FROM WHAT WE'VE GOT: TYOMA'S MICROSCOPE, DENIS'S FRIDGE AND UNCLE GOSHA'S COFFEE MACHINE — \"FOR MORALE\"."
+
+msgid "ДОРОГА НА ЮГ"
+msgstr "ROAD TO THE SOUTH"
 
 msgid "ДОСТИЖЕНИЕ!"
 msgstr "ACHIEVEMENT!"
@@ -1090,6 +1117,9 @@ msgstr "Mission intro: objective"
 msgid "Исследуй город, спасай выживших, катайся и сбивай зомби"
 msgstr "Explore the city, rescue survivors, cruise around and run down zombies"
 
+msgid "К ВЕЧЕРУ НА ГОРИЗОНТЕ ПОКАЗАЛОСЬ МОРЕ. ТЁМА ВИДЕЛ ЕГО ВПЕРВЫЕ И МОЛЧАЛ ЦЕЛЫХ ДВЕ МИНУТЫ. ЭТО РЕКОРД."
+msgstr "BY EVENING THE SEA APPEARED ON THE HORIZON. TYOMA SAW IT FOR THE FIRST TIME AND STAYED QUIET FOR TWO WHOLE MINUTES. A RECORD."
+
 msgid "К КАРТЕ"
 msgstr "TO MAP"
 
@@ -1201,6 +1231,9 @@ msgstr "THE END"
 msgid "КОНЕЦ ВТОРОЙ ЧАСТИ"
 msgstr "END OF PART TWO"
 
+msgid "КОНЕЦ ТРЕТЬЕЙ ЧАСТИ"
+msgstr "END OF PART THREE"
+
 msgid "КОНТЕЙНЕР №7"
 msgstr "CONTAINER №7"
 
@@ -1267,6 +1300,9 @@ msgstr "OWNED • %s"
 msgid "КУРЬЕР"
 msgstr "COURIER"
 
+msgid "Корабль «Надежда» стоит без топлива. Собери 6 канистр по причалам, пока мертвецы не почуяли солярку"
+msgstr "The ship Nadezhda is out of fuel. Collect 6 fuel cans around the docks before the dead smell the diesel"
+
 msgid "Корабль с юга ждёт у старого моста. Кабан ведёт орду и банду, чтобы отнять вакцину. Выдержи 5 волн и победи Кабана"
 msgstr "A ship from the south waits at the old bridge. Kaban leads a horde and his gang to steal the vaccine. Survive 5 waves and defeat Kaban"
 
@@ -1315,6 +1351,12 @@ msgstr "FOREST"
 msgid "ЛЕСНАЯ ВЫШКА"
 msgstr "FOREST TOWER"
 
+msgid "ЛЕСНАЯ ТРАССА"
+msgstr "FOREST HIGHWAY"
+
+msgid "ЛЕСНАЯ ТРАССА. УТРО"
+msgstr "FOREST HIGHWAY. MORNING"
+
 msgid "ЛЕСНОЙ ЛАГЕРЬ"
 msgstr "FOREST CAMP"
 
@@ -1353,6 +1395,9 @@ msgstr "PEOPLE +%d"
 
 msgid "Лев передаёт рецепт вакцины с лесной вышки. Удержи точку у вышки 100 секунд"
 msgstr "Lev is sending the vaccine recipe from the forest tower. Hold the point by the tower for 100 seconds"
+
+msgid "Лесная трасса на юг забита мертвецами. Расчисти дорогу колонне: убей 45 зомби"
+msgstr "The forest highway south is jammed with the dead. Clear the road for the convoy: kill 45 zombies"
 
 msgid "Лом, патроны и аптечки выпадают в 2 раза чаще"
 msgstr "Scrap, ammo and medkits drop 2 times more often"
@@ -1423,6 +1468,15 @@ msgstr "CAR BROKEN — HOLD \"REPAIR\""
 msgid "МАШИНЫ"
 msgstr "CARS"
 
+msgid "МАЯК"
+msgstr "THE LIGHTHOUSE"
+
+msgid "МАЯК ЗАЖЁГСЯ. ЛУЧ ПРОШЁЛ ПО ВОДЕ, ПО КРАНАМ, ПО НАШИМ ЛИЦАМ. ПАЛЫЧ ПРОСЛЕЗИЛСЯ: «ТРИ МЕСЯЦА НИКТО НЕ ВИДЕЛ МОЙ СВЕТ»."
+msgstr "THE LIGHTHOUSE CAME ON. THE BEAM SWEPT THE WATER, THE CRANES, OUR FACES. PALYCH TEARED UP: \"THREE MONTHS AND NOBODY SAW MY LIGHT.\""
+
+msgid "МАЯК НА МОЛУ"
+msgstr "LIGHTHOUSE ON THE PIER"
+
 msgid "МЕДИК"
 msgstr "MEDIC"
 
@@ -1456,6 +1510,12 @@ msgstr "MISSION COMPLETE"
 msgid "МИССИЯ ПРОВАЛЕНА"
 msgstr "MISSION FAILED"
 
+msgid "МИХАЛЫЧ"
+msgstr "MIKHALYCH"
+
+msgid "МИХАЛЫЧ ЗНАЕТ ПОРТ КАК СВОИ ПЯТЬ ПАЛЬЦЕВ: «ТОПЛИВО — В КАНИСТРАХ НА ПРИЧАЛАХ. ТОЛЬКО ТАМ ТЕПЕРЬ НЕ ГРУЗЧИКИ, А ЭТИ…»"
+msgstr "MIKHALYCH KNOWS THE PORT LIKE THE BACK OF HIS HAND: \"THE FUEL IS IN CANS ON THE PIERS. ONLY IT'S NOT DOCKERS THERE NOW, IT'S THOSE...\""
+
 msgid "МОЛОТОВ"
 msgstr "MOLOTOV"
 
@@ -1474,6 +1534,9 @@ msgstr "COINS +%d  (TOTAL %d)"
 msgid "МОНЕТЫ: %d"
 msgstr "COINS: %d"
 
+msgid "МОТОР РАЗБУДИЛ ВЕСЬ ПОРТ. МЕРТВЕЦЫ ЛЕЗУТ ИЗ КОНТЕЙНЕРОВ, А ИЗ ВОДЫ ПОДНИМАЕТСЯ УТОПЛЕННИК — ВЫСОТОЙ С ПОЛКРАНА."
+msgstr "THE ENGINE WOKE THE WHOLE PORT. THE DEAD CRAWL OUT OF THE CONTAINERS, AND THE DROWNED ONE RISES FROM THE WATER, HALF AS TALL AS A CRANE."
+
 msgid "МОТОЦИКЛ"
 msgstr "MOTORBIKE"
 
@@ -1482,6 +1545,9 @@ msgstr "MUSIC"
 
 msgid "МЫ ВЕРНЁМ ЭТОТ ГОРОД"
 msgstr "WE'LL TAKE THIS CITY BACK"
+
+msgid "МЫ ЕДЕМ НА ЮГ: Я, ТЁМА, ДЕНИС ЗА РУЛЁМ И ГЕНКА С ТЕРМОСОМ ДЯДИ ГОШИ. ЛЕСНАЯ ТРАССА ЗАБИТА МЕРТВЕЦАМИ — РАСЧИСТИ ДОРОГУ КОЛОННЕ."
+msgstr "WE'RE HEADING SOUTH: ME, TYOMA, DENIS AT THE WHEEL AND GENKA WITH UNCLE GOSHA'S THERMOS. THE FOREST HIGHWAY IS JAMMED WITH THE DEAD. CLEAR THE ROAD FOR THE CONVOY."
 
 msgid "МЫ ЖИЛИ НА САДОВОЙ: МАМА, Я И МОЙ МЛАДШИЙ БРАТ ТЁМА. ДВЕНАДЦАТЬ ЛЕТ, СОРОК КИЛОГРАММОВ УПРЯМСТВА И ВЕЧНО РАЗРЯЖЕННЫЙ ТЕЛЕФОН."
 msgstr "WE LIVED ON SADOVAYA STREET: MOM, ME AND MY LITTLE BROTHER TYOMA. TWELVE YEARS OLD, NINETY POUNDS OF STUBBORNNESS AND A PHONE THAT WAS ALWAYS DEAD."
@@ -1521,6 +1587,12 @@ msgstr "Coins: %d per wave + per kill  •  record %s"
 
 msgid "Мёртвые встают из могил: скелеты быстрые, гниляки живучие. Отбей пять волн, в конце — Громила"
 msgstr "The dead rise from their graves: skeletons are fast, ghouls are tough. Hold off five waves, then the Brute"
+
+msgid "НА МАЯКЕ ГОРИТ ОКНО. ВНУТРИ — СМОТРИТЕЛЬ ПАЛЫЧ. ТРИ МЕСЯЦА ОН НЕ ВЫХОДИЛ НАРУЖУ И ДУМАЛ, ЧТО В ГОРОДЕ ЗАБАСТОВКА."
+msgstr "A WINDOW GLOWS IN THE LIGHTHOUSE. INSIDE IS THE KEEPER, PALYCH. HE HAS NOT GONE OUTSIDE FOR THREE MONTHS AND THOUGHT THE CITY WAS ON STRIKE."
+
+msgid "НА ОБОЧИНЕ СТОЯЛА ФУРА С НАДПИСЬЮ «МОРОЖЕНОЕ». ВНУТРИ ТРИ МЕСЯЦА ЖИЛ ДАЛЬНОБОЙЩИК МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ. МОРОЖЕНОЕ КОНЧИЛОСЬ В ПЕРВУЮ НЕДЕЛЮ. ТЁЩА — НЕТ."
+msgstr "A TRUCK MARKED \"ICE CREAM\" STOOD ON THE ROADSIDE. TRUCKER MIKHALYCH HAD LIVED IN IT FOR THREE MONTHS WITH HIS WIFE AND MOTHER-IN-LAW. THE ICE CREAM RAN OUT IN THE FIRST WEEK. THE MOTHER-IN-LAW DID NOT."
 
 msgid "НА ПЕРИЛАХ МОСТА ВСЁ ЕЩЁ ВИСИТ СИНИЙ ШАРФ. МАМИН. МЫ С ТЁМОЙ ЗАВЯЗАЛИ РЯДОМ КРАСНЫЙ РЮКЗАК. ПУСТЬ ВИСЯТ ВМЕСТЕ."
 msgstr "A BLUE SCARF STILL HANGS ON THE BRIDGE RAILING. MOM'S. TYOMA AND I TIED THE RED BACKPACK NEXT TO IT. LET THEM HANG TOGETHER."
@@ -1642,6 +1714,9 @@ msgstr "NIGHT AT THE GRAVEYARD"
 msgid "НОЧЬ ПЕРЕД МОСТОМ"
 msgstr "THE NIGHT BEFORE THE BRIDGE"
 
+msgid "НОЧЬ. ПАЛЫЧ ЧИНИТ ЛАМПУ, А ТЫ ДЕРЖИШЬ МОЛ. ВСЕ МЕРТВЕЦЫ ПОРТА ИДУТ НА ШУМ. И НЕ ТОЛЬКО ПОРТА."
+msgstr "NIGHT. PALYCH FIXES THE LAMP WHILE YOU HOLD THE BREAKWATER. EVERY CORPSE IN THE PORT IS COMING TO THE NOISE. AND NOT JUST IN THE PORT."
+
 msgid "НОЧЬ: ЗОМБИ АКТИВНЕЕ"
 msgstr "NIGHT: ZOMBIES MORE ACTIVE"
 
@@ -1726,6 +1801,9 @@ msgstr "LOOK AROUND: SWIPE ON THE RIGHT SIDE OF THE SCREEN"
 msgid "ОСМОТРИСЬ: ДВИГАЙ МЫШЬЮ"
 msgstr "LOOK AROUND: MOVE THE MOUSE"
 
+msgid "ОСТАЛАСЬ БЕДА: ВЫХОД ИЗ ГАВАНИ — МЕЖДУ РИФАМИ. НОЧЬЮ БЕЗ МАЯКА НЕ ПРОЙТИ, А ДНЁМ МЕРТВЕЦЫ ЛЕЗУТ НА ПРИЧАЛ. НУЖЕН СВЕТ."
+msgstr "ONE PROBLEM LEFT: THE WAY OUT OF THE HARBOR RUNS BETWEEN REEFS. AT NIGHT YOU CAN'T PASS WITHOUT THE LIGHTHOUSE, AND BY DAY THE DEAD CLIMB ONTO THE PIER. WE NEED LIGHT."
+
 msgid "ОСТАТЬСЯ"
 msgstr "STAY"
 
@@ -1743,6 +1821,9 @@ msgstr "NICE! FINISH OFF THE REST — AND THE TUTORIAL IS DONE"
 
 msgid "ОТМЕНА"
 msgstr "CANCEL"
+
+msgid "ОТПЛЫВАЕМ НА РАССВЕТЕ. ПАЛЫЧ ВЫВЕДЕТ КОРАБЛЬ ЗА РИФЫ НА СВОЕЙ ЛОДКЕ. МАЯК ОСТАВИЛИ ГОРЕТЬ: ПУСТЬ ТЕ, КТО ЕЩЁ В ПУТИ, ЗНАЮТ, КУДА ИДТИ."
+msgstr "WE SAIL AT DAWN. PALYCH WILL GUIDE THE SHIP PAST THE REEFS IN HIS BOAT. WE LEFT THE LIGHTHOUSE ON: LET THOSE STILL ON THE ROAD KNOW WHERE TO GO."
 
 msgid "ОХОТА"
 msgstr "HUNT"
@@ -1791,6 +1872,12 @@ msgstr "Score: %d"
 
 msgid "ПАДШИЙ ГИГАНТ"
 msgstr "FALLEN GIANT"
+
+msgid "ПАЛЫЧ"
+msgstr "PALYCH"
+
+msgid "ПАЛЫЧ ВЫВЕЛ КОРАБЛЬ ЗА РИФЫ И ВЕРНУЛСЯ: В МОРЕ ЕГО УКАЧИВАЕТ. ТЕПЕРЬ ОН ЖИВЁТ В ЛАГЕРЕ И ОХРАНЯЕТ ГЕРАНЬ. У ЛАГЕРЯ — НОВЫЙ ДОМ И СВОЙ ПОРТ."
+msgstr "PALYCH GUIDED THE SHIP PAST THE REEFS AND CAME BACK: HE GETS SEASICK. NOW HE LIVES IN THE CAMP AND GUARDS HIS GERANIUM. THE CAMP HAS A NEW HOUSE AND A PORT OF ITS OWN."
 
 msgid "ПАМЯТЬ"
 msgstr "MEMORY"
@@ -1939,6 +2026,9 @@ msgstr "THE PORT ANSWERED. TWO HUNDRED PEOPLE, A SHIP AND CAPTAIN YAKOREV — TH
 msgid "ПОСЛЕДНИЙ ЖИВОЙ"
 msgstr "LAST ONE STANDING"
 
+msgid "ПОСЛЕДНИЙ РЕЙС"
+msgstr "THE LAST VOYAGE"
+
 msgid "ПОСЛЕДНЯЯ ВОЛНА: %s!"
 msgstr "FINAL WAVE: %s!"
 
@@ -1995,6 +2085,9 @@ msgstr "AIM: HOLD Z OR THE RIGHT MOUSE BUTTON"
 
 msgid "ПРИЦЕЛ: ЗАЖМИ КНОПКУ — ТОЧНЕЕ И ДАЛЬШЕ"
 msgstr "AIM: HOLD THE BUTTON — MORE ACCURATE, MORE RANGE"
+
+msgid "ПРИЧАЛ «НАДЕЖДЫ»"
+msgstr "THE NADEZHDA'S PIER"
 
 msgid "ПРОДЕРЖИСЬ %s • УБИТО %d"
 msgstr "SURVIVE %s • KILLS %d"
@@ -2056,6 +2149,9 @@ msgstr "FIVE WAVES, THEN KABAN. TYOMA ON THE RADIO, DENIS AT THE WHEEL, UNCLE GO
 msgid "ПЯТЬ ВОЛН, ПОТОМ ПРИДЁТ ОН — ГРОМИЛА, ПЕРВЫЙ ЗАРАЖЁННЫЙ. ПРАВИЛО ПОСЛЕДНЕЕ: ВОЗВРАЩАЙСЯ ДОМОЙ."
 msgstr "FIVE WAVES, THEN HE COMES — THE BRUTE, THE FIRST INFECTED. THE LAST RULE: COME BACK HOME."
 
+msgid "Палыч чинит маяк, а генератор ревёт на весь порт. Удержи точку у маяка 110 секунд"
+msgstr "Palych is fixing the lighthouse and the generator roars across the port. Hold the point by the lighthouse for 110 seconds"
+
 msgid "Перед каждой миссией в сумке появляется аптечка, если её нет"
 msgstr "A medkit appears in your bag before every mission if you don't have one"
 
@@ -2082,6 +2178,9 @@ msgstr "Half the zombies used to be builders"
 
 msgid "Пополняет запас всех стволов на 35%"
 msgstr "Refills all guns' reserve by 35%"
+
+msgid "Посадка на «Надежду». Удержи причал 5 волн, пока все поднимаются на борт, и победи Утопленника"
+msgstr "Boarding the Nadezhda. Hold the pier for 5 waves while everyone gets aboard, and defeat the Drowned One"
 
 msgid "Поставь 25 ловушек и турелей"
 msgstr "Place 25 traps and turrets"
@@ -2145,6 +2244,12 @@ msgstr "THIS USED TO BE SADOVAYA STREET: ICE CREAM, A BIKE SHOP, GRANNIES ON THE
 
 msgid "РАССВЕТ"
 msgstr "DAWN"
+
+msgid "РАССВЕТ. «НАДЕЖДА» ДЫМИТ ТРУБОЙ ВПЕРВЫЕ ЗА МЕСЯЦ. ПО ТРАПУ ИДУТ ЛЮДИ: ЭКИПАЖ, МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ, КОК БОРЩОВ С КАСТРЮЛЕЙ."
+msgstr "DAWN. THE NADEZHDA SMOKES FROM HER FUNNEL FOR THE FIRST TIME IN A MONTH. PEOPLE WALK UP THE GANGWAY: THE CREW, MIKHALYCH WITH HIS WIFE AND MOTHER-IN-LAW, COOK BORSHCHOV WITH HIS POT."
+
+msgid "РАССВЕТ. ПРИЧАЛ «НАДЕЖДЫ»"
+msgstr "DAWN. THE NADEZHDA'S PIER"
 
 msgid "РАССКАЗ ВЕРЫ"
 msgstr "VERA'S STORY"
@@ -2313,6 +2418,9 @@ msgstr "KNOCK OFF 60 HELMETS"
 
 msgid "СОБЕРИ 5 ЯЩИКОВ С ПРИПАСАМИ"
 msgstr "COLLECT 5 SUPPLY CRATES"
+
+msgid "СОБЕРИ ШЕСТЬ КАНИСТР. КОК БОРЩОВ ОБЕЩАЛ ЗА КАЖДУЮ ТАРЕЛКУ БОРЩА. ТЁМА ТОРГУЕТСЯ НА ДВЕ."
+msgstr "COLLECT SIX CANS. COOK BORSHCHOV PROMISED A BOWL OF BORSCHT FOR EACH ONE. TYOMA IS HOLDING OUT FOR TWO."
 
 msgid "СОБЕРИ ЯЩИКИ С РЕАКТИВАМИ. ПЛЕВУНЫ ЛЮБЯТ ХИМИЮ — НЕ ДАЙ ИМ ДОБРАТЬСЯ ДО НЕЁ ПЕРВЫМИ."
 msgstr "COLLECT THE REAGENT CRATES. SPITTERS LOVE CHEMICALS — DON'T LET THEM GET THERE FIRST."
@@ -2548,6 +2656,9 @@ msgstr "AXE"
 msgid "ТОЧКА"
 msgstr "POINT"
 
+msgid "ТРАССА НА ЮГ. ВЕЧЕР"
+msgstr "ROAD SOUTH. EVENING"
+
 msgid "ТРИ МЕСЯЦА СПУСТЯ"
 msgstr "THREE MONTHS LATER"
 
@@ -2656,6 +2767,12 @@ msgstr "THE \"JUBILEE\" DEPARTMENT STORE. THE SIGN IS LIT BACKWARDS: \"EELIBUJ\"
 msgid "УПРАВЛЕНИЕ"
 msgstr "HANDLING"
 
+msgid "УТОПЛЕННИК"
+msgstr "THE DROWNED ONE"
+
+msgid "УТОПЛЕННИК РУХНУЛ В ВОДУ, И ВОЛНА ОКАТИЛА ПРИЧАЛ. ТЁМА КРИКНУЛ: «ПОЗДРАВЛЯЮ, ТЫ ПОБЕДИЛ ГРУЗЧИКА!» ПАЛЫЧ ОБИДЕЛСЯ ЗА ГРУЗЧИКОВ."
+msgstr "THE DROWNED ONE CRASHED INTO THE WATER AND A WAVE WASHED OVER THE PIER. TYOMA SHOUTED: \"CONGRATS, YOU BEAT A DOCKER!\" PALYCH TOOK OFFENSE ON BEHALF OF DOCKERS."
+
 msgid "Убей %s"
 msgstr "Kill %s"
 
@@ -2761,6 +2878,9 @@ msgstr "THE \"GENOME\" PLANT. THIS IS WHERE THEY KEPT \"ROT-7\" — THE MEDICINE
 msgid "ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)"
 msgstr "POLLING RATE (GYRO FPS)"
 
+msgid "ЧАСТЬ ТРЕТЬЯ"
+msgstr "PART THREE"
+
 msgid "ЧЕЛОВЕК"
 msgstr "PEOPLE"
 
@@ -2769,6 +2889,9 @@ msgstr "PEOPLE"
 
 msgid "ЧЕМОДАН ЦЕЛ. КАБАН СБЕЖАЛ И БРОСИЛ СВОЙ СПОРТКАР. ДЕНИС ГОВОРИТ, ЧТО У МАШИНЫ ХАРАКТЕР. ТЁМА ГОВОРИТ, ЧТО ОНА РОЗОВАЯ."
 msgstr "THE CASE IS INTACT. KABAN RAN AND LEFT HIS SPORTS CAR BEHIND. DENIS SAYS THE CAR HAS CHARACTER. TYOMA SAYS IT'S PINK."
+
+msgid "ЧЕРЕЗ ДВЕ НЕДЕЛИ ПОСЛЕ МОСТА ЛЕВ ПОЙМАЛ ЮЖНЫЙ ПОРТ. ГОЛОС КАПИТАНА ЯКОРЕВА БЫЛ ХРИПЛЫМ: «ПОРТ ПАЛ. КОРАБЛЬ У ПРИЧАЛА. ВАКЦИНА НА БОРТУ. НАС ДЕСЯТЕРО. ПРИЁМ»."
+msgstr "TWO WEEKS AFTER THE BRIDGE, LEV PICKED UP THE SOUTHERN PORT. CAPTAIN YAKOREV'S VOICE WAS HOARSE: \"THE PORT HAS FALLEN. THE SHIP IS AT THE PIER. THE VACCINE IS ABOARD. TEN OF US LEFT. OVER.\""
 
 msgid "ЧЕРЕЗ НЕДЕЛЮ — МОСТ"
 msgstr "IN A WEEK — THE BRIDGE"
@@ -2821,6 +2944,15 @@ msgstr "EPILOGUE"
 msgid "ЭФФЕКТЫ"
 msgstr "EFFECTS"
 
+msgid "ЮЖНЫЙ ПОРТ"
+msgstr "THE SOUTHERN PORT"
+
+msgid "ЮЖНЫЙ ПОРТ. КРАНЫ ЗАМЕРЛИ НАД ВОДОЙ, КОНТЕЙНЕРЫ СТОЯТ, КАК ДОМИНО. У ПРИЧАЛА — БЕЛЫЙ КОРАБЛЬ «НАДЕЖДА». НА МОСТИКЕ МИГАЕТ ФОНАРИК: ЯКОРЕВ ЖИВ."
+msgstr "THE SOUTHERN PORT. CRANES FROZEN OVER THE WATER, CONTAINERS STANDING LIKE DOMINOES. AT THE PIER, THE WHITE SHIP NADEZHDA. A FLASHLIGHT BLINKS ON THE BRIDGE: YAKOREV IS ALIVE."
+
+msgid "ЮЖНЫЙ ПОРТ. НОЧЬ"
+msgstr "SOUTHERN PORT. NIGHT"
+
 msgid "ЮЖНЫЙ ПОРТ. ЭФИР"
 msgstr "SOUTHERN PORT. ON THE AIR"
 
@@ -2832,6 +2964,12 @@ msgstr "ЯЗЫК / LANGUAGE"
 
 msgid "ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s"
 msgstr "VOICE LANGUAGE: %s (AS ON PHONE)%s"
+
+msgid "ЯКОРЕВ ДАЛ ГУДОК — ДЛИННЫЙ, НА ВЕСЬ ПОРТ. «НАДЕЖДА» УШЛА НА ЮГ С ВАКЦИНОЙ, К ДВУМ СОТНЯМ ЛЮДЕЙ В ГОРАХ. МАЯК МИГНУЛ ЕЙ ВСЛЕД."
+msgstr "YAKOREV SOUNDED THE HORN, LONG AND LOUD ACROSS THE PORT. THE NADEZHDA SAILED SOUTH WITH THE VACCINE, TO TWO HUNDRED PEOPLE IN THE MOUNTAINS. THE LIGHTHOUSE BLINKED AFTER HER."
+
+msgid "ЯКОРЕВ ОБНЯЛ МЕНЯ ТАК, ЧТО ХРУСТНУЛА РАЦИЯ. ЭКИПАЖ ДВЕ НЕДЕЛИ ДЕРЖАЛСЯ НА МОСТИКЕ НА СУХАРЯХ И МОРСКИХ АНЕКДОТАХ. АНЕКДОТЫ КОНЧИЛИСЬ РАНЬШЕ."
+msgstr "YAKOREV HUGGED ME SO HARD MY RADIO CRACKED. THE CREW HAD HELD THE BRIDGE FOR TWO WEEKS ON CRACKERS AND SAILOR JOKES. THE JOKES RAN OUT FIRST."
 
 msgid "ЯРКОСТЬ КРАСНОЙ ВСПЫШКИ ПРИ УРОНЕ"
 msgstr "RED DAMAGE FLASH INTENSITY"

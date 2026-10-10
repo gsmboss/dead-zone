@@ -15,8 +15,8 @@ script = ExtResource("2_shot")
 mood = 4
 camera = "hope_walk"
 duration = 5.0
-voice_ru = "Корабль ушёл на юг с вакциной. Через месяц Лев поймал голоса ещё трёх городов. Там тоже живут."
-voice_en = "The ship sailed south with the vaccine. A month later Lev picked up voices from three more cities. People live there too."
+voice_ru = "«Надежда» довезла вакцину до людей в горах. Через месяц Лев поймал голоса ещё трёх городов. Там тоже живут."
+voice_en = "The Nadezhda delivered the vaccine to the people in the mountains. A month later Lev picked up voices from three more cities. People live there too."
 
 [sub_resource type="Resource" id="Shot_3"]
 script = ExtResource("2_shot")
