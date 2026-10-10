@@ -699,7 +699,7 @@ func _process_attack(delta: float) -> void:
 		if car != null and not car.is_broken():
 			# Игрок в машине — достаётся кузову (сломанная уже не защищает)
 			if car.distance_to_body(global_position) <= data.attack_range * ATTACK_HIT_TOLERANCE:
-				car.take_damage(data.attack_damage * damage_multiplier, global_position)
+				car.take_damage(data.attack_damage * damage_multiplier, global_position, self)
 		elif car != null:
 			if car.distance_to_body(global_position) <= data.attack_range * ATTACK_HIT_TOLERANCE:
 				_player_health.take_damage_from(data.attack_damage * damage_multiplier, global_position, false,

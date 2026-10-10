@@ -67,21 +67,50 @@ func _ready() -> void:
 	_pivot.add_child(_neon)
 
 
-## Показать машину с покраской; neon_color.a = 0 — без неона
-func show_car(car: CarData, paint_color: Color, neon_color: Color) -> void:
+## Показать машину с покраской, бронелистами и шипами; neon_color.a = 0 — без неона
+func show_car(car: CarData, paint_color: Color, neon_color: Color, armor: int = 0, spikes: int = 0) -> void:
 	if _pivot == null or car == null:
 		return
 	if _model != null:
 		_model.queue_free()
 		_model = null
+	# Как в DrivableCar: модель развёрнута на 180°, перед машины — −Z держателя (под бронелисты)
+	_model = Node3D.new()
+	_pivot.add_child(_model)
+	var body: Node3D = null
 	if car.model_scene != null:
-		_model = car.model_scene.instantiate() as Node3D
-	if _model != null:
-		_model.scale = Vector3.ONE * car.model_scale
-		_pivot.add_child(_model)
-		DrivableCar.paint_body(_model, paint_color)
+		body = car.model_scene.instantiate() as Node3D
+	if body != null:
+		body.scale = Vector3.ONE * car.model_scale
+		body.rotation.y = PI
+		_model.add_child(body)
+		DrivableCar.paint_body(body, paint_color)
+		var bounds: AABB = _bounds_in(_model, body)
+		if bounds.size != Vector3.ZERO:
+			DrivableCar.add_armor_visuals(_model, bounds.size, bounds.get_center(), armor, spikes)
 	_neon.visible = neon_color.a > 0.0
 	_neon.light_color = Color(neon_color, 1.0)
+
+
+## Габариты мешей модели в осях root
+func _bounds_in(root: Node3D, model: Node3D) -> AABB:
+	var result := AABB()
+	var has_bounds: bool = false
+	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		var xform: Transform3D = Transform3D.IDENTITY
+		var current: Node = mesh_instance
+		while current != null and current != root:
+			var current_3d := current as Node3D
+			if current_3d != null:
+				xform = current_3d.transform * xform
+			current = current.get_parent()
+		var bounds: AABB = xform * mesh_instance.get_aabb()
+		result = result.merge(bounds) if has_bounds else bounds
+		has_bounds = true
+	return result
 
 
 func _process(delta: float) -> void:

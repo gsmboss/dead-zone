@@ -29,7 +29,7 @@ const PORT: int = 24680
 const DISCOVERY_PORT: int = 24681
 const MAX_PLAYERS: int = 4
 ## Версия протокола: разные версии игры не соединяются
-const PROTOCOL: int = 5
+const PROTOCOL: int = 6
 const DISCOVERY_TAG: String = "DEADZONE"
 const ANNOUNCE_INTERVAL: float = 1.0
 ## Игра пропадает из списка, если о ней не слышно столько секунд

@@ -82,8 +82,14 @@ msgstr "%s • STARTS IN %d"
 msgid "%s • УРОВЕНЬ %d"
 msgstr "%s • LEVEL %d"
 
+msgid "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА"
+msgstr "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM"
+
 msgid "+12% РАЗГОНА"
 msgstr "+12% ACCELERATION"
+
+msgid "+15% ПРОЧНОСТИ, −6% УРОНА ОТ ЗОМБИ"
+msgstr "+15% DURABILITY, −6% DAMAGE FROM ZOMBIES"
 
 msgid "+25% УРОНА СБИТЫМ ЗОМБИ"
 msgstr "+25% DAMAGE TO RAMMED ZOMBIES"
@@ -240,6 +246,9 @@ msgstr "BARRELS WITH A RED STRIPE EXPLODE. USE THAT. JUST DON'T STAND NEXT TO TH
 
 msgid "БРОНЕГРУЗОВИК"
 msgstr "ARMORED TRUCK"
+
+msgid "БРОНЕЛИСТЫ"
+msgstr "ARMOR PLATES"
 
 msgid "БРОНЕПИКАП"
 msgstr "ARMORED PICKUP"
@@ -2370,6 +2379,9 @@ msgstr "VERTICAL SENSITIVITY"
 
 msgid "ЧУВСТВИТЕЛЬНОСТЬ ПО ГОРИЗОНТАЛИ"
 msgstr "HORIZONTAL SENSITIVITY"
+
+msgid "ШИПЫ"
+msgstr "SPIKES"
 
 msgid "ШНЫРЬ"
 msgstr "SHNYR"

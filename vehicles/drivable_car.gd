@@ -35,6 +35,14 @@ const TUNE_TURBO: float = 0.12
 const TUNE_STEER: float = 0.06
 const TUNE_GRIP: float = 0.08
 const TUNE_RAM: float = 0.25
+## Бронелисты: прочность +15% и удар зомби −6% за уровень
+const TUNE_ARMOR_HEALTH: float = 0.15
+const TUNE_ARMOR_BLOCK: float = 0.06
+## Шипы: урон зомби, который бьёт машину, за уровень; и прибавка к тарану
+const SPIKE_DAMAGE: float = 12.0
+const TUNE_SPIKE_RAM: float = 0.1
+const ARMOR_COLOR: Color = Color(0.22, 0.23, 0.25)
+const SPIKE_COLOR: Color = Color(0.75, 0.76, 0.78)
 ## Фары: днём светят слабо, ночью — вовсю (DayNightCycle.night_amount)
 const HEADLIGHT_DAY_ENERGY: float = 1.5
 const HEADLIGHT_NIGHT_ENERGY: float = 12.0
@@ -166,6 +174,9 @@ var _damage_smoke: CPUParticles3D
 var _damage_fade: Gradient
 var _fire_light: OmniLight3D
 var _hit_sound_left: float = 0.0
+## Бронелисты и шипы (тюнинг armor / spikes)
+var _damage_taken_factor: float = 1.0
+var _spike_damage: float = 0.0
 
 
 ## Машина автосалона с тюнингом, покраской и неоном
@@ -223,6 +234,7 @@ func _ready() -> void:
 	_build_neon()
 	_apply_garage()
 	_apply_tuning()
+	add_armor_visuals(self, _box_size, _box_center, int(tuning.get("armor", 0)), int(tuning.get("spikes", 0)))
 	_build_damage_smoke()
 	health = max_health
 	_safe_position = global_position
@@ -486,13 +498,17 @@ func get_power_factor() -> float:
 	return lerpf(DAMAGED_POWER_MIN, 1.0, ratio / DAMAGED_POWER_AT)
 
 
-## Удар по машине (зомби). По сети урон считает хост и рассылает прочность
-func take_damage(amount: float, from: Vector3) -> void:
+## Удар по машине (зомби). По сети урон считает хост и рассылает прочность.
+## attacker — кто бьёт: шипы ранят его в ответ
+func take_damage(amount: float, from: Vector3, attacker: Node3D = null) -> void:
 	if amount <= 0.0 or is_broken():
 		return
 	if Net.in_match and not Net.is_host():
 		return
-	_set_health(health - amount)
+	var zombie := attacker as Zombie
+	if zombie != null and _spike_damage > 0.0 and zombie.health != null and not zombie.health.is_dead:
+		zombie.health.take_damage(_spike_damage, zombie.global_position + Vector3.UP, false)
+	_set_health(health - amount * _damage_taken_factor)
 	_hit_effect(from)
 	if Net.in_match:
 		Net.send_car_health(self)
@@ -872,6 +888,83 @@ func _apply_tuning() -> void:
 	steer_rate *= 1.0 + TUNE_STEER * handling
 	grip *= 1.0 + TUNE_GRIP * handling
 	run_over_damage_factor *= 1.0 + TUNE_RAM * int(tuning.get("ram", 0))
+	var armor: int = int(tuning.get("armor", 0))
+	max_health *= 1.0 + TUNE_ARMOR_HEALTH * armor
+	_damage_taken_factor = maxf(1.0 - TUNE_ARMOR_BLOCK * armor, 0.4)
+	var spikes: int = int(tuning.get("spikes", 0))
+	_spike_damage = SPIKE_DAMAGE * spikes
+	run_over_damage_factor *= 1.0 + TUNE_SPIKE_RAM * spikes
+
+
+## Бронелисты и шипы на кузове (примитивы по габаритам модели; и в превью автосалона).
+## Перед машины — −Z. Броня: 1+ — листы на боках, 3+ — щит-таран спереди, 5 — лист на крыше.
+## Шипы: на переднем бампере, с 3-го уровня — и на боках
+static func add_armor_visuals(parent: Node3D, box_size: Vector3, box_center: Vector3, armor: int,
+		spikes: int) -> void:
+	if parent == null or (armor <= 0 and spikes <= 0):
+		return
+	var root := Node3D.new()
+	root.name = "ArmorKit"
+	parent.add_child(root)
+	var front_z: float = box_center.z - box_size.z * 0.5
+	var bottom: float = box_center.y - box_size.y * 0.5
+	if armor > 0:
+		var plate := StandardMaterial3D.new()
+		plate.albedo_color = ARMOR_COLOR
+		plate.metallic = 0.7
+		plate.roughness = 0.45
+		for side: float in [-1.0, 1.0]:
+			_kit_box(root, plate, Vector3(0.06, box_size.y * 0.32, box_size.z * 0.62),
+				Vector3(box_center.x + side * (box_size.x * 0.5 + 0.02), bottom + box_size.y * 0.38, box_center.z))
+		if armor >= 3:
+			var ram := _kit_box(root, plate, Vector3(box_size.x * 0.86, box_size.y * 0.28, 0.1),
+				Vector3(box_center.x, bottom + box_size.y * 0.2, front_z - 0.12))
+			ram.rotation.x = 0.25
+		if armor >= 5:
+			_kit_box(root, plate, Vector3(box_size.x * 0.7, 0.06, box_size.z * 0.35),
+				Vector3(box_center.x, box_center.y + box_size.y * 0.5 + 0.03, box_center.z + box_size.z * 0.05))
+	if spikes > 0:
+		var steel := StandardMaterial3D.new()
+		steel.albedo_color = SPIKE_COLOR
+		steel.metallic = 0.9
+		steel.roughness = 0.3
+		var cone := CylinderMesh.new()
+		cone.top_radius = 0.0
+		cone.bottom_radius = 0.07
+		cone.height = 0.32 + 0.04 * spikes
+		cone.radial_segments = 6
+		cone.rings = 1
+		cone.material = steel
+		var count: int = 3 + spikes
+		for i in count:
+			var x: float = box_center.x + lerpf(-box_size.x * 0.4, box_size.x * 0.4, float(i) / float(maxi(count - 1, 1)))
+			var spike := MeshInstance3D.new()
+			spike.mesh = cone
+			spike.rotation.x = -PI * 0.5  # остриём вперёд (−Z)
+			spike.position = Vector3(x, bottom + box_size.y * 0.25, front_z - 0.18)
+			root.add_child(spike)
+		if spikes >= 3:
+			for side: float in [-1.0, 1.0]:
+				for k in 3:
+					var side_spike := MeshInstance3D.new()
+					side_spike.mesh = cone
+					side_spike.rotation.z = -side * PI * 0.5  # остриём наружу
+					side_spike.position = Vector3(box_center.x + side * (box_size.x * 0.5 + 0.15),
+						bottom + box_size.y * 0.3, box_center.z + (k - 1) * box_size.z * 0.25)
+					root.add_child(side_spike)
+	for node: Node in root.get_children():
+		(node as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+
+static func _kit_box(root: Node3D, material: Material, box_size: Vector3, at: Vector3) -> MeshInstance3D:
+	var box := BoxMesh.new()
+	box.size = box_size
+	box.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = box
+	instance.position = at
+	root.add_child(instance)
+	return instance
 
 
 ## Две фары и рассеянный свет перед капотом (горят, пока в машине кто-то есть), стоп-сигнал

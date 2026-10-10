@@ -1,7 +1,7 @@
 class_name CarPanel
 extends HubWindow
 ## Окно «АВТОСАЛОН»: машины классов D/C/B/A — 3D-превью, характеристики, покупка и выбор.
-## Для своей машины — тюнинг (двигатель, газ, управление, таран), покраска и неон.
+## Для своей машины — тюнинг (двигатель, газ, управление, таран, бронелисты, шипы), покраска и неон.
 ## Выбранная машина ждёт игрока в городе у старта и едет с ним в матч по сети.
 
 const TUNING_NAMES: Dictionary = {
@@ -9,6 +9,8 @@ const TUNING_NAMES: Dictionary = {
 	"turbo": ["ГАЗ (ТУРБО)", "+12% РАЗГОНА"],
 	"handling": ["УПРАВЛЕНИЕ", "+6% РУЛЯ, +8% СЦЕПЛЕНИЯ"],
 	"ram": ["ТАРАН", "+25% УРОНА СБИТЫМ ЗОМБИ"],
+	"armor": ["БРОНЕЛИСТЫ", "+15% ПРОЧНОСТИ, −6% УРОНА ОТ ЗОМБИ"],
+	"spikes": ["ШИПЫ", "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА"],
 }
 ## Характеристика → [подпись, тюнинг, прибавка за уровень]
 const STATS: Array = [
@@ -52,7 +54,8 @@ func _build_content() -> void:
 	_preview = CarPreview.new()
 	left.add_child(_preview)
 	if shown != null:
-		_preview.show_car.call_deferred(shown, _paint_of(shown), _neon_of(shown))
+		_preview.show_car.call_deferred(shown, _paint_of(shown), _neon_of(shown),
+			GameState.get_car_tuning(shown.id, "armor"), GameState.get_car_tuning(shown.id, "spikes"))
 		_build_info(shown, left)
 
 	var right := VBoxContainer.new()

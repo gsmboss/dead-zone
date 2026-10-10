@@ -824,5 +824,9 @@
  "Перезарядка на 30% быстрее": "Reload 30% faster",
  "РУКОЯТЬ": "FOREGRIP",
  "СНЯТЬ": "REMOVE",
- "ГОЛОСА ГЕРОЕВ: НЕЙРОСЕТЬ PIPER": "CHARACTER VOICES: PIPER NEURAL TTS"
+ "ГОЛОСА ГЕРОЕВ: НЕЙРОСЕТЬ PIPER": "CHARACTER VOICES: PIPER NEURAL TTS",
+ "БРОНЕЛИСТЫ": "ARMOR PLATES",
+ "+15% ПРОЧНОСТИ, −6% УРОНА ОТ ЗОМБИ": "+15% DURABILITY, −6% DAMAGE FROM ZOMBIES",
+ "ШИПЫ": "SPIKES",
+ "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА": "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM"
 }

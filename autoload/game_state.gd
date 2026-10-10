@@ -76,7 +76,7 @@ const CAR_PATHS: Array[String] = ["res://vehicles/cars/pickup.tres", "res://vehi
 	"res://vehicles/cars/pickup_armored.tres", "res://vehicles/cars/sports.tres",
 	"res://vehicles/cars/truck_armored.tres", "res://vehicles/cars/sports_armored.tres"]
 ## Тюнинг машины: двигатель — макс. скорость, газ — разгон, управление — руль и сцепление, таран — урон
-const CAR_TUNING: Array[String] = ["engine", "turbo", "handling", "ram"]
+const CAR_TUNING: Array[String] = ["engine", "turbo", "handling", "ram", "armor", "spikes"]
 const CAR_TUNING_MAX: int = 5
 const CAR_TUNING_GROWTH: float = 1.55
 ## Покраска (индекс 0 — заводской цвет, бесплатно) и неон под днищем
