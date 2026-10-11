@@ -1,0 +1,253 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dxkjvqcbx2yt6" path="res://ui/touch/touch_controls.gd" id="2_o6mel"]
+[ext_resource type="Script" uid="uid://dghnj5repsr7p" path="res://ui/damage_overlay.gd" id="2_wkb0e"]
+[ext_resource type="Script" uid="uid://b5ehpirj8va4c" path="res://ui/touch/virtual_joystick.gd" id="3_e7anx"]
+[ext_resource type="Script" uid="uid://l7ge3tjil0vp" path="res://ui/touch/touch_action_button.gd" id="4_ur00s"]
+[ext_resource type="Script" uid="uid://bpix1h3rg7vin" path="res://ui/crosshair.gd" id="5_ur00s"]
+[ext_resource type="Script" uid="uid://cor576lrvs0cp" path="res://ui/ammo_display.gd" id="6_wndkh"]
+[ext_resource type="Script" uid="uid://s84lkipfd2x5" path="res://ui/health_display.gd" id="8_paa45"]
+[ext_resource type="Script" uid="uid://bqofxke15edqw" path="res://ui/mission_hud.gd" id="14_mhud1"]
+[ext_resource type="PackedScene" uid="uid://ckdq70rsi165h" path="res://player/player.tscn" id="1_w7r7j"]
+[ext_resource type="PackedScene" uid="uid://ct6h4tc3s40c6" path="res://enemies/zombie.tscn" id="7_ly3hx"]
+[ext_resource type="Script" uid="uid://dovqnlj1fo70i" path="res://missions/mission_manager.gd" id="11_o5yuq"]
+[ext_resource type="Resource" path="res://missions/data/mission_city.tres" id="12_miss1"]
+[ext_resource type="Script" uid="uid://bxnfpultch60d" path="res://missions/zombie_spawner.gd" id="13_xag4j"]
+[ext_resource type="Script" path="res://levels/runtime_nav_region.gd" id="31_nav01"]
+[ext_resource type="Script" path="res://levels/city/city_generator.gd" id="40_city1"]
+[ext_resource type="Resource" path="res://levels/city/city_config.tres" id="41_cfg01"]
+[ext_resource type="Script" path="res://vehicles/drive_controller.gd" id="42_drv01"]
+[ext_resource type="Script" path="res://ui/game_menus.gd" id="50_menu1"]
+[ext_resource type="Script" path="res://levels/day_night_cycle.gd" id="43_day01"]
+[ext_resource type="Script" path="res://levels/weather.gd" id="44_wth01"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_mat"]
+sky_horizon_color = Color(0.62, 0.64, 0.66, 1)
+ground_horizon_color = Color(0.62, 0.64, 0.66, 1)
+
+[sub_resource type="Sky" id="Sky_res"]
+sky_material = SubResource("Sky_mat")
+
+[sub_resource type="Environment" id="Env_res"]
+background_mode = 2
+sky = SubResource("Sky_res")
+ambient_light_source = 3
+fog_enabled = true
+fog_light_color = Color(0.62, 0.64, 0.66, 1)
+fog_density = 0.008
+fog_sky_affect = 0.3
+
+[sub_resource type="NavigationMesh" id="Nav_mesh"]
+agent_height = 2.0
+agent_radius = 0.5
+
+[node name="CityLevel" type="Node3D" unique_id=1952099019]
+
+[node name="Player" parent="." unique_id=2137822335 node_paths=PackedStringArray("touch_controls") instance=ExtResource("1_w7r7j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+touch_controls = NodePath("../HUD/TouchControls")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=992695476]
+environment = SubResource("Env_res")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=382947329]
+transform = Transform3D(0.866025, -0.383022, 0.321394, 0, 0.642788, 0.766044, -0.5, -0.663414, 0.55667, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=498262993]
+
+[node name="DamageOverlay" type="ColorRect" parent="HUD" unique_id=1835518200]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_wkb0e")
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1780298419 node_paths=PackedStringArray("joystick")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_o6mel")
+joystick = NodePath("Joystick")
+
+[node name="Joystick" type="Control" parent="HUD/TouchControls" unique_id=1314025991]
+layout_mode = 1
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_e7anx")
+
+[node name="FireButton" type="Control" parent="HUD/TouchControls" unique_id=1688909280]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -230.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"fire"
+label = "FIRE"
+
+[node name="JumpButton" type="Control" parent="HUD/TouchControls" unique_id=674373442]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -170.0
+offset_right = -260.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"jump"
+label = "JUMP"
+
+[node name="ReloadButton" type="Control" parent="HUD/TouchControls" unique_id=568355740]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -380.0
+offset_right = -100.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"reload"
+label = "R"
+
+[node name="Crosshair" type="CenterContainer" parent="HUD/TouchControls" unique_id=2080779263]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="HUD/TouchControls/Crosshair" unique_id=86499869]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "+"
+script = ExtResource("5_ur00s")
+
+[node name="SwitchButton" type="Control" parent="HUD/TouchControls" unique_id=979111094]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -380.0
+offset_right = -230.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"switch_weapon"
+label = "⇄"
+
+[node name="AimButton" type="Control" parent="HUD/TouchControls" unique_id=162421704]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -300.0
+offset_right = -360.0
+offset_bottom = -180.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"aim"
+label = "ПРИЦЕЛ"
+show_aim_state = true
+
+[node name="AmmoLabel" type="Label" parent="HUD" unique_id=1137799918]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("6_wndkh")
+
+[node name="HealthLabel" type="Label" parent="HUD" unique_id=73412667]
+anchors_preset = -1
+anchor_left = 30.0
+anchor_top = 20.0
+anchor_right = 300.0
+anchor_bottom = 70.0
+offset_left = -34560.0
+offset_top = -12960.0
+offset_right = -345599.0
+offset_bottom = -45321.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("8_paa45")
+
+[node name="MissionHUD" type="Control" parent="HUD" unique_id=433307376]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_mhud1")
+
+[node name="GameMenus" type="Control" parent="HUD" unique_id=891558714]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("50_menu1")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=161098808]
+navigation_mesh = SubResource("Nav_mesh")
+script = ExtResource("31_nav01")
+cell_size = 0.5
+
+[node name="City" type="Node3D" parent="NavigationRegion3D" unique_id=1424107815]
+script = ExtResource("40_city1")
+config = ExtResource("41_cfg01")
+
+[node name="MissionManager" type="Node" parent="." unique_id=938085127]
+script = ExtResource("11_o5yuq")
+mission = ExtResource("12_miss1")
+
+[node name="ZombieSpawner" type="Node3D" parent="MissionManager" unique_id=913788856]
+script = ExtResource("13_xag4j")
+zombie_scene = ExtResource("7_ly3hx")
+dynamic_spawn = true
+
+[node name="DriveController" type="Node" parent="." unique_id=789317830]
+script = ExtResource("42_drv01")
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=1928374651]
+script = ExtResource("43_day01")
+
+[node name="Weather" type="Node3D" parent="." unique_id=1928374652]
+script = ExtResource("44_wth01")

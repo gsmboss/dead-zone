@@ -1,0 +1,4037 @@
+# Dead Zone — английский перевод. Ключи — русские строки. Не править вручную:
+# источник — locale/en.json, сборка — tools/l10n/build_po.py
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "\n\nПРОЙДЕНО %d%% СЮЖЕТА"
+msgstr "\n\nSTORY %d%% COMPLETE"
+
+msgid "\nСОБЫТИЕ ДНЯ: %s"
+msgstr "\nEVENT OF THE DAY: %s"
+
+msgid "  (БЕЗ ЛОМА — ДОЛЬШЕ)"
+msgstr "  (SLOWER WITHOUT SCRAP)"
+
+msgid "  (ПОЛНАЯ)"
+msgstr "  (FULL)"
+
+msgid "  (СЕЙЧАС: %s)"
+msgstr "  (NOW: %s)"
+
+msgid "  (ХОСТ)"
+msgstr "  (HOST)"
+
+msgid "  — ТЫ"
+msgstr "  — YOU"
+
+msgid "  •  рекорд %s"
+msgstr "  •  record %s"
+
+msgid "  •  уровень %d"
+msgstr "  •  level %d"
+
+msgid " + %d ЛОМА"
+msgstr " + %d SCRAP"
+
+msgid " • ВЕРНИСЬ НА ТОЧКУ!"
+msgstr " • GET BACK TO THE POINT!"
+
+msgid " • ГОЛОС НЕ НАЙДЕН: УСТАНОВИ СИНТЕЗ РЕЧИ GOOGLE"
+msgstr " • NO VOICE FOUND: INSTALL GOOGLE TEXT-TO-SPEECH"
+
+msgid " • СПАСЕНО %d/%d"
+msgstr " • RESCUED %d/%d"
+
+msgid "%.1f М"
+msgstr "%.1f M"
+
+msgid "%d / %d  •  награда %d"
+msgstr "%d / %d  •  reward %d"
+
+msgid "%d ГЦ"
+msgstr "%d HZ"
+
+msgid "%d КМ/Ч"
+msgstr "%d KM/H"
+
+msgid "%d МОНЕТ"
+msgstr "%d COINS"
+
+msgid "%d за волну + за убитых"
+msgstr "%d per wave + per kill"
+
+msgid "%s\nБЛИЖНИЙ БОЙ"
+msgstr "%s\nMELEE"
+
+msgid "%s  (в сумке %d / %d)"
+msgstr "%s  (%d / %d in bag)"
+
+msgid "%s  •  ОСТАЛОСЬ ДНЕЙ: %d"
+msgstr "%s  •  DAYS LEFT: %d"
+
+msgid "%s  •  УР. %d"
+msgstr "%s  •  LV. %d"
+
+msgid "%s  •  УРОВЕНЬ %d"
+msgstr "%s  •  LEVEL %d"
+
+msgid "%s + за убитых"
+msgstr "%s + per kill"
+
+msgid "%s ВЫШЕЛ"
+msgstr "%s LEFT"
+
+msgid "%s ПОГИБ"
+msgstr "%s DIED"
+
+msgid "%s • СТАРТ ЧЕРЕЗ %d"
+msgstr "%s • STARTS IN %d"
+
+msgid "%s • УРОВЕНЬ %d"
+msgstr "%s • LEVEL %d"
+
+msgid "+%d МОНЕТ"
+msgstr "+%d COINS"
+
+msgid "+%d ЯЩ. — %d"
+msgstr "+%d CRATES — %d"
+
+msgid "+%s ЗА ПОДПИСКУ"
+msgstr "+%s FOR FOLLOWING"
+
+msgid "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА"
+msgstr "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM"
+
+msgid "+12% РАЗГОНА"
+msgstr "+12% ACCELERATION"
+
+msgid "+15% ПРОЧНОСТИ, −6% УРОНА ОТ ЗОМБИ"
+msgstr "+15% DURABILITY, −6% DAMAGE FROM ZOMBIES"
+
+msgid "+25% УРОНА СБИТЫМ ЗОМБИ"
+msgstr "+25% DAMAGE TO RAMMED ZOMBIES"
+
+msgid "+6% РУЛЯ, +8% СЦЕПЛЕНИЯ"
+msgstr "+6% STEERING, +8% GRIP"
+
+msgid "+7% МАКС. СКОРОСТИ"
+msgstr "+7% TOP SPEED"
+
+msgid ", в последней — %s"
+msgstr ", final one: %s"
+
+msgid "1-Е ЛИЦО"
+msgstr "1ST PERSON"
+
+msgid "10 миссий на три звезды"
+msgstr "10 missions with three stars"
+
+msgid "100 убийств оружием ближнего боя"
+msgstr "100 melee kills"
+
+msgid "15 УБИЙСТВ В ГОЛОВУ"
+msgstr "15 HEADSHOT KILLS"
+
+msgid "2 ИГРОКА — ДУЭЛЬ, 3 — КАЖДЫЙ САМ ЗА СЕБЯ, 4 — КОМАНДЫ 2×2"
+msgstr "2 PLAYERS — DUEL, 3 — FREE FOR ALL, 4 — TEAMS 2×2"
+
+msgid "2 МИНУТЫ"
+msgstr "2 MINUTES"
+
+msgid "2031 ГОД. ВИРУС ПРЕВРАТИЛ ГОРОДА В КЛАДБИЩА."
+msgstr "2031. A VIRUS TURNED CITIES INTO GRAVEYARDS."
+
+msgid "3 золотые медали в заездах"
+msgstr "3 gold medals in races"
+
+msgid "3-Е ЛИЦО"
+msgstr "3RD PERSON"
+
+msgid "300 УБИЙСТВ В ГОЛОВУ"
+msgstr "300 HEADSHOT KILLS"
+
+msgid "40 УБИЙСТВ В ГОЛОВУ"
+msgstr "40 HEADSHOT KILLS"
+
+msgid "50 убийств в голову"
+msgstr "50 headshot kills"
+
+msgid "500 убийств в голову"
+msgstr "500 headshot kills"
+
+msgid "IP ХОСТА: %s"
+msgstr "HOST IP: %s"
+
+msgid "PVP КОМАНДА НА КОМАНДУ, СВОИХ РАНИТЬ НЕЛЬЗЯ"
+msgstr "PVP TEAM VS TEAM, NO FRIENDLY FIRE"
+
+msgid "PVP: СТРЕЛЯЙТЕ ДРУГ В ДРУГА, ЗОМБИ МЕШАЮТ ВСЕМ"
+msgstr "PVP: SHOOT EACH OTHER, ZOMBIES GET IN EVERYONE'S WAY"
+
+msgid "SALAMANDERLAB\nПРЕДСТАВЛЯЕТ"
+msgstr "SALAMANDERLAB\nPRESENTS"
+
+msgid "WI-FI, ДО 4 ИГРОКОВ"
+msgstr "WI-FI, UP TO 4 PLAYERS"
+
+msgid "YOUTUBE, INSTAGRAM И TELEGRAM SALAMANDERLAB: НОВОСТИ, ТРЕЙЛЕРЫ И КОДЫ. ЗА ПОДПИСКИ — %s."
+msgstr "SALAMANDERLAB ON YOUTUBE, INSTAGRAM AND TELEGRAM: NEWS, TRAILERS AND CODES. FOLLOW AND GET %s."
+
+msgid "x2 МОНЕТЫ  ▶ РЕКЛАМА"
+msgstr "x2 COINS  ▶ AD"
+
+msgid "«ЗОМБИ? — ПЕРЕСПРОСИЛ ПАЛЫЧ. — А Я ДУМАЛ, ГРУЗЧИКИ БЕЗ ЗАРПЛАТЫ». ГЕНЕРАТОР МАЯКА ЗАВЕДЁТСЯ, НО РЕВЁТ ТАК, ЧТО ЕГО СЛЫШНО НА ТОМ СВЕТЕ."
+msgstr "\"ZOMBIES?\" PALYCH ASKED. \"I THOUGHT THEY WERE DOCKERS WHO NEVER GOT PAID.\" THE LIGHTHOUSE GENERATOR WILL START, BUT IT ROARS LOUD ENOUGH TO BE HEARD IN THE AFTERLIFE."
+
+msgid "«К ТОЧКЕ ДОСТУПА» ИЛИ ВВОДЯТ IP ХОСТА. ДО 4 ИГРОКОВ."
+msgstr "\"TO HOTSPOT\" OR ENTER THE HOST IP. UP TO 4 PLAYERS."
+
+msgid "«НАДЕЖДА» ВСТАЛА В БУХТЕ У КУРОРТА «ЧАЙКА». ДО ГОР, ГДЕ ЖДУТ ДВЕСТИ ЧЕЛОВЕК, — ДВА ДНЯ ПО СЕРПАНТИНУ. КОРАБЛЬ ТУДА НЕ ДОПЛЫВЁТ."
+msgstr "THE NADEZHDA ANCHORED IN THE BAY BY THE SEAGULL RESORT. TO THE MOUNTAINS WHERE TWO HUNDRED PEOPLE WAIT IS TWO DAYS OF SWITCHBACKS. THE SHIP CAN'T GO THERE."
+
+msgid "«НАДЕЖДА» ДОВЕЗЛА ВАКЦИНУ ДО ЛЮДЕЙ В ГОРАХ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ."
+msgstr "THE NADEZHDA DELIVERED THE VACCINE TO THE PEOPLE IN THE MOUNTAINS. A MONTH LATER LEV PICKED UP VOICES FROM THREE MORE CITIES: PEOPLE LIVE THERE TOO."
+
+msgid "«НАДЕЖДА» ШЛА ДОМОЙ НА ВСЕХ ПАРАХ. БОРЩОВ ВАРИЛ БОРЩ ДЛЯ ВСЕХ, ЭДИК УЧИЛ ДЕРЕВЕНСКИХ ТАНЦЕВАТЬ, ТЁМА СПАЛ НА МЕШКЕ С КАРТОШКОЙ."
+msgstr "THE NADEZHDA RACED HOME AT FULL STEAM. BORSHCHOV COOKED BORSCHT FOR EVERYONE, EDIK TAUGHT THE VILLAGERS TO DANCE, TYOMA SLEPT ON A SACK OF POTATOES."
+
+msgid "«Я ЖИВ. ИДУ К ЛЕСУ. Т.»"
+msgstr "\"I'M ALIVE. HEADING TO THE FOREST. T.\""
+
+msgid "ЁЛКА"
+msgstr "CHRISTMAS TREE"
+
+msgid "Ёлка с огоньками и подарками — Новый год по своему календарю"
+msgstr "A tree with lights and presents — New Year on our own calendar"
+
+msgid "А В АРХИВЕ ВЫШКИ ЛЕВ НАШЁЛ ЗАПИСЬ ДНЯ НОЛЬ. ЖЕНСКИЙ ГОЛОС НА АВАРИЙНОЙ ЧАСТОТЕ: «ЕСЛИ КТО-ТО НАЙДЁТ МОИХ МАЛЬЧИКОВ…» ЭТО МАМА."
+msgstr "AND IN THE TOWER ARCHIVE LEV FOUND A RECORDING FROM DAY ZERO. A WOMAN'S VOICE ON THE EMERGENCY FREQUENCY: \"IF ANYONE FINDS MY BOYS…\" IT'S MOM."
+
+msgid "А ВЫШЕ, В ГОРАХ, КТО-ТО ВЫЛ. ДОЛГО И НИЗКО. МЕРТВЕЦЫ НА СКЛОНАХ ПОВЕРНУЛИ ГОЛОВЫ НА ЗВУК — РАЗОМ, КАК СТАДО."
+msgstr "AND HIGHER UP, IN THE MOUNTAINS, SOMETHING HOWLED. LONG AND LOW. THE DEAD ON THE SLOPES TURNED THEIR HEADS TO THE SOUND, ALL AT ONCE, LIKE A HERD."
+
+msgid "А ПОТОМ ЛУЧ ВЫХВАТИЛ ИЗ ВОДЫ ЧТО-ТО ОГРОМНОЕ. ОНО СТОЯЛО ПО ПОЯС В МОРЕ И СМОТРЕЛО НА МАЯК. ПАЛЫЧ СКАЗАЛ, ЧТО ЭТО ГРУЗЧИК. ЯКОРЕВ СКАЗАЛ: «УТОПЛЕННИК»."
+msgstr "THEN THE BEAM CAUGHT SOMETHING HUGE IN THE WATER. IT STOOD WAIST-DEEP IN THE SEA, STARING AT THE LIGHTHOUSE. PALYCH SAID IT WAS A DOCKER. YAKOREV SAID: \"THE DROWNED ONE.\""
+
+msgid "А ПОТОМ ОН УСЛЫШАЛ ГОЛОС БАРОНА ПО РАЦИИ И ЗАХОХОТАЛ: «ДА ЭТО ЖЕ ГЕНКА! ОХРАННИК ИЗ УНИВЕРМАГА! ОН НА ПАРКОВКЕ ШТРАФЫ ВЫПИСЫВАЛ!»"
+msgstr "THEN HE HEARD BARON'S VOICE ON THE RADIO AND BURST OUT LAUGHING: \"THAT'S GENKA! THE SECURITY GUARD FROM THE DEPARTMENT STORE! HE USED TO WRITE PARKING TICKETS!\""
+
+msgid "АВТО"
+msgstr "AUTO"
+
+msgid "АВТО — КАК В ТЕЛЕФОНЕ. В УБЕЖИЩЕ ВСЁ ПЕРЕКЛЮЧАЕТСЯ СРАЗУ."
+msgstr "AUTO — SAME AS THE PHONE. IN THE SHELTER EVERYTHING SWITCHES INSTANTLY."
+
+msgid "АВТО: ПОДБИРАЕТСЯ ПОД ТЕЛЕФОН И САМО СНИЖАЕТСЯ, ЕСЛИ ИГРА ТОРМОЗИТ"
+msgstr "AUTO: FITS YOUR PHONE AND LOWERS ITSELF IF THE GAME LAGS"
+
+msgid "АВТООГОНЬ ПРИ НАВЕДЕНИИ"
+msgstr "AUTO-FIRE ON TARGET"
+
+msgid "АВТОСАЛОН"
+msgstr "CAR DEALERSHIP"
+
+msgid "АНГЛИЙСКИЙ"
+msgstr "ENGLISH"
+
+msgid "АПОКАЛИПСИС ОТМЕНЁН"
+msgstr "APOCALYPSE CANCELLED"
+
+msgid "АПТЕЧКА"
+msgstr "MEDKIT"
+
+msgid "АПТЕЧНЫЙ СКЛАД"
+msgstr "PHARMACY WAREHOUSE"
+
+msgid "АРСЕНАЛ"
+msgstr "ARSENAL"
+
+msgid "АРХИВ ВЫШКИ. ДЕНЬ НОЛЬ"
+msgstr "TOWER ARCHIVE. DAY ZERO"
+
+msgid "Автобус застрял в снегу на перевале. Продержись 2,5 минуты, пока Тёма его чинит"
+msgstr "The bus is stuck in the snow on the pass. Hold out for 2.5 minutes while Tyoma fixes it"
+
+msgid "БАБА ШУРА"
+msgstr "GRANNY SHURA"
+
+msgid "БАЗА"
+msgstr "BASE"
+
+msgid "БАЗА КАБАНА"
+msgstr "KABAN'S BASE"
+
+msgid "БАКИ ПУСТЫ. ТОПЛИВО — В КАНИСТРАХ ПО ВСЕМУ ПОРТУ: НА ПИРСЕ, У МАЯКА, МЕЖДУ КОНТЕЙНЕРАМИ. МЕРТВЕЦЫ ИДУТ НА ЗАПАХ СОЛЯРКИ — НЕ СПРАШИВАЙ ПОЧЕМУ."
+msgstr "THE TANKS ARE EMPTY. THE FUEL IS IN CANS ALL OVER THE PORT: ON THE PIER, BY THE LIGHTHOUSE, BETWEEN THE CONTAINERS. THE DEAD FOLLOW THE SMELL OF DIESEL. DON'T ASK WHY."
+
+msgid "БАНДИТ"
+msgstr "BANDIT"
+
+msgid "БАНДИТ С ОБРЕЗОМ"
+msgstr "SAWED-OFF BANDIT"
+
+msgid "БАНДИТЫ НЕ ЗОМБИ: ОНИ СТРЕЛЯЮТ, ПРЯЧУТСЯ И ОРУТ ГЛУПОСТИ. ЗАТО ИХ МОЖНО ДОПРОСИТЬ."
+msgstr "BANDITS AREN'T ZOMBIES: THEY SHOOT, TAKE COVER AND YELL NONSENSE. ON THE PLUS SIDE, YOU CAN INTERROGATE THEM."
+
+msgid "БАРНАЯ СТОЙКА"
+msgstr "BAR COUNTER"
+
+msgid "БАРОН"
+msgstr "BARON"
+
+msgid "БАРОН СДАЛСЯ. БЕЗ АВТОМАТА И ПЛАЩА ОН ОКАЗАЛСЯ ОБЫЧНЫМ ГЕНКОЙ, КОТОРЫЙ ОЧЕНЬ БОИТСЯ ДЯДЮ ГОШУ."
+msgstr "BARON SURRENDERED. WITHOUT HIS RIFLE AND CLOAK HE TURNED OUT TO BE JUST GENKA, WHO IS VERY SCARED OF UNCLE GOSHA."
+
+msgid "БАРОН ХВАСТАЛСЯ МАЛЬЧИШКОЙ, КОТОРЫЙ ЧИНИТ ЛЮБУЮ РАЦИЮ. «ЕСТ ЗА ТРОИХ, ВСЕХ БЕСИТ, НО РУКИ ЗОЛОТЫЕ». ЭТО ТЁМА. ТОЧНО ТЁМА."
+msgstr "BARON BRAGGED ABOUT A KID WHO CAN FIX ANY RADIO. \"EATS FOR THREE, ANNOYS EVERYONE, BUT HE'S GOT GOLDEN HANDS.\" THAT'S TYOMA. IT HAS TO BE TYOMA."
+
+msgid "БАСКЕТБОЛ"
+msgstr "BASKETBALL"
+
+msgid "БЕГ: ДЖОЙСТИК ДО УПОРА ВПЕРЁД"
+msgstr "SPRINT: PUSH THE JOYSTICK ALL THE WAY FORWARD"
+
+msgid "БЕГ: ЗАЖМИ SHIFT И ИДИ ВПЕРЁД"
+msgstr "SPRINT: HOLD SHIFT AND MOVE FORWARD"
+
+msgid "БЕГУН"
+msgstr "RUNNER"
+
+msgid "БЕГУНЫ ЗАХОДЯТ СО СПИНЫ — ОГЛЯДЫВАЙСЯ"
+msgstr "RUNNERS FLANK FROM BEHIND — WATCH YOUR BACK"
+
+msgid "БЕЗ ОГРАНИЧЕНИЯ"
+msgstr "UNLIMITED"
+
+msgid "БЕЛЫЙ"
+msgstr "WHITE"
+
+msgid "БЕСКОНЕЧНАЯ ОБОРОНА"
+msgstr "ENDLESS DEFENSE"
+
+msgid "БЕСКОНЕЧНЫЙ РЕЖИМ"
+msgstr "ENDLESS MODE"
+
+msgid "БИЛЬЯРД"
+msgstr "POOL TABLE"
+
+msgid "БИРЮЗОВЫЙ"
+msgstr "TURQUOISE"
+
+msgid "БИТА С ШИПАМИ"
+msgstr "SPIKED BAT"
+
+msgid "БИТА-ПИЛА"
+msgstr "SAW BAT"
+
+msgid "БЛИЖНИМ БОЕМ"
+msgstr "MELEE KILLS"
+
+msgid "БОГАЧ"
+msgstr "MONEYBAGS"
+
+msgid "БОЛЬНИЦА"
+msgstr "THE HOSPITAL"
+
+msgid "БОЛЬШОЙ МАГАЗИН"
+msgstr "EXTENDED MAG"
+
+msgid "БОРЩОВ"
+msgstr "BORSHCHOV"
+
+msgid "БОРЩОВ СДЕРЖАЛ СЛОВО: БОРЩ БЫЛ ИЗ КОНСЕРВОВ, НО ГОРЯЧИЙ. ТЁМА СЪЕЛ ДВЕ ТАРЕЛКИ И ПОТРЕБОВАЛ ТРЕТЬЮ «ЗА ПЕРЕГОВОРЫ»."
+msgstr "BORSHCHOV KEPT HIS WORD: THE BORSCHT CAME FROM CANS, BUT IT WAS HOT. TYOMA ATE TWO BOWLS AND DEMANDED A THIRD \"FOR THE NEGOTIATIONS\"."
+
+msgid "БОСС"
+msgstr "BOSS"
+
+msgid "БОССОВ ПОБЕЖДЕНО"
+msgstr "BOSSES DEFEATED"
+
+msgid "БОЧКИ С КРАСНОЙ ПОЛОСОЙ ВЗРЫВАЮТСЯ. ИСПОЛЬЗУЙ ЭТО. ГЛАВНОЕ — НЕ СТОЙ РЯДОМ."
+msgstr "BARRELS WITH A RED STRIPE EXPLODE. USE THAT. JUST DON'T STAND NEXT TO THEM."
+
+msgid "БРОНЕГРУЗОВИК"
+msgstr "ARMORED TRUCK"
+
+msgid "БРОНЕЛИСТЫ"
+msgstr "ARMOR PLATES"
+
+msgid "БРОНЕПИКАП"
+msgstr "ARMORED PICKUP"
+
+msgid "БРОНЕСПОРТ"
+msgstr "ARMORED SPORT"
+
+msgid "БРОНЗА"
+msgstr "BRONZE"
+
+msgid "БУГАЁВ"
+msgstr "BRUTES"
+
+msgid "БУГАИ НА УЛИЦАХ"
+msgstr "BRUTES ON THE STREETS"
+
+msgid "БУГАЙ"
+msgstr "BRUTE"
+
+msgid "БЫВАЛЫЙ"
+msgstr "SEASONED"
+
+msgid "БЫСТРЫЙ МАГАЗИН"
+msgstr "QUICK MAG"
+
+msgid "Банда Барона грабит колонну выживших на стоянке контейнеров. Отбей колонну — убей 25 бандитов и зомби"
+msgstr "Baron's gang is robbing a survivor convoy at the container yard. Save the convoy — kill 25 bandits and zombies"
+
+msgid "Банда Кабана украла вакцину и прячется на стоянке контейнеров. Убей 35 бандитов и зомби и верни чемодан"
+msgstr "Kaban's gang stole the vaccine and is hiding at the container yard. Kill 35 bandits and zombies and bring back the case"
+
+msgid "Барон держит пленных на улице у старого универмага. Выдержи 4 волны его банды и победи Барона"
+msgstr "Baron holds prisoners on the street by the old department store. Survive 4 waves of his gang and defeat Baron"
+
+msgid "Бочка на крыше греется на солнце — горячая вода к обеду"
+msgstr "A barrel on the roof warms in the sun — hot water by lunchtime"
+
+msgid "Бронированные бугаи вышли на охоту"
+msgstr "Armored brutes are on the hunt"
+
+msgid "Броня"
+msgstr "Armor"
+
+msgid "Бросок кнопкой ГРАНАТА: взрыв через 2 секунды, разносит толпу"
+msgstr "Throw with the GRENADE button: blows up after 2 seconds, scatters a crowd"
+
+msgid "Бросок кнопкой ГРАНАТА: лужа огня на 6 секунд, жжёт всех внутри"
+msgstr "Throw with the GRENADE button: a pool of fire for 6 seconds, burns everyone inside"
+
+msgid "В БОЙ"
+msgstr "FIGHT"
+
+msgid "В БОЙ!"
+msgstr "FIGHT!"
+
+msgid "В БОЙ!  %s"
+msgstr "FIGHT!  %s"
+
+msgid "В ГОЛОВУ"
+msgstr "HEADSHOTS"
+
+msgid "В ГУЩЕ СОБЫТИЙ"
+msgstr "IN THE THICK OF IT"
+
+msgid "В ДЕРЕВНЕ КОМАНДУЕТ БАБА ШУРА — БЫВШИЙ ДИРЕКТОР ШКОЛЫ. ЕЁ СЛУШАЮТСЯ ДВЕСТИ ЧЕЛОВЕК, ТРИ КОРОВЫ И, КАЖЕТСЯ, ПОГОДА."
+msgstr "THE VILLAGE IS RUN BY GRANNY SHURA, A FORMER SCHOOL PRINCIPAL. TWO HUNDRED PEOPLE, THREE COWS AND, IT SEEMS, THE WEATHER OBEY HER."
+
+msgid "В ДНЕВНИКЕ — ВСЁ, ЧТО НУЖНО ИРИНЕ: ЧАСЫ, ДОЗЫ, СИМПТОМЫ. МАМИН ПОЧЕРК, РОВНЫЙ, КАК НА РЕЦЕПТАХ. НОВАЯ ВАКЦИНА БОЛЬШЕ НЕ РАСТИТ БОРОДУ. ШНЫРЬ РАСТРОИЛСЯ."
+msgstr "THE DIARY HAS EVERYTHING IRINA NEEDS: HOURS, DOSES, SYMPTOMS. MOM'S HANDWRITING, NEAT AS ON A PRESCRIPTION. THE NEW VACCINE NO LONGER GROWS BEARDS. SHNYR WAS UPSET."
+
+msgid "В ЛАГЕРЕ ВЫРОС ТРЕТИЙ ДОМ — ЛАБОРАТОРИЯ. ТЁМА УЖЕ ПОЧИНИЛ В НЕЙ МИКРОСКОП. ЕГО НИКТО НЕ ПРОСИЛ."
+msgstr "A THIRD HOUSE WENT UP IN THE CAMP — A LAB. TYOMA HAS ALREADY FIXED THE MICROSCOPE IN IT. NOBODY ASKED HIM TO."
+
+msgid "В ЛАГЕРЕ КОСТЯ СРАЗУ ОТКРЫЛ МЕДПУНКТ. ПЕРВЫЙ ПАЦИЕНТ — КОЗА ЗИНА. ДИАГНОЗ: СЪЕЛА ИНСТРУКЦИЮ ОТ АВТОКЛАВА."
+msgstr "IN THE CAMP KOSTYA OPENED A FIRST-AID POST RIGHT AWAY. FIRST PATIENT: ZINA THE GOAT. DIAGNOSIS: ATE THE AUTOCLAVE MANUAL."
+
+msgid "В ЛАГЕРЕ НОВЫЙ ДОМ"
+msgstr "NEW HOUSE IN THE CAMP"
+
+msgid "В ЛАГЕРЕ ТЕПЕРЬ СЕМЕРО НОВЫХ ЛЮДЕЙ И ОДИН ТЁМА. ТЁМА СТОИТ ЦЕЛОГО ДОМА — ДЕНИС ПОСТРОИЛ ЕМУ МАСТЕРСКУЮ."
+msgstr "THE CAMP NOW HAS SEVEN NEW PEOPLE AND ONE TYOMA. TYOMA IS WORTH A WHOLE HOUSE — DENIS BUILT HIM A WORKSHOP."
+
+msgid "В ЛАГЕРЕ: "
+msgstr "IN CAMP: "
+
+msgid "В ЛАГЕРЬ"
+msgstr "TO CAMP"
+
+msgid "В ЛЕСУ ЗА ТРАССОЙ — ДЫМ КОСТРОВ. ЭТО РАЗВЕДЧИКИ ВЕРЫ: ЧЕТВЕРО, С ПАЛАТКАМИ, ИНСТРУМЕНТАМИ И ГИТАРОЙ, НА КОТОРОЙ НИКТО НЕ УМЕЕТ ИГРАТЬ."
+msgstr "IN THE FOREST PAST THE HIGHWAY — CAMPFIRE SMOKE. IT'S VERA'S SCOUTS: FOUR OF THEM, WITH TENTS, TOOLS AND A GUITAR NOBODY CAN PLAY."
+
+msgid "В ЛОББИ"
+msgstr "TO LOBBY"
+
+msgid "В МАГАЗИНЕ ПЯТЫЙ ДЕНЬ СИДИТ СЕМЬЯ: ОТЕЦ И ДВОЕ ДЕТЕЙ. ЕДЯТ ЧИПСЫ. ДЕТИ СЧАСТЛИВЫ, ОТЕЦ — НЕТ."
+msgstr "A FAMILY HAS BEEN HOLED UP IN THE STORE FOR FIVE DAYS: A FATHER AND TWO KIDS. EATING CHIPS. THE KIDS ARE HAPPY, THE FATHER ISN'T."
+
+msgid "В ПРОМЗОНЕ ЕСТЬ ХЛАДОКОМБИНАТ №3. ТАМ СТОЯТ ПРОМЫШЛЕННЫЕ ХОЛОДИЛЬНИКИ, КОТОРЫЕ ДЕНИС ГОТОВ РАЗОБРАТЬ НА БЛОКИ И СОБРАТЬ ЗАНОВО. ГЛАЗА У НЕГО ПРИ ЭТОМ ГОРЯТ."
+msgstr "THERE IS COLD STORAGE PLANT NO. 3 IN THE INDUSTRIAL ZONE. IT HAS INDUSTRIAL FREEZERS DENIS IS READY TO TAKE APART AND PUT BACK TOGETHER. HIS EYES LIGHT UP WHEN HE SAYS IT."
+
+msgid "В СКЛАДЕ БАНАНОВ ПРЯТАЛИСЬ ДВОЕ ПОРТОВЫХ ДИСПЕТЧЕРОВ. БАНАНОВ НЕ ОСТАЛОСЬ, ДИСПЕТЧЕРЫ ПОЖЕЛТЕЛИ."
+msgstr "TWO PORT DISPATCHERS WERE HIDING IN THE BANANA WAREHOUSE. NO BANANAS LEFT. THE DISPATCHERS TURNED YELLOW."
+
+msgid "В СКЛЕПЕ ПРЯЧЕТСЯ РАДИСТ ЛЕВ С ДОЧКОЙ СОНЕЙ. ЕГО РАЦИЯ РАЗБИТА, ДЕТАЛИ РАЗБРОСАНЫ СРЕДИ МОГИЛ."
+msgstr "RADIO OPERATOR LEV AND HIS DAUGHTER SONYA ARE HIDING IN THE CRYPT. HIS RADIO IS SMASHED, THE PARTS SCATTERED AMONG THE GRAVES."
+
+msgid "В УБЕЖИЩЕ"
+msgstr "TO SHELTER"
+
+msgid "В ЦЕНТРЕ — ВОСЕМЬ ВЫЖИВШИХ, ДВОЕ ДЕТЕЙ. И ДЯДЯ ГОША. С КОФЕМАШИНОЙ. БЕЗ НЕЁ ОН ЕХАТЬ ОТКАЗЫВАЕТСЯ."
+msgstr "DOWNTOWN — EIGHT SURVIVORS, TWO OF THEM KIDS. AND UNCLE GOSHA. WITH A COFFEE MACHINE. HE REFUSES TO LEAVE WITHOUT IT."
+
+msgid "В прицеле — красная точка: разброс −40%, чуть сильнее зум"
+msgstr "Red dot when aiming: spread −40%, a bit more zoom"
+
+msgid "В цехах промзоны — гнездо, откуда идёт заражение. Выдержи 5 волн и убей Громилу"
+msgstr "The industrial zone workshops hide the nest where the infection comes from. Survive 5 waves and kill the Brute"
+
+msgid "ВАКЦИНА"
+msgstr "THE VACCINE"
+
+msgid "ВАКЦИНА РАБОТАЕТ"
+msgstr "THE VACCINE WORKS"
+
+msgid "ВАКЦИНА РАБОТАЕТ, НО БЕЗ ХОЛОДА ПОРТИТСЯ ЗА СУТКИ. ДЕНИС ЗНАЕТ, ГДЕ ВЗЯТЬ ХОЛОД: ХЛАДОКОМБИНАТ В ПРОМЗОНЕ."
+msgstr "THE VACCINE WORKS, BUT WITHOUT COLD IT SPOILS IN A DAY. DENIS KNOWS WHERE TO GET COLD: THE COLD STORAGE PLANT IN THE INDUSTRIAL ZONE."
+
+msgid "ВАКЦИНА РАБОТАЕТ, НО ПОРТИТСЯ ЗА СУТКИ БЕЗ ХОЛОДА. ХОЛОДИЛЬНИК ДЕНИСА ТЯНЕТ ТРИ АМПУЛЫ И ОДНУ БАНКУ ОГУРЦОВ ДЯДИ ГОШИ."
+msgstr "THE VACCINE WORKS, BUT IT SPOILS IN A DAY WITHOUT COLD. DENIS'S FRIDGE HOLDS THREE VIALS AND ONE JAR OF UNCLE GOSHA'S PICKLES."
+
+msgid "ВАКЦИНА РАБОТАЕТ. ТЕПЕРЬ О НЕЙ ДОЛЖНЫ УЗНАТЬ ВСЕ, КТО ЕЩЁ ЖИВ. ЛЕВ ЗНАЕТ КАК: НУЖНА ВЫШКА СВЯЗИ В ЛЕСУ."
+msgstr "THE VACCINE WORKS. NOW EVERYONE STILL ALIVE NEEDS TO HEAR ABOUT IT. LEV KNOWS HOW: WE NEED THE RADIO TOWER IN THE FOREST."
+
+msgid "ВАКЦИНА УШЛА НА ЮГ, КАБАН МОЕТ ПОСУДУ, ТЁМА РЯДОМ. ДЯДЯ ГОША ОБЪЯВИЛ ПЕРВЫЙ В ИСТОРИИ ЛАГЕРЯ КОФЕЙНЫЙ ФЕСТИВАЛЬ."
+msgstr "THE VACCINE HAS GONE SOUTH, KABAN WASHES DISHES, TYOMA IS HERE. UNCLE GOSHA ANNOUNCED THE CAMP'S FIRST EVER COFFEE FESTIVAL."
+
+msgid "ВВЕДИ ИМЯ"
+msgstr "ENTER NAME"
+
+msgid "ВЕЛОМАСТЕРСКАЯ"
+msgstr "BIKE REPAIR"
+
+msgid "ВЕРА"
+msgstr "VERA"
+
+msgid "ВЕРА ВИДЕЛА МАЛЬЧИКА С КРАСНЫМ РЮКЗАКОМ. ОН УШЁЛ ТРИ ДНЯ НАЗАД. НЕ ОДИН."
+msgstr "VERA SAW A BOY WITH A RED BACKPACK. HE LEFT THREE DAYS AGO. NOT ALONE."
+
+msgid "ВЕРА ЕЩЁ СЛЫШАЛА В ЭФИРЕ ЧУЖОЙ ПОЗЫВНОЙ. СИГНАЛ ИДЁТ СО СТАРОГО КЛАДБИЩА. С ТОГО САМОГО."
+msgstr "VERA ALSO HEARD A STRANGE CALL SIGN ON THE AIR. THE SIGNAL IS COMING FROM THE OLD GRAVEYARD. THAT GRAVEYARD."
+
+msgid "ВЕРА РАССКАЗАЛА ГЛАВНОЕ: ТЁМУ УВЕЛИ ЛЮДИ В КРАСНЫХ ПЛАТКАХ. БАНДА «СТЕРВЯТНИКИ». ИХ ГЛАВНЫЙ ЗОВЁТ СЕБЯ БАРОНОМ."
+msgstr "VERA TOLD US WHAT MATTERS: TYOMA WAS TAKEN BY PEOPLE IN RED BANDANAS. A GANG CALLED THE \"VULTURES\". THEIR BOSS CALLS HIMSELF THE BARON."
+
+msgid "ВЕРНИСЬ НА ТОЧКУ!"
+msgstr "GET BACK TO THE POINT!"
+
+msgid "ВЕРХНИЕ КЛЮЧИ"
+msgstr "UPPER SPRINGS"
+
+msgid "ВЕРШИНА ПЕРЕВАЛА"
+msgstr "TOP OF THE PASS"
+
+msgid "ВЕТЕРАН"
+msgstr "VETERAN"
+
+msgid "ВЕТРЯК"
+msgstr "WIND TURBINE"
+
+msgid "ВЕЧНАЯ ОБОРОНА"
+msgstr "ETERNAL DEFENSE"
+
+msgid "ВЗРЫВНАЯ НЕДЕЛЯ"
+msgstr "EXPLOSIVE WEEK"
+
+msgid "ВЗРЫВНОЙ"
+msgstr "EXPLODER"
+
+msgid "ВЗРЫВНОЙ ЗОМБИ РАЗДУВАЕТСЯ ПЕРЕД ВЗРЫВОМ — ОТБЕГИ"
+msgstr "EXPLODERS SWELL UP BEFORE THEY BLOW — RUN"
+
+msgid "ВЗЯЛИ ПЛЕННОГО — ШНЫРЯ. ДО АПОКАЛИПСИСА ОН БЫЛ БУХГАЛТЕРОМ И ДО СИХ ПОР СЧИТАЕТ ВСЕХ ЗОМБИ В ТЕТРАДКУ."
+msgstr "WE TOOK A PRISONER — SHNYR. BEFORE THE APOCALYPSE HE WAS AN ACCOUNTANT, AND HE STILL LOGS EVERY ZOMBIE IN A NOTEBOOK."
+
+msgid "ВИД"
+msgstr "VIEW"
+
+msgid "ВИД ОТ 3-ГО ЛИЦА — В НАСТРОЙКАХ ИЛИ КНОПКОЙ «ВИД»"
+msgstr "THIRD-PERSON VIEW — IN SETTINGS OR WITH THE \"VIEW\" BUTTON"
+
+msgid "ВИД ОТ 3-ГО ЛИЦА — КНОПКА «ВИД»"
+msgstr "THIRD-PERSON VIEW — \"VIEW\" BUTTON"
+
+msgid "ВИНТОВКА"
+msgstr "RIFLE"
+
+msgid "ВКЛЮЧИ ЗАПИСЬ ЭКРАНА НА ТЕЛЕФОНЕ\nДВОЙНОЙ ТАП — ВЕРНУТЬ КНОПКИ"
+msgstr "START SCREEN RECORDING ON YOUR PHONE\nDOUBLE TAP — BRING BACK BUTTONS"
+
+msgid "ВМЕСТЕ ПРОТИВ ЗОМБИ, ОЧКИ ЗА КАЖДОГО УБИТОГО"
+msgstr "TOGETHER AGAINST ZOMBIES, POINTS FOR EVERY KILL"
+
+msgid "ВНУТРИ ТРИ МЕСЯЦА ДЕЖУРИТ МЕДБРАТ КОСТЯ. ОН ПРИВЯЗАЛ ПАЦИЕНТОВ К КРОВАТЯМ И ЛЕЧИТ ИХ АСПИРИНОМ. ПАЦИЕНТЫ РЫЧАТ, НО КОСТЯ НЕ СДАЁТСЯ."
+msgstr "MALE NURSE KOSTYA HAS BEEN ON DUTY INSIDE FOR THREE MONTHS. HE TIED THE PATIENTS TO THEIR BEDS AND TREATS THEM WITH ASPIRIN. THE PATIENTS GROWL, BUT KOSTYA DOESN'T GIVE UP."
+
+msgid "ВО ДВОРЕ ДЕНИС НАШЁЛ ПИКАП И ЗА НОЧЬ ПРЕВРАТИЛ ЕГО В БРОНЕПИКАП. «ЭТО НЕ РЕМОНТ, ЭТО ИСКУССТВО», — СКАЗАЛ ОН И УСНУЛ ПРЯМО ПОД МАШИНОЙ."
+msgstr "DENIS FOUND A PICKUP IN THE YARD AND OVERNIGHT TURNED IT INTO AN ARMORED PICKUP. \"THIS ISN'T A REPAIR, IT'S ART,\" HE SAID, AND FELL ASLEEP RIGHT UNDER THE CAR."
+
+msgid "ВОДИТЕЛЬ"
+msgstr "DRIVER"
+
+msgid "ВОЖАТАЯ"
+msgstr "CAMP LEADER"
+
+msgid "ВОЗРОЖДЕНИЕ ЧЕРЕЗ %d"
+msgstr "RESPAWN IN %d"
+
+msgid "ВОЙ ИДЁТ С ВЕРШИНЫ ПЕРЕВАЛА. ТАМ, НА СТАРОЙ ТУРБАЗЕ, ЖИВЁТ ПАСТУХ: РОСТОМ С ДВА ЧЕЛОВЕКА, БЛЕДНЫЙ, КАК СНЕГ, С ГОЛОСОМ, ОТ КОТОРОГО ДРОЖАТ СТЁКЛА."
+msgstr "THE HOWL COMES FROM THE TOP OF THE PASS. THERE, AT AN OLD HIKERS' LODGE, LIVES THE SHEPHERD: TWICE A MAN'S HEIGHT, PALE AS SNOW, WITH A VOICE THAT RATTLES WINDOWS."
+
+msgid "ВОЙТИ"
+msgstr "JOIN"
+
+msgid "ВОЛНА %d"
+msgstr "WAVE %d"
+
+msgid "ВОЛНА %d ПРОЙДЕНА"
+msgstr "WAVE %d CLEARED"
+
+msgid "ВОЛНА %d ПРОЙДЕНА  +%d"
+msgstr "WAVE %d CLEARED  +%d"
+
+msgid "ВОЛНА %d • ЗОМБИ: %d • РЕКОРД %d"
+msgstr "WAVE %d • ZOMBIES: %d • BEST %d"
+
+msgid "ВОЛНА %d/%d • ЗОМБИ: %d"
+msgstr "WAVE %d/%d • ZOMBIES: %d"
+
+msgid "ВОЛНА %d: %s!"
+msgstr "WAVE %d: %s!"
+
+msgid "ВОЛНЫ"
+msgstr "WAVES"
+
+msgid "ВОЛНЫ ВСЁ СИЛЬНЕЕ, БЕЗ ВОЗРОЖДЕНИЯ — ПОБЕЖДАЕТ ПОСЛЕДНИЙ ЖИВОЙ"
+msgstr "WAVES KEEP GETTING STRONGER, NO RESPAWNS — LAST ONE ALIVE WINS"
+
+msgid "ВОРОТА ЛАГЕРЯ"
+msgstr "THE CAMP GATE"
+
+msgid "ВОРОТА ОТКРЫЛИСЬ НА ЗАКАТЕ. ЗА НИМИ — КРАНЫ, КОНТЕЙНЕРЫ И БЕЛЫЙ КОРАБЛЬ."
+msgstr "THE GATE OPENED AT SUNSET. BEYOND IT: CRANES, CONTAINERS AND A WHITE SHIP."
+
+msgid "ВОРОТА УБЕЖИЩА"
+msgstr "SHELTER GATES"
+
+msgid "ВОСКРЕСНУТЬ  ▶ РЕКЛАМА"
+msgstr "REVIVE  ▶ AD"
+
+msgid "ВОТ ЭТО ОБЕД!"
+msgstr "NOW THAT'S A LUNCH!"
+
+msgid "ВПЕРЁД!"
+msgstr "GO!"
+
+msgid "ВРАГИ"
+msgstr "ENEMIES"
+
+msgid "ВСЕ ВОСЕМЬ В ЛАГЕРЕ. ДЯДЯ ГОША ВАРИЛ КОФЕ ПРЯМО В КУЗОВЕ, НА ХОДУ. НИКТО НЕ ОБЖЁГСЯ. ПОЧТИ."
+msgstr "ALL EIGHT ARE IN THE CAMP. UNCLE GOSHA BREWED COFFEE IN THE TRUCK BED, ON THE MOVE. NOBODY GOT BURNED. ALMOST."
+
+msgid "ВСЕ НАГРАДЫ ПОЛУЧЕНЫ. СПАСИБО, ЧТО ТЫ С НАМИ!"
+msgstr "ALL REWARDS CLAIMED. THANKS FOR BEING WITH US!"
+
+msgid "ВСЕГДА"
+msgstr "ALWAYS"
+
+msgid "ВСТАВИТЬ ИЗ БУФЕРА"
+msgstr "PASTE FROM CLIPBOARD"
+
+msgid "ВСТАВЬ КОД СЮДА"
+msgstr "PASTE THE CODE HERE"
+
+msgid "ВСТАТЬ"
+msgstr "STAND UP"
+
+msgid "ВТОРОЙ ШАНС!"
+msgstr "SECOND CHANCE!"
+
+msgid "ВТОРОЙ ШАНС: %d"
+msgstr "SECOND CHANCE: %d"
+
+msgid "ВЫ ПОГИБЛИ"
+msgstr "YOU DIED"
+
+msgid "ВЫ: %s"
+msgstr "YOU: %s"
+
+msgid "ВЫБРАН"
+msgstr "SELECTED"
+
+msgid "ВЫБРАНА"
+msgstr "SELECTED"
+
+msgid "ВЫБРАННАЯ МАШИНА ЖДЁТ В ГОРОДЕ У СТАРТА И ЕДЕТ С ВАМИ В ИГРУ ПО СЕТИ"
+msgstr "YOUR SELECTED CAR WAITS AT THE CITY START AND JOINS YOU IN ONLINE GAMES"
+
+msgid "ВЫБРАТЬ"
+msgstr "SELECT"
+
+msgid "ВЫЖИВАНИЕ"
+msgstr "SURVIVAL"
+
+msgid "ВЫЖИВИ. ЗАЧИСТИ. ВЕРНИСЬ."
+msgstr "SURVIVE. CLEAR. RETURN."
+
+msgid "ВЫЖИВШИЙ"
+msgstr "SURVIVOR"
+
+msgid "ВЫЖИВШИЙ СПАСЁН  +%d"
+msgstr "SURVIVOR RESCUED  +%d"
+
+msgid "ВЫИГРАЙ 15 МИССИЙ"
+msgstr "WIN 15 MISSIONS"
+
+msgid "ВЫЙТИ"
+msgstr "EXIT"
+
+msgid "ВЫЙТИ ИЗ ИГРЫ?"
+msgstr "QUIT THE GAME?"
+
+msgid "ВЫЙТИ ИЗ ЛОББИ"
+msgstr "LEAVE LOBBY"
+
+msgid "ВЫКЛ"
+msgstr "OFF"
+
+msgid "ВЫПОЛНИ 2 МИССИИ"
+msgstr "COMPLETE 2 MISSIONS"
+
+msgid "ВЫПОЛНИ 4 МИССИИ"
+msgstr "COMPLETE 4 MISSIONS"
+
+msgid "ВЫСОКОЕ"
+msgstr "HIGH"
+
+msgid "ВЫХОД"
+msgstr "EXIT"
+
+msgid "Вакцине нужен холод. Собери 6 блоков холодильных установок на хладокомбинате"
+msgstr "The vaccine needs cold. Collect 6 cooling units at the cold storage plant"
+
+msgid "Взрывные зомби на каждом углу"
+msgstr "Exploding zombies on every corner"
+
+msgid "Волн пройдено: %d"
+msgstr "Waves cleared: %d"
+
+msgid "Волны без конца, каждые 5 волн — Громила. Сколько продержишься? Монеты за каждую волну"
+msgstr "Endless waves, a Brute every 5 waves. How long can you last? Coins for every wave"
+
+msgid "Восстанавливает 40 здоровья"
+msgstr "Restores 40 health"
+
+msgid "Время: %s"
+msgstr "Time: %s"
+
+msgid "Все монеты за миссии ×2"
+msgstr "All mission coins ×2"
+
+msgid "Второй ярус контейнеров, радио, генератор и бассейн"
+msgstr "A second tier of containers, radio, generator and a pool"
+
+msgid "Выиграй 10 миссий"
+msgstr "Win 10 missions"
+
+msgid "Выиграй 100 миссий"
+msgstr "Win 100 missions"
+
+msgid "Выпадает из зомби и лежит в городе. Из лома в мастерской убежища собираются гранаты, коктейли и аптечки"
+msgstr "Dropped by zombies and lying around the city. In the shelter workshop, scrap becomes grenades, cocktails and medkits"
+
+msgid "Выполни 3 недельных испытания"
+msgstr "Complete 3 weekly challenges"
+
+msgid "Вышка"
+msgstr "Watchtower"
+
+msgid "ГАЗ (ТУРБО)"
+msgstr "NITRO (TURBO)"
+
+msgid "ГАРАЖ"
+msgstr "GARAGE"
+
+msgid "ГАРАЖ: УЛУЧШЕНИЯ МАШИН"
+msgstr "GARAGE: CAR UPGRADES"
+
+msgid "ГЕНЕРАТОР"
+msgstr "GENERATOR"
+
+msgid "ГЕНКА"
+msgstr "GENKA"
+
+msgid "ГЕНКА ВСЮ НОЧЬ СТОЯЛ НА ВОРОТАХ И НИКОГО НЕ ОШТРАФОВАЛ. ДЯДЯ ГОША НАЛИЛ ЕМУ КОФЕ. ЭТО БОЛЬШЕ, ЧЕМ МЕДАЛЬ. ТЕПЕРЬ — ЦЕХА «ГЕНОМА»."
+msgstr "GENKA STOOD AT THE GATE ALL NIGHT AND DIDN'T FINE ANYONE. UNCLE GOSHA POURED HIM A COFFEE. THAT'S BETTER THAN A MEDAL. NOW, ON TO THE GENOME WORKSHOPS."
+
+msgid "ГЕНКА И КАБАН МОЮТ ПОСУДУ И СПОРЯТ, ЧЬЯ ТАРЕЛКА ЧИЩЕ. ИРИНА ДЕЛАЕТ ВАКЦИНУ ПАРТИЯМИ. НИНА ВЫДАЁТ ЕЁ СТРОГО ПО РЕЦЕПТУ."
+msgstr "GENKA AND KABAN WASH THE DISHES AND ARGUE OVER WHOSE PLATE IS CLEANER. IRINA MAKES VACCINE IN BATCHES. NINA HANDS IT OUT STRICTLY BY PRESCRIPTION."
+
+msgid "ГЕНКА, БЫВШИЙ БАРОН, ПРОСИТСЯ С ТОБОЙ: «КАБАН БЫЛ МОИМ ЗАМОМ. ЭТО МОЙ ПОЗОР — Я ЕГО И ОТМОЮ». ОН ТЕПЕРЬ МОЕТ ПОСУДУ И ВЕРИТ В ОТМЫВАНИЕ."
+msgstr "GENKA, THE FORMER BARON, ASKS TO COME WITH YOU: \"KABAN WAS MY DEPUTY. HE'S MY SHAME — I'LL SCRUB HIM CLEAN MYSELF.\" HE WASHES DISHES NOW AND BELIEVES IN SCRUBBING."
+
+msgid "ГЕРОЙ СЕВЕРА-9"
+msgstr "HERO OF NORTH-9"
+
+msgid "ГИРЛЯНДЫ"
+msgstr "STRING LIGHTS"
+
+msgid "ГИРОСКОП"
+msgstr "GYROSCOPE"
+
+msgid "ГИРОСКОП РАБОТАЕТ НА ТЕЛЕФОНЕ"
+msgstr "GYROSCOPE WORKS ON PHONES"
+
+msgid "ГЛАВ СЮЖЕТА"
+msgstr "STORY CHAPTERS"
+
+msgid "ГЛАВА %d  •  %s"
+msgstr "CHAPTER %d  •  %s"
+
+msgid "ГЛАВА 1\nПЕРВЫЙ ДЕНЬ"
+msgstr "CHAPTER 1\nTHE FIRST DAY"
+
+msgid "ГЛАВА 10\nИСТОЧНИК"
+msgstr "CHAPTER 10\nTHE SOURCE"
+
+msgid "ГЛАВА 11\nРЕЦЕПТ ВАКЦИНЫ"
+msgstr "CHAPTER 11\nVACCINE RECIPE"
+
+msgid "ГЛАВА 12\nХОЛОДНАЯ ЦЕПЬ"
+msgstr "CHAPTER 12\nTHE COLD CHAIN"
+
+msgid "ГЛАВА 13\nБОЛЬНИЦА"
+msgstr "CHAPTER 13\nTHE HOSPITAL"
+
+msgid "ГЛАВА 14\nГОЛОСА С ЮГА"
+msgstr "CHAPTER 14\nVOICES FROM THE SOUTH"
+
+msgid "ГЛАВА 15\nГОЛОС МАМЫ"
+msgstr "CHAPTER 15\nMOM'S VOICE"
+
+msgid "ГЛАВА 16\nКРЫСА"
+msgstr "CHAPTER 16\nTHE RAT"
+
+msgid "ГЛАВА 17\nПО СЛЕДУ КАБАНА"
+msgstr "CHAPTER 17\nON KABAN'S TRAIL"
+
+msgid "ГЛАВА 18\nПЕРЕПРАВА"
+msgstr "CHAPTER 18\nTHE CROSSING"
+
+msgid "ГЛАВА 19\nСТАРЫЙ МОСТ"
+msgstr "CHAPTER 19\nTHE OLD BRIDGE"
+
+msgid "ГЛАВА 2\nУЛИЦА МОЛЧАНИЯ"
+msgstr "CHAPTER 2\nSILENCE STREET"
+
+msgid "ГЛАВА 20\nПРАЗДНИК"
+msgstr "CHAPTER 20\nTHE FESTIVAL"
+
+msgid "ГЛАВА 22\nПОРТОВЫЕ СКЛАДЫ"
+msgstr "CHAPTER 22\nPORT WAREHOUSES"
+
+msgid "ГЛАВА 26\nКУРОРТ «ЧАЙКА»"
+msgstr "CHAPTER 26\nTHE SEAGULL RESORT"
+
+msgid "ГЛАВА 27\nГОРНЫЙ ПЕРЕВАЛ"
+msgstr "CHAPTER 27\nMOUNTAIN PASS"
+
+msgid "ГЛАВА 28\nВЕРХНИЕ КЛЮЧИ"
+msgstr "CHAPTER 28\nUPPER SPRINGS"
+
+msgid "ГЛАВА 29\nПАСТУХ"
+msgstr "CHAPTER 29\nTHE SHEPHERD"
+
+msgid "ГЛАВА 3\nЛЕСНОЙ ЛАГЕРЬ"
+msgstr "CHAPTER 3\nFOREST CAMP"
+
+msgid "ГЛАВА 30\nДОМОЙ"
+msgstr "CHAPTER 30\nHOMEWARD"
+
+msgid "ГЛАВА 4\nНОЧЬ НА КЛАДБИЩЕ"
+msgstr "CHAPTER 4\nNIGHT AT THE GRAVEYARD"
+
+msgid "ГЛАВА 5\nСТЕРВЯТНИКИ"
+msgstr "CHAPTER 5\nVULTURES"
+
+msgid "ГЛАВА 6\nПРОМЗОНА"
+msgstr "CHAPTER 6\nINDUSTRIAL ZONE"
+
+msgid "ГЛАВА 7\nЭВАКУАЦИЯ"
+msgstr "CHAPTER 7\nEVACUATION"
+
+msgid "ГЛАВА 8\nЛОГОВО БАРОНА"
+msgstr "CHAPTER 8\nTHE BARON'S LAIR"
+
+msgid "ГЛАВА 9\nИСТОЧНИК"
+msgstr "CHAPTER 9\nTHE SOURCE"
+
+msgid "ГЛАВА 9\nОСАДА"
+msgstr "CHAPTER 9\nTHE SIEGE"
+
+msgid "ГЛАВА ПРОЙДЕНА  •  %s"
+msgstr "CHAPTER COMPLETE  •  %s"
+
+msgid "ГЛАВНАЯ У УЧЁНЫХ — ДОКТОР ИРИНА. ЕЙ НУЖНЫ РЕАКТИВЫ, ХОЛОДИЛЬНИК И НОРМАЛЬНЫЙ КОФЕ. ДЯДЯ ГОША ВПЕРВЫЕ ВСТРЕТИЛ РАВНОГО ПРОТИВНИКА."
+msgstr "THE SCIENTISTS' LEADER IS DOCTOR IRINA. SHE NEEDS REAGENTS, A FRIDGE AND DECENT COFFEE. UNCLE GOSHA HAS MET HIS MATCH FOR THE FIRST TIME."
+
+msgid "ГЛУШИТЕЛЬ"
+msgstr "SILENCER"
+
+msgid "ГНИЛЯК"
+msgstr "GHOUL"
+
+msgid "ГНОМЫ ТЕПЕРЬ ЖИВУТ В ЛАГЕРЕ У КОСТРА. ДЯДЯ ГОША ГОВОРИТ, ЧТО ОНИ НА НЕГО СМОТРЯТ. ГНОМЫ МОЛЧАТ."
+msgstr "THE GNOMES NOW LIVE IN THE CAMP BY THE FIRE. UNCLE GOSHA SAYS THEY ARE WATCHING HIM. THE GNOMES SAY NOTHING."
+
+msgid "ГОД НАЗАД"
+msgstr "A YEAR AGO"
+
+msgid "ГОЛОДАЮТ"
+msgstr "STARVING"
+
+msgid "ГОЛОС МАМЫ"
+msgstr "MOM'S VOICE"
+
+msgid "ГОЛОСА ВЫЖИВШИХ В УБЕЖИЩЕ"
+msgstr "SURVIVOR VOICES IN THE SHELTER"
+
+msgid "ГОЛОСА ГЕРОЕВ: НЕЙРОСЕТЬ PIPER"
+msgstr "CHARACTER VOICES: PIPER NEURAL TTS"
+
+msgid "ГОЛОСА С ЮГА"
+msgstr "VOICES FROM THE SOUTH"
+
+msgid "ГОЛУБОЙ"
+msgstr "LIGHT BLUE"
+
+msgid "ГОРНЫЙ ПЕРЕВАЛ"
+msgstr "MOUNTAIN PASS"
+
+msgid "ГОРОД"
+msgstr "CITY"
+
+msgid "ГОРОД ЖДЁТ ГЕРОЯ"
+msgstr "THE CITY NEEDS A HERO"
+
+msgid "ГОРОД ОГРОМНЫЙ. ВОЗЬМИ МАШИНУ: БАМПЕР — ТОЖЕ ОРУЖИЕ, А ДРИФТ НА ПЛОЩАДИ — ТОЖЕ ТАКТИКА."
+msgstr "THE CITY IS HUGE. TAKE A CAR: THE BUMPER IS A WEAPON TOO, AND DRIFTING ON THE PLAZA IS A TACTIC TOO."
+
+msgid "ГОРОДСКАЯ БОЛЬНИЦА"
+msgstr "CITY HOSPITAL"
+
+msgid "ГОРОДСКАЯ БОЛЬНИЦА №1"
+msgstr "CITY HOSPITAL NO. 1"
+
+msgid "ГОРОДСКАЯ БОЛЬНИЦА №1. НА ДВЕРЯХ ТАБЛИЧКА: «ПРИЁМ ПО ЗАПИСИ». НИЖЕ МАРКЕРОМ: «КУСАЮЩИХ НЕ ПРИНИМАЕМ»."
+msgstr "CITY HOSPITAL NO. 1. A SIGN ON THE DOOR: \"APPOINTMENTS ONLY\". BELOW, IN MARKER: \"NO BITERS ALLOWED\"."
+
+msgid "ГОША, ТЫ ГЕНИЙ!"
+msgstr "GOSHA, YOU'RE A GENIUS!"
+
+msgid "ГРАНАТА"
+msgstr "GRENADE"
+
+msgid "ГРАФИКА"
+msgstr "GRAPHICS"
+
+msgid "ГРАФИКА, УПРАВЛЕНИЕ"
+msgstr "GRAPHICS, CONTROLS"
+
+msgid "ГРАФИТ"
+msgstr "GRAPHITE"
+
+msgid "ГРОЗА МЕРТВЕЦОВ"
+msgstr "BANE OF THE DEAD"
+
+msgid "ГРОМИЛА"
+msgstr "BRUTE"
+
+msgid "ГРОМИЛА МЁРТВ, ГНЕЗДО ГОРИТ. В ПОДВАЛЕ ЦЕХА — ТРОЕ УЧЁНЫХ «ГЕНОМА». ОНИ ЗНАЮТ, КАК СДЕЛАТЬ ВАКЦИНУ."
+msgstr "THE BRUTE IS DEAD, THE NEST IS BURNING. IN THE BASEMENT OF THE PLANT — THREE \"GENOME\" SCIENTISTS. THEY KNOW HOW TO MAKE A VACCINE."
+
+msgid "ГРОМКОСТЬ"
+msgstr "VOLUME"
+
+msgid "ГРОМКОСТЬ ГОЛОСОВ"
+msgstr "VOICE VOLUME"
+
+msgid "ГРУЗОВИК"
+msgstr "TRUCK"
+
+msgid "ГРУЗЧИКИ ДНЯ НОЛЬ ТАК И ОСТАЛИСЬ НА СМЕНЕ. ИХ СОТНИ, И У НИХ ВСЁ ЕЩЁ КРЕПКИЕ РУКИ."
+msgstr "THE DAY ZERO DOCKERS NEVER CLOCKED OUT. THERE ARE HUNDREDS OF THEM, AND THEIR GRIP IS STILL STRONG."
+
+msgid "ГРУСТЯТ"
+msgstr "SAD"
+
+msgid "Город кишит мёртвыми. Пробейся к людям — убей 45 зомби, машина поможет"
+msgstr "The city is crawling with the dead. Fight through to the people — kill 45 zombies, the car will help"
+
+msgid "Грядки и теплица: +4 ящика провизии каждый день"
+msgstr "Garden beds: +4 crates of food every day"
+
+msgid "ДАВИЛКА"
+msgstr "ROADKILL"
+
+msgid "ДАЛЕЕ"
+msgstr "NEXT"
+
+msgid "ДАЛЕЕ  ▸"
+msgstr "NEXT  ▸"
+
+msgid "ДВЕ МИНУТЫ НА ПОЛИГОНЕ: ХОДЬБА, ОБЗОР, СТРЕЛЬБА, ПРИЦЕЛ И ПЕРВЫЕ ЗОМБИ. НАГРАДА — 150 МОНЕТ."
+msgstr "TWO MINUTES ON THE PROVING GROUND: WALKING, LOOKING, SHOOTING, AIMING AND YOUR FIRST ZOMBIES. REWARD — 150 COINS."
+
+msgid "ДВЕ НЕДЕЛИ БЫЛО ТИХО. ПОТОМ ЛЕВ ПОЙМАЛ ЮЖНЫЙ ПОРТ. ГОЛОС ЯКОРЕВА БЫЛ ХРИПЛЫМ. НО ЭТО УЖЕ ДРУГАЯ ИСТОРИЯ."
+msgstr "IT WAS QUIET FOR TWO WEEKS. THEN LEV PICKED UP THE SOUTHERN PORT. YAKOREV'S VOICE WAS HOARSE. BUT THAT'S ANOTHER STORY."
+
+msgid "ДВЕСТИ ЖИТЕЛЕЙ ПОРТА УСПЕЛИ УЙТИ В ГОРЫ И ЖДУТ ВАКЦИНУ. А «НАДЕЖДА» ЗАСТРЯЛА У ПРИЧАЛА: НИ ТОПЛИВА, НИ ДОРОГИ К НЕЙ."
+msgstr "TWO HUNDRED PEOPLE FROM THE PORT ESCAPED INTO THE MOUNTAINS AND ARE WAITING FOR THE VACCINE. BUT THE NADEZHDA IS STUCK AT THE PIER: NO FUEL, NO WAY TO REACH HER."
+
+msgid "ДВЕСТИ ПРИВИВОК. ТЁМА СДЕЛАЛ ИХ ВСЕ И НИ РАЗУ НЕ ПРОМАХНУЛСЯ. БАБА ШУРА ПОСТАВИЛА ЕМУ ПЯТЁРКУ — РУЧКОЙ, НА РУКЕ."
+msgstr "TWO HUNDRED SHOTS. TYOMA GAVE EVERY ONE AND NEVER MISSED. GRANNY SHURA GAVE HIM AN A, IN PEN, ON HIS HAND."
+
+msgid "ДВИГАЙСЯ: ВЕДИ ДЖОЙСТИК СЛЕВА"
+msgstr "MOVE: DRAG THE JOYSTICK ON THE LEFT"
+
+msgid "ДВИГАЙСЯ: КЛАВИШИ W A S D"
+msgstr "MOVE: W A S D KEYS"
+
+msgid "ДВИГАТЕЛЬ"
+msgstr "ENGINE"
+
+msgid "ДВИГАТЕЛЬ (скорость +8%)"
+msgstr "ENGINE (speed +8%)"
+
+msgid "ДВОЕ ЕГО ЛЮДЕЙ ОСТАЛИСЬ. СКАЗАЛИ, ЧТО У НАС КОРМЯТ ЛУЧШЕ И НИКТО НЕ ЗАСТАВЛЯЕТ НОСИТЬ КРАСНЫЕ ПЛАТКИ."
+msgstr "TWO OF HIS MEN STAYED. THEY SAID THE FOOD IS BETTER HERE AND NOBODY MAKES THEM WEAR RED BANDANAS."
+
+msgid "ДВОЕ ЕГО ПАРНЕЙ СДАЛИСЬ И ПОПРОСИЛИСЬ К НАМ. ГЕНКА ВЫДАЛ ИМ ФАРТУКИ. ПОСУДА В ЛАГЕРЕ НИКОГДА ЕЩЁ НЕ БЫЛА ТАКОЙ ЧИСТОЙ."
+msgstr "TWO OF HIS GUYS SURRENDERED AND ASKED TO JOIN US. GENKA HANDED THEM APRONS. THE CAMP DISHES HAVE NEVER BEEN THIS CLEAN."
+
+msgid "ДВОЙНЫЕ МОНЕТЫ"
+msgstr "DOUBLE COINS"
+
+msgid "ДВОР"
+msgstr "YARD"
+
+msgid "ДЕНИС"
+msgstr "DENIS"
+
+msgid "ДЕНИС И ЛЮБА ДВА ЧАСА СПОРИЛИ О ФРЕОНЕ. ТЁМА СКАЗАЛ, ЧТО ЭТО САМЫЙ РОМАНТИЧНЫЙ СПОР, КОТОРЫЙ ОН СЛЫШАЛ."
+msgstr "DENIS AND LYUBA ARGUED ABOUT FREON FOR TWO HOURS. TYOMA SAID IT WAS THE MOST ROMANTIC ARGUMENT HE HAD EVER HEARD."
+
+msgid "ДЕНИС РАСТАЩИТ ЗАВАЛ БРОНЕГРУЗОВИКОМ. ЭТО ГРОМКО И ДОЛГО. МЕРТВЕЦЫ ЛЮБЯТ И ТО, И ДРУГОЕ."
+msgstr "DENIS WILL CLEAR THE PILE-UP WITH THE ARMORED TRUCK. IT IS LOUD AND IT TAKES TIME. THE DEAD LOVE BOTH."
+
+msgid "ДЕНЬ 92. РАЦИЯ"
+msgstr "DAY 92. THE RADIO"
+
+msgid "ДЕНЬ 92. РАЦИЯ, КОТОРАЯ ТРИ МЕСЯЦА ШИПЕЛА, ВДРУГ ЗАГОВОРИЛА ЖЕНСКИМ ГОЛОСОМ: «МЫ НА СТОЯНКЕ У ТРАССЫ, НАС ДВОЕ, БРАТ РАНЕН!»"
+msgstr "DAY 92. THE RADIO THAT HAD HISSED FOR THREE MONTHS SUDDENLY SPOKE IN A WOMAN'S VOICE: \"WE'RE AT THE YARD BY THE HIGHWAY, THERE'S TWO OF US, MY BROTHER'S HURT!\""
+
+msgid "ДЕНЬ МАРОДЁРА"
+msgstr "LOOTER'S DAY"
+
+msgid "ДЕНЬ НОЛЬ"
+msgstr "DAY ZERO"
+
+msgid "ДЕНЬ НОЛЬ, 18:40. ПОЖАР В «ГЕНОМЕ». ЧЕРЕЗ ЧАС ПО ГОРОДУ БЕЖАЛИ ЛЮДИ. ЧЕРЕЗ ДВА — ЗА НИМИ БЕЖАЛИ ТЕ, КТО УЖЕ НЕ БЫЛ ЛЮДЬМИ."
+msgstr "DAY ZERO, 18:40. A FIRE AT \"GENOME\". AN HOUR LATER PEOPLE WERE RUNNING THROUGH THE CITY. TWO HOURS LATER THEY WERE BEING CHASED BY THOSE WHO WERE NO LONGER PEOPLE."
+
+msgid "ДЕРЖИ ВОРОТА. ТЁМА НА КРЫШЕ С РАЦИЕЙ, ДЕНИС ЗАВАРИВАЕТ ДЫРЫ В ЗАБОРЕ, А ГЕНКА — БЫВШИЙ БАРОН — ВПЕРВЫЕ В ЖИЗНИ ОХРАНЯЕТ ТО, ЧТО НЕ УКРАЛ."
+msgstr "HOLD THE GATE. TYOMA IS ON THE ROOF WITH THE RADIO, DENIS IS WELDING HOLES IN THE FENCE, AND GENKA, THE FORMER BARON, IS GUARDING SOMETHING HE DIDN'T STEAL FOR THE FIRST TIME IN HIS LIFE."
+
+msgid "ДЕРЖИ ПОДЪЕЗД К МОСТУ. ГНОМОВ ДЕНИС ОБЕЩАЛ СОХРАНИТЬ — ТЁМА ПОТРЕБОВАЛ."
+msgstr "HOLD THE APPROACH TO THE BRIDGE. DENIS PROMISED TO SAVE THE GNOMES: TYOMA DEMANDED IT."
+
+msgid "ДЕРЖИ ПРИЧАЛ, ПОКА ВСЕ НЕ ПОДНИМУТСЯ НА БОРТ. ПЯТЬ ВОЛН — И УТОПЛЕННИК. ПРАВИЛО №1 ТЕПЕРЬ ЗВУЧИТ ТАК: ПРОВЕРЯЙ ЗАДНЮЮ ПАЛУБУ."
+msgstr "HOLD THE PIER UNTIL EVERYONE IS ABOARD. FIVE WAVES, THEN THE DROWNED ONE. RULE NO. 1 NOW GOES LIKE THIS: ALWAYS CHECK THE BACK DECK."
+
+msgid "ДЖОЙСТИК\n(ПЕРЕТАЩИ НА ДРУГУЮ СТОРОНУ)"
+msgstr "JOYSTICK\n(DRAG TO THE OTHER SIDE)"
+
+msgid "ДИДЖЕЙ"
+msgstr "DJ"
+
+msgid "ДИСПЕТЧЕР"
+msgstr "DISPATCHER"
+
+msgid "ДИСТАНЦИЯ КАМЕРЫ (3-Е ЛИЦО)"
+msgstr "CAMERA DISTANCE (3RD PERSON)"
+
+msgid "ДЛЯ МАСТЕРСКОЙ"
+msgstr "FOR THE WORKSHOP"
+
+msgid "ДО ВСЕГО ЭТОГО"
+msgstr "BEFORE ALL THIS"
+
+msgid "ДО КОРАБЛЯ ДВА ДНЯ. А СТАРЫЙ МОСТ ЗАБИТ МАШИНАМИ ДНЯ НОЛЬ: АВТОБУС, ДВА ГРУЗОВИКА И ЧЕЙ-ТО ДОМ НА КОЛЁСАХ С ГНОМАМИ НА КРЫШЕ."
+msgstr "TWO DAYS UNTIL THE SHIP. AND THE OLD BRIDGE IS JAMMED WITH CARS FROM DAY ZERO: A BUS, TWO TRUCKS AND SOMEONE'S MOTORHOME WITH GARDEN GNOMES ON THE ROOF."
+
+msgid "ДО ПОРТА — КИЛОМЕТР ПОРТОВЫХ СКЛАДОВ. МИХАЛЫЧ ЗНАЕТ ИХ НАИЗУСТЬ: «ТУТ ВОДКА, ТУТ ЗАПЧАСТИ, ТУТ БАНАНЫ. БЫЛИ»."
+msgstr "A KILOMETER OF PORT WAREHOUSES STANDS BETWEEN US AND THE PORT. MIKHALYCH KNOWS THEM BY HEART: \"VODKA HERE, SPARE PARTS HERE, BANANAS HERE. USED TO BE.\""
+
+msgid "ДОБАВКИ МОЖНО?"
+msgstr "CAN I HAVE SECONDS?"
+
+msgid "ДОВОЛЬНЫ"
+msgstr "CONTENT"
+
+msgid "ДОКТОР ИРИНА СОБИРАЕТ ВАКЦИНУ ИЗ ТОГО, ЧТО ЕСТЬ: МИКРОСКОП ТЁМЫ, ХОЛОДИЛЬНИК ДЕНИСА И КОФЕМАШИНА ДЯДИ ГОШИ — «ДЛЯ НАСТРОЕНИЯ»."
+msgstr "DOCTOR IRINA IS BUILDING A VACCINE FROM WHAT WE'VE GOT: TYOMA'S MICROSCOPE, DENIS'S FRIDGE AND UNCLE GOSHA'S COFFEE MACHINE — \"FOR MORALE\"."
+
+msgid "ДОМОЙ"
+msgstr "HOMEWARD"
+
+msgid "ДОРОГА НА ЮГ"
+msgstr "ROAD TO THE SOUTH"
+
+msgid "ДОРОГА ЧИСТА. НА МОСТУ ОСТАЛСЯ ТОЛЬКО МАМИН СИНИЙ ШАРФ НА ПЕРИЛАХ. МЫ ЕГО НЕ ТРОГАЛИ."
+msgstr "THE ROAD IS CLEAR. ONLY MOM'S BLUE SCARF REMAINS ON THE BRIDGE RAILING. WE LEFT IT ALONE."
+
+msgid "ДОСТИЖЕНИЕ!"
+msgstr "ACHIEVEMENT!"
+
+msgid "ДОСТИЖЕНИЯ"
+msgstr "ACHIEVEMENTS"
+
+msgid "ДОСТУПНА"
+msgstr "AVAILABLE"
+
+msgid "ДРИФТ"
+msgstr "DRIFT"
+
+msgid "ДРИФТ  %d"
+msgstr "DRIFT  %d"
+
+msgid "ДРИФТ  %d  +%s"
+msgstr "DRIFT  %d  +%s"
+
+msgid "ДРИФТ-ПЛОЩАДЬ"
+msgstr "DRIFT PLAZA"
+
+msgid "ДРОБОВИК"
+msgstr "SHOTGUN"
+
+msgid "ДУЛО"
+msgstr "MUZZLE"
+
+msgid "ДЯДЯ ГОША"
+msgstr "UNCLE GOSHA"
+
+msgid "ДЯДЯ ГОША ОТКРЫЛ В ЛАГЕРЕ КОФЕЙНЮ «ПОСЛЕДНЯЯ КАПЛЯ». ШНЫРЬ ВЕДЁТ БУХГАЛТЕРИЮ НА СОВЕТСКОМ КАЛЬКУЛЯТОРЕ И НОСИТ БОРОДУ С ГОРДОСТЬЮ."
+msgstr "UNCLE GOSHA OPENED A COFFEE SHOP IN THE CAMP: \"THE LAST DROP\". SHNYR KEEPS THE BOOKS ON A SOVIET CALCULATOR AND WEARS HIS BEARD WITH PRIDE."
+
+msgid "ДЯДЯ ГОША, А ЧТО НА ОБЕД? «НИЧЕГО»? ОПЯТЬ?"
+msgstr "UNCLE GOSHA, WHAT'S FOR LUNCH? \"NOTHING\"? AGAIN?"
+
+msgid "Два автомата из торгового центра. Рекорд у Тёмы"
+msgstr "Two cabinets from the mall. Tyoma holds the high score"
+
+msgid "Два шезлонга у зоны отдыха — загорать под вой зомби"
+msgstr "Two loungers by the lounge — sunbathe to the zombie howls"
+
+msgid "Две волны зомби, в последней — огромный босс. Уворачивайся от рывка и удара о землю"
+msgstr "Two waves of zombies, the last one with a huge boss. Dodge his charge and ground slam"
+
+msgid "Двести человек получают прививку, а орда идёт на вой к воротам деревни. Удержи ворота 120 секунд"
+msgstr "Two hundred people are getting vaccinated while the horde follows the howl to the village gate. Hold the gate for 120 seconds"
+
+msgid "Двор больше: %d × %d м."
+msgstr "Bigger yard: %d × %d m."
+
+msgid "Двор ещё шире: столовая, кинотеатр и ветряк"
+msgstr "An even wider yard: canteen, cinema and a wind turbine"
+
+msgid "Двор из контейнеров, костёр и пара палаток"
+msgstr "A container yard, a campfire and a couple of tents"
+
+msgid "День серии: %d из %d. Заходи каждый день — награда растёт"
+msgstr "Streak day: %d of %d. Come back daily — the reward grows"
+
+msgid "Держись как можно дольше: волны без конца"
+msgstr "Hold out as long as you can: endless waves"
+
+msgid "Для вакцины нужны реактивы с аптечного склада у проспекта. Собери 6 ящиков, пока их не нашли плевуны"
+msgstr "The vaccine needs reagents from the pharmacy warehouse by the avenue. Collect 6 crates before the spitters find them"
+
+msgid "Для детей и для дяди Гоши. Скрипят на весь двор"
+msgstr "For the kids and for uncle Gosha. They squeak across the yard"
+
+msgid "Доедь до финиша заезда"
+msgstr "Finish a race"
+
+msgid "Дорога в порт идёт через склады, забитые мертвецами. Пробейся: убей 45 зомби"
+msgstr "The road to the port runs through warehouses packed with the dead. Break through: kill 45 zombies"
+
+msgid "Дядя Гоша гремит пустой кастрюлей. Пора на обед — и за наградой дня!"
+msgstr "Uncle Gosha is banging an empty pot. Lunch time — and grab your daily reward!"
+
+msgid "ЕЖЕДНЕВНАЯ НАГРАДА ГОТОВА"
+msgstr "DAILY REWARD IS READY"
+
+msgid "ЕЖЕДНЕВНО"
+msgstr "DAILY"
+
+msgid "ЕЖЕДНЕВНО  !"
+msgstr "DAILY  !"
+
+msgid "ЕСЛИ НЕ ПООБЕДАЕМ, Я СЪЕМ ДИВАН."
+msgstr "IF WE DON'T EAT SOON, I'LL EAT THE COUCH."
+
+msgid "ЕСТЬ"
+msgstr "OWNED"
+
+msgid "ЕСТЬ ХОЧЕТСЯ… ДАЖЕ ЗОМБИ ПАХНУТ КОТЛЕТОЙ."
+msgstr "SO HUNGRY… EVEN ZOMBIES SMELL LIKE MEATBALLS."
+
+msgid "ЕЩЁ РАЗ"
+msgstr "AGAIN"
+
+msgid "ЖЁЛТЫЙ"
+msgstr "YELLOW"
+
+msgid "ЖДЁМ ИГРОКОВ…"
+msgstr "WAITING FOR PLAYERS…"
+
+msgid "ЖДЁМ ИГРОКОВ…  %d"
+msgstr "WAITING FOR PLAYERS…  %d"
+
+msgid "ЖДЁМ, КОГДА ХОСТ НАЖМЁТ СТАРТ…"
+msgstr "WAITING FOR THE HOST TO PRESS START…"
+
+msgid "ЖИЗНЬ НАЛАЖИВАЕТСЯ!"
+msgstr "LIFE IS GETTING BETTER!"
+
+msgid "ЖИЛЬЦЫ ПРОГОЛОДАЛИСЬ"
+msgstr "THE RESIDENTS ARE HUNGRY"
+
+msgid "ЖИЛЬЦЫ: %d / %d МЕСТ"
+msgstr "RESIDENTS: %d / %d BEDS"
+
+msgid "Жильцы заработали монеты. Забери, пока дядя Гоша не купил ещё одну кофемашину!"
+msgstr "The residents earned coins. Grab them before uncle Gosha buys another coffee machine!"
+
+msgid "Жильцы работают: монеты копятся до %d ч. Больше людей и выше настроение — больше доход"
+msgstr "Residents work: coins pile up for up to %d h. More people and better mood — more income"
+
+msgid "ЗА ПЕРЕВАЛОМ ПОКАЗАЛАСЬ ДЕРЕВНЯ ВЕРХНИЕ КЛЮЧИ: ЧАСТОКОЛ, ДЫМ ИЗ ТРУБ И ЛЮДИ НА СТЕНЕ. ОНИ МАХАЛИ НАМ ВСЕМИ РУКАМИ."
+msgstr "BEYOND THE PASS WE SAW THE VILLAGE OF UPPER SPRINGS: A STOCKADE, SMOKE FROM CHIMNEYS AND PEOPLE ON THE WALL. THEY WAVED AT US WITH BOTH HANDS."
+
+msgid "ЗА РЕКОЙ РАБОТАЛА ЛАБОРАТОРИЯ «ГЕНОМ». ОНИ ИСКАЛИ ЛЕКАРСТВО ОТ СТАРОСТИ — И НАШЛИ «ГНИЛЬ-7». ОНА НЕ ЛЕЧИЛА СТАРОСТЬ. ОНА ОТМЕНЯЛА СМЕРТЬ."
+msgstr "ACROSS THE RIVER STOOD THE \"GENOME\" LAB. THEY WERE LOOKING FOR A CURE FOR OLD AGE — AND FOUND \"ROT-7\". IT DIDN'T CURE OLD AGE. IT CANCELED DEATH."
+
+msgid "ЗА РУЛЬ"
+msgstr "DRIVE"
+
+msgid "ЗА ТРАССОЙ"
+msgstr "PAST THE HIGHWAY"
+
+msgid "ЗА ТРИ ДНЯ ДО КОРАБЛЯ"
+msgstr "THREE DAYS BEFORE THE SHIP"
+
+msgid "ЗА ТРИ ДНЯ ДО КОРАБЛЯ ИЗ ЛАБОРАТОРИИ ПРОПАЛ ЧЕМОДАН С ВАКЦИНОЙ. И ШНЫРЬ. И ЕГО БОРОДА."
+msgstr "THREE DAYS BEFORE THE SHIP, THE CASE WITH THE VACCINE VANISHED FROM THE LAB. SO DID SHNYR. AND HIS BEARD."
+
+msgid "ЗАБЕРИ НАГРАДУ!"
+msgstr "CLAIM YOUR REWARD!"
+
+msgid "ЗАБРАТЬ"
+msgstr "CLAIM"
+
+msgid "ЗАБРАТЬ %s"
+msgstr "CLAIM %s"
+
+msgid "ЗАБРАТЬ +%d"
+msgstr "COLLECT +%d"
+
+msgid "ЗАВОДСКОЙ"
+msgstr "FACTORY"
+
+msgid "ЗАВТРА — МОСТ"
+msgstr "TOMORROW — THE BRIDGE"
+
+msgid "ЗАГРУЗИТЬ"
+msgstr "LOAD"
+
+msgid "ЗАГРУЗИТЬ КОД МОЖНО ТОЛЬКО В УБЕЖИЩЕ"
+msgstr "A CODE CAN ONLY BE LOADED IN THE SHELTER"
+
+msgid "ЗАГРУЗИТЬ ПРОГРЕСС ИЗ КОДА"
+msgstr "LOAD PROGRESS FROM A CODE"
+
+msgid "ЗАГРУЗКА  %d%%"
+msgstr "LOADING  %d%%"
+
+msgid "ЗАГРУЗКА КАРТЫ…"
+msgstr "LOADING MAP…"
+
+msgid "ЗАДАНИЯ НА СЕГОДНЯ"
+msgstr "TODAY'S QUESTS"
+
+msgid "ЗАДАЧА: %s"
+msgstr "TASK: %s"
+
+msgid "ЗАЕЗД ОТМЕНЁН"
+msgstr "RACE CANCELLED"
+
+msgid "ЗАЕЗДОВ"
+msgstr "RACES"
+
+msgid "ЗАЕЗДЫ"
+msgstr "RACES"
+
+msgid "ЗАЖИГАЕТСЯ САМ НОЧЬЮ"
+msgstr "LIGHTS UP AUTOMATICALLY AT NIGHT"
+
+msgid "ЗАЖИГАТЬ КНОПКОЙ ФАКЕЛ"
+msgstr "LIGHT WITH THE TORCH BUTTON"
+
+msgid "ЗАКРЫТА: ПРОЙДИ ГЛАВУ %d"
+msgstr "LOCKED: COMPLETE CHAPTER %d"
+
+msgid "ЗАКРЫТЬ"
+msgstr "CLOSE"
+
+msgid "ЗАМЕДЛЕНИЕ ПРИ ХЕДШОТЕ"
+msgstr "HEADSHOT SLOW-MO"
+
+msgid "ЗАНОВО"
+msgstr "RESTART"
+
+msgid "ЗАПИСЬ ДНЯ НОЛЬ"
+msgstr "DAY ZERO RECORDING"
+
+msgid "ЗАРАБОТАНО МОНЕТ"
+msgstr "COINS EARNED"
+
+msgid "ЗАХОДИ В «ЕЖЕДНЕВНО» ЗА НАГРАДОЙ"
+msgstr "CHECK \"DAILY\" FOR A REWARD"
+
+msgid "ЗАЧИСТКА"
+msgstr "CLEANUP"
+
+msgid "ЗАЩИТИ ДОМ. ВСЕ НА МЕСТАХ: ДЕНИС НА ГРУЗОВИКЕ, ГЕНКА НА ВОРОТАХ, КАБАН С ПОДНОСОМ, ДЯДЯ ГОША С ТЕРМОСОМ. ПРАВИЛО ПОСЛЕДНЕЕ: ВОЗВРАЩАЙСЯ ДОМОЙ."
+msgstr "DEFEND HOME. EVERYONE IN PLACE: DENIS ON THE TRUCK, GENKA AT THE GATE, KABAN WITH HIS TRAY, UNCLE GOSHA WITH HIS THERMOS. THE LAST RULE: COME BACK HOME."
+
+msgid "ЗВУК"
+msgstr "SOUND"
+
+msgid "ЗЕЛЁНЫЙ"
+msgstr "GREEN"
+
+msgid "ЗЕРКАЛО"
+msgstr "MIRROR"
+
+msgid "ЗНАЧКИ НА КНОПКАХ ВМЕСТО НАДПИСЕЙ"
+msgstr "ICONS ON BUTTONS INSTEAD OF TEXT"
+
+msgid "ЗОЛОТАЯ ЛИХОРАДКА"
+msgstr "GOLD RUSH"
+
+msgid "ЗОЛОТО"
+msgstr "GOLD"
+
+msgid "ЗОЛОТЫЕ КОЛЁСА"
+msgstr "GOLDEN WHEELS"
+
+msgid "ЗОЛОТЫХ МЕДАЛЕЙ"
+msgstr "GOLD MEDALS"
+
+msgid "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s"
+msgstr "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s"
+
+msgid "ЗОМБИ СКУЧАЮТ"
+msgstr "THE ZOMBIES MISS YOU"
+
+msgid "ЗОМБИ! УБЕЙ ЕГО. В ГОЛОВУ — ДВОЙНОЙ УРОН"
+msgstr "ZOMBIE! KILL IT. HEADSHOTS DEAL DOUBLE DAMAGE"
+
+msgid "ЗОМБИ-КОСПЛЕЙ"
+msgstr "ZOMBIE COSPLAY"
+
+msgid "ЗОНА ОТДЫХА"
+msgstr "LOUNGE"
+
+msgid "За каждую подписку — награда. Осталось получить: %s"
+msgstr "A reward for every follow. Still to claim: %s"
+
+msgid "За победу в миссии: +%d ящ. и ещё по ящику за звезду"
+msgstr "Mission win: +%d crates and one more per star"
+
+msgid "Заданий нет"
+msgstr "No quests"
+
+msgid "Запас патронов всех стволов +30%"
+msgstr "Ammo reserve of all guns +30%"
+
+msgid "Заработай 50000 монет"
+msgstr "Earn 50000 coins"
+
+msgid "Заходи 7 дней подряд"
+msgstr "Log in 7 days in a row"
+
+msgid "Здоровье"
+msgstr "Health"
+
+msgid "Здоровье %d  •  Броня %d%%"
+msgstr "Health %d  •  Armor %d%%"
+
+msgid "Зомби приходят в 1.5 раза чаще, монеты ×1.5"
+msgstr "Zombies come 1.5 times more often, coins ×1.5"
+
+msgid "Зомби приходят реже, можно спокойно исследовать город"
+msgstr "Zombies come less often — explore the city in peace"
+
+msgid "Зомби слышат выстрел втрое ближе, нет вспышки. Урон −5%"
+msgstr "Zombies hear shots from a third of the distance, no muzzle flash. Damage −5%"
+
+msgid "Зомби штурмуют убежище. Отбей набег — награда ×2!"
+msgstr "Zombies are storming the shelter. Repel the raid — double reward!"
+
+msgid "И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, "
+msgstr "AND TAPS \"CREATE GAME\". FRIENDS CONNECT TO ITS NETWORK AND PICK THE GAME FROM THE LIST, "
+
+msgid "ИГРА ПО СЕТИ"
+msgstr "ONLINE GAME"
+
+msgid "ИГРА СОЗДАНА"
+msgstr "GAME CREATED"
+
+msgid "ИГРА УЖЕ ИДЁТ — ДОЖДИСЬ КОНЦА МАТЧА"
+msgstr "GAME IN PROGRESS — WAIT FOR THE MATCH TO END"
+
+msgid "ИГРАЙ С ДРУЗЬЯМИ: КНОПКА «ПО СЕТИ» В УБЕЖИЩЕ"
+msgstr "PLAY WITH FRIENDS: \"ONLINE\" BUTTON IN THE SHELTER"
+
+msgid "ИГРАТЬ"
+msgstr "PLAY"
+
+msgid "ИГРОВЫЕ АВТОМАТЫ"
+msgstr "ARCADE MACHINES"
+
+msgid "ИГРОК %d"
+msgstr "PLAYER %d"
+
+msgid "ИГРОК — ОЧКИ / ЗОМБИ / ИГРОКИ / СМЕРТИ"
+msgstr "PLAYER — SCORE / ZOMBIES / PLAYERS / DEATHS"
+
+msgid "ИГРОКИ (%d/%d)"
+msgstr "PLAYERS (%d/%d)"
+
+msgid "ИДЕАЛЬНО"
+msgstr "FLAWLESS"
+
+msgid "ИДУ ЗА ТОБОЙ"
+msgstr "I'M WITH YOU"
+
+msgid "ИЗ ТОЛПЫ ПЛЕННЫХ ВЫШЕЛ ХУДОЙ МАЛЬЧИШКА С КРАСНЫМ РЮКЗАКОМ: «ТЫ ЧЕГО ТАК ДОЛГО? Я ТУТ УЖЕ ВСЕМ РАЦИИ ПОЧИНИЛ!»"
+msgstr "A SKINNY KID WITH A RED BACKPACK STEPPED OUT OF THE CROWD OF PRISONERS: \"WHAT TOOK YOU SO LONG? I'VE ALREADY FIXED EVERYONE'S RADIOS HERE!\""
+
+msgid "ИМЯ:"
+msgstr "NAME:"
+
+msgid "ИНВЕРСИЯ ОСИ Y"
+msgstr "INVERT Y AXIS"
+
+msgid "ИНВЕРСИЯ ПО ВЕРТИКАЛИ"
+msgstr "INVERT VERTICAL"
+
+msgid "ИНВЕРСИЯ ПО ГОРИЗОНТАЛИ"
+msgstr "INVERT HORIZONTAL"
+
+msgid "ИНЖЕНЕР"
+msgstr "ENGINEER"
+
+msgid "ИРИНА"
+msgstr "IRINA"
+
+msgid "ИРИНА ВЫШЛА С ПОЛНОЙ СУМКОЙ И МЕДБРАТОМ КОСТЕЙ. КОСТЯ ПЛАКАЛ: «ОНИ ЖЕ ПОЧТИ ПОПРАВИЛИСЬ!» ИРИНА МЯГКО СКАЗАЛА, ЧТО НЕТ."
+msgstr "IRINA CAME OUT WITH A FULL BAG AND NURSE KOSTYA. KOSTYA WAS CRYING: \"THEY WERE ALMOST BETTER!\" IRINA GENTLY SAID THEY WERE NOT."
+
+msgid "ИРИНЕ НУЖНО ДВЕ МИНУТЫ, ЧТОБЫ СОБРАТЬ ШПРИЦЫ И АВТОКЛАВ. ДЕРЖИ ВХОД. И НЕ ЗАХОДИ В ПАЛАТУ №6."
+msgstr "IRINA NEEDS TWO MINUTES TO GATHER THE SYRINGES AND THE AUTOCLAVE. HOLD THE ENTRANCE. AND DON'T GO INTO WARD NO. 6."
+
+msgid "ИСПОЛЬЗОВАТЬ"
+msgstr "USE"
+
+msgid "ИСПЫТАНИЕ: %s"
+msgstr "CHALLENGE: %s"
+
+msgid "ИСТОРИЯ"
+msgstr "STORY"
+
+msgid "ИСТОЧНИК"
+msgstr "THE SOURCE"
+
+msgid "ИЩЕМ ИГРЫ В СЕТИ…"
+msgstr "SEARCHING FOR GAMES…"
+
+msgid "Интро миссии: в бой"
+msgstr "Mission intro: into battle"
+
+msgid "Интро миссии: обзор локации"
+msgstr "Mission intro: location overview"
+
+msgid "Интро миссии: цель"
+msgstr "Mission intro: objective"
+
+msgid "Ирина собирает шприцы и автоклав в городской больнице. Продержись 2 минуты у входа"
+msgstr "Irina is gathering syringes and the autoclave in the city hospital. Hold out at the entrance for 2 minutes"
+
+msgid "Исследуй город, спасай выживших, катайся и сбивай зомби"
+msgstr "Explore the city, rescue survivors, cruise around and run down zombies"
+
+msgid "ЙЫНЙЕЛИБЮ"
+msgstr "EELIBUJ"
+
+msgid "К ВЕЧЕРУ НА ГОРИЗОНТЕ ПОКАЗАЛОСЬ МОРЕ. ТЁМА ВИДЕЛ ЕГО ВПЕРВЫЕ И МОЛЧАЛ ЦЕЛЫХ ДВЕ МИНУТЫ. ЭТО РЕКОРД."
+msgstr "BY EVENING THE SEA APPEARED ON THE HORIZON. TYOMA SAW IT FOR THE FIRST TIME AND STAYED QUIET FOR TWO WHOLE MINUTES. A RECORD."
+
+msgid "К КАРТЕ"
+msgstr "TO MAP"
+
+msgid "К ТОЧКЕ ДОСТУПА ДРУГА"
+msgstr "TO FRIEND'S HOTSPOT"
+
+msgid "КАБАН"
+msgstr "KABAN"
+
+msgid "КАБАН ЕЩЁ ВЕРНЁТСЯ"
+msgstr "KABAN WILL BE BACK"
+
+msgid "КАБАН ЛЕЖИТ В ПЫЛИ И ПРОСИТ ПОЗВАТЬ ГЕНКУ. ГЕНКА ПРИНЁС ЕМУ ФАРТУК: «ПОСУДА САМА СЕБЯ НЕ ПОМОЕТ»."
+msgstr "KABAN LIES IN THE DUST AND ASKS FOR GENKA. GENKA BROUGHT HIM AN APRON: \"THE DISHES WON'T WASH THEMSELVES.\""
+
+msgid "КАБАН НЕ ДУРАК: ОН ГРЕМИТ КАСТРЮЛЯМИ ЗА ЗАБОРОМ И ВЕДЁТ НА ЛАГЕРЬ ВСЮ ОРДУ С ТРАССЫ. ПЛАН ПРОСТОЙ: МЕРТВЕЦЫ ЛОМАЮТ ВОРОТА, БАНДИТЫ ЗАБИРАЮТ ДОБЫЧУ."
+msgstr "KABAN IS NO FOOL: HE BANGS POTS BEHIND THE FENCE AND LEADS THE WHOLE HIGHWAY HORDE TO THE CAMP. THE PLAN IS SIMPLE: THE DEAD BREAK THE GATE, THE BANDITS TAKE THE LOOT."
+
+msgid "КАБАН ОТСТУПИЛ, РУГАЯСЬ ТАК, ЧТО ПОКРАСНЕЛИ ДАЖЕ ЗОМБИ. НА ПРОЩАНИЕ ОН КРИКНУЛ: «МЫ ЕЩЁ ВСТРЕТИМСЯ!» МЫ ВСТРЕТИМСЯ. ПОЗЖЕ."
+msgstr "KABAN RETREATED, SWEARING SO HARD EVEN THE ZOMBIES BLUSHED. AS A PARTING SHOT HE YELLED: \"WE'LL MEET AGAIN!\" WE WILL. LATER."
+
+msgid "КАБАН СНОВА УШЁЛ — ЗА САМОЙ ТОЛСТОЙ БОЧКОЙ БЫЛ ЛАЗ. С НИМ ПЯТЕРО. ОН ВСЁ ЕЩЁ ЗНАЕТ ПРО МОСТ."
+msgstr "KABAN GOT AWAY AGAIN: BEHIND THE FATTEST BARREL THERE WAS A HOLE. FIVE MEN WENT WITH HIM. HE STILL KNOWS ABOUT THE BRIDGE."
+
+msgid "КАЖДУЮ НОЧЬ ОН ГОНИТ СВОЁ СТАДО К ДЕРЕВНЕ. КАЖДУЮ НОЧЬ ЧАСТОКОЛ СТАНОВИТСЯ НИЖЕ."
+msgstr "EVERY NIGHT HE DRIVES HIS HERD TOWARD THE VILLAGE. EVERY NIGHT THE STOCKADE GETS LOWER."
+
+msgid "КАЖДЫЙ САМ ЗА СЕБЯ"
+msgstr "FREE FOR ALL"
+
+msgid "КАК ВСЁ НАЧАЛОСЬ"
+msgstr "HOW IT ALL BEGAN"
+
+msgid "КАК ИГРАТЬ ВМЕСТЕ: ОДИН ТЕЛЕФОН ВКЛЮЧАЕТ ТОЧКУ ДОСТУПА (ИЛИ ВСЕ В ОДНОЙ WI-FI СЕТИ) "
+msgstr "HOW TO PLAY TOGETHER: ONE PHONE TURNS ON A HOTSPOT (OR EVERYONE IS ON ONE WI-FI NETWORK) "
+
+msgid "КАМЕРА"
+msgstr "CAMERA"
+
+msgid "КАМПАНИЯ ПРОЙДЕНА. ГОРОД, БЕСКОНЕЧНАЯ ОБОРОНА И ИГРА С ДРУЗЬЯМИ ЖДУТ."
+msgstr "CAMPAIGN COMPLETE. THE CITY, ENDLESS DEFENSE AND PLAYING WITH FRIENDS AWAIT."
+
+msgid "КАПИТАН"
+msgstr "THE CAPTAIN"
+
+msgid "КАПИТАН ЯКОРЕВ ПРИНЯЛ ЧЕМОДАН С ВАКЦИНОЙ И ОТДАЛ ЧЕСТЬ. ТЁМЕ. ТЁМА ОТДАЛ ЧЕСТЬ В ОТВЕТ — ЛЕВОЙ РУКОЙ, НО ОТ ДУШИ."
+msgstr "CAPTAIN YAKOREV TOOK THE VACCINE CASE AND SALUTED. TYOMA. TYOMA SALUTED BACK — WITH HIS LEFT HAND, BUT FROM THE HEART."
+
+msgid "КАПКАН"
+msgstr "BEAR TRAP"
+
+msgid "КАПЛЯ — КИСЛОТА"
+msgstr "DROP — ACID"
+
+msgid "КАРТА"
+msgstr "MAP"
+
+msgid "КАРТА ЗАРАЖЕНИЯ"
+msgstr "INFECTION MAP"
+
+msgid "КАСКА"
+msgstr "HELMET"
+
+msgid "КАСКИ И ДУБИНКИ"
+msgstr "HARD HATS AND CLUBS"
+
+msgid "КАСКОБОЙ"
+msgstr "HELMET BREAKER"
+
+msgid "КАСКУ СБИВАЮТ ДВА ВЫСТРЕЛА В ГОЛОВУ"
+msgstr "TWO HEADSHOTS KNOCK A HELMET OFF"
+
+msgid "КАССА ЛАГЕРЯ"
+msgstr "CAMP CASH BOX"
+
+msgid "КАССА ЛАГЕРЯ ПОЛНА"
+msgstr "THE CAMP CASH BOX IS FULL"
+
+msgid "КАССА ЛАГЕРЯ: %d / %d   (%d В ЧАС)"
+msgstr "CAMP CASH BOX: %d / %d   (%d PER HOUR)"
+
+msgid "КАССА ПУСТА — ЛЮДИ ЕЩЁ РАБОТАЮТ"
+msgstr "THE BOX IS EMPTY — PEOPLE ARE STILL WORKING"
+
+msgid "КАФЕ «ЧАЙКА»"
+msgstr "SEAGULL CAFE"
+
+msgid "КАЧЕЛИ"
+msgstr "SWINGS"
+
+msgid "КАЧЕСТВО ГРАФИКИ"
+msgstr "GRAPHICS QUALITY"
+
+msgid "КЛАДБИЩЕ"
+msgstr "GRAVEYARD"
+
+msgid "КЛАДБИЩЕ У ЧАСОВНИ. ЗДЕСЬ ЛЕЖИТ МАМА. ТРИ МЕСЯЦА Я НЕ МОГ СЮДА ВЕРНУТЬСЯ."
+msgstr "THE GRAVEYARD BY THE CHAPEL. MOM IS BURIED HERE. FOR THREE MONTHS I COULDN'T BRING MYSELF TO COME BACK."
+
+msgid "КЛУМБЫ"
+msgstr "FLOWER BEDS"
+
+msgid "КНОПКА ГРАНАТА"
+msgstr "GRENADE BUTTON"
+
+msgid "КНОПКИ"
+msgstr "BUTTONS"
+
+msgid "КОГДА РАБОТАЕТ"
+msgstr "WHEN ACTIVE"
+
+msgid "КОГТИ — УКУС ИЛИ УДАР ЗОМБИ, ПРИЦЕЛ — ВЫСТРЕЛ ИГРОКА, ЗВЕЗДА — ВЗРЫВ ИЛИ ОГОНЬ, "
+msgstr "CLAWS — ZOMBIE BITE OR HIT, CROSSHAIR — PLAYER SHOT, STAR — EXPLOSION OR FIRE, "
+
+msgid "КОД НЕ ПОДХОДИТ: ПРОВЕРЬ, ЧТО СКОПИРОВАН ЦЕЛИКОМ"
+msgstr "THE CODE DOESN'T WORK: MAKE SURE IT WAS COPIED IN FULL"
+
+msgid "КОД СКОПИРОВАН (%d ЗНАКОВ). СОХРАНИ ЕГО В НАДЁЖНОМ МЕСТЕ"
+msgstr "CODE COPIED (%d CHARACTERS). KEEP IT SOMEWHERE SAFE"
+
+msgid "КОД СОХРАНЕНИЯ — ВЕСЬ ТВОЙ ПРОГРЕСС ОДНОЙ СТРОКОЙ. СКОПИРУЙ ЕГО, ОТПРАВЬ СЕБЕ (TELEGRAM, ЗАМЕТКИ) И ВСТАВЬ НА ДРУГОМ ТЕЛЕФОНЕ ИЛИ ПОСЛЕ ПЕРЕУСТАНОВКИ ИГРЫ."
+msgstr "THE SAVE CODE IS ALL YOUR PROGRESS IN ONE LINE. COPY IT, SEND IT TO YOURSELF (TELEGRAM, NOTES) AND PASTE IT ON ANOTHER PHONE OR AFTER REINSTALLING THE GAME."
+
+msgid "КОКТЕЙЛЬ МОЛОТОВА"
+msgstr "MOLOTOV COCKTAIL"
+
+msgid "КОЛЛИМАТОР"
+msgstr "RED DOT"
+
+msgid "КОЛОННА БЕЖЕНЦЕВ ОТКАЗАЛАСЬ ПЛАТИТЬ БАРОНУ НАЛОГ. ТЕПЕРЬ СТЕРВЯТНИКИ ЗАБИРАЮТ У НИХ ВСЁ — ВМЕСТЕ С МАШИНАМИ И ЛЮДЬМИ."
+msgstr "A REFUGEE CONVOY REFUSED TO PAY THE BARON'S TAX. NOW THE VULTURES ARE TAKING EVERYTHING FROM THEM — CARS AND PEOPLE INCLUDED."
+
+msgid "КОЛОННА СПАСЕНА: ТРОЕ ВЗРОСЛЫХ И КОЗА ПО ИМЕНИ ЗИНА. КОЗУ НИКТО НЕ ПРОСИЛ, НО ОНА ТЕПЕРЬ ТОЖЕ В ЛАГЕРЕ."
+msgstr "THE CONVOY IS SAVED: THREE ADULTS AND A GOAT NAMED ZINA. NOBODY ASKED FOR THE GOAT, BUT SHE'S IN THE CAMP NOW TOO."
+
+msgid "КОМАНДЫ"
+msgstr "TEAMS"
+
+msgid "КОМПЕНСАТОР"
+msgstr "COMPENSATOR"
+
+msgid "КОНЕЦ"
+msgstr "THE END"
+
+msgid "КОНЕЦ ВТОРОЙ ЧАСТИ"
+msgstr "END OF PART TWO"
+
+msgid "КОНЕЦ ТРЕТЬЕЙ ЧАСТИ"
+msgstr "END OF PART THREE"
+
+msgid "КОНКУРС НА САМЫЙ КРЕПКИЙ КОФЕ ВЫИГРАЛА ЛЮБА: ОНА ЗАМОРОЗИЛА ЭСПРЕССО И ПОДАЛА ЕГО КАК ПЛОМБИР. ДЯДЯ ГОША ПРИЗНАЛ ПОРАЖЕНИЕ ВПЕРВЫЕ В ЖИЗНИ."
+msgstr "THE STRONGEST-COFFEE CONTEST WAS WON BY LYUBA: SHE FROZE AN ESPRESSO AND SERVED IT AS ICE CREAM. UNCLE GOSHA ADMITTED DEFEAT FOR THE FIRST TIME IN HIS LIFE."
+
+msgid "КОНТЕЙНЕР №7"
+msgstr "CONTAINER №7"
+
+msgid "КОНТУР"
+msgstr "OUTLINE"
+
+msgid "КОПЬЁ"
+msgstr "SPEAR"
+
+msgid "КОРАБЛЬ УШЁЛ НА ЮГ С ВАКЦИНОЙ. ЧЕРЕЗ МЕСЯЦ ЛЕВ ПОЙМАЛ ГОЛОСА ЕЩЁ ТРЁХ ГОРОДОВ: ТАМ ТОЖЕ ЖИВУТ."
+msgstr "THE SHIP SAILED SOUTH WITH THE VACCINE. A MONTH LATER LEV PICKED UP VOICES FROM THREE MORE CITIES: PEOPLE ARE LIVING THERE TOO."
+
+msgid "КОРОЛЬ ДРИФТА"
+msgstr "DRIFT KING"
+
+msgid "КОСТЯ"
+msgstr "KOSTYA"
+
+msgid "КРАСНЫЕ"
+msgstr "RED"
+
+msgid "КРАСНЫЙ"
+msgstr "RED"
+
+msgid "КРАСНЫЙ РЮКЗАК"
+msgstr "THE RED BACKPACK"
+
+msgid "КРАСНЫЙ РЮКЗАК. МАМА КУПИЛА ЕГО ТЁМЕ ПЕРЕД ШКОЛОЙ. ОН НЕНАВИДЕЛ ЭТОТ ЦВЕТ."
+msgstr "THE RED BACKPACK. MOM BOUGHT IT FOR TYOMA BEFORE SCHOOL STARTED. HE HATED THAT COLOR."
+
+msgid "КРАСНЫХ"
+msgstr "RED"
+
+msgid "КРЕПОСТЬ"
+msgstr "FORTRESS"
+
+msgid "КРИКУН"
+msgstr "SCREAMER"
+
+msgid "КРИКУН ЗОВЁТ ОРДУ — УБЕЙ ЕГО ПЕРВЫМ"
+msgstr "THE SCREAMER CALLS THE HORDE — KILL IT FIRST"
+
+msgid "КРИКУНОВ"
+msgstr "SCREAMERS"
+
+msgid "КРУГ ПО ГОРОДУ"
+msgstr "CITY LOOP"
+
+msgid "КРУПНО"
+msgstr "CLOSE-UP"
+
+msgid "КРЫСА"
+msgstr "THE RAT"
+
+msgid "КТО БОЛЬШЕ УБЬЁТ"
+msgstr "MOST KILLS WINS"
+
+msgid "КТО-НИБУДЬ ВИДЕЛ ЕДУ? ХОТЬ КОНСЕРВУ?"
+msgstr "HAS ANYONE SEEN FOOD? EVEN A TIN CAN?"
+
+msgid "КУЗОВ %d%%"
+msgstr "HULL %d%%"
+
+msgid "КУПИТЬ %d"
+msgstr "BUY %d"
+
+msgid "КУПИТЬ — %d"
+msgstr "BUY — %d"
+
+msgid "КУПЛЕН • %s"
+msgstr "OWNED • %s"
+
+msgid "КУПЛЕНО"
+msgstr "BOUGHT"
+
+msgid "КУРОРТ «ЧАЙКА»"
+msgstr "THE SEAGULL RESORT"
+
+msgid "КУРС НА ЮГ"
+msgstr "HEADING SOUTH"
+
+msgid "КУРЬЕР"
+msgstr "COURIER"
+
+msgid "Кабан собирает новую банду на старой базе в промзоне. Разгроми её: убей 40 врагов"
+msgstr "Kaban is gathering a new gang at the old base in the industrial zone. Smash it: kill 40 enemies"
+
+msgid "Кабан, бывший зам Барона, ведёт остатки банды и орду на лагерь. Удержи ворота 100 секунд"
+msgstr "Kaban, the Baron's former deputy, is leading what's left of the gang and a horde against the camp. Hold the gate for 100 seconds"
+
+msgid "Касса лагеря"
+msgstr "Camp cash box"
+
+msgid "Касса лагеря набита до отказа. Загляни и забери!"
+msgstr "The camp cash box is packed. Drop by and collect!"
+
+msgid "Касса лагеря, награда дня, набеги"
+msgstr "Camp cash box, daily reward, raids"
+
+msgid "Кольцо и разметка: три очка — неделя без дежурства"
+msgstr "A hoop and court lines: a three-pointer gets you a week off guard duty"
+
+msgid "Корабль «Надежда» стоит без топлива. Собери 6 канистр по причалам, пока мертвецы не почуяли солярку"
+msgstr "The ship Nadezhda is out of fuel. Collect 6 fuel cans around the docks before the dead smell the diesel"
+
+msgid "Корабль с юга ждёт у старого моста. Кабан ведёт орду и банду, чтобы отнять вакцину. Выдержи 5 волн и победи Кабана"
+msgstr "A ship from the south waits at the old bridge. Kaban leads a horde and his gang to steal the vaccine. Survive 5 waves and defeat Kaban"
+
+msgid "Кофейный фестиваль дяди Гоши и салют разбудили всю округу. Отбей 4 волны и спаси праздник"
+msgstr "Uncle Gosha's coffee festival and the fireworks woke up the whole area. Repel 4 waves and save the party"
+
+msgid "Красный луч и точка на цели: разброс от бедра −30%"
+msgstr "Red beam and a dot on the target: hip-fire spread −30%"
+
+msgid "Крепость на колёсах: таран, перед которым не устоит даже толстяк."
+msgstr "Fortress on wheels: a ram not even a fatty can stand against."
+
+msgid "Крикуны повсюду: орда приходит быстрее"
+msgstr "Screamers everywhere: the horde arrives faster"
+
+msgid "Крутится и скрипит. Ток не даёт, зато красиво. Нужен уровень БАЗА"
+msgstr "Spins and creaks. No power, but pretty. Needs the BASE level"
+
+msgid "Купи 10 обвесов"
+msgstr "Buy 10 attachments"
+
+msgid "Купи 5 вещей для обустройства убежища"
+msgstr "Buy 5 items to furnish the shelter"
+
+msgid "Купи 5 стволов"
+msgstr "Buy 5 guns"
+
+msgid "Курортный городок у бухты захвачен отдыхающими. Расчисти набережную: убей 50 зомби"
+msgstr "The seaside resort town has been taken over by vacationers. Clear the promenade: kill 50 zombies"
+
+msgid "Кухня под навесом и столы: ящик провизии кормит 8 человек вместо 5"
+msgstr "A kitchen under an awning and tables: one food crate feeds 8 people instead of 5"
+
+msgid "ЛАГЕРЬ"
+msgstr "CAMP"
+
+msgid "ЛАГЕРЬ ВЫЖИВШИХ"
+msgstr "SURVIVOR CAMP"
+
+msgid "ЛАГЕРЬ. 03:00"
+msgstr "THE CAMP. 03:00"
+
+msgid "ЛАГЕРЬ. ВЕЧЕР"
+msgstr "CAMP. EVENING"
+
+msgid "ЛАГЕРЬ. ПРАЗДНИК"
+msgstr "CAMP. FESTIVAL"
+
+msgid "ЛАГЕРЬ. УТРО"
+msgstr "THE CAMP. MORNING"
+
+msgid "ЛАЗЕР"
+msgstr "LASER"
+
+msgid "ЛЕВ"
+msgstr "LEV"
+
+msgid "ЛЕВ ВЫШЕЛ НА СВЯЗЬ ИЗ ЛАГЕРЯ. ГОЛОС ВСТРЕВОЖЕННЫЙ: «ВОЗВРАЩАЙТЕСЬ. СКОРЕЕ. К НАМ ИДЁТ ОРДА — САМАЯ БОЛЬШАЯ ИЗ ВСЕХ»."
+msgstr "LEV CAME ON THE RADIO FROM THE CAMP. HIS VOICE WAS WORRIED: \"COME BACK. HURRY. A HORDE IS COMING FOR US, THE BIGGEST ONE YET.\""
+
+msgid "ЛЕВ ПЕРЕХВАТИЛ ЭФИР: ОСТАТКИ СТЕРВЯТНИКОВ, БАНДА КАБАНА, ХОТЯТ ПРОДАТЬ ВАКЦИНУ ПОРТУ. ЦЕНА — ВЕСЬ ПОРТ."
+msgstr "LEV INTERCEPTED A BROADCAST: WHAT'S LEFT OF THE VULTURES, KABAN'S GANG, WANT TO SELL THE VACCINE TO THE PORT. THE PRICE — THE WHOLE PORT."
+
+msgid "ЛЕВ ПОЙМАЛ «НАДЕЖДУ»: КОРАБЛЬ БУДЕТ ЗАВТРА НА РАССВЕТЕ. А КАБАН, ГОВОРЯТ, СОБРАЛ ВСЕХ, КОГО МОГ. ЗАВТРА — МОСТ."
+msgstr "LEV PICKED UP THE NADEZHDA: THE SHIP WILL ARRIVE TOMORROW AT DAWN. AND KABAN, THEY SAY, HAS GATHERED EVERYONE HE COULD. TOMORROW, THE BRIDGE."
+
+msgid "ЛЕВ ПОЧТИ НЕ СПИТ: ОН СЛУШАЕТ ЭФИР. С ЮГА, ИЗ ПОРТА, КТО-ТО ПОВТОРЯЕТ ОДНО И ТО ЖЕ: «ЕСТЬ ЛИ КТО ЖИВОЙ? ПРИЁМ»."
+msgstr "LEV BARELY SLEEPS: HE LISTENS TO THE AIRWAVES. FROM THE SOUTH, FROM THE PORT, SOMEONE KEEPS REPEATING THE SAME THING: \"IS ANYONE ALIVE? OVER.\""
+
+msgid "ЛЕВ ПРОСЛУШАЛ ЗАПИСЬ ДНЯ НОЛЬ ДО КОНЦА. В КОНЦЕ МАМА ГОВОРИТ: «Я НА СТАНЦИИ СКОРОЙ У КЛАДБИЩА. ВСЁ ЗАПИСАЛА В ТЕТРАДЬ. ЕСЛИ ЧТО — ПУСТЬ НАЙДУТ»."
+msgstr "LEV LISTENED TO THE DAY ZERO RECORDING TO THE END. AT THE END MOM SAYS: \"I'M AT THE AMBULANCE STATION BY THE CEMETERY. I WROTE EVERYTHING IN MY NOTEBOOK. IF ANYTHING HAPPENS, LET THEM FIND IT.\""
+
+msgid "ЛЕВ СОБРАЛ РАЦИЮ, И В ЭФИР ВОРВАЛСЯ БАРОН: «ГОРОД МОЙ. НАЛОГ — ТУШЁНКА, БЕНЗИН И ПАТРОНЫ»."
+msgstr "LEV BUILT A RADIO, AND THE BARON BURST ONTO THE AIR: \"THE CITY IS MINE. THE TAX IS CANNED MEAT, GAS AND AMMO.\""
+
+msgid "ЛЕС"
+msgstr "FOREST"
+
+msgid "ЛЕСНАЯ ВЫШКА"
+msgstr "FOREST TOWER"
+
+msgid "ЛЕСНАЯ ТРАССА"
+msgstr "FOREST HIGHWAY"
+
+msgid "ЛЕСНАЯ ТРАССА. УТРО"
+msgstr "FOREST HIGHWAY. MORNING"
+
+msgid "ЛЕСНОЙ ЛАГЕРЬ"
+msgstr "FOREST CAMP"
+
+msgid "ЛЕТНИЙ ДУШ"
+msgstr "OUTDOOR SHOWER"
+
+msgid "ЛЕТНИЙ КИНОТЕАТР"
+msgstr "OPEN-AIR CINEMA"
+
+msgid "ЛИС"
+msgstr "FOX"
+
+msgid "ЛОББИ ЗАПОЛНЕНО"
+msgstr "LOBBY FULL"
+
+msgid "ЛОВУШКА"
+msgstr "TRAP"
+
+msgid "ЛОГОВО БАРОНА"
+msgstr "BARON'S LAIR"
+
+msgid "ЛОГОВО БАРОНА — СТАРЫЙ УНИВЕРМАГ «ЮБИЛЕЙНЫЙ». ТАМ ТЁМА."
+msgstr "THE BARON'S LAIR IS THE OLD \"JUBILEE\" DEPARTMENT STORE. TYOMA IS THERE."
+
+msgid "ЛОКАЦИЯ: %s\n%s"
+msgstr "LOCATION: %s\n%s"
+
+msgid "ЛОМ"
+msgstr "SCRAP"
+
+msgid "ЛОМ ×%d"
+msgstr "SCRAP ×%d"
+
+msgid "ЛУЧШАЯ ВОЛНА"
+msgstr "BEST WAVE"
+
+msgid "ЛУЧШАЯ СЕРИЯ ДНЕЙ"
+msgstr "BEST DAY STREAK"
+
+msgid "ЛЮБА"
+msgstr "LYUBA"
+
+msgid "ЛЮДИ +%d"
+msgstr "PEOPLE +%d"
+
+msgid "ЛЮДИ ГОЛОДНЫ!"
+msgstr "PEOPLE ARE HUNGRY!"
+
+msgid "Лев передаёт рецепт вакцины с лесной вышки. Удержи точку у вышки 100 секунд"
+msgstr "Lev is sending the vaccine recipe from the forest tower. Hold the point by the tower for 100 seconds"
+
+msgid "Лесная трасса на юг забита мертвецами. Расчисти дорогу колонне: убей 45 зомби"
+msgstr "The forest highway south is jammed with the dead. Clear the road for the convoy: kill 45 zombies"
+
+msgid "Летом — главное место двора. Нужен уровень ФОРТ"
+msgstr "The hottest spot of the yard in summer. Needs the FORT level"
+
+msgid "Лом, патроны и аптечки выпадают в 2 раза чаще"
+msgstr "Scrap, ammo and medkits drop 2 times more often"
+
+msgid "Лучшее, что осталось в городе: скорость спорткара и бронированный бампер."
+msgstr "Best ride left in the city: sports car speed and an armored bumper."
+
+msgid "Лёгкий и очень быстрый. Король дрифта, но бьёт слабо."
+msgstr "Light and very fast. King of drift, but hits weakly."
+
+msgid "МЁРТВЫЕ ЗДЕСЬ ВСТАЮТ ИЗ ЗЕМЛИ — ТАК И ДОЛЖНО БЫТЬ НА КЛАДБИЩЕ, ТОЛЬКО ОТ ЭТОГО НЕ ЛЕГЧЕ. СОБЕРИ ДЕТАЛИ."
+msgstr "THE DEAD RISE FROM THE GROUND HERE — THAT'S HOW IT SHOULD BE IN A GRAVEYARD, BUT IT DOESN'T MAKE IT ANY EASIER. COLLECT THE PARTS."
+
+msgid "МЁРТВЫХ ЕЩЁ МНОГО. НО ТЕПЕРЬ У НАС ЕСТЬ ДОМ — И ТЕ, РАДИ КОГО СТОИТ ВОЗВРАЩАТЬСЯ."
+msgstr "THERE ARE STILL PLENTY OF DEAD. BUT NOW WE HAVE A HOME — AND PEOPLE WORTH COMING BACK FOR."
+
+msgid "МАГАЗИН"
+msgstr "MAGAZINE"
+
+msgid "МАКС"
+msgstr "MAX"
+
+msgid "МАЛО МОНЕТ"
+msgstr "NOT ENOUGH COINS"
+
+msgid "МАЛО ПРОВИЗИИ"
+msgstr "NOT ENOUGH FOOD"
+
+msgid "МАМА"
+msgstr "MOM"
+
+msgid "МАМА БЫЛА ФЕЛЬДШЕРОМ. В ДЕНЬ НОЛЬ ОНА ПЕРВОЙ ВИДЕЛА ЗАРАЖЁННЫХ И ЗАПИСЫВАЛА ВСЁ: ВРЕМЯ, СИМПТОМЫ, ЧТО ПОМОГАЕТ. ИРИНА ГОВОРИТ, ЭТО МОЖЕТ СДЕЛАТЬ ВАКЦИНУ ЛУЧШЕ."
+msgstr "MOM WAS A PARAMEDIC. ON DAY ZERO SHE WAS THE FIRST TO SEE THE INFECTED AND WROTE EVERYTHING DOWN: TIMES, SYMPTOMS, WHAT HELPS. IRINA SAYS IT COULD MAKE THE VACCINE BETTER."
+
+msgid "МАМА ОСТАЛАСЬ, ЧТОБЫ МЫ УСПЕЛИ К МОСТУ. ОНА НЕ ДОГНАЛА. А ПОТОМ ТОЛПА РАЗОРВАЛА НАС С ТЁМОЙ."
+msgstr "MOM STAYED BEHIND SO WE COULD MAKE IT TO THE BRIDGE. SHE NEVER CAUGHT UP. THEN THE CROWD TORE TYOMA AND ME APART."
+
+msgid "МАНГАЛ"
+msgstr "BARBECUE"
+
+msgid "МАРАФОН"
+msgstr "MARATHON"
+
+msgid "МАРИНА"
+msgstr "MARINA"
+
+msgid "МАРИНА ВИДЕЛА НЕДЕЛЮ НАЗАД МАЛЬЧИШКУ С КРАСНЫМ РЮКЗАКОМ. ОН ШЁЛ К УЛИЦЕ МОЛЧАНИЯ И РУГАЛСЯ НА ЗОМБИ, КАК ВЗРОСЛЫЙ."
+msgstr "A WEEK AGO MARINA SAW A KID WITH A RED BACKPACK. HE WAS HEADING FOR SILENCE STREET AND CURSING AT ZOMBIES LIKE A GROWN-UP."
+
+msgid "МАРИНА И ЕЁ БРАТ ДЕНИС ТЕПЕРЬ В УБЕЖИЩЕ. ДЕНИС — МЕХАНИК: ОН ОБЕЩАЕТ ПОЧИНИТЬ ЛЮБУЮ МАШИНУ. ДАЖЕ ТУ, ЧТО БЕЗ КОЛЁС."
+msgstr "MARINA AND HER BROTHER DENIS ARE IN THE SHELTER NOW. DENIS IS A MECHANIC: HE PROMISES TO FIX ANY CAR. EVEN ONE WITH NO WHEELS."
+
+msgid "МАСТЕР НА ВСЕ РУКИ"
+msgstr "JACK OF ALL TRADES"
+
+msgid "МАСТЕРСКАЯ"
+msgstr "WORKSHOP"
+
+msgid "МАСТЕРСКАЯ: СБОРКА ИЗ ЛОМА"
+msgstr "WORKSHOP: CRAFT FROM SCRAP"
+
+msgid "МАТЧ ОКОНЧЕН"
+msgstr "MATCH OVER"
+
+msgid "МАШИНА"
+msgstr "CAR"
+
+msgid "МАШИНА «%s»"
+msgstr "CAR \"%s\""
+
+msgid "МАШИНА СБИВАЕТ ЗОМБИ — ЖМИ «ЗА РУЛЬ» РЯДОМ С НЕЙ"
+msgstr "CARS RUN ZOMBIES OVER — PRESS «DRIVE» NEXT TO ONE"
+
+msgid "МАШИНА СЛОМАНА — ВЫЙДИ И ПОЧИНИ"
+msgstr "CAR BROKEN — GET OUT AND REPAIR"
+
+msgid "МАШИНА СЛОМАНА — ДЕРЖИ «ЧИНИТЬ»"
+msgstr "CAR BROKEN — HOLD \"REPAIR\""
+
+msgid "МАШИНЫ"
+msgstr "CARS"
+
+msgid "МАЯК"
+msgstr "THE LIGHTHOUSE"
+
+msgid "МАЯК ЗАЖЁГСЯ. ЛУЧ ПРОШЁЛ ПО ВОДЕ, ПО КРАНАМ, ПО НАШИМ ЛИЦАМ. ПАЛЫЧ ПРОСЛЕЗИЛСЯ: «ТРИ МЕСЯЦА НИКТО НЕ ВИДЕЛ МОЙ СВЕТ»."
+msgstr "THE LIGHTHOUSE CAME ON. THE BEAM SWEPT THE WATER, THE CRANES, OUR FACES. PALYCH TEARED UP: \"THREE MONTHS AND NOBODY SAW MY LIGHT.\""
+
+msgid "МАЯК НА МОЛУ"
+msgstr "LIGHTHOUSE ON THE PIER"
+
+msgid "МЕДИК"
+msgstr "MEDIC"
+
+msgid "МЕДПУНКТ"
+msgstr "FIRST AID POST"
+
+msgid "МЕДСЕСТРА"
+msgstr "NURSE"
+
+msgid "МЕТКИЙ ГЛАЗ"
+msgstr "SHARP EYE"
+
+msgid "МЕХАНИК"
+msgstr "MECHANIC"
+
+msgid "МИНА"
+msgstr "MINE"
+
+msgid "МИССИИ"
+msgstr "MISSIONS"
+
+msgid "МИССИЙ НА 3 ЗВЕЗДЫ"
+msgstr "3-STAR MISSIONS"
+
+msgid "МИССИЯ"
+msgstr "MISSION"
+
+msgid "МИССИЯ ВЫПОЛНЕНА"
+msgstr "MISSION COMPLETE"
+
+msgid "МИССИЯ ПРОВАЛЕНА"
+msgstr "MISSION FAILED"
+
+msgid "МИХАЛЫЧ"
+msgstr "MIKHALYCH"
+
+msgid "МИХАЛЫЧ ЗНАЕТ ПОРТ КАК СВОИ ПЯТЬ ПАЛЬЦЕВ: «ТОПЛИВО — В КАНИСТРАХ НА ПРИЧАЛАХ. ТОЛЬКО ТАМ ТЕПЕРЬ НЕ ГРУЗЧИКИ, А ЭТИ…»"
+msgstr "MIKHALYCH KNOWS THE PORT LIKE THE BACK OF HIS HAND: \"THE FUEL IS IN CANS ON THE PIERS. ONLY IT'S NOT DOCKERS THERE NOW, IT'S THOSE...\""
+
+msgid "МОЛОТОВ"
+msgstr "MOLOTOV"
+
+msgid "МОНЕТ"
+msgstr "COINS"
+
+msgid "МОНЕТА"
+msgstr "COIN"
+
+msgid "МОНЕТЫ"
+msgstr "COINS"
+
+msgid "МОНЕТЫ +%d  (ВСЕГО %d)"
+msgstr "COINS +%d  (TOTAL %d)"
+
+msgid "МОНЕТЫ ЖДУТ В УБЕЖИЩЕ"
+msgstr "COINS ARE WAITING AT THE SHELTER"
+
+msgid "МОНЕТЫ: %d"
+msgstr "COINS: %d"
+
+msgid "МОРОЖЕНОЕ"
+msgstr "ICE CREAM"
+
+msgid "МОТОР РАЗБУДИЛ ВЕСЬ ПОРТ. МЕРТВЕЦЫ ЛЕЗУТ ИЗ КОНТЕЙНЕРОВ, А ИЗ ВОДЫ ПОДНИМАЕТСЯ УТОПЛЕННИК — ВЫСОТОЙ С ПОЛКРАНА."
+msgstr "THE ENGINE WOKE THE WHOLE PORT. THE DEAD CRAWL OUT OF THE CONTAINERS, AND THE DROWNED ONE RISES FROM THE WATER, HALF AS TALL AS A CRANE."
+
+msgid "МОТОР ЧИХНУЛ И ЗАВЁЛСЯ. ТЁМА ВЫЛЕЗ ИЗ-ПОД КАПОТА ЧЁРНЫЙ, КАК ТРУБОЧИСТ, И СЧАСТЛИВЫЙ, КАК ИМЕНИННИК."
+msgstr "THE ENGINE SNEEZED AND STARTED. TYOMA CRAWLED OUT FROM UNDER THE HOOD BLACK AS A CHIMNEY SWEEP AND HAPPY AS A BIRTHDAY BOY."
+
+msgid "МОТОЦИКЛ"
+msgstr "MOTORBIKE"
+
+msgid "МУЗЫКА"
+msgstr "MUSIC"
+
+msgid "МЫ ВЕРНЁМ ЭТОТ ГОРОД"
+msgstr "WE'LL TAKE THIS CITY BACK"
+
+msgid "МЫ ЕДЕМ НА ЮГ: Я, ТЁМА, ДЕНИС ЗА РУЛЁМ И ГЕНКА С ТЕРМОСОМ ДЯДИ ГОШИ. ЛЕСНАЯ ТРАССА ЗАБИТА МЕРТВЕЦАМИ — РАСЧИСТИ ДОРОГУ КОЛОННЕ."
+msgstr "WE'RE HEADING SOUTH: ME, TYOMA, DENIS AT THE WHEEL AND GENKA WITH UNCLE GOSHA'S THERMOS. THE FOREST HIGHWAY IS JAMMED WITH THE DEAD. CLEAR THE ROAD FOR THE CONVOY."
+
+msgid "МЫ ЖИЛИ НА САДОВОЙ: МАМА, Я И МОЙ МЛАДШИЙ БРАТ ТЁМА. ДВЕНАДЦАТЬ ЛЕТ, СОРОК КИЛОГРАММОВ УПРЯМСТВА И ВЕЧНО РАЗРЯЖЕННЫЙ ТЕЛЕФОН."
+msgstr "WE LIVED ON SADOVAYA STREET: MOM, ME AND MY LITTLE BROTHER TYOMA. TWELVE YEARS OLD, NINETY POUNDS OF STUBBORNNESS AND A PHONE THAT WAS ALWAYS DEAD."
+
+msgid "МЫ НАШЛИСЬ"
+msgstr "WE FOUND EACH OTHER"
+
+msgid "МЫ ПОСТРОИЛИ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ И ЖЕЛЕЗА."
+msgstr "WE BUILT A SHELTER OUT OF CONTAINERS AND SCRAP METAL."
+
+msgid "МЭТТ"
+msgstr "MATT"
+
+msgid "Магазин"
+msgstr "Magazine"
+
+msgid "Магазин +50%, перезарядка на 10% дольше"
+msgstr "Magazine +50%, reload 10% slower"
+
+msgid "Мама работала фельдшером на станции скорой у кладбища. Найди 5 страниц её дневника"
+msgstr "Mom worked as a paramedic at the ambulance station by the cemetery. Find 5 pages of her diary"
+
+msgid "Мачта и рация: можно звать новых выживших в убежище"
+msgstr "A mast and a radio: call new survivors to the shelter"
+
+msgid "Медленный и тяжёлый: зомби отлетают, как кегли. Поворачивает неохотно."
+msgstr "Slow and heavy: zombies fly like bowling pins. Turns reluctantly."
+
+msgid "Мест для жильцов: %d → %d. Касса копится %d ч."
+msgstr "Beds: %d → %d. Cash box fills for %d h."
+
+msgid "Монеты ×1.2, цель — головы"
+msgstr "Coins ×1.2, aim for the heads"
+
+msgid "Монеты за каждого убитого зомби"
+msgstr "Coins for every zombie killed"
+
+msgid "Монеты за миссии ×1.5"
+msgstr "Mission coins ×1.5"
+
+msgid "Монеты: %d"
+msgstr "Coins: %d"
+
+msgid "Монеты: %d   •   Лом: %d"
+msgstr "Coins: %d   •   Scrap: %d"
+
+msgid "Монеты: %d за волну + за убитых  •  рекорд %s"
+msgstr "Coins: %d per wave + per kill  •  record %s"
+
+msgid "Мост завален машинами. Удержи подъезд 110 секунд, пока Денис растаскивает завал"
+msgstr "The bridge is blocked by wrecked cars. Hold the approach for 110 seconds while Denis clears the wreckage"
+
+msgid "Мёртвые встают из могил: скелеты быстрые, гниляки живучие. Отбей пять волн, в конце — Громила"
+msgstr "The dead rise from their graves: skeletons are fast, ghouls are tough. Hold off five waves, then the Brute"
+
+msgid "НА ВОЙ С ГОР ИДЁТ ОРДА. ДЕРЖИ ВОРОТА, ПОКА ВСЕ ДВЕСТИ НЕ ПОЛУЧАТ ПРИВИВКУ. ОЧЕРЕДЬ ЖИВАЯ — И ПУСТЬ ТАКОЙ ОСТАНЕТСЯ."
+msgstr "A HORDE IS COMING TOWARD THE HOWL FROM THE MOUNTAINS. HOLD THE GATE UNTIL ALL TWO HUNDRED ARE VACCINATED. THE QUEUE IS ALIVE, AND LET IT STAY THAT WAY."
+
+msgid "НА ЗАВТРАК БЫЛО ВСЁ СРАЗУ: БОРЩ БОРЩОВА, ЗАМОРОЖЕННЫЙ ЭСПРЕССО ЛЮБЫ, ПЛОМБИР МИХАЛЫЧА И ПИРОГИ БАБЫ ШУРЫ. КОЗА ЗИНА СЪЕЛА СКАТЕРТЬ."
+msgstr "BREAKFAST WAS EVERYTHING AT ONCE: BORSHCHOV'S BORSCHT, LYUBA'S FROZEN ESPRESSO, MIKHALYCH'S ICE CREAM AND GRANNY SHURA'S PIES. ZINA THE GOAT ATE THE TABLECLOTH."
+
+msgid "НА КРЫШЕ КАФЕ ТАНЦУЕТ АНИМАТОР ЭДИК: ПОКА ОН ТАНЦУЕТ, ЗОМБИ СМОТРЯТ НА НЕГО, А НЕ ИЩУТ ЕДУ. ОН ТАНЦУЕТ ТРЕТИЙ ДЕНЬ. РАСЧИСТИ НАБЕРЕЖНУЮ."
+msgstr "ON THE CAFE ROOF ANIMATOR EDIK IS DANCING: WHILE HE DANCES, THE ZOMBIES WATCH HIM INSTEAD OF LOOKING FOR FOOD. HE HAS BEEN DANCING FOR THREE DAYS. CLEAR THE PROMENADE."
+
+msgid "НА МАЯКЕ ГОРИТ ОКНО. ВНУТРИ — СМОТРИТЕЛЬ ПАЛЫЧ. ТРИ МЕСЯЦА ОН НЕ ВЫХОДИЛ НАРУЖУ И ДУМАЛ, ЧТО В ГОРОДЕ ЗАБАСТОВКА."
+msgstr "A WINDOW GLOWS IN THE LIGHTHOUSE. INSIDE IS THE KEEPER, PALYCH. HE HAS NOT GONE OUTSIDE FOR THREE MONTHS AND THOUGHT THE CITY WAS ON STRIKE."
+
+msgid "НА НАБЕРЕЖНОЙ — МЕРТВЕЦЫ В ПАНАМАХ, КУПАЛЬНИКАХ И С НАДУВНЫМИ КРУГАМИ. ВСЁ ВКЛЮЧЕНО, ВКЛЮЧАЯ ЗУБЫ."
+msgstr "THE PROMENADE IS FULL OF CORPSES IN SUN HATS, SWIMSUITS AND INFLATABLE RINGS. ALL INCLUSIVE, TEETH INCLUDED."
+
+msgid "НА ОБОЧИНЕ СТОЯЛА ФУРА С НАДПИСЬЮ «МОРОЖЕНОЕ». ВНУТРИ ТРИ МЕСЯЦА ЖИЛ ДАЛЬНОБОЙЩИК МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ. МОРОЖЕНОЕ КОНЧИЛОСЬ В ПЕРВУЮ НЕДЕЛЮ. ТЁЩА — НЕТ."
+msgstr "A TRUCK MARKED \"ICE CREAM\" STOOD ON THE ROADSIDE. TRUCKER MIKHALYCH HAD LIVED IN IT FOR THREE MONTHS WITH HIS WIFE AND MOTHER-IN-LAW. THE ICE CREAM RAN OUT IN THE FIRST WEEK. THE MOTHER-IN-LAW DID NOT."
+
+msgid "НА ПЕРЕВАЛЕ «ЛАСТОЧКА» ЗАСТРЯЛА В СУГРОБЕ И ЗАГЛОХЛА. ТЁМА ЛЕЗЕТ ПОД КАПОТ: «ДВЕ МИНУТЫ. НУ, ДВЕ С ПОЛОВИНОЙ»."
+msgstr "ON THE PASS THE SWALLOW GOT STUCK IN A SNOWDRIFT AND STALLED. TYOMA CLIMBS UNDER THE HOOD: \"TWO MINUTES. WELL, TWO AND A HALF.\""
+
+msgid "НА ПЕРИЛАХ МОСТА ВСЁ ЕЩЁ ВИСИТ СИНИЙ ШАРФ. МАМИН. МЫ С ТЁМОЙ ЗАВЯЗАЛИ РЯДОМ КРАСНЫЙ РЮКЗАК. ПУСТЬ ВИСЯТ ВМЕСТЕ."
+msgstr "A BLUE SCARF STILL HANGS ON THE BRIDGE RAILING. MOM'S. TYOMA AND I TIED THE RED BACKPACK NEXT TO IT. LET THEM HANG TOGETHER."
+
+msgid "НА СЕГОДНЯ ЭФИР ЗАКОНЧЕН"
+msgstr "THAT'S ALL FOR TODAY'S BROADCAST"
+
+msgid "НА УЛИЦЕ ПЕРЕД ВХОДОМ — ВСЯ БАНДА: ОБРЕЗЫ, ВИНТОВКИ, КРАСНЫЕ ПЛАТКИ. И ЗОМБИ, КОТОРЫЕ ПРИШЛИ НА ШУМ."
+msgstr "ON THE STREET OUTSIDE THE ENTRANCE — THE WHOLE GANG: SAWED-OFFS, RIFLES, RED BANDANAS. AND ZOMBIES THAT CAME FOR THE NOISE."
+
+msgid "НАЁМНИК"
+msgstr "MERCENARY"
+
+msgid "НАБЕГ: НАГРАДА ×2, ЛОВУШКИ В СУМКЕ"
+msgstr "RAID: REWARD ×2, TRAPS IN YOUR BAG"
+
+msgid "НАГРАДА"
+msgstr "REWARD"
+
+msgid "НАГРАДА ЖДЁТ!"
+msgstr "REWARD AWAITS!"
+
+msgid "НАГРАДА ЗА ВХОД"
+msgstr "LOGIN REWARD"
+
+msgid "НАГРАДА ПОЛУЧЕНА ✓"
+msgstr "REWARD CLAIMED ✓"
+
+msgid "НАГРАДА: %s"
+msgstr "REWARD: %s"
+
+msgid "НАГРАДЫ И ЗАДАНИЯ"
+msgstr "REWARDS AND QUESTS"
+
+msgid "НАДУВНОЙ БАССЕЙН"
+msgstr "INFLATABLE POOL"
+
+msgid "НАЙДЕННЫЕ ИГРЫ"
+msgstr "GAMES FOUND"
+
+msgid "НАЙДЕНО: "
+msgstr "FOUND: "
+
+msgid "НАКОРМИТЬ (%d)"
+msgstr "FEED (%d)"
+
+msgid "НАПОМИНАНИЯ"
+msgstr "REMINDERS"
+
+msgid "НАПОМИНАНИЯ (УВЕДОМЛЕНИЯ)"
+msgstr "REMINDERS (NOTIFICATIONS)"
+
+msgid "НАСТРОЕНИЕ %d+: +%d%% МОНЕТ ЗА МИССИИ"
+msgstr "MOOD %d+: +%d%% MISSION COINS"
+
+msgid "НАСТРОЕНИЕ: %s"
+msgstr "MOOD: %s"
+
+msgid "НАСТРОИТЬ РАСКЛАДКУ КНОПОК"
+msgstr "CUSTOMIZE BUTTON LAYOUT"
+
+msgid "НАСТРОЙКИ"
+msgstr "SETTINGS"
+
+msgid "НАСТРОЙКИ КОНФИДЕНЦИАЛЬНОСТИ"
+msgstr "PRIVACY SETTINGS"
+
+msgid "НАЧАЛО ПУТИ"
+msgstr "FIRST STEPS"
+
+msgid "НАЧАТЬ"
+msgstr "START"
+
+msgid "НАЧАТЬ ГЛАВУ"
+msgstr "START CHAPTER"
+
+msgid "НАШ ЛАГЕРЬ"
+msgstr "OUR CAMP"
+
+msgid "НАШ МАЯК ГОРЕЛ: ПАЛЫЧ ЖДАЛ. А ЗА ЛАГЕРЕМ, ДО САМОГО ГОРИЗОНТА, ШЛИ МЕРТВЕЦЫ. ТЫСЯЧИ. ВСЕ, КОГО КОГДА-ТО ГНАЛ ПАСТУХ."
+msgstr "OUR LIGHTHOUSE WAS LIT: PALYCH WAS WAITING. AND BEHIND THE CAMP, ALL THE WAY TO THE HORIZON, THE DEAD WERE COMING. THOUSANDS. EVERYONE THE SHEPHERD HAD EVER HERDED."
+
+msgid "НАШ ПОРТ"
+msgstr "OUR PORT"
+
+msgid "НЕ ВСЕ СТЕРВЯТНИКИ СДАЛИСЬ. ЗАМ БАРОНА ПО КЛИЧКЕ КАБАН ЗАБРАЛ ОБРЕЗЫ, БЕНЗИН И ПОЛБАНДЫ. ТЕПЕРЬ ОН ХОЧЕТ ВЕРНУТЬ «СВОИХ» ПЛЕННЫХ."
+msgstr "NOT ALL THE VULTURES SURRENDERED. THE BARON'S DEPUTY, A MAN CALLED KABAN, TOOK THE SAWN-OFFS, THE GAS AND HALF THE GANG. NOW HE WANTS \"HIS\" PRISONERS BACK."
+
+msgid "НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ"
+msgstr "COULDN'T CONNECT"
+
+msgid "НЕ УДАЛОСЬ СОБРАТЬ КОД"
+msgstr "COULDN'T BUILD THE CODE"
+
+msgid "НЕ УДАЛОСЬ СОЗДАТЬ ИГРУ (%s)"
+msgstr "COULDN'T CREATE GAME (%s)"
+
+msgid "НЕ ХВАТАЕТ ШЕСТИ РЕАКТИВОВ. ОНИ НА АПТЕЧНОМ СКЛАДЕ У ПРОСПЕКТА. ТАМ ЖЕ, ПО СЛУХАМ, ДО СИХ ПОР СИДИТ АПТЕКАРША НИНА И НЕ ОТПУСКАЕТ БЕЗ РЕЦЕПТА."
+msgstr "WE'RE SIX REAGENTS SHORT. THEY'RE AT THE PHARMACY WAREHOUSE ON THE AVENUE. RUMOR HAS IT NINA THE PHARMACIST IS STILL THERE AND WON'T GIVE ANYTHING OUT WITHOUT A PRESCRIPTION."
+
+msgid "НЕВЕРНЫЙ IP: %s"
+msgstr "INVALID IP: %s"
+
+msgid "НЕДЕЛЯ КРИКУНОВ"
+msgstr "SCREAMER WEEK"
+
+msgid "НЕОН ПОД ДНИЩЕМ — %s"
+msgstr "UNDERGLOW NEON — %s"
+
+msgid "НЕОН: ВЫБЕРИ ЦВЕТ"
+msgstr "NEON: PICK A COLOR"
+
+msgid "НЕПРОЗРАЧНОСТЬ КНОПОК"
+msgstr "BUTTON OPACITY"
+
+msgid "НЕСГИБАЕМЫЙ"
+msgstr "UNBREAKABLE"
+
+msgid "НЕТ МЕСТ — РАСШИРЬ УБЕЖИЩЕ"
+msgstr "NO BEDS — EXPAND THE SHELTER"
+
+msgid "НЕТ СЕТИ"
+msgstr "NO NETWORK"
+
+msgid "НЕТ СЕТИ: ПОДКЛЮЧИСЬ К ТОЧКЕ ДОСТУПА ДРУГА"
+msgstr "NO NETWORK: CONNECT TO YOUR FRIEND'S HOTSPOT"
+
+msgid "НИЗКОЕ"
+msgstr "LOW"
+
+msgid "НИНА"
+msgstr "NINA"
+
+msgid "НИНА ДЕЙСТВИТЕЛЬНО ПОТРЕБОВАЛА РЕЦЕПТ. ИРИНА ВЫПИСАЛА ЕГО НА КОРОБКЕ ОТ ПИЦЦЫ. НИНА ПРИНЯЛА: «ПОЧЕРК ВРАЧЕБНЫЙ, ВСЁ ЧЕСТНО»."
+msgstr "NINA REALLY DID DEMAND A PRESCRIPTION. IRINA WROTE ONE ON A PIZZA BOX. NINA ACCEPTED IT: \"DOCTOR'S HANDWRITING, ALL LEGIT.\""
+
+msgid "НИЧЬЯ"
+msgstr "DRAW"
+
+msgid "НИЧЬЯ  %d : %d"
+msgstr "DRAW  %d : %d"
+
+msgid "НО ВОЙ НЕ СТИХАЕТ. БАБА ШУРА ЗНАЕТ, КТО ЭТО: «ПАСТУХ. ОГРОМНЫЙ. ВОЕТ — И МЕРТВЕЦЫ ИДУТ ЗА НИМ СТАДОМ. ПОКА ОН ЖИВ, ПОКОЯ НЕ БУДЕТ»."
+msgstr "BUT THE HOWLING DOESN'T STOP. GRANNY SHURA KNOWS WHO IT IS: \"THE SHEPHERD. HUGE. HE HOWLS AND THE DEAD FOLLOW HIM LIKE A HERD. AS LONG AS HE LIVES, THERE WILL BE NO PEACE.\""
+
+msgid "НОВАЯ МАШИНА: %s"
+msgstr "NEW CAR: %s"
+
+msgid "НОВЫЕ ЗАДАНИЯ ДНЯ"
+msgstr "NEW DAILY QUESTS"
+
+msgid "НОВЫЙ ДОМ"
+msgstr "NEW HOUSE"
+
+msgid "НОВЫЙ РЕКОРД!"
+msgstr "NEW RECORD!"
+
+msgid "НОЖ"
+msgstr "KNIFE"
+
+msgid "НОЧЬ НА КЛАДБИЩЕ"
+msgstr "NIGHT AT THE GRAVEYARD"
+
+msgid "НОЧЬ ПЕРЕД МОСТОМ"
+msgstr "THE NIGHT BEFORE THE BRIDGE"
+
+msgid "НОЧЬ ПОСЛЕ КОНТЕЙНЕРОВ"
+msgstr "THE NIGHT AFTER THE CONTAINERS"
+
+msgid "НОЧЬ. ПАЛЫЧ ЧИНИТ ЛАМПУ, А ТЫ ДЕРЖИШЬ МОЛ. ВСЕ МЕРТВЕЦЫ ПОРТА ИДУТ НА ШУМ. И НЕ ТОЛЬКО ПОРТА."
+msgstr "NIGHT. PALYCH FIXES THE LAMP WHILE YOU HOLD THE BREAKWATER. EVERY CORPSE IN THE PORT IS COMING TO THE NOISE. AND NOT JUST IN THE PORT."
+
+msgid "НОЧЬ: ЗОМБИ АКТИВНЕЕ"
+msgstr "NIGHT: ZOMBIES MORE ACTIVE"
+
+msgid "НОЧЬЮ ЗОМБИ ИДУТ НА ОГОНЬ. ПРОДЕРЖИСЬ, ПОКА РАЗВЕДЧИКИ СОБИРАЮТ ЛАГЕРЬ. ФАКЕЛ БУДЕТ КСТАТИ."
+msgstr "AT NIGHT ZOMBIES COME TO THE FIRE. HOLD OUT WHILE THE SCOUTS PACK UP THE CAMP. A TORCH WILL COME IN HANDY."
+
+msgid "НУЖЕН «%s»"
+msgstr "NEEDS \"%s\""
+
+msgid "НУЖНА РАДИОСТАНЦИЯ"
+msgstr "NEEDS A RADIO STATION"
+
+msgid "НУЖНО ПРОВИЗИИ: %d (ЕСТЬ %d) — КУПИ В ОКНЕ БАЗА"
+msgstr "FOOD NEEDED: %d (HAVE %d) — BUY IN THE BASE WINDOW"
+
+msgid "Набери 10000 очков дрифта"
+msgstr "Score 10000 drift points"
+
+msgid "Награда за подписку — в убежище: МЕНЮ → СОЦСЕТИ (ещё %s)"
+msgstr "Follow rewards are in the shelter: MENU → SOCIAL (%s left)"
+
+msgid "Награда: %s"
+msgstr "Reward: %s"
+
+msgid "Найди 5 ящиков с припасами на стоянке. Ищи световые столбы"
+msgstr "Find 5 supply crates in the container yard. Look for the light beams"
+
+msgid "Накорми лагерь 30 раз"
+msgstr "Feed the camp 30 times"
+
+msgid "Накорми лагерь 7 раз"
+msgstr "Feed the camp 7 times"
+
+msgid "Настроение"
+msgstr "Mood"
+
+msgid "Наш флаг над двором: видно издалека, что здесь живые"
+msgstr "Our flag over the yard: everyone can see the living are here"
+
+msgid "Неделя без вылазок: провизия кончается, а орда всё ближе. Вернись!"
+msgstr "A week without a raid: food is running out and the horde is closing in. Come back!"
+
+msgid "Неизвестное задание"
+msgstr "Unknown quest"
+
+msgid "Нет доступных миссий"
+msgstr "No missions available"
+
+msgid "Новости обновлений, коды и общение с разработчиками"
+msgstr "Update news, codes and chatting with the developers"
+
+msgid "Новые жильцы (радио)"
+msgstr "New residents (radio)"
+
+msgid "Нужно топливо для генераторов. Удержи заправочную точку 90 секунд"
+msgstr "Generators need fuel. Hold the gas station point for 90 seconds"
+
+msgid "ОБВЕСЫ"
+msgstr "ATTACHMENTS"
+
+msgid "ОБЕД БЫЛ ✓"
+msgstr "LUNCH SERVED ✓"
+
+msgid "ОБЕД! НАСТРОЕНИЕ +%d"
+msgstr "LUNCH! MOOD +%d"
+
+msgid "ОБЗОР НАКЛОНОМ ТЕЛЕФОНА"
+msgstr "AIM BY TILTING THE PHONE"
+
+msgid "ОБЛЁТ"
+msgstr "ORBIT"
+
+msgid "ОБОРОНА"
+msgstr "DEFENSE"
+
+msgid "ОБОРОНА ТОЧКИ"
+msgstr "DEFEND THE POINT"
+
+msgid "ОБОРОНА УБЕЖИЩА"
+msgstr "SHELTER DEFENSE"
+
+msgid "ОБУСТРОЙСТВО"
+msgstr "COMFORTS"
+
+msgid "ОБУЧЕНИЕ"
+msgstr "TUTORIAL"
+
+msgid "ОБУЧЕНИЕ  %d / %d"
+msgstr "TUTORIAL  %d / %d"
+
+msgid "ОБЫСК %d%%"
+msgstr "SEARCHING %d%%"
+
+msgid "ОГНЕМЁТ"
+msgstr "FLAMETHROWER"
+
+msgid "ОГОРОД"
+msgstr "GARDEN"
+
+msgid "ОГРАНИЧЕНИЕ FPS (МЕНЬШЕ — ТЕЛЕФОН МЕНЬШЕ ГРЕЕТСЯ)"
+msgstr "FPS LIMIT (LOWER — PHONE RUNS COOLER)"
+
+msgid "ОЗВУЧКА КАТ-СЦЕН"
+msgstr "CUTSCENE VOICE-OVER"
+
+msgid "ОНИ ОТДАЛИ НАМ КЛЮЧИ ОТ ВОРОТ И КАРТУ ПОРТА: ГДЕ КАНИСТРЫ, ГДЕ МАЯК, ГДЕ «НАДЕЖДА». И ГДЕ ЛУЧШЕ НЕ ХОДИТЬ НОЧЬЮ."
+msgstr "THEY GAVE US THE GATE KEYS AND A MAP OF THE PORT: WHERE THE FUEL CANS ARE, WHERE THE LIGHTHOUSE IS, WHERE THE NADEZHDA IS. AND WHERE NOT TO GO AT NIGHT."
+
+msgid "ОПАСНОСТЬ"
+msgstr "DANGER"
+
+msgid "ОРАНЖЕВЫЙ"
+msgstr "ORANGE"
+
+msgid "ОРДА"
+msgstr "HORDE"
+
+msgid "ОРДА КОНЧИЛАСЬ НА РАССВЕТЕ. ПОСЛЕДНЕГО МЕРТВЕЦА ВМЕСТЕ УЛОЖИЛИ ГЕНКА И КАБАН — ВОРОТАМИ И ПОДНОСОМ. ОНИ ТЕПЕРЬ ЛУЧШИЕ ДРУЗЬЯ."
+msgstr "THE HORDE RAN OUT AT DAWN. GENKA AND KABAN TOOK DOWN THE LAST CORPSE TOGETHER, WITH THE GATE AND THE TRAY. THEY ARE BEST FRIENDS NOW."
+
+msgid "ОРДА У ВОРОТ!"
+msgstr "HORDE AT THE GATES!"
+
+msgid "ОРУЖЕЙНАЯ"
+msgstr "ARMORY"
+
+msgid "ОРУЖИЕ И ПРИПАСЫ"
+msgstr "WEAPONS AND SUPPLIES"
+
+msgid "ОСАДА"
+msgstr "THE SIEGE"
+
+msgid "ОСМОТРИСЬ: ВЕДИ ПАЛЬЦЕМ ПО ПРАВОЙ ЧАСТИ ЭКРАНА"
+msgstr "LOOK AROUND: SWIPE ON THE RIGHT SIDE OF THE SCREEN"
+
+msgid "ОСМОТРИСЬ: ДВИГАЙ МЫШЬЮ"
+msgstr "LOOK AROUND: MOVE THE MOUSE"
+
+msgid "ОСТАЛАСЬ БЕДА: ВЫХОД ИЗ ГАВАНИ — МЕЖДУ РИФАМИ. НОЧЬЮ БЕЗ МАЯКА НЕ ПРОЙТИ, А ДНЁМ МЕРТВЕЦЫ ЛЕЗУТ НА ПРИЧАЛ. НУЖЕН СВЕТ."
+msgstr "ONE PROBLEM LEFT: THE WAY OUT OF THE HARBOR RUNS BETWEEN REEFS. AT NIGHT YOU CAN'T PASS WITHOUT THE LIGHTHOUSE, AND BY DAY THE DEAD CLIMB ONTO THE PIER. WE NEED LIGHT."
+
+msgid "ОСТАТЬСЯ"
+msgstr "STAY"
+
+msgid "ОТБИТО НАБЕГОВ"
+msgstr "RAIDS REPELLED"
+
+msgid "ОТБИТЬ"
+msgstr "FIGHT BACK"
+
+msgid "ОТКРЫТЫЙ ГОРОД"
+msgstr "OPEN CITY"
+
+msgid "ОТКРЫТЬ"
+msgstr "OPEN"
+
+msgid "ОТЛИЧНО! ДОБЕЙ ОСТАЛЬНЫХ — И ОБУЧЕНИЕ ПРОЙДЕНО"
+msgstr "NICE! FINISH OFF THE REST — AND THE TUTORIAL IS DONE"
+
+msgid "ОТМЕНА"
+msgstr "CANCEL"
+
+msgid "ОТПЛЫВАЕМ НА РАССВЕТЕ. ПАЛЫЧ ВЫВЕДЕТ КОРАБЛЬ ЗА РИФЫ НА СВОЕЙ ЛОДКЕ. МАЯК ОСТАВИЛИ ГОРЕТЬ: ПУСТЬ ТЕ, КТО ЕЩЁ В ПУТИ, ЗНАЮТ, КУДА ИДТИ."
+msgstr "WE SAIL AT DAWN. PALYCH WILL GUIDE THE SHIP PAST THE REEFS IN HIS BOAT. WE LEFT THE LIGHTHOUSE ON: LET THOSE STILL ON THE ROAD KNOW WHERE TO GO."
+
+msgid "ОХОТА"
+msgstr "HUNT"
+
+msgid "ОХОТА НА ГОЛОВЫ"
+msgstr "HEAD HUNT"
+
+msgid "ОХОТНИК НА БОССОВ"
+msgstr "BOSS HUNTER"
+
+msgid "ОХОТНИЦА"
+msgstr "HUNTRESS"
+
+msgid "ОЧКОВ ДРИФТА"
+msgstr "DRIFT POINTS"
+
+msgid "ОШИБКА ПОДКЛЮЧЕНИЯ (%s)"
+msgstr "CONNECTION ERROR (%s)"
+
+msgid "Обед раз в день: %d ящ. (ящик кормит %d человек). День без обеда — настроение −%d"
+msgstr "Lunch once a day: %d crates (a crate feeds %d people). A day without lunch — mood −%d"
+
+msgid "Огород: +%d ящ. каждый день"
+msgstr "Garden: +%d crates every day"
+
+msgid "Они уже стучат в ворота убежища. Возвращайся, выживший!"
+msgstr "They're already knocking on the shelter gates. Come back, survivor!"
+
+msgid "Орда идёт к воротам. Поставь турели, капканы и мины (кнопка ЛОВУШКА) и удержи ворота 150 секунд"
+msgstr "A horde is heading for the gates. Set up turrets, bear traps and mines (TRAP button) and hold the gates for 150 seconds"
+
+msgid "Отбей %s"
+msgstr "Repel %s"
+
+msgid "Отбей 5 набегов на убежище"
+msgstr "Repel 5 raids on the shelter"
+
+msgid "Отбей три волны зомби"
+msgstr "Fight off three waves of zombies"
+
+msgid "Отдача −40%, прицел меньше расходится при стрельбе"
+msgstr "Recoil −40%, less crosshair bloom while firing"
+
+msgid "Отдача −45%, разброс −10%"
+msgstr "Recoil −45%, spread −10%"
+
+msgid "Открывает улучшения машин: таран и двигатель"
+msgstr "Unlocks car upgrades: ram and engine"
+
+msgid "Открытый город без конца: исследуй кварталы, катайся на машинах и сбивай зомби. Монеты за каждого убитого"
+msgstr "An endless open city: explore the blocks, drive cars and run over zombies. Coins for every kill"
+
+msgid "Очки: %d"
+msgstr "Score: %d"
+
+msgid "ПАДШИЙ ГИГАНТ"
+msgstr "FALLEN GIANT"
+
+msgid "ПАЛЫЧ"
+msgstr "PALYCH"
+
+msgid "ПАЛЫЧ ВЫВЕЛ КОРАБЛЬ ЗА РИФЫ И ВЕРНУЛСЯ НА МАЯК: В МОРЕ ЕГО УКАЧИВАЕТ. ДЕНИС, ГЕНКА И МИХАЛЫЧ ПОВЕЛИ МАШИНЫ ДОМОЙ ВДОЛЬ БЕРЕГА. У ЛАГЕРЯ ТЕПЕРЬ СВОЙ ПОРТ."
+msgstr "PALYCH GUIDED THE SHIP PAST THE REEFS AND WENT BACK TO THE LIGHTHOUSE: HE GETS SEASICK. DENIS, GENKA AND MIKHALYCH DROVE THE CARS HOME ALONG THE COAST. THE CAMP HAS ITS OWN PORT NOW."
+
+msgid "ПАЛЫЧ ВЫВЕЛ КОРАБЛЬ ЗА РИФЫ И ВЕРНУЛСЯ: В МОРЕ ЕГО УКАЧИВАЕТ. ТЕПЕРЬ ОН ЖИВЁТ В ЛАГЕРЕ И ОХРАНЯЕТ ГЕРАНЬ. У ЛАГЕРЯ — НОВЫЙ ДОМ И СВОЙ ПОРТ."
+msgstr "PALYCH GUIDED THE SHIP PAST THE REEFS AND CAME BACK: HE GETS SEASICK. NOW HE LIVES IN THE CAMP AND GUARDS HIS GERANIUM. THE CAMP HAS A NEW HOUSE AND A PORT OF ITS OWN."
+
+msgid "ПАМЯТЬ"
+msgstr "MEMORY"
+
+msgid "ПАССАЖИР"
+msgstr "PASSENGER"
+
+msgid "ПАСТУХ"
+msgstr "THE SHEPHERD"
+
+msgid "ПАСТУХ РУХНУЛ В СНЕГ И ЗАМОЛЧАЛ. ВПЕРВЫЕ ЗА МЕСЯЦЫ В ГОРАХ СТАЛО ТИХО — ТАК ТИХО, ЧТО СЛЫШНО, КАК ПАДАЕТ СНЕГ."
+msgstr "THE SHEPHERD FELL INTO THE SNOW AND WENT SILENT. FOR THE FIRST TIME IN MONTHS THE MOUNTAINS WERE QUIET, SO QUIET YOU COULD HEAR THE SNOW FALL."
+
+msgid "ПАТРОНЫ"
+msgstr "AMMO"
+
+msgid "ПАУЗА"
+msgstr "PAUSED"
+
+msgid "ПЕЛА ЛЮБА — ТЕХНОЛОГ КОМБИНАТА. ТРИ МЕСЯЦА ОНА ЖИЛА В МОРОЗИЛКЕ И ПИТАЛАСЬ ПЛОМБИРОМ. НА ВОПРОС «КАК ВЫ?» ОТВЕТИЛА: «ХОЛОДНО, НО ВКУСНО»."
+msgstr "IT WAS LYUBA, THE PLANT TECHNOLOGIST. FOR THREE MONTHS SHE LIVED IN THE FREEZER EATING ICE CREAM. ASKED \"HOW ARE YOU?\" SHE SAID: \"COLD, BUT TASTY.\""
+
+msgid "ПЕРВАЯ КРОВЬ"
+msgstr "FIRST BLOOD"
+
+msgid "ПЕРВУЮ ДОЗУ ВЫЗВАЛСЯ ПРОВЕРИТЬ ШНЫРЬ: «Я БУХГАЛТЕР, Я ВСЮ ЖИЗНЬ РИСКУЮ». К УТРУ У НЕГО ОТРОСЛА БОРОДА. ИРИНА ГОВОРИТ, ЭТО ПОБОЧНОЕ И ПРОЙДЁТ."
+msgstr "SHNYR VOLUNTEERED TO TEST THE FIRST DOSE: \"I'M AN ACCOUNTANT, I'VE BEEN TAKING RISKS MY WHOLE LIFE.\" BY MORNING HE HAD GROWN A BEARD. IRINA SAYS IT'S A SIDE EFFECT AND WILL PASS."
+
+msgid "ПЕРВЫЙ ДЕНЬ"
+msgstr "DAY ONE"
+
+msgid "ПЕРВЫЙ ЗАЕЗД"
+msgstr "FIRST RACE"
+
+msgid "ПЕРЕЗАРЯДКА..."
+msgstr "RELOADING..."
+
+msgid "ПЕРЕЗАРЯДКА: КЛАВИША R"
+msgstr "RELOAD: R KEY"
+
+msgid "ПЕРЕЗАРЯДКА: НАЖМИ КНОПКУ"
+msgstr "RELOAD: TAP THE BUTTON"
+
+msgid "ПЕРЕИГРАТЬ"
+msgstr "REPLAY"
+
+msgid "ПЕРЕПРАВА"
+msgstr "THE CROSSING"
+
+msgid "ПЕРЕТАСКИВАЙ КНОПКИ ПАЛЬЦЕМ"
+msgstr "DRAG BUTTONS WITH YOUR FINGER"
+
+msgid "ПЕРСОНАЖ"
+msgstr "CHARACTER"
+
+msgid "ПИСТОЛЕТ"
+msgstr "PISTOL"
+
+msgid "ПИСТОЛЕТ-ПУЛЕМЁТ"
+msgstr "SMG"
+
+msgid "ПЛАН КАБАНА: ВКЛЮЧИТЬ РЕВУН У МОСТА В ДЕНЬ, КОГДА ПРИДЁТ КОРАБЛЬ, И ЗАБРАТЬ ВАКЦИНУ В СУМАТОХЕ. ПЛАН ГЛУПЫЙ, НО ГРОМКИЙ."
+msgstr "KABAN'S PLAN: SWITCH ON THE HOWLER AT THE BRIDGE THE DAY THE SHIP ARRIVES AND GRAB THE VACCINE IN THE CHAOS. A STUPID PLAN, BUT A LOUD ONE."
+
+msgid "ПЛЕВУН"
+msgstr "SPITTER"
+
+msgid "ПЛЕННЫЕ РАССКАЗАЛИ: БАЗА КАБАНА — В СТАРОМ ГАРАЖЕ НА КРАЮ ПРОМЗОНЫ. ТАМ ОН ПРЯЧЕТ «РЕВУН» — СИРЕНУ, НА КОТОРУЮ СБЕГАЮТСЯ ВСЕ МЕРТВЕЦЫ ГОРОДА."
+msgstr "THE PRISONERS TALKED: KABAN'S BASE IS AN OLD GARAGE AT THE EDGE OF THE INDUSTRIAL ZONE. THAT'S WHERE HE HIDES THE \"HOWLER\", A SIREN THAT BRINGS EVERY CORPSE IN TOWN RUNNING."
+
+msgid "ПЛЕННЫХ ПОВЕЗЛИ В ЦЕНТР ГОРОДА. ЧТОБЫ ДОБРАТЬСЯ ДО ЛОГОВА БАРОНА, СНАЧАЛА НАДО ПРОБИТЬСЯ ЧЕРЕЗ ЦЕНТР."
+msgstr "THE PRISONERS WERE TAKEN TO THE CITY CENTER. TO REACH THE BARON'S LAIR, WE HAVE TO FIGHT THROUGH THE CENTER FIRST."
+
+msgid "ПЛОСКИЕ"
+msgstr "FLAT"
+
+msgid "ПО СЕТИ"
+msgstr "ONLINE"
+
+msgid "ПО СЕТИ: МЕТКА НАД ТЕМ, КТО В ВАС СТРЕЛЯЕТ"
+msgstr "ONLINE: MARKER OVER WHOEVER SHOOTS AT YOU"
+
+msgid "ПО СЛЕДУ КАБАНА"
+msgstr "ON KABAN'S TRAIL"
+
+msgid "ПОБЕД В МИССИЯХ"
+msgstr "MISSIONS WON"
+
+msgid "ПОБЕДА КОМАНДЫ %s  %d : %d"
+msgstr "%s TEAM WINS  %d : %d"
+
+msgid "ПОБЕДА!"
+msgstr "VICTORY!"
+
+msgid "ПОБЕДИ ГРОМИЛУ"
+msgstr "DEFEAT THE BRUTE"
+
+msgid "ПОБЕДИТЕЛЬ: %s"
+msgstr "WINNER: %s"
+
+msgid "ПОГОВОРИТЬ"
+msgstr "TALK"
+
+msgid "ПОД МОСТОМ ПРЯТАЛАСЬ СЕМЬЯ ИЗ ЧЕТЫРЁХ. ТЕПЕРЬ ОНИ В ЛАГЕРЕ, А У ЛАГЕРЯ — НОВЫЙ ДОМ ДЛЯ ГОСТЕЙ С ЮГА."
+msgstr "A FAMILY OF FOUR WAS HIDING UNDER THE BRIDGE. NOW THEY'RE IN THE CAMP, AND THE CAMP HAS A NEW HOUSE FOR GUESTS FROM THE SOUTH."
+
+msgid "ПОД СТВОЛ"
+msgstr "UNDERBARREL"
+
+msgid "ПОДКАТ"
+msgstr "SLIDE"
+
+msgid "ПОДКЛЮЧЕНИЕ К %s…"
+msgstr "CONNECTING TO %s…"
+
+msgid "ПОДКЛЮЧЕНО К %s"
+msgstr "CONNECTED TO %s"
+
+msgid "ПОДПИСАТЬСЯ"
+msgstr "FOLLOW"
+
+msgid "ПОДПИШИСЬ НА SALAMANDERLAB — НОВОСТИ ИГРЫ, ТРЕЙЛЕРЫ И КОДЫ ПЕРВЫМ!"
+msgstr "FOLLOW SALAMANDERLAB — GET GAME NEWS, TRAILERS AND CODES FIRST!"
+
+msgid "ПОДПИШИСЬ НА НАС!"
+msgstr "FOLLOW US!"
+
+msgid "ПОДЪЕЗД К МОСТУ"
+msgstr "BRIDGE APPROACH"
+
+msgid "ПОЗВАТЬ"
+msgstr "CALL"
+
+msgid "ПОЗЖЕ"
+msgstr "LATER"
+
+msgid "ПОЗЫВНОЙ «НАДЕЖДА»"
+msgstr "CALL SIGN \"HOPE\""
+
+msgid "ПОКА"
+msgstr "BYE"
+
+msgid "ПОКАЗАТЬ ВСТУПЛЕНИЕ И ИНТРО МИССИЙ СНОВА"
+msgstr "SHOW INTRO AND MISSION INTROS AGAIN"
+
+msgid "ПОКАЗЫВАТЬ FPS"
+msgstr "SHOW FPS"
+
+msgid "ПОКАЗЫВАТЬ КАТ-СЦЕНЫ"
+msgstr "SHOW CUTSCENES"
+
+msgid "ПОКАЗЫВАТЬ, С КАКОЙ СТОРОНЫ АТАКУЮТ"
+msgstr "SHOW ATTACK DIRECTION"
+
+msgid "ПОКРАСКА И НЕОН"
+msgstr "PAINT AND NEON"
+
+msgid "ПОКРАСКА: %s  (%s, ЗАВОДСКОЙ — БЕСПЛАТНО)"
+msgstr "PAINT: %s  (%s, FACTORY — FREE)"
+
+msgid "ПОЛЕВАЯ КУХНЯ"
+msgstr "FIELD KITCHEN"
+
+msgid "ПОЛЗУН"
+msgstr "CRAWLER"
+
+msgid "ПОЛИГОН"
+msgstr "PROVING GROUND"
+
+msgid "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ"
+msgstr "PRIVACY POLICY"
+
+msgid "ПОЛНО"
+msgstr "FULL"
+
+msgid "ПОЛУЧЕНО"
+msgstr "CLAIMED"
+
+msgid "ПОЛУЧЕНО %d ИЗ %d"
+msgstr "UNLOCKED %d OF %d"
+
+msgid "ПОМОГИТЕ!"
+msgstr "HELP!"
+
+msgid "ПОНЯТНО"
+msgstr "GOT IT"
+
+msgid "ПОРТ ОТВЕТИЛ. ТАМ ДВЕСТИ ЧЕЛОВЕК, КОРАБЛЬ И КАПИТАН ЯКОРЕВ — ЭТО НАСТОЯЩАЯ ФАМИЛИЯ. ЧЕРЕЗ НЕДЕЛЮ КОРАБЛЬ ПРИДЁТ К СТАРОМУ МОСТУ."
+msgstr "THE PORT ANSWERED. TWO HUNDRED PEOPLE, A SHIP AND CAPTAIN YAKOREV — THAT'S HIS REAL NAME. IN A WEEK THE SHIP WILL COME TO THE OLD BRIDGE."
+
+msgid "ПОРТОВЫЕ СКЛАДЫ"
+msgstr "PORT WAREHOUSES"
+
+msgid "ПОСЛЕДНЕГО ЗОМБИ СБИЛ С НОГ КАБАН — ПОДНОСОМ. ГЕНКА СКАЗАЛ, ЧТО ГОРДИТСЯ ИМ. КАБАН ПОКРАСНЕЛ."
+msgstr "THE LAST ZOMBIE WAS KNOCKED DOWN BY KABAN, WITH A TRAY. GENKA SAID HE WAS PROUD OF HIM. KABAN BLUSHED."
+
+msgid "ПОСЛЕДНИЙ ЖИВОЙ"
+msgstr "LAST ONE STANDING"
+
+msgid "ПОСЛЕДНИЙ РЕЙС"
+msgstr "THE LAST VOYAGE"
+
+msgid "ПОСЛЕДНЯЯ ВОЛНА: %s!"
+msgstr "FINAL WAVE: %s!"
+
+msgid "ПОСЛЕДНЯЯ СТРАНИЦА: «МАЛЬЧИКИ, Я НЕ ДОГНАЛА. НО Я ВИДЕЛА С МОСТА, КАК ВЫ ДОБЕЖАЛИ. ЗНАЧИТ, ВСЁ НЕ ЗРЯ. СТАРШИЙ, БЕРЕГИ ЕГО. ТЁМА, НЕ ЕШЬ ШОКОЛАДКИ НА НОЧЬ»."
+msgstr "THE LAST PAGE: \"BOYS, I DIDN'T CATCH UP. BUT FROM THE BRIDGE I SAW YOU MAKE IT. SO IT WAS NOT FOR NOTHING. ELDEST, TAKE CARE OF HIM. TYOMA, NO CHOCOLATE AT NIGHT.\""
+
+msgid "ПОСТАВИТЬ"
+msgstr "PLACE"
+
+msgid "ПОСТАВЛЕНО ЛОВУШЕК"
+msgstr "TRAPS PLACED"
+
+msgid "ПОСТОЯННЫЙ ГОСТЬ"
+msgstr "REGULAR"
+
+msgid "ПОСТРОЕНО"
+msgstr "BUILT"
+
+msgid "ПОСТРОИТЬ — %d"
+msgstr "BUILD — %d"
+
+msgid "ПОСТРОЙКИ"
+msgstr "BUILDINGS"
+
+msgid "ПОХОДИ ПЕРЕД КАМЕРОЙ ИЛИ ВЫБЕРИ РАКУРС"
+msgstr "WALK IN FRONT OF THE CAMERA OR PICK AN ANGLE"
+
+msgid "ПОЧИНЕНО!"
+msgstr "REPAIRED!"
+
+msgid "ПОШУТИТЬ"
+msgstr "TELL A JOKE"
+
+msgid "ПРАВИЛО №2: НЕ УЛЫБАЙСЯ, КОГДА ВОКРУГ ЗОМБИ. ПРАВИЛО №3: ЕСЛИ УЛЫБНУЛСЯ — БЕГИ."
+msgstr "RULE #2: DON'T SMILE WHEN THERE ARE ZOMBIES AROUND. RULE #3: IF YOU SMILED — RUN."
+
+msgid "ПРАВИЛО №7: ОТ БАНДИТОВ ПРЯЧЬСЯ ЗА СТЕНОЙ, ОТ ЗОМБИ — УБЕГАЙ. ПЕРЕПУТАЕШЬ — БУДЕТ ОБИДНО."
+msgstr "RULE #7: HIDE FROM BANDITS BEHIND A WALL, RUN FROM ZOMBIES. MIX THEM UP — AND IT'LL HURT."
+
+msgid "ПРАЗДНИК"
+msgstr "THE FESTIVAL"
+
+msgid "ПРИВЕТ"
+msgstr "WAVE"
+
+msgid "ПРИВИВКИ ДЕЛАЕТ ТЁМА: «Я ВИДЕЛ, КАК ИРИНА ДЕЛАЕТ. ТРИ РАЗА». БАБА ШУРА СТОИТ РЯДОМ И СМОТРИТ ТАК, ЧТО У ТЁМЫ НЕ ДРОЖАТ РУКИ."
+msgstr "TYOMA IS GIVING THE SHOTS: \"I SAW IRINA DO IT. THREE TIMES.\" GRANNY SHURA STANDS NEXT TO HIM AND LOOKS AT HIM SO THAT HIS HANDS DON'T SHAKE."
+
+msgid "ПРИВИВКИ ПОЛУЧИЛ ВЕСЬ ЛАГЕРЬ. ТЕПЕРЬ ОБ ЭТОМ НАДО РАССКАЗАТЬ ОСТАЛЬНЫМ. ЛЕВ СМОТРИТ НА КАРТУ И ТЫЧЕТ ПАЛЬЦЕМ В ЛЕС: ТАМ ВЫШКА."
+msgstr "THE WHOLE CAMP GOT VACCINATED. NOW EVERYONE ELSE NEEDS TO KNOW. LEV LOOKS AT THE MAP AND POKES HIS FINGER AT THE FOREST: THERE IS A TOWER THERE."
+
+msgid "ПРИПАСЫ"
+msgstr "SUPPLIES"
+
+msgid "ПРИПАСЫ В СУМКУ"
+msgstr "SUPPLIES TO BAG"
+
+msgid "ПРИХОДИ ЗАВТРА"
+msgstr "COME BACK TOMORROW"
+
+msgid "ПРИЦЕЛ"
+msgstr "AIM"
+
+msgid "ПРИЦЕЛ: ЗАЖМИ Z ИЛИ ПРАВУЮ КНОПКУ МЫШИ"
+msgstr "AIM: HOLD Z OR THE RIGHT MOUSE BUTTON"
+
+msgid "ПРИЦЕЛ: ЗАЖМИ КНОПКУ — ТОЧНЕЕ И ДАЛЬШЕ"
+msgstr "AIM: HOLD THE BUTTON — MORE ACCURATE, MORE RANGE"
+
+msgid "ПРИЧАЛ «НАДЕЖДЫ»"
+msgstr "THE NADEZHDA'S PIER"
+
+msgid "ПРОБЕЙСЯ К ВОРОТАМ ПОРТА. ТЁЩА МИХАЛЫЧА ОСТАЛАСЬ В ФУРЕ И КОМАНДУЕТ ПО РАЦИИ. ЕЁ БОЯТСЯ ДАЖЕ ЗОМБИ."
+msgstr "FIGHT YOUR WAY TO THE PORT GATE. MIKHALYCH'S MOTHER-IN-LAW STAYED IN THE TRUCK AND GIVES ORDERS OVER THE RADIO. EVEN THE ZOMBIES FEAR HER."
+
+msgid "ПРОВИЗИЯ: %d ЯЩИКОВ"
+msgstr "FOOD: %d CRATES"
+
+msgid "ПРОГРАММА: КОНКУРС НА САМЫЙ КРЕПКИЙ КОФЕ, ТАНЦЫ, ГИТАРА ВЕРЫ И САЛЮТ ИЗ СИГНАЛЬНЫХ РАКЕТ. ПРО САЛЮТ ПОДУМАЛИ НЕ ВСЕ."
+msgstr "THE PROGRAM: A STRONGEST-COFFEE CONTEST, DANCING, VERA'S GUITAR AND FIREWORKS MADE FROM SIGNAL FLARES. NOT EVERYONE THOUGHT THE FIREWORKS THROUGH."
+
+msgid "ПРОДЕРЖИСЬ %s • УБИТО %d"
+msgstr "SURVIVE %s • KILLS %d"
+
+msgid "ПРОДОЛЖИТЬ"
+msgstr "CONTINUE"
+
+msgid "ПРОДУКТЫ"
+msgstr "GROCERIES"
+
+msgid "ПРОЙДЕНА"
+msgstr "COMPLETED"
+
+msgid "ПРОЙДЕНО %d%%"
+msgstr "%d%% COMPLETE"
+
+msgid "ПРОЙДЕНО ✓"
+msgstr "COMPLETED ✓"
+
+msgid "ПРОЙТИ"
+msgstr "PLAY"
+
+msgid "ПРОЙТИ ОБУЧЕНИЕ НА ПОЛИГОНЕ"
+msgstr "PLAY TUTORIAL ON THE PROVING GROUND"
+
+msgid "ПРОЛОГ"
+msgstr "PROLOGUE"
+
+msgid "ПРОМЗОНА"
+msgstr "INDUSTRIAL ZONE"
+
+msgid "ПРОПУСТИТЬ"
+msgstr "SKIP"
+
+msgid "ПРОПУСТИТЬ  ▸"
+msgstr "SKIP  ▸"
+
+msgid "ПРОПУСТИТЬ  ▸▸"
+msgstr "SKIP  ▸▸"
+
+msgid "ПРОСПЕКТ МИРА"
+msgstr "PEACE AVENUE"
+
+msgid "ПРОЧЕЕ"
+msgstr "OTHER"
+
+msgid "ПРЫЖОК: НАЖМИ КНОПКУ"
+msgstr "JUMP: TAP THE BUTTON"
+
+msgid "ПРЫЖОК: ПРОБЕЛ"
+msgstr "JUMP: SPACE"
+
+msgid "ПУСТО"
+msgstr "EMPTY"
+
+msgid "ПЯТЕРО РАБОЧИХ ДЕРЖАТ ЗАПРАВКУ ПОСРЕДИ ПРОМЗОНЫ. БЕЗ ТОПЛИВА ИХ ГЕНЕРАТОРЫ ВСТАНУТ, А СКЛАД БАРОНА — СРАЗУ ЗА ЗАБОРОМ."
+msgstr "FIVE WORKERS ARE HOLDING A GAS STATION IN THE MIDDLE OF THE INDUSTRIAL ZONE. WITHOUT FUEL THEIR GENERATORS WILL DIE, AND THE BARON'S WAREHOUSE IS RIGHT BEHIND THE FENCE."
+
+msgid "ПЯТЬ ВОЛН — И ПАСТУХ. ЭДИК ОБЕЩАЛ ОТВЛЕКАТЬ ЗОМБИ ТАНЦЕМ. БАБА ШУРА ОБЕЩАЛА ОТВЛЕКАТЬ ЭДИКА, ЕСЛИ ОН ПЕРЕСТАРАЕТСЯ."
+msgstr "FIVE WAVES, THEN THE SHEPHERD. EDIK PROMISED TO DISTRACT THE ZOMBIES BY DANCING. GRANNY SHURA PROMISED TO DISTRACT EDIK IF HE OVERDOES IT."
+
+msgid "ПЯТЬ ВОЛН, ПОТОМ КАБАН. ТЁМА НА РАЦИИ, ДЕНИС ЗА РУЛЁМ, ДЯДЯ ГОША С ТЕРМОСОМ. ПРАВИЛО №1 ВСЁ ЕЩЁ В СИЛЕ: ПРОВЕРЯЙ ЗАДНЕЕ СИДЕНЬЕ."
+msgstr "FIVE WAVES, THEN KABAN. TYOMA ON THE RADIO, DENIS AT THE WHEEL, UNCLE GOSHA WITH A THERMOS. RULE #1 STILL STANDS: CHECK THE BACK SEAT."
+
+msgid "ПЯТЬ ВОЛН, ПОТОМ ПРИДЁТ ОН — ГРОМИЛА, ПЕРВЫЙ ЗАРАЖЁННЫЙ. ПРАВИЛО ПОСЛЕДНЕЕ: ВОЗВРАЩАЙСЯ ДОМОЙ."
+msgstr "FIVE WAVES, THEN HE COMES — THE BRUTE, THE FIRST INFECTED. THE LAST RULE: COME BACK HOME."
+
+msgid "Палыч чинит маяк, а генератор ревёт на весь порт. Удержи точку у маяка 110 секунд"
+msgstr "Palych is fixing the lighthouse and the generator roars across the port. Hold the point by the lighthouse for 110 seconds"
+
+msgid "Пастух гонит орду с вершины перевала. Отбей 5 волн и победи Пастуха"
+msgstr "The Shepherd drives the horde down from the top of the pass. Repel 5 waves and defeat the Shepherd"
+
+msgid "Перед каждой миссией в сумке появляется аптечка, если её нет"
+msgstr "A medkit appears in your bag before every mission if you don't have one"
+
+msgid "Перезарядка"
+msgstr "Reload"
+
+msgid "Перезарядка на 30% быстрее"
+msgstr "Reload 30% faster"
+
+msgid "Пикап с решёткой на бампере: быстрее и бьёт сильнее."
+msgstr "Pickup with a bull bar: faster and hits harder."
+
+msgid "Победи 10 боссов"
+msgstr "Defeat 10 bosses"
+
+msgid "Победи первого босса"
+msgstr "Defeat your first boss"
+
+msgid "Позвать выжившего: %d монет и %d ящ. провизии. Сегодня ещё: %d"
+msgstr "Call a survivor: %d coins and %d food crates. Left today: %d"
+
+msgid "Позови по радио 10 выживших"
+msgstr "Call 10 survivors on the radio"
+
+msgid "Полигон: ходьба, обзор, бег, стрельба, прицел и первые зомби. Две минуты — и ты готов"
+msgstr "Proving ground: walking, looking, sprinting, shooting, aiming and your first zombies. Two minutes and you're ready"
+
+msgid "Половина зомби — бывшие строители"
+msgstr "Half the zombies used to be builders"
+
+msgid "Пополняет запас всех стволов на 35%"
+msgstr "Refills all guns' reserve by 35%"
+
+msgid "Посадка на «Надежду». Удержи причал 5 волн, пока все поднимаются на борт, и победи Утопленника"
+msgstr "Boarding the Nadezhda. Hold the pier for 5 waves while everyone gets aboard, and defeat the Drowned One"
+
+msgid "Поставь 25 ловушек и турелей"
+msgstr "Place 25 traps and turrets"
+
+msgid "Потолок настроения растёт от уюта: обустройство и постройки (сейчас уют %d)"
+msgstr "Comfort raises the mood cap: comforts and buildings (comfort now %d)"
+
+msgid "Появление босса"
+msgstr "Boss entrance"
+
+msgid "Провизия"
+msgstr "Food"
+
+msgid "Провизия в убежище: +%d"
+msgstr "Food for the shelter: +%d"
+
+msgid "Продержись %d:%02d"
+msgstr "Survive %d:%02d"
+
+msgid "Продержись 10 волн в бесконечном режиме"
+msgstr "Survive 10 waves in endless mode"
+
+msgid "Продержись 25 волн в бесконечном режиме"
+msgstr "Survive 25 waves in endless mode"
+
+msgid "Продержись 90 секунд"
+msgstr "Hold out for 90 seconds"
+
+msgid "Продержись на точке %s"
+msgstr "Hold the point for %s"
+
+msgid "Прожектор и дозорный. В набег — турель и 2 мины в сумку, жильцам спокойнее"
+msgstr "A searchlight and a lookout. On a raid — a turret and 2 mines in your bag; residents feel safer"
+
+msgid "Прожекторы и флаги на стенах — самая большая крепость в округе"
+msgstr "Searchlights and flags on the walls — the biggest fortress around"
+
+msgid "Пройди все главы сюжета"
+msgstr "Complete every story chapter"
+
+msgid "Пройди первую главу сюжета"
+msgstr "Complete the first story chapter"
+
+msgid "РАБОЧИЕ С НАМИ. ОНИ ПРИГНАЛИ БРОНЕГРУЗОВИК СТЕРВЯТНИКОВ И ПОСТРОИЛИ ВТОРОЙ ДОМ."
+msgstr "THE WORKERS ARE WITH US. THEY BROUGHT IN THE VULTURES' ARMORED TRUCK AND BUILT A SECOND HOUSE."
+
+msgid "РАДИО"
+msgstr "RADIO"
+
+msgid "РАДИО: НОВЫЕ ЖИЛЬЦЫ"
+msgstr "RADIO: NEW RESIDENTS"
+
+msgid "РАДИОСТАНЦИЯ"
+msgstr "RADIO STATION"
+
+msgid "РАДИОЭФИР"
+msgstr "ON THE AIR"
+
+msgid "РАДИОЭФИР. НОЧЬ"
+msgstr "RADIO. NIGHT"
+
+msgid "РАЗВЕДЧИКИ ПЕРЕБРАЛИСЬ К НАМ И ПОСТРОИЛИ ПЕРВЫЙ ДОМ В ЛАГЕРЕ. ГИТАРУ ТОЖЕ ПРИВЕЗЛИ. ЛУЧШЕ БЫ НЕТ."
+msgstr "THE SCOUTS MOVED IN WITH US AND BUILT THE FIRST HOUSE IN THE CAMP. THEY BROUGHT THE GUITAR TOO. WE WISH THEY HADN'T."
+
+msgid "РАЗВЕДЧИЦА"
+msgstr "SCOUT"
+
+msgid "РАЗГОН"
+msgstr "ACCELERATION"
+
+msgid "РАЗГРОМИ БАЗУ. ГЕНКА ИДЁТ С ТОБОЙ: «Я ЗНАЮ ВСЕ ЕГО ПРИВЫЧКИ. ОН ВСЕГДА ПРЯЧЕТСЯ ЗА САМОЙ ТОЛСТОЙ БОЧКОЙ»."
+msgstr "SMASH THE BASE. GENKA IS COMING WITH YOU: \"I KNOW ALL HIS HABITS. HE ALWAYS HIDES BEHIND THE FATTEST BARREL.\""
+
+msgid "РАЗМЕР КНОПОК"
+msgstr "BUTTON SIZE"
+
+msgid "РАЗМЕР ПРИЦЕЛА"
+msgstr "CROSSHAIR SIZE"
+
+msgid "РАЗНЫЕ ВЕРСИИ ИГРЫ — ОБНОВИТЕ ИГРУ"
+msgstr "GAME VERSIONS DIFFER — UPDATE THE GAME"
+
+msgid "РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)"
+msgstr "3D RESOLUTION (LOWER — FASTER)"
+
+msgid "РАЗРУШИТЕЛЬ БРОНИ"
+msgstr "ARMOR BREAKER"
+
+msgid "РАНЬШЕ ЭТО БЫЛА САДОВАЯ: МОРОЖЕНОЕ, ВЕЛОМАСТЕРСКАЯ, БАБУШКИ НА ЛАВОЧКАХ. ТЕПЕРЬ ЕЁ ЗОВУТ УЛИЦЕЙ МОЛЧАНИЯ."
+msgstr "THIS USED TO BE SADOVAYA STREET: ICE CREAM, A BIKE SHOP, GRANNIES ON THE BENCHES. NOW THEY CALL IT SILENCE STREET."
+
+msgid "РАССВЕТ"
+msgstr "DAWN"
+
+msgid "РАССВЕТ. «НАДЕЖДА» ДЫМИТ ТРУБОЙ ВПЕРВЫЕ ЗА МЕСЯЦ. ПО ТРАПУ ИДУТ ЛЮДИ: ЭКИПАЖ, МИХАЛЫЧ С ЖЕНОЙ И ТЁЩЕЙ, КОК БОРЩОВ С КАСТРЮЛЕЙ."
+msgstr "DAWN. THE NADEZHDA SMOKES FROM HER FUNNEL FOR THE FIRST TIME IN A MONTH. PEOPLE WALK UP THE GANGWAY: THE CREW, MIKHALYCH WITH HIS WIFE AND MOTHER-IN-LAW, COOK BORSHCHOV WITH HIS POT."
+
+msgid "РАССВЕТ. ПРИЧАЛ «НАДЕЖДЫ»"
+msgstr "DAWN. THE NADEZHDA'S PIER"
+
+msgid "РАССКАЗ ВЕРЫ"
+msgstr "VERA'S STORY"
+
+msgid "РАСЧИСТИ УЛИЦУ. И ПОСМОТРИ ПО СТОРОНАМ: ЕСЛИ ТЁМА БЫЛ ЗДЕСЬ, ОН ОСТАВИЛ СЛЕД. ОН ВСЕГДА ОСТАВЛЯЕТ СЛЕДЫ. ОБЫЧНО — ФАНТИКИ."
+msgstr "CLEAR THE STREET. AND LOOK AROUND: IF TYOMA WAS HERE, HE LEFT A TRAIL. HE ALWAYS LEAVES A TRAIL. USUALLY CANDY WRAPPERS."
+
+msgid "РАСШИРИТЬ ДО «%s»"
+msgstr "EXPAND TO \"%s\""
+
+msgid "РАЦИЯ. ПЕРЕХВАТ"
+msgstr "RADIO. INTERCEPT"
+
+msgid "РЕВУН"
+msgstr "HOWLER"
+
+msgid "РЕВУН РАЗБИТ. ГЕНКА СЛОМАЛ ЕГО ГАЕЧНЫМ КЛЮЧОМ И СКАЗАЛ: «ЭТО ЗА ПАРКОВКУ». НИКТО НЕ ПОНЯЛ, НО ВСЕ ЗААПЛОДИРОВАЛИ."
+msgstr "THE HOWLER IS SMASHED. GENKA BROKE IT WITH A WRENCH AND SAID: \"THAT'S FOR THE PARKING LOT.\" NOBODY UNDERSTOOD, BUT EVERYONE CLAPPED."
+
+msgid "РЕЖИМ"
+msgstr "MODE"
+
+msgid "РЕЖИМ: %s  •  КАРТА: %s"
+msgstr "MODE: %s  •  MAP: %s"
+
+msgid "РЕЙНДЖЕР"
+msgstr "RANGER"
+
+msgid "РЕКЛАМА"
+msgstr "ADS"
+
+msgid "РЕКОРД"
+msgstr "RECORD"
+
+msgid "РЕМОНТ %d%%%s"
+msgstr "REPAIR %d%%%s"
+
+msgid "РЕЦЕПТ ВАКЦИНЫ"
+msgstr "VACCINE RECIPE"
+
+msgid "РЖАВЫЙ ПИКАП"
+msgstr "RUSTY PICKUP"
+
+msgid "РОЗОВЫЙ"
+msgstr "PINK"
+
+msgid "РУКОЯТЬ"
+msgstr "FOREGRIP"
+
+msgid "РУССКИЙ"
+msgstr "RUSSIAN"
+
+msgid "Радист прячется в склепе. Собери 5 деталей рации среди могил"
+msgstr "Radio operator hides in a crypt. Collect 5 radio parts among the graves"
+
+msgid "Разведчики держат лагерь в лесу. Продержись 2 минуты, пока они собирают вещи"
+msgstr "Scouts are holding a camp in the forest. Hold out for 2 minutes while they pack up"
+
+msgid "Разноцветные лампочки над костром — вечером как праздник"
+msgstr "Colored bulbs over the campfire — a party every evening"
+
+msgid "Расширь убежище до уровня КРЕПОСТЬ"
+msgstr "Expand the shelter to the FORTRESS level"
+
+msgid "Расширь убежище до уровня ФОРТ"
+msgstr "Expand the shelter to the FORT level"
+
+msgid "Ролики о разработке, трейлеры и секреты игры"
+msgstr "Devlogs, trailers and game secrets"
+
+msgid "С ГОР СПУСКАЮТСЯ МЕРТВЕЦЫ — МЕДЛЕННЫЕ ОТ ХОЛОДА, НО УПРЯМЫЕ. И СОБАКИ. СОБАКИ НЕ МЕДЛЕННЫЕ. ПРОДЕРЖИСЬ."
+msgstr "THE DEAD ARE COMING DOWN FROM THE MOUNTAINS: SLOW FROM THE COLD, BUT STUBBORN. AND DOGS. THE DOGS ARE NOT SLOW. HOLD OUT."
+
+msgid "САЛЮТ УВИДЕЛИ ВСЕ МЕРТВЕЦЫ НА ДЕСЯТЬ КИЛОМЕТРОВ ВОКРУГ. ОТБЕЙ ЧЕТЫРЕ ВОЛНЫ — ПРАЗДНИК ДОЛЖЕН ПРОДОЛЖАТЬСЯ."
+msgstr "EVERY CORPSE WITHIN TEN KILOMETERS SAW THE FIREWORKS. REPEL FOUR WAVES: THE PARTY MUST GO ON."
+
+msgid "СБИТО КАСОК"
+msgstr "HELMETS KNOCKED OFF"
+
+msgid "СБИТО МАШИНОЙ"
+msgstr "RUN OVER"
+
+msgid "СБОР ПРИПАСОВ"
+msgstr "SUPPLY RUN"
+
+msgid "СБОРКА ИЗ ЛОМА"
+msgstr "CRAFTING FROM SCRAP"
+
+msgid "СБОРЩИК"
+msgstr "COLLECTOR"
+
+msgid "СБРОС"
+msgstr "RESET"
+
+msgid "СБРОСИТЬ ВСЕ НАСТРОЙКИ"
+msgstr "RESET ALL SETTINGS"
+
+msgid "СВОЁ"
+msgstr "CUSTOM"
+
+msgid "СГЛАЖИВАНИЕ"
+msgstr "SMOOTHING"
+
+msgid "СГЛАЖИВАНИЕ КРАЁВ"
+msgstr "ANTI-ALIASING"
+
+msgid "СДАТЬСЯ"
+msgstr "GIVE UP"
+
+msgid "СЕВЕР-9"
+msgstr "NORTH-9"
+
+msgid "СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО"
+msgstr "NORTH-9. A YEAR BEFORE ALL THIS"
+
+msgid "СЕВЕР-9. ГОД ДО ВСЕГО ЭТОГО. ГОРОД, ГДЕ СВЕТОФОРЫ РАБОТАЛИ, АВТОБУСЫ ХОДИЛИ ПО РАСПИСАНИЮ, А САМОЙ СТРАШНОЙ БЕДОЙ БЫЛА ПРОБКА НА ПРОСПЕКТЕ."
+msgstr "NORTH-9. A YEAR BEFORE ALL THIS. A CITY WHERE THE TRAFFIC LIGHTS WORKED, THE BUSES RAN ON TIME, AND THE WORST DISASTER WAS A TRAFFIC JAM ON THE AVENUE."
+
+msgid "СЕВЕР-9. ДЕНЬ НОЛЬ, 18:40"
+msgstr "NORTH-9. DAY ZERO, 18:40"
+
+msgid "СЕВЕР-9. СЕЙЧАС"
+msgstr "NORTH-9. NOW"
+
+msgid "СЕГОДНЯ К МОСТУ ПРИДЁТ КОРАБЛЬ С ЮГА. ВАКЦИНУ НАДО ПЕРЕДАТЬ ИЗ РУК В РУКИ. А КАБАН ХОЧЕТ ЗАБРАТЬ ЕЁ СИЛОЙ — С БАНДОЙ И ОРДОЙ, КОТОРУЮ ОН ПРИВЁЛ НА ШУМ."
+msgstr "TODAY A SHIP FROM THE SOUTH COMES TO THE BRIDGE. THE VACCINE MUST BE HANDED OVER IN PERSON. AND KABAN WANTS TO TAKE IT BY FORCE — WITH HIS GANG AND THE HORDE HIS NOISE DRAGGED IN."
+
+msgid "СЕГОДНЯ УЖЕ ОБЕДАЛИ"
+msgstr "LUNCH IS ALREADY SERVED TODAY"
+
+msgid "СЕЙЧАС"
+msgstr "NOW"
+
+msgid "СЕМЬЯ СПАСЕНА. А НА СТЕНЕ МАГАЗИНА — НАДПИСЬ МАРКЕРОМ: «Я ЖИВ. ИДУ К ЛЕСУ. Т.»"
+msgstr "THE FAMILY IS SAVED. AND ON THE STORE WALL, IN MARKER: \"I'M ALIVE. HEADING TO THE FOREST. T.\""
+
+msgid "СЕРЕБРО"
+msgstr "SILVER"
+
+msgid "СЕРПАНТИН, СНЕГ И РОЗОВЫЙ АВТОБУС С ПАЛЬМАМИ. ЭДИК ПОЁТ, ЧТОБЫ НЕ БЫЛО СТРАШНО. СТРАШНО ВСЁ РАВНО."
+msgstr "SWITCHBACKS, SNOW AND A PINK BUS WITH PALM TREES. EDIK SINGS SO NOBODY IS SCARED. EVERYONE IS SCARED ANYWAY."
+
+msgid "СЕСТЬ"
+msgstr "SIT"
+
+msgid "СИНИЕ"
+msgstr "BLUE"
+
+msgid "СИНИЕ %d : %d КРАСНЫЕ"
+msgstr "BLUE %d : %d RED"
+
+msgid "СИНИЙ"
+msgstr "BLUE"
+
+msgid "СИНИХ"
+msgstr "BLUE"
+
+msgid "СКЕЛЕТ"
+msgstr "SKELETON"
+
+msgid "СКЛАД ПАТРОНОВ"
+msgstr "AMMO DEPOT"
+
+msgid "СКЛАД ПУСТ: ПЛЕННЫХ УВЕЗЛИ ЗА ЧАС ДО НАС. НА ПОЛУ — ФАНТИК ОТ ШОКОЛАДКИ. ТЁМА ВСЕГДА БРОСАЕТ ИХ ГДЕ ПОПАЛО."
+msgstr "THE WAREHOUSE IS EMPTY: THE PRISONERS WERE MOVED AN HOUR BEFORE WE GOT HERE. ON THE FLOOR — A CHOCOLATE BAR WRAPPER. TYOMA ALWAYS DROPS THEM EVERYWHERE."
+
+msgid "СКОПИРОВАТЬ КОД СОХРАНЕНИЯ"
+msgstr "COPY SAVE CODE"
+
+msgid "СКОРОСТЬ"
+msgstr "SPEED"
+
+msgid "СЛЕДУЮЩАЯ ВОЛНА ЧЕРЕЗ %d"
+msgstr "NEXT WAVE IN %d"
+
+msgid "СЛЕДУЮЩЕЕ УТРО"
+msgstr "THE NEXT MORNING"
+
+msgid "СЛЕЖКА"
+msgstr "FOLLOW"
+
+msgid "СМЕНИ ОРУЖИЕ: КЛАВИША Q"
+msgstr "SWITCH WEAPON: Q KEY"
+
+msgid "СМЕНИ ОРУЖИЕ: НОЖ ↔ ПИСТОЛЕТ"
+msgstr "SWITCH WEAPON: KNIFE ↔ PISTOL"
+
+msgid "СНАЙПЕР"
+msgstr "SNIPER"
+
+msgid "СНАРЯЖЕНИЕ"
+msgstr "GEAR"
+
+msgid "СНАЧАЛА КУПИ ЭТУ МАШИНУ НА ВКЛАДКЕ «МАШИНЫ»"
+msgstr "BUY THIS CAR FIRST ON THE \"CARS\" TAB"
+
+msgid "СНЯТЬ"
+msgstr "REMOVE"
+
+msgid "СОБАКА"
+msgstr "DOG"
+
+msgid "СОБЕЙ 60 КАСОК"
+msgstr "KNOCK OFF 60 HELMETS"
+
+msgid "СОБЕРИ 5 ЯЩИКОВ С ПРИПАСАМИ"
+msgstr "COLLECT 5 SUPPLY CRATES"
+
+msgid "СОБЕРИ ШЕСТЬ БЛОКОВ ОХЛАЖДЕНИЯ. НА КОМБИНАТЕ ХОЛОДНО, ТЕМНО И КТО-ТО ПОЁТ. НАДЕЕМСЯ, ЧТО НЕ ЗОМБИ."
+msgstr "COLLECT SIX COOLING UNITS. THE PLANT IS COLD, DARK, AND SOMEONE IS SINGING. LET'S HOPE IT'S NOT A ZOMBIE."
+
+msgid "СОБЕРИ ШЕСТЬ КАНИСТР. КОК БОРЩОВ ОБЕЩАЛ ЗА КАЖДУЮ ТАРЕЛКУ БОРЩА. ТЁМА ТОРГУЕТСЯ НА ДВЕ."
+msgstr "COLLECT SIX CANS. COOK BORSHCHOV PROMISED A BOWL OF BORSCHT FOR EACH ONE. TYOMA IS HOLDING OUT FOR TWO."
+
+msgid "СОБЕРИ ЯЩИКИ С РЕАКТИВАМИ. ПЛЕВУНЫ ЛЮБЯТ ХИМИЮ — НЕ ДАЙ ИМ ДОБРАТЬСЯ ДО НЕЁ ПЕРВЫМИ."
+msgstr "COLLECT THE REAGENT CRATES. SPITTERS LOVE CHEMICALS — DON'T LET THEM GET THERE FIRST."
+
+msgid "СОБРАНО В МАСТЕРСКОЙ"
+msgstr "CRAFTED IN THE WORKSHOP"
+
+msgid "СОБРАТЬ — %d ЛОМА"
+msgstr "CRAFT — %d SCRAP"
+
+msgid "СОБЫТИЕ ДНЯ: %s"
+msgstr "EVENT OF THE DAY: %s"
+
+msgid "СОБЫТИЕ ДНЯ: %s — %s"
+msgstr "EVENT OF THE DAY: %s — %s"
+
+msgid "СОБЫТИЕ НЕДЕЛИ: %s"
+msgstr "WEEKLY EVENT: %s"
+
+msgid "СОЗДАТЬ ИГРУ"
+msgstr "CREATE GAME"
+
+msgid "СОХРАНЕНИЕ"
+msgstr "SAVE"
+
+msgid "СОХРАНИТЬ"
+msgstr "SAVE"
+
+msgid "СОЦСЕТИ"
+msgstr "SOCIAL"
+
+msgid "СПАСЁН!"
+msgstr "RESCUED!"
+
+msgid "СПАСЁННЫЕ"
+msgstr "RESCUED"
+
+msgid "СПАСАТЕЛЬ"
+msgstr "RESCUER"
+
+msgid "СПАСЕНО ВЫЖИВШИХ"
+msgstr "SURVIVORS RESCUED"
+
+msgid "СПАСЕНО ЛЮДЕЙ: %d"
+msgstr "PEOPLE SAVED: %d"
+
+msgid "СПАСЕНО ЛЮДЕЙ: %d   •   ДОМОВ: %d   •   МАШИН: %d"
+msgstr "PEOPLE SAVED: %d   •   HOUSES: %d   •   CARS: %d"
+
+msgid "СПАСЕНО: %d"
+msgstr "SAVED: %d"
+
+msgid "СПАСИ 2 ВЫЖИВШИХ В ГОРОДЕ"
+msgstr "RESCUE 2 SURVIVORS IN THE CITY"
+
+msgid "СПАСИБО! ВКУСНО!"
+msgstr "THANKS! DELICIOUS!"
+
+msgid "СПОКОЙНЫ"
+msgstr "CALM"
+
+msgid "СПОРТКАР"
+msgstr "SPORTS CAR"
+
+msgid "СПОРТКАР КАБАНА"
+msgstr "KABAN'S SPORTS CAR"
+
+msgid "СПОРТУГОЛОК"
+msgstr "WORKOUT CORNER"
+
+msgid "СПРИНТ"
+msgstr "SPRINT"
+
+msgid "СРЕДНЕЕ"
+msgstr "MEDIUM"
+
+msgid "СТАДО БЕЗ ПАСТУХА РАЗБРЕЛОСЬ ПО СКЛОНАМ. БЕЗ НЕГО ОНИ ПРОСТО МЕРТВЕЦЫ. ОПАСНЫЕ, НО ГЛУПЫЕ."
+msgstr "WITHOUT ITS SHEPHERD THE HERD SCATTERED ACROSS THE SLOPES. WITHOUT HIM THEY ARE JUST THE DEAD. DANGEROUS, BUT DUMB."
+
+msgid "СТАНЦИЯ СКОРОЙ"
+msgstr "AMBULANCE STATION"
+
+msgid "СТАРОЕ КЛАДБИЩЕ"
+msgstr "THE OLD GRAVEYARD"
+
+msgid "СТАРТ"
+msgstr "START"
+
+msgid "СТАРЫЙ МОСТ"
+msgstr "THE OLD BRIDGE"
+
+msgid "СТАРЫЙ МОСТ. В ДЕНЬ НОЛЬ ЗДЕСЬ МАМА ОТПУСТИЛА НАШИ РУКИ И СКАЗАЛА: «БЕГИТЕ, Я ДОГОНЮ»."
+msgstr "THE OLD BRIDGE. ON DAY ZERO, THIS IS WHERE MOM LET GO OF OUR HANDS AND SAID: \"RUN, I'LL CATCH UP.\""
+
+msgid "СТАРЫЙ МОСТ. ДЕНЬ НОЛЬ"
+msgstr "THE OLD BRIDGE. DAY ZERO"
+
+msgid "СТАРЫЙ МОСТ. РАССВЕТ"
+msgstr "THE OLD BRIDGE. DAWN"
+
+msgid "СТАРЫЙ МОСТ. СЕГОДНЯ"
+msgstr "THE OLD BRIDGE. TODAY"
+
+msgid "СТАТИСТИКА"
+msgstr "STATISTICS"
+
+msgid "СТАТУС: %s"
+msgstr "STATUS: %s"
+
+msgid "СТЕРВЯТНИКИ"
+msgstr "VULTURES"
+
+msgid "СТИЛЬ КНОПОК"
+msgstr "BUTTON STYLE"
+
+msgid "СТО ДВАДЦАТЬ ДНЕЙ. МАМА БЫЛА ПРАВА: МЫ ИСКАЛИ ДРУГ ДРУГА — И НАШЛИСЬ."
+msgstr "ONE HUNDRED AND TWENTY DAYS. MOM WAS RIGHT: WE KEPT LOOKING FOR EACH OTHER — AND WE FOUND EACH OTHER."
+
+msgid "СТОЛОВАЯ"
+msgstr "CANTEEN"
+
+msgid "СТОРОЖЕВАЯ ВЫШКА"
+msgstr "WATCHTOWER"
+
+msgid "СТОЯНКА"
+msgstr "CONTAINER YARD"
+
+msgid "СТОЯНКА В ДВУХ КИЛОМЕТРАХ. ЗОМБИ УЖЕ ТАМ — ОНИ ВСЕГДА ПРИХОДЯТ РАНЬШЕ. БЕРИ НОЖ И ПИСТОЛЕТ."
+msgstr "THE YARD IS TWO KILOMETERS AWAY. THE ZOMBIES ARE ALREADY THERE — THEY ALWAYS GET THERE FIRST. TAKE THE KNIFE AND THE PISTOL."
+
+msgid "СТОЯНКА КОНТЕЙНЕРОВ"
+msgstr "CONTAINER YARD"
+
+msgid "СТРАЖ ВОРОТ"
+msgstr "GATEKEEPER"
+
+msgid "СТРАНИЦЫ ДНЕВНИКА РАЗЛЕТЕЛИСЬ ПО КЛАДБИЩУ. СОБЕРИ ПЯТЬ. ТЁМА ИДЁТ С ТОБОЙ И ВПЕРВЫЕ НИЧЕГО НЕ ГОВОРИТ."
+msgstr "THE DIARY PAGES ARE SCATTERED ACROSS THE CEMETERY. COLLECT FIVE. TYOMA IS COMING WITH YOU AND FOR ONCE SAYS NOTHING."
+
+msgid "СТРЕЛОК БАНДЫ"
+msgstr "GANG SHOOTER"
+
+msgid "СТРЕЛЯЙ: ЗАЖМИ КНОПКУ ОГНЯ"
+msgstr "SHOOT: HOLD THE FIRE BUTTON"
+
+msgid "СТРЕЛЯЙ: КЛАВИША F"
+msgstr "SHOOT: F KEY"
+
+msgid "СУМКА"
+msgstr "BAG"
+
+msgid "СЧАСТЛИВЫ"
+msgstr "HAPPY"
+
+msgid "СЭМ"
+msgstr "SAM"
+
+msgid "СЮЖЕТ"
+msgstr "STORY"
+
+msgid "Самая большая орда идёт на наш лагерь. Вернись и защити дом: убей 70 зомби"
+msgstr "The biggest horde of all is marching on our camp. Come back and defend home: kill 70 zombies"
+
+msgid "Самый быстрый разгон и юркий руль, протиснется где угодно. Но ты на виду: зомби бьют тебя, а не кузов. Можно стрелять на ходу."
+msgstr "Fastest acceleration and nimble steering, squeezes through anywhere. But you're exposed: zombies hit you, not the bodywork. You can shoot while riding."
+
+msgid "Сбей машиной 100 зомби"
+msgstr "Run over 100 zombies"
+
+msgid "Сборка гранат, коктейлей, аптечек и патронов из лома"
+msgstr "Craft grenades, cocktails, medkits and ammo from scrap"
+
+msgid "Свежие задания и награда уже в убежище. Зомби сами себя не победят."
+msgstr "Fresh quests and a reward are waiting at the shelter. The zombies won't defeat themselves."
+
+msgid "Семья заперлась в магазине. Расчисти улицу — убей 30 зомби"
+msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
+
+msgid "Серия дней не ждёт: забери монеты и накорми лагерь."
+msgstr "Your streak won't wait: grab the coins and feed the camp."
+
+msgid "Скриншоты, новые зомби и закулисье студии"
+msgstr "Screenshots, new zombies and behind the scenes"
+
+msgid "Сначала построй: %s"
+msgstr "Build this first: %s"
+
+msgid "Собей 30 касок"
+msgstr "Knock off 30 helmets"
+
+msgid "Собери %s с припасами"
+msgstr "Collect %s of supplies"
+
+msgid "Собери 20 предметов в мастерской"
+msgstr "Craft 20 items in the workshop"
+
+msgid "Собери 50 предметов миссий"
+msgstr "Collect 50 mission items"
+
+msgid "Солнечные панели и бак: касса лагеря +25%, гирлянды во дворе"
+msgstr "Solar panels and a tank: camp cash box +25%, string lights over the yard"
+
+msgid "Спаси 10 выживших в городе"
+msgstr "Rescue 10 survivors in the city"
+
+msgid "Ставится кнопкой ЛОВУШКА: взводится за 1.5 секунды, взрывается под зомби"
+msgstr "Placed with the TRAP button: arms in 1.5 seconds, blows up under zombies"
+
+msgid "Ставится кнопкой ЛОВУШКА: держит зомби 4 секунды и ранит, срабатывает 3 раза"
+msgstr "Placed with the TRAP button: holds a zombie for 4 seconds and wounds it, works 3 times"
+
+msgid "Ставится кнопкой ЛОВУШКА: сама стреляет по зомби в 16 м, 120 патронов"
+msgstr "Placed with the TRAP button: shoots zombies within 16 m on its own, 120 rounds"
+
+msgid "Старый, но заводится с пол-оборота. Мягкий зад — легко пустить в занос."
+msgstr "Old, but starts on the first try. Loose rear end — easy to drift."
+
+msgid "Стены раздвигаются: место под огород и вышку, больше жильцов"
+msgstr "The walls move out: room for a garden and a watchtower, more residents"
+
+msgid "Стойка, табуреты и газировка. Наливают только компот"
+msgstr "A counter, stools and soda. Only fruit punch on tap"
+
+msgid "Стол с зелёным сукном. Шары — настоящие, кии — швабры"
+msgstr "A green felt table. Real balls, mops for cues"
+
+msgid "Стоянка контейнеров у трассы. Отбей зомби от раненых и забери их в убежище"
+msgstr "A container yard by the highway. Fight the zombies off the wounded and bring them to the shelter"
+
+msgid "Сумка пуста. Ненужные сейчас аптечки и патроны с земли попадают сюда, "
+msgstr "The bag is empty. Medkits and ammo you pick up but don't need go here, "
+
+msgid "ТЁМА"
+msgstr "TYOMA"
+
+msgid "ТЁМА ДОЛГО СИДЕЛ У МАМИНОЙ МОГИЛЫ. ПОТОМ ДОСТАЛ ИЗ КАРМАНА ШОКОЛАДКУ И ОТДАЛ МНЕ. «НА НОЧЬ НЕЛЬЗЯ», — СКАЗАЛ ОН."
+msgstr "TYOMA SAT BY MOM'S GRAVE FOR A LONG TIME. THEN HE TOOK A CHOCOLATE BAR FROM HIS POCKET AND GAVE IT TO ME. \"NOT AT NIGHT,\" HE SAID."
+
+msgid "ТЁМА ИДЁТ С ТОБОЙ. СПОРИТЬ БЕСПОЛЕЗНО: «МАМА СКАЗАЛА СЛУШАТЬСЯ БРАТА, А БРАТ ИДЁТ ТУДА»."
+msgstr "TYOMA IS COMING WITH YOU. NO POINT ARGUING: \"MOM SAID TO LISTEN TO MY BROTHER, AND MY BROTHER IS GOING THERE.\""
+
+msgid "ТЁМА ПОДСЛУШАЛ У БАРОНА ГЛАВНОЕ: ЕГО ПЛЕННЫЕ УЧЁНЫЕ ЗНАЮТ, ГДЕ ГНЕЗДО. В ЦЕХАХ «ГЕНОМА»."
+msgstr "TYOMA OVERHEARD THE KEY THING AT THE BARON'S: HIS CAPTIVE SCIENTISTS KNOW WHERE THE NEST IS. IN THE \"GENOME\" PLANT."
+
+msgid "ТЁМА ЧИНИТ ВСЁ, ЧТО ВИДИТ, И СПОРИТ С ДЕНИСОМ, КАКАЯ МАШИНА ЛУЧШЕ ДРИФТУЕТ. МАМА БЫ СМЕЯЛАСЬ."
+msgstr "TYOMA FIXES EVERYTHING HE SEES AND ARGUES WITH DENIS ABOUT WHICH CAR DRIFTS BETTER. MOM WOULD HAVE LAUGHED."
+
+msgid "ТЁПЛЫЙ СВЕТ В ТЕМНОТЕ. НОЧЬЮ В ГОРОДЕ ЗАГОРАЕТСЯ САМ, НА РАССВЕТЕ ГАСНЕТ. ВРУЧНУЮ — КНОПКА ФАКЕЛ ИЛИ T"
+msgstr "WARM LIGHT IN THE DARK. LIGHTS UP BY ITSELF AT NIGHT IN THE CITY, GOES OUT AT DAWN. MANUALLY — TORCH BUTTON OR T"
+
+msgid "ТЁЩА"
+msgstr "MOTHER-IN-LAW"
+
+msgid "ТАНК"
+msgstr "TANK"
+
+msgid "ТАРАН"
+msgstr "RAM"
+
+msgid "ТАРАН (урон сбивания +25%)"
+msgstr "RAM (ram damage +25%)"
+
+msgid "ТВОЯ ПЕРВАЯ МАШИНА. В АВТОСАЛОНЕ ОНА УЖЕ ТВОЯ, А В ГОРОДЕ ЖДЁТ У СТАРТА."
+msgstr "YOUR FIRST CAR. IN THE CAR DEALERSHIP IT'S ALREADY YOURS, AND IN THE CITY IT'S WAITING AT THE START."
+
+msgid "ТЕКУЩИЙ ПРОГРЕСС БУДЕТ ЗАМЕНЁН. НАЖМИ «ЗАГРУЗИТЬ» ЕЩЁ РАЗ"
+msgstr "YOUR CURRENT PROGRESS WILL BE REPLACED. PRESS «LOAD» AGAIN"
+
+msgid "ТЕНИ"
+msgstr "SHADOWS"
+
+msgid "ТЕРРИТОРИЯ БАРОНА"
+msgstr "BARON'S TERRITORY"
+
+msgid "ТЕСНО! НАСТРОЕНИЕ НИЖЕ — РАСШИРЬ УБЕЖИЩЕ"
+msgstr "CROWDED! LOWER MOOD — EXPAND THE SHELTER"
+
+msgid "ТИХИЙ ДЕНЬ"
+msgstr "QUIET DAY"
+
+msgid "ТИХИЙ УБИЙЦА"
+msgstr "SILENT KILLER"
+
+msgid "ТИШИНА!"
+msgstr "SILENCE!"
+
+msgid "ТОЛСТЯК-ЗОМБИ"
+msgstr "FAT ZOMBIE"
+
+msgid "ТОЛЧОК КАМЕРЫ ПРИ УРОНЕ"
+msgstr "CAMERA KICK ON DAMAGE"
+
+msgid "ТОЛЬКО В ПРИЦЕЛЕ"
+msgstr "AIMING ONLY"
+
+msgid "ТОПОР"
+msgstr "AXE"
+
+msgid "ТОЧКА"
+msgstr "POINT"
+
+msgid "ТРАССА НА ЮГ. ВЕЧЕР"
+msgstr "ROAD SOUTH. EVENING"
+
+msgid "ТРИ МЕСЯЦА СПУСТЯ"
+msgstr "THREE MONTHS LATER"
+
+msgid "ТРИ МЕСЯЦА СПУСТЯ. МАМУ Я ПОХОРОНИЛ У СТАРОЙ ЧАСОВНИ. ТЁМУ НЕ НАШЁЛ. А РАЗ НЕ НАШЁЛ — ЗНАЧИТ, ОН ЖИВ."
+msgstr "THREE MONTHS LATER. I BURIED MOM BY THE OLD CHAPEL. I NEVER FOUND TYOMA. AND IF I NEVER FOUND HIM — HE'S ALIVE."
+
+msgid "ТРОЕ ПЛЕННЫХ КАБАНА ТЕПЕРЬ С НАМИ. ГЕНКА ДО УТРА МЫЛ ПОСУДУ — СКАЗАЛ, ЧТО ТАК ЛУЧШЕ ДУМАЕТСЯ. ЗАВТРА — МОСТ."
+msgstr "KABAN'S THREE PRISONERS ARE WITH US NOW. GENKA WASHED DISHES TILL MORNING — SAID IT HELPS HIM THINK. TOMORROW — THE BRIDGE."
+
+msgid "ТРОЕ ПЛЕННЫХ КАБАНА ТЕПЕРЬ С НАМИ. ГЕНКА ДО УТРА МЫЛ ПОСУДУ — СКАЗАЛ, ЧТО ТАК ЛУЧШЕ ДУМАЕТСЯ. ПЛЕННЫЕ ЗНАЮТ, ГДЕ БАЗА КАБАНА."
+msgstr "KABAN'S THREE PRISONERS ARE WITH US NOW. GENKA WASHED DISHES UNTIL MORNING, SAYING IT HELPS HIM THINK. THE PRISONERS KNOW WHERE KABAN'S BASE IS."
+
+msgid "ТРЯСКА КАМЕРЫ (ВЗРЫВЫ, БОСС)"
+msgstr "CAMERA SHAKE (EXPLOSIONS, BOSS)"
+
+msgid "ТУРБАЗА"
+msgstr "HIKERS' LODGE"
+
+msgid "ТУРЕЛЬ"
+msgstr "TURRET"
+
+msgid "ТЮНИНГ"
+msgstr "TUNING"
+
+msgid "ТЮНИНГ СТВОЛА"
+msgstr "GUN TUNER"
+
+msgid "ТЮНИНГ: %s"
+msgstr "TUNING: %s"
+
+msgid "ТЯЖЁЛЫЙ ВЕС"
+msgstr "HEAVYWEIGHT"
+
+msgid "Точность: %d%%  •  Здоровье: %d%%"
+msgstr "Accuracy: %d%%  •  Health: %d%%"
+
+msgid "Турник и брусья: кто подтягивается, тот убегает"
+msgstr "A pull-up bar and parallel bars: those who train, outrun"
+
+msgid "Тёма спрашивает, где ты пропадаешь. Мертвецы сами себя не упокоят!"
+msgstr "Tyoma keeps asking where you are. The dead won't put themselves to rest!"
+
+msgid "У БУГАЯ БРОНЯ СПЕРЕДИ — ЗАЙДИ СБОКУ ИЛИ ЦЕЛЬСЯ В ГОЛОВУ"
+msgstr "THE BRUTE IS ARMORED IN FRONT — FLANK IT OR AIM FOR THE HEAD"
+
+msgid "У ВЫШКИ ПРЯТАЛИСЬ ЧЕТВЕРО ЛЕСНИКОВ. МЕСЯЦ ЕЛИ ШИШКИ. ТЕПЕРЬ ЕДЯТ У ДЯДИ ГОШИ И ХВАЛЯТ ДАЖЕ ПЕРЕСОЛЕННОЕ."
+msgstr "FOUR FORESTERS WERE HIDING BY THE TOWER. THEY ATE PINE CONES FOR A MONTH. NOW THEY EAT AT UNCLE GOSHA'S AND PRAISE EVEN THE OVERSALTED STUFF."
+
+msgid "У КОСТРА"
+msgstr "BY THE FIRE"
+
+msgid "У МАМИНОЙ МОГИЛЫ КТО-ТО ПОСАДИЛ ЦВЕТЫ. ДЕТСКОЙ РУКОЙ, КРИВО, НО ОЧЕНЬ СТАРАТЕЛЬНО. ТЁМА БЫЛ ЗДЕСЬ."
+msgstr "SOMEONE PLANTED FLOWERS ON MOM'S GRAVE. A CHILD'S HAND, CROOKED, BUT VERY CAREFUL. TYOMA WAS HERE."
+
+msgid "У МЕНЯ ЕСТЬ УБЕЖИЩЕ ИЗ КОНТЕЙНЕРОВ, НОЖ, ПИСТОЛЕТ И ПРАВИЛА ВЫЖИВАНИЯ. ПРАВИЛО №1: ВСЕГДА ПРОВЕРЯЙ ЗАДНЕЕ СИДЕНЬЕ."
+msgstr "I HAVE A SHELTER MADE OF CONTAINERS, A KNIFE, A PISTOL AND RULES FOR SURVIVAL. RULE #1: ALWAYS CHECK THE BACK SEAT."
+
+msgid "У МЕНЯ ЖИВОТ УРЧИТ ГРОМЧЕ ОРДЫ."
+msgstr "MY STOMACH GROWLS LOUDER THAN THE HORDE."
+
+msgid "У ЭДИКА ЕСТЬ КУРОРТНЫЙ АВТОБУС «ЛАСТОЧКА» — РОЗОВЫЙ, С ПАЛЬМАМИ НА БОРТУ. ДЕНИС БЫ ЗАПЛАКАЛ. ТЁМА ЕГО УЖЕ ЧИНИТ."
+msgstr "EDIK HAS A RESORT BUS CALLED \"SWALLOW\": PINK, WITH PALM TREES ON THE SIDE. DENIS WOULD HAVE CRIED. TYOMA IS ALREADY FIXING IT."
+
+msgid "УБЕЖИЩЕ"
+msgstr "SHELTER"
+
+msgid "УБЕЖИЩЕ БЕЗ ТЕБЯ НЕ ТО"
+msgstr "THE SHELTER ISN'T THE SAME WITHOUT YOU"
+
+msgid "УБЕЖИЩЕ РАСШИРЕНО ДО КОНЦА — ЭТО КРЕПОСТЬ!"
+msgstr "THE SHELTER IS FULLY EXPANDED — IT'S A FORTRESS!"
+
+msgid "УБЕЖИЩЕ. ПЕРВАЯ НОЧЬ"
+msgstr "THE SHELTER. FIRST NIGHT"
+
+msgid "УБЕЙ 100 ЗОМБИ"
+msgstr "KILL 100 ZOMBIES"
+
+msgid "УБЕЙ 25 БУГАЁВ"
+msgstr "KILL 25 BRUTES"
+
+msgid "УБЕЙ 40 ЗОМБИ"
+msgstr "KILL 40 ZOMBIES"
+
+msgid "УБЕЙ 40 КРИКУНОВ"
+msgstr "KILL 40 SCREAMERS"
+
+msgid "УБЕЙ 5 ТАНКОВ"
+msgstr "KILL 5 TANKS"
+
+msgid "УБЕЙ 50 ЗОМБИ"
+msgstr "KILL 50 ZOMBIES"
+
+msgid "УБЕЙ 600 ЗОМБИ"
+msgstr "KILL 600 ZOMBIES"
+
+msgid "УБИТО %d / %d"
+msgstr "KILLS %d / %d"
+
+msgid "УБИТО %d • ОЧКИ %d • %s"
+msgstr "KILLS %d • SCORE %d • %s"
+
+msgid "УБИТО ЗОМБИ"
+msgstr "ZOMBIES KILLED"
+
+msgid "УДЕРЖИ ВЫШКУ, ПОКА ИДЁТ ПЕРЕДАЧА. ЗОМБИ ИДУТ НА ЗВУК, СОБАКИ — НА ЗАПАХ, А ЛЕВ РУГАЕТСЯ НА ПОМЕХИ."
+msgstr "HOLD THE TOWER WHILE THE TRANSMISSION RUNS. ZOMBIES FOLLOW THE SOUND, DOGS FOLLOW THE SMELL, AND LEV CURSES AT THE STATIC."
+
+msgid "УДЕРЖИ ТОЧКУ, ПОКА ОНИ ЗАЛИВАЮТ БОЧКИ. СТЕРВЯТНИКИ ТОЖЕ ХОТЯТ ТОПЛИВО. И ВЗРЫВНЫЕ ЗОМБИ ХОТЯТ… ПРОСТО ВЗОРВАТЬСЯ."
+msgstr "HOLD THE POINT WHILE THEY FILL THE BARRELS. THE VULTURES WANT FUEL TOO. AND THE EXPLODERS WANT… JUST TO EXPLODE."
+
+msgid "УДЕРЖИВАЙ ТОЧКУ %d%%%s"
+msgstr "HOLD THE POINT %d%%%s"
+
+msgid "УЗНАТЬ ФАКТ"
+msgstr "LEARN A FACT"
+
+msgid "УЛИЦА"
+msgstr "STREET"
+
+msgid "УЛИЦА МОЛЧАНИЯ"
+msgstr "STREET OF SILENCE"
+
+msgid "УЛУЧШЕНИЯ МАШИН"
+msgstr "CAR UPGRADES"
+
+msgid "УНИВЕРМАГ «ЮБИЛЕЙНЫЙ»"
+msgstr "\"JUBILEE\" DEPARTMENT STORE"
+
+msgid "УНИВЕРМАГ «ЮБИЛЕЙНЫЙ». ВЫВЕСКА ГОРИТ НАОБОРОТ: «ЙЫНЙЕЛИБЮ». БАРОН СЧИТАЕТ, ЧТО ТАК СТРАШНЕЕ."
+msgstr "THE \"JUBILEE\" DEPARTMENT STORE. THE SIGN IS LIT BACKWARDS: \"EELIBUJ\". THE BARON THINKS IT'S SCARIER THAT WAY."
+
+msgid "УПРАВЛЕНИЕ"
+msgstr "HANDLING"
+
+msgid "УР. %d • ЖИЛЬЦОВ %d"
+msgstr "LVL %d • %d RESIDENTS"
+
+msgid "УРОВЕНЬ %d: %s"
+msgstr "LEVEL %d: %s"
+
+msgid "УТОПЛЕННИК"
+msgstr "THE DROWNED ONE"
+
+msgid "УТОПЛЕННИК РУХНУЛ В ВОДУ, И ВОЛНА ОКАТИЛА ПРИЧАЛ. ТЁМА КРИКНУЛ: «ПОЗДРАВЛЯЮ, ТЫ ПОБЕДИЛ ГРУЗЧИКА!» ПАЛЫЧ ОБИДЕЛСЯ ЗА ГРУЗЧИКОВ."
+msgstr "THE DROWNED ONE CRASHED INTO THE WATER AND A WAVE WASHED OVER THE PIER. TYOMA SHOUTED: \"CONGRATS, YOU BEAT A DOCKER!\" PALYCH TOOK OFFENSE ON BEHALF OF DOCKERS."
+
+msgid "УЮТ +%d"
+msgstr "COMFORT +%d"
+
+msgid "УЮТНО"
+msgstr "COZY"
+
+msgid "Убей %s"
+msgstr "Kill %s"
+
+msgid "Убей 100 зомби"
+msgstr "Kill 100 zombies"
+
+msgid "Убей 1000 зомби"
+msgstr "Kill 1000 zombies"
+
+msgid "Убей 20 бугаёв"
+msgstr "Kill 20 brutes"
+
+msgid "Убей 20 крикунов"
+msgstr "Kill 20 screamers"
+
+msgid "Убей 25 танков"
+msgstr "Kill 25 tanks"
+
+msgid "Убей 5000 зомби"
+msgstr "Kill 5000 zombies"
+
+msgid "Убей первого зомби"
+msgstr "Kill your first zombie"
+
+msgid "Убито зомби: %d"
+msgstr "Zombies killed: %d"
+
+msgid "Удерживай перекрёсток 60 секунд. Время вне точки не идёт"
+msgstr "Hold the intersection for 60 seconds. The clock stops when you're off the point"
+
+msgid "Уничтожь 25 зомби"
+msgstr "Destroy 25 zombies"
+
+msgid "Уровни"
+msgstr "Levels"
+
+msgid "Урон"
+msgstr "Damage"
+
+msgid "Урон %s  •  %.1f удара/с  •  ближний бой"
+msgstr "Damage %s  •  %.1f hits/s  •  melee"
+
+msgid "Урон %s  •  Магазин %d  •  Перезарядка %.1f с  •  %.1f выстр/с"
+msgstr "Damage %s  •  Magazine %d  •  Reload %.1f s  •  %.1f shots/s"
+
+msgid "Уют поднимает потолок настроения жильцов. Сейчас уют %d, потолок %d"
+msgstr "Comfort raises the residents' mood cap. Comfort now %d, cap %d"
+
+msgid "ФАКЕЛ"
+msgstr "TORCH"
+
+msgid "ФАКЕЛ САМ ЗАЖИГАЕТСЯ НОЧЬЮ"
+msgstr "TORCH LIGHTS ITSELF AT NIGHT"
+
+msgid "ФИНИШ"
+msgstr "FINISH"
+
+msgid "ФИОЛЕТОВЫЙ"
+msgstr "PURPLE"
+
+msgid "ФЛАГ УБЕЖИЩА"
+msgstr "SHELTER FLAG"
+
+msgid "ФОРТ"
+msgstr "FORT"
+
+msgid "ХЕДШОТ ×%d"
+msgstr "HEADSHOT ×%d"
+
+msgid "ХЕДШОТ НАНОСИТ ДВОЙНОЙ УРОН"
+msgstr "HEADSHOTS DEAL DOUBLE DAMAGE"
+
+msgid "ХЕДШОТ!"
+msgstr "HEADSHOT!"
+
+msgid "ХЛАДОКОМБИНАТ №3"
+msgstr "COLD STORAGE PLANT NO. 3"
+
+msgid "ХОДЯЧИЙ"
+msgstr "WALKER"
+
+msgid "ХОЛОДИЛЬНИК ГОТОВ. ТЕПЕРЬ ИРИНЕ НУЖНЫ ШПРИЦЫ И АВТОКЛАВ ИЗ ГОРОДСКОЙ БОЛЬНИЦЫ. ТУДА НИКТО НЕ ХОДИТ: ГОВОРЯТ, ТАМ ДО СИХ ПОР КТО-ТО ЛЕЧИТ."
+msgstr "THE FRIDGE IS READY. NOW IRINA NEEDS SYRINGES AND AN AUTOCLAVE FROM THE CITY HOSPITAL. NOBODY GOES THERE: THEY SAY SOMEONE IS STILL TREATING PATIENTS."
+
+msgid "ХОЛОДНАЯ ЦЕПЬ"
+msgstr "THE COLD CHAIN"
+
+msgid "ХОСТ НЕ ОТВЕЧАЕТ — ПРОВЕРЬ IP И ЧТО ВЫ В ОДНОЙ СЕТИ"
+msgstr "HOST NOT RESPONDING — CHECK THE IP AND THAT YOU'RE ON THE SAME NETWORK"
+
+msgid "ХОСТ ОТКЛЮЧИЛСЯ"
+msgstr "HOST DISCONNECTED"
+
+msgid "ХРОНИКИ\nМЁРТВОЙ ЗОНЫ"
+msgstr "DEAD ZONE\nCHRONICLES"
+
+msgid "ХРОНИКИ МЁРТВОЙ ЗОНЫ"
+msgstr "DEAD ZONE CHRONICLES"
+
+msgid "ЦВЕТ ПРИЦЕЛА"
+msgstr "CROSSHAIR COLOR"
+
+msgid "ЦЕЛЬ"
+msgstr "GOAL"
+
+msgid "ЦЕЛЬ: %s"
+msgstr "GOAL: %s"
+
+msgid "ЦЕНТР ГОРОДА. ГОД НАЗАД"
+msgstr "CITY CENTER. A YEAR AGO"
+
+msgid "ЦЕНТР ГОРОДА. ЗДЕСЬ БЫЛИ ФОНТАН, КИНО И САМЫЙ ВКУСНЫЙ ШАУРМИСТ ОБЛАСТИ. ФОНТАН НА МЕСТЕ."
+msgstr "THE CITY CENTER. THERE USED TO BE A FOUNTAIN, A CINEMA AND THE BEST SHAWARMA GUY IN THE REGION. THE FOUNTAIN IS STILL THERE."
+
+msgid "ЦЕХА «ГЕНОМ»"
+msgstr "\"GENOME\" PLANT"
+
+msgid "ЦЕХА «ГЕНОМ». ПОЖАР"
+msgstr "\"GENOME\" PLANT. THE FIRE"
+
+msgid "ЦЕХА «ГЕНОМА». ЗДЕСЬ ДЕРЖАЛИ «ГНИЛЬ-7» — ЛЕКАРСТВО, КОТОРОЕ ОТМЕНИЛО СМЕРТЬ. ЗДЕСЬ РОДИЛОСЬ ГНЕЗДО."
+msgstr "THE \"GENOME\" PLANT. THIS IS WHERE THEY KEPT \"ROT-7\" — THE MEDICINE THAT CANCELED DEATH. THIS IS WHERE THE NEST WAS BORN."
+
+msgid "Цветы в ящиках вокруг флага. Вера поливает их кофе — растут"
+msgstr "Flowers in planters around the flag. Vera waters them with coffee — they grow"
+
+msgid "ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)"
+msgstr "POLLING RATE (GYRO FPS)"
+
+msgid "ЧАСТЬ %d"
+msgstr "PART %d"
+
+msgid "ЧАСТЬ ВТОРАЯ\nВАКЦИНА"
+msgstr "PART TWO\nTHE VACCINE"
+
+msgid "ЧАСТЬ ТРЕТЬЯ"
+msgstr "PART THREE"
+
+msgid "ЧЕЛОВЕК"
+msgstr "PEOPLE"
+
+msgid "ЧЕЛОВЕКА"
+msgstr "PEOPLE"
+
+msgid "ЧЕМОДАН ЦЕЛ. КАБАН СБЕЖАЛ И БРОСИЛ СВОЙ СПОРТКАР. ДЕНИС ГОВОРИТ, ЧТО У МАШИНЫ ХАРАКТЕР. ТЁМА ГОВОРИТ, ЧТО ОНА РОЗОВАЯ."
+msgstr "THE CASE IS INTACT. KABAN RAN AND LEFT HIS SPORTS CAR BEHIND. DENIS SAYS THE CAR HAS CHARACTER. TYOMA SAYS IT'S PINK."
+
+msgid "ЧЕРЕЗ ДВЕ НЕДЕЛИ ПОСЛЕ МОСТА ЛЕВ ПОЙМАЛ ЮЖНЫЙ ПОРТ. ГОЛОС КАПИТАНА ЯКОРЕВА БЫЛ ХРИПЛЫМ: «ПОРТ ПАЛ. КОРАБЛЬ У ПРИЧАЛА. ВАКЦИНА НА БОРТУ. НАС ДЕСЯТЕРО. ПРИЁМ»."
+msgstr "TWO WEEKS AFTER THE BRIDGE, LEV PICKED UP THE SOUTHERN PORT. CAPTAIN YAKOREV'S VOICE WAS HOARSE: \"THE PORT HAS FALLEN. THE SHIP IS AT THE PIER. THE VACCINE IS ABOARD. TEN OF US LEFT. OVER.\""
+
+msgid "ЧЕРЕЗ НЕДЕЛЮ — МОСТ"
+msgstr "IN A WEEK — THE BRIDGE"
+
+msgid "ЧЕТЫРЕ ВОЛНЫ, ПОТОМ САМ БАРОН — ЗДОРОВЕННЫЙ, С АВТОМАТОМ, В ПЛАЩЕ ИЗ ШТОРЫ. ПРАВИЛО №12: НЕ ДЕРИСЬ ЧЕСТНО С ТЕМ, КТО НЕЧЕСТЕН."
+msgstr "FOUR WAVES, THEN THE BARON HIMSELF — HUGE, WITH AN ASSAULT RIFLE, IN A CAPE MADE FROM A CURTAIN. RULE #12: DON'T FIGHT FAIR WITH SOMEONE WHO DOESN'T."
+
+msgid "ЧИНИТЬ"
+msgstr "REPAIR"
+
+msgid "ЧИСТИЛЬЩИК"
+msgstr "CLEANER"
+
+msgid "ЧТОБЫ ДОКРИЧАТЬСЯ ДО ПОРТА, НУЖНА ВЫШКА СВЯЗИ В ЛЕСУ. ЛЕВ ПЕРЕДАСТ РЕЦЕПТ ВАКЦИНЫ — ЭТО ЗАЙМЁТ ВРЕМЯ. И НАДЕЛАЕТ ШУМА."
+msgstr "TO REACH THE PORT, WE NEED THE RADIO TOWER IN THE FOREST. LEV WILL TRANSMIT THE VACCINE RECIPE — IT'LL TAKE TIME. AND MAKE A LOT OF NOISE."
+
+msgid "ЧУВСТВИТЕЛЬНОСТЬ ОБЗОРА"
+msgstr "LOOK SENSITIVITY"
+
+msgid "ЧУВСТВИТЕЛЬНОСТЬ ПО ВЕРТИКАЛИ"
+msgstr "VERTICAL SENSITIVITY"
+
+msgid "ЧУВСТВИТЕЛЬНОСТЬ ПО ГОРИЗОНТАЛИ"
+msgstr "HORIZONTAL SENSITIVITY"
+
+msgid "ШЕЗЛОНГИ"
+msgstr "LOUNGERS"
+
+msgid "ШЕСТЕРО ИЗ ДЕРЕВНИ ЗАХОТЕЛИ ПОЙТИ С НАМИ: «У ВАС ТАМ, ГОВОРЯТ, КОФЕ И КОЗА». СЛУХИ О ЛАГЕРЕ ДОШЛИ ДАЖЕ ДО ГОР."
+msgstr "SIX PEOPLE FROM THE VILLAGE WANTED TO COME WITH US: \"THEY SAY YOU HAVE COFFEE AND A GOAT THERE.\" RUMORS ABOUT THE CAMP HAVE REACHED EVEN THE MOUNTAINS."
+
+msgid "ШЕФ-ПОВАР"
+msgstr "HEAD CHEF"
+
+msgid "ШИПЫ"
+msgstr "SPIKES"
+
+msgid "ШНЫРЬ"
+msgstr "SHNYR"
+
+msgid "ШНЫРЬ СДАЛ ВСЕХ ЗА ПЯТЬ МИНУТ И ОДНУ БАНКУ ТУШЁНКИ: ТЁМА НА СКЛАДЕ БАРОНА В ПРОМЗОНЕ. ЖИВОЙ И ОЧЕНЬ НАДОЕДЛИВЫЙ."
+msgstr "SHNYR RATTED EVERYONE OUT FOR FIVE MINUTES AND ONE CAN OF STEW: TYOMA IS IN THE BARON'S WAREHOUSE IN THE INDUSTRIAL ZONE. ALIVE AND VERY ANNOYING."
+
+msgid "ШНЫРЯ НАШЛИ В КОНТЕЙНЕРЕ, ПРИВЯЗАННОГО К СТУЛУ. КАБАН ЗАСТАВИЛ ЕГО УКРАСТЬ ВАКЦИНУ — ДЕРЖАЛ В ЗАЛОЖНИКАХ ЕГО КАЛЬКУЛЯТОР. СОВЕТСКИЙ."
+msgstr "SHNYR WAS FOUND IN A CONTAINER, TIED TO A CHAIR. KABAN FORCED HIM TO STEAL THE VACCINE — HE HELD HIS CALCULATOR HOSTAGE. A SOVIET ONE."
+
+msgid "ШОН"
+msgstr "SEAN"
+
+msgid "ШТАТИВ"
+msgstr "TRIPOD"
+
+msgid "Шашлык по воскресеньям. Запах слышат даже зомби"
+msgstr "Shashlik on Sundays. Even the zombies can smell it"
+
+msgid "ЭВАКУАЦИЯ"
+msgstr "EVACUATION"
+
+msgid "ЭДИК"
+msgstr "EDIK"
+
+msgid "ЭДИК СПУСТИЛСЯ С КРЫШИ, ЛЁГ НА ПЕСОК И СКАЗАЛ: «СЛЕДУЮЩАЯ ДИСКОТЕКА — БЕЗ МЕНЯ». ПОТОМ ПОДУМАЛ И ДОБАВИЛ: «НО ЕСЛИ НАДО — ЗОВИТЕ»."
+msgstr "EDIK CLIMBED DOWN FROM THE ROOF, LAY ON THE SAND AND SAID: \"THE NEXT DISCO GOES ON WITHOUT ME.\" THEN HE THOUGHT ABOUT IT AND ADDED: \"BUT CALL ME IF YOU NEED ME.\""
+
+msgid "ЭПИЛОГ"
+msgstr "EPILOGUE"
+
+msgid "ЭФФЕКТЫ"
+msgstr "EFFECTS"
+
+msgid "Экран, проектор и скамейки: кино по пятницам. Нужен уровень БАЗА"
+msgstr "A screen, a projector and benches: movie night on Fridays. Needs the BASE level"
+
+msgid "ЮЖНЫЙ ПОРТ"
+msgstr "THE SOUTHERN PORT"
+
+msgid "ЮЖНЫЙ ПОРТ. КРАНЫ ЗАМЕРЛИ НАД ВОДОЙ, КОНТЕЙНЕРЫ СТОЯТ, КАК ДОМИНО. У ПРИЧАЛА — БЕЛЫЙ КОРАБЛЬ «НАДЕЖДА». НА МОСТИКЕ МИГАЕТ ФОНАРИК: ЯКОРЕВ ЖИВ."
+msgstr "THE SOUTHERN PORT. CRANES FROZEN OVER THE WATER, CONTAINERS STANDING LIKE DOMINOES. AT THE PIER, THE WHITE SHIP NADEZHDA. A FLASHLIGHT BLINKS ON THE BRIDGE: YAKOREV IS ALIVE."
+
+msgid "ЮЖНЫЙ ПОРТ. НОЧЬ"
+msgstr "SOUTHERN PORT. NIGHT"
+
+msgid "ЮЖНЫЙ ПОРТ. ЭФИР"
+msgstr "SOUTHERN PORT. ON THE AIR"
+
+msgid "Я НАЙДУ БРАТА. И ВСЕХ, КТО ЕЩЁ ДЫШИТ."
+msgstr "I'LL FIND MY BROTHER. AND EVERYONE WHO'S STILL BREATHING."
+
+msgid "Я СМОТРЕЛ НА НИХ И ДУМАЛ: МАМА БЫ СМЕЯЛАСЬ. МЫ ДОМА. ВСЕ."
+msgstr "I LOOKED AT THEM AND THOUGHT: MOM WOULD HAVE LAUGHED. WE ARE HOME. ALL OF US."
+
+msgid "ЯЗЫК / LANGUAGE"
+msgstr "ЯЗЫК / LANGUAGE"
+
+msgid "ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s"
+msgstr "VOICE LANGUAGE: %s (AS ON PHONE)%s"
+
+msgid "ЯКОРЕВ ДАЛ ГУДОК — ДЛИННЫЙ, НА ВЕСЬ ПОРТ. «НАДЕЖДА» УШЛА НА ЮГ С ВАКЦИНОЙ, К ДВУМ СОТНЯМ ЛЮДЕЙ В ГОРАХ. МАЯК МИГНУЛ ЕЙ ВСЛЕД."
+msgstr "YAKOREV SOUNDED THE HORN, LONG AND LOUD ACROSS THE PORT. THE NADEZHDA SAILED SOUTH WITH THE VACCINE, TO TWO HUNDRED PEOPLE IN THE MOUNTAINS. THE LIGHTHOUSE BLINKED AFTER HER."
+
+msgid "ЯКОРЕВ ДАЛ ГУДОК — ДЛИННЫЙ, НА ВЕСЬ ПОРТ. «НАДЕЖДА» УШЛА НА ЮГ С ВАКЦИНОЙ, К ДВУМ СОТНЯМ ЛЮДЕЙ В ГОРАХ. МЫ С ТЁМОЙ — НА БОРТУ: ОТ БУХТЫ ДО ГОР ДВА ДНЯ ПЕШКОМ."
+msgstr "YAKOREV SOUNDED THE HORN, LONG AND LOUD ACROSS THE PORT. THE NADEZHDA SAILED SOUTH WITH THE VACCINE, TO TWO HUNDRED PEOPLE IN THE MOUNTAINS. TYOMA AND I ARE ON BOARD: FROM THE BAY TO THE MOUNTAINS IS TWO DAYS ON FOOT."
+
+msgid "ЯКОРЕВ ОБНЯЛ МЕНЯ ТАК, ЧТО ХРУСТНУЛА РАЦИЯ. ЭКИПАЖ ДВЕ НЕДЕЛИ ДЕРЖАЛСЯ НА МОСТИКЕ НА СУХАРЯХ И МОРСКИХ АНЕКДОТАХ. АНЕКДОТЫ КОНЧИЛИСЬ РАНЬШЕ."
+msgstr "YAKOREV HUGGED ME SO HARD MY RADIO CRACKED. THE CREW HAD HELD THE BRIDGE FOR TWO WEEKS ON CRACKERS AND SAILOR JOKES. THE JOKES RAN OUT FIRST."
+
+msgid "ЯКОРЕВ ОСТАЁТСЯ В БУХТЕ И ЖДЁТ НАС. ВАКЦИНА — В ХОЛОДИЛЬНИКЕ АВТОБУСА, РЯДОМ С ЭДИКОВЫМ ЛИМОНАДОМ. ВПЕРЁД, В ГОРЫ."
+msgstr "YAKOREV STAYS IN THE BAY AND WAITS FOR US. THE VACCINE IS IN THE BUS FRIDGE, NEXT TO EDIK'S LEMONADE. ONWARD, TO THE MOUNTAINS."
+
+msgid "ЯРКОСТЬ КРАСНОЙ ВСПЫШКИ ПРИ УРОНЕ"
+msgstr "RED DAMAGE FLASH INTENSITY"
+
+msgid "ЯЩИК %d / %d"
+msgstr "CRATE %d / %d"
+
+msgid "ЯЩИКИ С ПРИПАСАМИ %d / %d • УБИТО %d"
+msgstr "SUPPLY CRATES %d / %d • KILLS %d"
+
+msgid "а купить их можно в оружейной"
+msgstr "and you can buy them in the armory"
+
+msgid "волн"
+msgstr "waves"
+
+msgid "волна"
+msgstr "wave"
+
+msgid "волну"
+msgstr "wave"
+
+msgid "волны"
+msgstr "waves"
+
+msgid "за каждого убитого"
+msgstr "per kill"
+
+msgid "зомби"
+msgstr "zombies"
+
+msgid "монет"
+msgstr "coins"
+
+msgid "монета"
+msgstr "coin"
+
+msgid "монеты"
+msgstr "coins"
+
+msgid "очка"
+msgstr "points"
+
+msgid "очко"
+msgstr "point"
+
+msgid "очков"
+msgstr "points"
+
+msgid "секунд"
+msgstr "seconds"
+
+msgid "секунду"
+msgstr "second"
+
+msgid "секунды"
+msgstr "seconds"
+
+msgid "ящик"
+msgstr "crate"
+
+msgid "ящика"
+msgstr "crates"
+
+msgid "ящиков"
+msgstr "crates"
+
+msgid "▼ В ВАС СТРЕЛЯЕТ: %s"
+msgstr "▼ SHOOTING AT YOU: %s"
+
+msgid "● ЗАПИСЬ"
+msgstr "● REC"
+
+msgid "☰  МЕНЮ"
+msgstr "☰  MENU"
+
+msgid "✓ ОТЛИЧНО!"
+msgstr "✓ NICE!"

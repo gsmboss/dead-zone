@@ -1,0 +1,86 @@
+[gd_resource type="Resource" script_class="WeeklyEventList" format=3]
+
+[ext_resource type="Script" path="res://quests/weekly_event_list.gd" id="1_list"]
+[ext_resource type="Script" path="res://quests/weekly_event_data.gd" id="2_week"]
+[ext_resource type="Resource" path="res://enemies/brute.tres" id="z0"]
+[ext_resource type="Resource" path="res://enemies/exploder.tres" id="z1"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z2"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z3"]
+
+[sub_resource type="Resource" id="w0"]
+script = ExtResource("2_week")
+id = "screamers"
+title = "НЕДЕЛЯ КРИКУНОВ"
+description = "Крикуны повсюду: орда приходит быстрее"
+zombie = ExtResource("z3")
+zombie_chance = 0.18
+coin_multiplier = 1.0
+challenge_text = "УБЕЙ 40 КРИКУНОВ"
+challenge_event = &"screamer_kill"
+challenge_target = 40
+challenge_reward = 1500
+
+[sub_resource type="Resource" id="w1"]
+script = ExtResource("2_week")
+id = "brutes"
+title = "БУГАИ НА УЛИЦАХ"
+description = "Бронированные бугаи вышли на охоту"
+zombie = ExtResource("z0")
+zombie_chance = 0.12
+coin_multiplier = 1.1
+challenge_text = "УБЕЙ 25 БУГАЁВ"
+challenge_event = &"brute_kill"
+challenge_target = 25
+challenge_reward = 1800
+
+[sub_resource type="Resource" id="w2"]
+script = ExtResource("2_week")
+id = "helmets"
+title = "КАСКИ И ДУБИНКИ"
+description = "Половина зомби — бывшие строители"
+zombie = ExtResource("z2")
+zombie_chance = 0.25
+coin_multiplier = 1.0
+challenge_text = "СОБЕЙ 60 КАСОК"
+challenge_event = &"helmet_off"
+challenge_target = 60
+challenge_reward = 1500
+
+[sub_resource type="Resource" id="w3"]
+script = ExtResource("2_week")
+id = "gold"
+title = "ЗОЛОТАЯ ЛИХОРАДКА"
+description = "Монеты за миссии ×1.5"
+coin_multiplier = 1.5
+challenge_text = "ВЫИГРАЙ 15 МИССИЙ"
+challenge_event = &"mission_win"
+challenge_target = 15
+challenge_reward = 1500
+
+[sub_resource type="Resource" id="w4"]
+script = ExtResource("2_week")
+id = "heads"
+title = "ОХОТА НА ГОЛОВЫ"
+description = "Монеты ×1.2, цель — головы"
+coin_multiplier = 1.2
+challenge_text = "300 УБИЙСТВ В ГОЛОВУ"
+challenge_event = &"headshot_kill"
+challenge_target = 300
+challenge_reward = 2000
+
+[sub_resource type="Resource" id="w5"]
+script = ExtResource("2_week")
+id = "boom"
+title = "ВЗРЫВНАЯ НЕДЕЛЯ"
+description = "Взрывные зомби на каждом углу"
+zombie = ExtResource("z1")
+zombie_chance = 0.2
+coin_multiplier = 1.0
+challenge_text = "УБЕЙ 600 ЗОМБИ"
+challenge_event = &"kill"
+challenge_target = 600
+challenge_reward = 1500
+
+[resource]
+script = ExtResource("1_list")
+events = Array[ExtResource("2_week")]([SubResource("w0"), SubResource("w1"), SubResource("w2"), SubResource("w3"), SubResource("w4"), SubResource("w5")])

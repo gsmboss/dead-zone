@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Кабан отступил и крикнул на прощание: «Мы ещё встретимся!» Звучало как угроза. И как обещание."
+voice_en = "Kaban retreated, yelling: \"We'll meet again!\" It sounded like a threat. And a promise."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Генка, держи. Самый крепкий, без сахара. Ты сегодня заслужил."
+voice_en = "Here, Genka. The strongest, no sugar. You earned it today."
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Учёные «Генома» нарисовали карту цехов. Гнездо — в самом сердце. Утром идём."
+voice_en = "The Genome scientists drew a map of the workshops. The nest is right at the heart. We go in the morning."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_siege_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

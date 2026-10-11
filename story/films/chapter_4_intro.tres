@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_wide"
+duration = 6.0
+caption = "СТАРОЕ КЛАДБИЩЕ"
+voice_ru = "Сигнал идёт с кладбища. Того самого, у часовни. Где я оставил маму."
+voice_en = "The signal comes from the cemetery. The one by the chapel. Where I left Mom."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "close_up"
+duration = 5.0
+caption = "ПАМЯТЬ"
+voice_ru = "Если когда-нибудь потеряешься — ищи брата. А он будет искать тебя. Так и найдётесь."
+voice_en = "If you ever get lost, look for your brother. And he'll look for you. That's how you'll find each other."
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_chapel"
+duration = 5.5
+voice_ru = "В склепе прячется радист Лев с дочкой. Рация разбита, детали разбросаны по могилам. Отличное место для ночной прогулки."
+voice_en = "A radio operator named Lev is hiding in the crypt with his daughter. His radio is smashed, the parts scattered among the graves. A lovely spot for a night walk."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 4\nНОЧЬ НА КЛАДБИЩЕ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_4_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

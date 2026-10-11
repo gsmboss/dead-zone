@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_wide"
+duration = 5.0
+caption = "ВЕРШИНА ПЕРЕВАЛА"
+voice_ru = "Он живёт на вершине, на старой турбазе. Ростом с двоих. Голос — стёкла дрожат. Мы зовём его Пастух."
+voice_en = "He lives at the top, at the old hikers' lodge. Twice a man's height. His voice rattles the windows. We call him the Shepherd."
+speaker = "БАБА ШУРА"
+pitch = 1.05
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_low"
+duration = 5.0
+voice_ru = "Каждую ночь он гонит стадо к деревне. Каждую ночь частокол становится ниже."
+voice_en = "Every night he drives the herd toward the village. Every night the stockade gets lower."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_pass"
+duration = 5.0
+voice_ru = "Я отвлеку их танцем! Это моя профессия! Ну, была."
+voice_en = "I'll distract them with a dance! It's my profession! Well, it was."
+speaker = "ЭДИК"
+pitch = 1.35
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 29\nПАСТУХ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_shepherd_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

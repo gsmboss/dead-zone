@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_fire"
+duration = 6.0
+voice_ru = "Склад пуст. Пленных увезли за час до нас. На полу — фантик от шоколадки. Тёма всегда бросает их где попало."
+voice_en = "The depot's empty. The prisoners were moved an hour before we got there. On the floor, a candy wrapper. Tyoma always drops them everywhere."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_gate"
+duration = 5.0
+voice_ru = "Зато мы взяли их бронегрузовик. Барон будет очень, очень расстроен."
+voice_en = "But we took their armored truck. The Baron is going to be very, very upset."
+speaker = "ДЕНИС"
+pitch = 0.9
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_5_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2")])

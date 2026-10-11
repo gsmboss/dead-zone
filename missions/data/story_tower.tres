@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="MissionData" format=3]
+
+[ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="1_mdt"]
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="z_walker"]
+[ext_resource type="Resource" uid="uid://bxalb3sauqja6" path="res://enemies/runner.tres" id="z_runner"]
+[ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="z_tank"]
+[ext_resource type="Resource" path="res://enemies/ghoul.tres" id="z_ghoul"]
+[ext_resource type="Resource" path="res://enemies/dog.tres" id="z_dog"]
+[ext_resource type="Resource" path="res://enemies/skeleton.tres" id="z_skeleton"]
+[ext_resource type="Resource" path="res://enemies/exploder.tres" id="z_exploder"]
+[ext_resource type="Resource" path="res://enemies/screamer.tres" id="z7_screamer"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
+
+[resource]
+script = ExtResource("1_mdt")
+id = "story_tower"
+title = "ГОЛОСА С ЮГА"
+description = "Лев передаёт рецепт вакцины с лесной вышки. Удержи точку у вышки 100 секунд"
+type = 3
+level_scene = "res://levels/forest_level.tscn"
+dressing = &"radio_tower"
+time_of_day = 2
+defend_time = 100.0
+defend_radius = 6.0
+walker = ExtResource("z_walker")
+runner = ExtResource("z_skeleton")
+tank = ExtResource("z_ghoul")
+tank_chance = 0.1
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_dog"), ExtResource("z_dog"), ExtResource("z_exploder"), ExtResource("z7_screamer"), ExtResource("z7_helmet")])
+health_drop_chance = 0.12
+ammo_drop_chance = 0.22
+reward_coins = 800
+metadata/_custom_type_script = "uid://dp7avtsfoxban"

@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_gangway"
+duration = 5.0
+voice_ru = "Якорев обнял меня так, что хрустнула рация. Две недели экипаж держался на сухарях и морских анекдотах."
+voice_en = "Yakorev hugged me so hard my radio cracked. For two weeks the crew had lived on crackers and sailor jokes."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_ship"
+duration = 5.0
+voice_ru = "Анекдоты кончились раньше сухарей. Это было страшнее мертвецов."
+voice_en = "The jokes ran out before the crackers. That was scarier than the dead."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_sea"
+duration = 6.0
+voice_ru = "Но выход из гавани — между рифами. Ночью без маяка — прямо на дно. А маяк молчит три месяца."
+voice_en = "But the way out of the harbor runs between reefs. At night, without the lighthouse, straight to the bottom. And the lighthouse has been dark for three months."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "lighthouse"
+duration = 4.0
+voice_ru = "Маяк молчал. Но в его окне горел свет."
+voice_en = "The lighthouse was dark. But there was a light in its window."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_port_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

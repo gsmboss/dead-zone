@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "road_low"
+duration = 5.0
+caption = "ДЕНЬ 92. РАЦИЯ"
+voice_ru = "Кто-нибудь! Мы на стоянке контейнеров у трассы! Нас двое, брат ранен!"
+voice_en = "Anybody! We're at the container yard by the highway! There are two of us, my brother's hurt!"
+speaker = "МАРИНА"
+pitch = 1.3
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 5.0
+voice_ru = "Девяносто два дня я не слышал живого голоса. Рация говорила, а я стоял и улыбался как дурак."
+voice_en = "Ninety-two days without hearing a living voice. The radio talked, and I just stood there grinning like an idiot."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "crossroad"
+duration = 5.5
+voice_ru = "Правило номер два: не улыбайся, когда вокруг зомби. Они думают, что это приглашение."
+voice_en = "Rule number two: don't smile when zombies are around. They take it as an invitation."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 1\nПЕРВЫЙ ДЕНЬ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_1_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itm01"]
+
+[resource]
+script = ExtResource("1_itm01")
+id = "bear_trap"
+title = "КАПКАН"
+description = "Ставится кнопкой ЛОВУШКА: держит зомби 4 секунды и ранит, срабатывает 3 раза"
+effect = 6
+amount = 45.0
+max_stack = 5
+price = 70
+icon_color = Color(0.5, 0.42, 0.3, 1)
+craft_cost = 3

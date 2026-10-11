@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 6.0
+caption = "ЗАПИСЬ ДНЯ НОЛЬ"
+voice_ru = "Я на станции скорой у кладбища. Всё записала в тетрадь — время, симптомы, что помогает. Если что — пусть найдут."
+voice_en = "I'm at the ambulance station by the cemetery. I wrote everything in my notebook: times, symptoms, what helps. If anything happens, let them find it."
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "close_up"
+duration = 5.0
+caption = "ДО ВСЕГО ЭТОГО"
+voice_ru = "Мама была фельдшером. Она всегда говорила: «Сначала записать, потом паниковать». Паниковать она так и не начала."
+voice_en = "Mom was a paramedic. She always said: \"Write it down first, panic later.\" She never got around to panicking."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_wide"
+duration = 5.0
+caption = "СТАРОЕ КЛАДБИЩЕ"
+voice_ru = "Страницы её дневника разнесло по всему кладбищу. Ветер, дождь и мертвецы — плохие библиотекари."
+voice_en = "The pages of her diary were scattered all over the cemetery. Wind, rain and the dead make terrible librarians."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_low"
+duration = 4.0
+voice_ru = "Я иду с тобой. Я не буду болтать. Честно."
+voice_en = "I'm coming with you. I won't talk. Honest."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 15\nГОЛОС МАМЫ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_mother_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

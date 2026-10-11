@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttachmentData" format=3]
+
+[ext_resource type="Script" path="res://weapons/attachment_data.gd" id="1_att01"]
+
+[resource]
+script = ExtResource("1_att01")
+id = "grip"
+title = "РУКОЯТЬ"
+description = "Отдача −45%, разброс −10%"
+slot = 3
+look = 5
+price = 260
+not_for = PackedStringArray("pistol")
+recoil = 0.55
+spread = 0.9

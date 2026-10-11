@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Последнего зомби Кабан уложил подносом. Генка сказал, что гордится им. Кабан покраснел."
+voice_en = "Kaban took down the last zombie with a tray. Genka said he was proud of him. Kaban blushed."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Замороженный эспрессо… Это гениально. Я проиграл. Впервые. Налейте мне ещё."
+voice_en = "Frozen espresso... It's genius. I lost. For the first time. Pour me another."
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Две недели было тихо. Мы чинили, сажали, спорили и спали. Почти как раньше."
+voice_en = "For two weeks it was quiet. We fixed things, planted, argued and slept. Almost like before."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "КОНЕЦ ВТОРОЙ ЧАСТИ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_feast_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

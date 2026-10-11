@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 5.0
+caption = "УБЕЖИЩЕ. ПЕРВАЯ НОЧЬ"
+voice_ru = "Первая ночь, когда в убежище храпит кто-то, кроме меня. Оказывается, я по этому скучал."
+voice_en = "The first night someone other than me is snoring in the shelter. Turns out I missed that."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Денис, не трогай пистолет. Денис! Он чинит всё, что видит. В прошлый раз «починил» микроволновку — теперь она показывает погоду."
+voice_en = "Denis, don't touch the gun. Denis! He fixes everything he sees. Last time he 'fixed' a microwave, and now it shows the weather."
+speaker = "МАРИНА"
+pitch = 1.3
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Зато точно показывает. Завтра — дождь из мертвецов, местами переходящий в бандитов."
+voice_en = "And it's accurate. Tomorrow: a shower of dead people, turning into bandits in places."
+speaker = "ДЕНИС"
+pitch = 0.9
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Неделю назад я видела мальчишку с красным рюкзаком. Он шёл к Садовой и ругался на зомби, как взрослый."
+voice_en = "A week ago I saw a boy with a red backpack. He was heading to Sadovaya, swearing at zombies like a grown-up."
+speaker = "МАРИНА"
+pitch = 1.3
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "КРАСНЫЙ РЮКЗАК"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_1_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PlayerSkin" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://player/player_skin.gd" id="1_skin"]
+[ext_resource type="PackedScene" path="res://models/characters/kenney/character-female-d.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_skin")
+id = "kenney_female_d"
+display_name = "ВОЖАТАЯ"
+model_scene = ExtResource("2_model")
+price = 500
+anim_idle = &"idle"
+hide_weapon = true
+anim_walk = &"walk"
+anim_run = &"sprint"
+anim_jump = &"jump"
+anim_death = &"die"
+anim_hit = &"emote-no"
+anim_melee = &"attack-melee-right"
+anim_emote = &"emote-yes"
+anim_idle_unarmed = &"idle"
+anim_walk_unarmed = &"walk"
+anim_run_unarmed = &"sprint"
+walk_anim_speed = 1.8
+run_anim_speed = 5.0
+hand_bone = &""
+hand_offset = Vector3(0, -0.2, 0.05)
+hand_rotation_degrees = Vector3(0, 0, 0)
+weapon_length = 0.5

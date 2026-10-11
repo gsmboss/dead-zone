@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 1
+camera = "street_end"
+duration = 5.0
+caption = "СТАРЫЙ МОСТ. ДЕНЬ НОЛЬ"
+voice_ru = "Бегите! Не оглядывайтесь! Я догоню, слышите? Я всегда вас догоняю!"
+voice_en = "Run! Don't look back! I'll catch up, you hear me? I always catch up with you!"
+speaker = "МАМА"
+pitch = 1.2
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+voice_ru = "Она не догнала."
+voice_en = "She never caught up."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 5.0
+caption = "СТАРЫЙ МОСТ. СЕГОДНЯ"
+voice_ru = "Сто сорок дней спустя. Тот же мост, тот же ветер. Только теперь за моей спиной — целый лагерь."
+voice_en = "One hundred and forty days later. Same bridge, same wind. Only now there's a whole camp behind me."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 5.0
+voice_ru = "Отдайте чемодан по-хорошему! По-плохому тоже можно — у меня орда за спиной. Я её свистом привёл!"
+voice_en = "Hand over the case the easy way! The hard way works too, I've got a horde behind me. I whistled it here myself!"
+speaker = "КАБАН"
+pitch = 0.5
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Брат… Мама бы сказала: не дерись честно с тем, кто нечестен."
+voice_en = "Bro... Mom would say: don't fight fair with someone who doesn't."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 19
+СТАРЫЙ МОСТ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_bridge_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

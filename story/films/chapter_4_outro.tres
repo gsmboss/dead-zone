@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 6.5
+caption = "РАДИОЭФИР"
+voice_ru = "Говорит Барон! Город теперь мой. Налог — тушёнка, бензин и патроны. Кто не платит — идёт гулять с мертвецами. Хорошего дня!"
+voice_en = "This is the Baron speaking! The city is mine now. Taxes are canned meat, fuel and ammo. Those who don't pay go for a walk with the dead. Have a nice day!"
+speaker = "БАРОН"
+pitch = 0.6
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_chapel"
+duration = 5.5
+voice_ru = "Ещё он хвастался мальчишкой, который чинит любую рацию. Ест за троих, всех бесит, но руки золотые."
+voice_en = "He also bragged about a kid who can fix any radio. Eats like three men, annoys everyone, but has golden hands."
+speaker = "ЛЕВ"
+pitch = 0.75
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_mom"
+duration = 4.5
+voice_ru = "Тёма. Это точно Тёма."
+voice_en = "Tyoma. That's definitely Tyoma."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_4_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

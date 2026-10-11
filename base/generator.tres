@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "generator"
+title = "ГЕНЕРАТОР"
+description = "Солнечные панели и бак: касса лагеря +25%, гирлянды во дворе"
+price = 2000
+icon_color = Color(1, 0.85, 0.3, 1)
+required_level = 3
+comfort = 4
+builder = &"generator"
+hub_position = Vector3(18, 0, 5.5)
+hub_yaw_degrees = -90.0

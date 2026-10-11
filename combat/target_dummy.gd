@@ -62,7 +62,7 @@ func _on_damaged(_amount: float, _hit_position: Vector3, _is_headshot: bool) -> 
 
 func _on_died() -> void:
 	_set_active(false)
-	await get_tree().create_timer(respawn_time).timeout
+	await create_tween().tween_interval(respawn_time).finished  # твин умирает вместе с узлом
 	if not is_inside_tree():
 		return
 	health.reset()

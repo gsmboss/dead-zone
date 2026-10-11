@@ -4,6 +4,12 @@
 [ext_resource type="Resource" uid="uid://bxalb3sauqja6" path="res://enemies/runner.tres" id="1_tcjpo"]
 [ext_resource type="Resource" uid="uid://cgohwgveryuy2" path="res://enemies/tank.tres" id="3_xcrdt"]
 [ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="4_0broo"]
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" path="res://enemies/crawler.tres" id="sp_1"]
+[ext_resource type="Resource" path="res://enemies/spitter.tres" id="sp_2"]
+[ext_resource type="Resource" path="res://enemies/exploder.tres" id="sp_3"]
+[ext_resource type="Resource" path="res://enemies/dog.tres" id="sp_4"]
+[ext_resource type="Resource" path="res://enemies/helmet.tres" id="z7_helmet"]
 
 [resource]
 script = ExtResource("1_elts0")
@@ -14,4 +20,5 @@ walker = ExtResource("4_0broo")
 runner = ExtResource("1_tcjpo")
 tank = ExtResource("3_xcrdt")
 tank_chance_per_level = 0.05
+specials = Array[ExtResource("sp_zd")]([ExtResource("sp_1"), ExtResource("sp_2"), ExtResource("sp_3"), ExtResource("sp_4"), ExtResource("z7_helmet")])
 metadata/_custom_type_script = "uid://dp7avtsfoxban"

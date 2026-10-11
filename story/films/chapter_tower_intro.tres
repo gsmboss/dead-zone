@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+caption = "ЛАГЕРЬ. 03:00"
+voice_ru = "Тихо! Слышите? «Есть ли кто живой? Приём». Это порт на юге. Они живые!"
+voice_en = "Quiet! Hear that? 'Is anyone alive? Over.' That's the port down south. They're alive!"
+speaker = "ЛЕВ"
+pitch = 0.75
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "А можно им сказать, что у нас есть вакцина? И коза Зина? Пусть завидуют."
+voice_en = "Can we tell them we have a vaccine? And Zina the goat? Let them be jealous."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 9
+camera = "forest_tower"
+duration = 5.0
+caption = "ЛЕСНАЯ ВЫШКА"
+voice_ru = "Чтобы докричаться до юга, нужна вышка в лесу. Сорок метров ржавого железа и одна очень плохая идея."
+voice_en = "To reach the south we need the tower in the forest. Forty meters of rusty steel and one very bad idea."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 9
+camera = "forest_low"
+duration = 5.0
+voice_ru = "Передача займёт пару минут. Пара минут — это вечность, когда весь лес слышит твоё радио."
+voice_en = "The broadcast takes a couple of minutes. A couple of minutes is forever when the whole forest can hear your radio."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 14
+ГОЛОСА С ЮГА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_tower_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

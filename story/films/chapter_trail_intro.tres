@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_wide"
+duration = 5.0
+caption = "БАЗА КАБАНА"
+voice_ru = "Старый гараж на краю промзоны. База Кабана. Пахнет бензином, жареной тушёнкой и плохими идеями."
+voice_en = "An old garage at the edge of the industrial zone. Kaban's base. It smells of gasoline, fried stew and bad ideas."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.0
+voice_ru = "Ревун готов! В день корабля врубим его у моста, и пусть мертвецы сделают всю работу!"
+voice_en = "The Howler is ready! On ship day we switch it on at the bridge and let the dead do all the work!"
+speaker = "КАБАН"
+pitch = 0.5
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_gate"
+duration = 5.0
+voice_ru = "Я знаю все его привычки. Он всегда прячется за самой толстой бочкой. Всегда."
+voice_en = "I know all his habits. He always hides behind the fattest barrel. Always."
+speaker = "ГЕНКА"
+pitch = 0.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 17\nПО СЛЕДУ КАБАНА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_trail_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

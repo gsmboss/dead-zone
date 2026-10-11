@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "road_low"
+duration = 5.0
+caption = "СТАРЫЙ МОСТ. РАССВЕТ"
+voice_ru = "Орда кончилась одновременно с патронами. Я считаю это везением."
+voice_en = "The horde ran out at the same time as the ammo. I call that luck."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sidewalk"
+duration = 5.0
+voice_ru = "Капитан Якорев, Южный порт. Вакцину принял! Разрешите отдать честь… младшему по званию."
+voice_en = "Captain Yakorev, Southern Port. Vaccine received! Permission to salute... the junior officer."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "close_up"
+duration = 5.0
+voice_ru = "Вольно, капитан. А можно потом посмотреть мотор корабля? Я ничего не трону. Почти."
+voice_en = "At ease, captain. Can I look at the ship's engine later? I won't touch anything. Almost."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "На перилах моста всё ещё висел мамин синий шарф. Мы завязали рядом красный рюкзак. Пусть висят вместе."
+voice_en = "Mom's blue scarf was still tied to the bridge railing. We tied the red backpack next to it. Let them stay together."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sky_up"
+duration = 5.0
+voice_ru = "Мы искали друг друга — и нашлись. А теперь нас ищут другие. И находят."
+voice_en = "We searched for each other, and we found each other. Now others are searching for us. And finding us."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "МЫ НАШЛИСЬ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_bridge_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

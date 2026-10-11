@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 13
+camera = "harbor_gangway"
+duration = 5.0
+voice_ru = "Следующая дискотека — без меня. Но если надо — зовите. Я профессионал."
+voice_en = "The next disco goes on without me. But call me if you need me. I'm a professional."
+speaker = "ЭДИК"
+pitch = 1.35
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 13
+camera = "harbor_quay"
+duration = 5.0
+voice_ru = "Автобус «Ласточка». Розовый, с пальмами. Денис бы заплакал. Я уже чиню."
+voice_en = "The Swallow bus. Pink, with palm trees. Denis would cry. I'm already fixing it."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_ship"
+duration = 5.0
+voice_ru = "Я жду вас в бухте. Два дня туда, два обратно. Не опаздывайте — у Борщова борщ остынет."
+voice_en = "I'll wait for you in the bay. Two days there, two back. Don't be late, Borshchov's borscht will get cold."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_resort_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

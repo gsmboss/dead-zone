@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "lighthouse"
+duration = 5.0
+caption = "НАШ ПОРТ"
+voice_ru = "Наш маяк горел. Палыч ждал. Он сказал потом, что не спал три ночи. Герань подтвердила."
+voice_en = "Our lighthouse was lit. Palych was waiting. He said later he didn't sleep for three nights. The geranium confirmed it."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "aerial"
+duration = 5.0
+voice_ru = "А за лагерем, до самого горизонта, шли мертвецы. Все, кого когда-то гнал Пастух."
+voice_en = "And behind the camp, all the way to the horizon, the dead were coming. Everyone the Shepherd had ever herded."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 5.0
+voice_ru = "Все по местам! Денис — грузовик, Генка — ворота, Кабан — поднос! Кофе — в конце, как награда!"
+voice_en = "Everyone to your posts! Denis, the truck! Genka, the gate! Kaban, the tray! Coffee at the end, as a reward!"
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 4.0
+voice_ru = "Правило последнее: возвращайся домой. Мы вернулись. Теперь — защитим его."
+voice_en = "The last rule: come back home. We're back. Now we defend it."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 30\nДОМОЙ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_home_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

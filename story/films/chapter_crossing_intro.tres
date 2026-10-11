@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 5.0
+caption = "ПОДЪЕЗД К МОСТУ"
+voice_ru = "Автобус, два грузовика и дом на колёсах с гномами на крыше. Мост забит намертво."
+voice_en = "A bus, two trucks and a motorhome with gnomes on the roof. The bridge is jammed solid."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "road_low"
+duration = 5.0
+voice_ru = "Растащу бронегрузовиком. Громко будет. Очень громко. Зато быстро. Ну, не очень быстро."
+voice_en = "I'll drag it all with the armored truck. It'll be loud. Very loud. But fast. Well, not that fast."
+speaker = "ДЕНИС"
+pitch = 0.9
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "close_up"
+duration = 4.0
+voice_ru = "Гномов не трогай! Они три месяца охраняли мост. Они герои."
+voice_en = "Don't touch the gnomes! They've guarded the bridge for three months. They're heroes."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 18\nПЕРЕПРАВА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_crossing_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

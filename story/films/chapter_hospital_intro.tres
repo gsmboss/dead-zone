@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "street_end"
+duration = 5.0
+caption = "ГОРОДСКАЯ БОЛЬНИЦА"
+voice_ru = "Городская больница. Приём по записи. Кусающих не принимаем. Кто-то здесь всё ещё работает."
+voice_en = "City hospital. Appointments only. No biters allowed. Someone is still working here."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "window"
+duration = 5.0
+voice_ru = "Тихо! У меня обход! Пациенты из палаты шесть очень нервные. Но им уже лучше. Почти."
+voice_en = "Quiet! I'm doing my rounds! The patients in ward six are very nervous. But they're getting better. Almost."
+speaker = "КОСТЯ"
+pitch = 1.0
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "close_up"
+duration = 5.0
+voice_ru = "Две минуты. Шприцы, автоклав и, если повезёт, нормальные перчатки. Держи вход."
+voice_en = "Two minutes. Syringes, the autoclave and, if we are lucky, decent gloves. Hold the entrance."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 13\nБОЛЬНИЦА"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_hospital_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

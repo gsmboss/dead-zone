@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "lighthouse"
+duration = 5.0
+voice_ru = "Маяк зажёгся. Луч прошёл по воде, по кранам, по нашим лицам."
+voice_en = "The lighthouse came on. The beam swept the water, the cranes, our faces."
+effect = "flash"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "lighthouse"
+duration = 4.0
+voice_ru = "Три месяца никто не видел мой свет… Спасибо, сынок."
+voice_en = "Three months and nobody saw my light... Thank you, son."
+speaker = "ПАЛЫЧ"
+pitch = 0.72
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_sea"
+duration = 5.0
+voice_ru = "А потом луч выхватил из воды что-то огромное. Оно стояло по пояс в море и смотрело на маяк."
+voice_en = "Then the beam caught something huge in the water. It stood waist-deep in the sea, staring at the lighthouse."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_ship"
+duration = 6.0
+voice_ru = "Утопленник. Ходит по дну за кораблями. Отплываем на рассвете — и молимся, чтобы он спал."
+voice_en = "The Drowned One. It walks the seabed after ships. We sail at dawn, and pray it's asleep."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_quay"
+duration = 4.0
+voice_ru = "Он не спит. Он машет. Почему он машет?!"
+voice_en = "It's not asleep. It's waving. Why is it waving?!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_lighthouse_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

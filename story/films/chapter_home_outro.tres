@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Орда кончилась на рассвете. Последнего мертвеца вместе уложили Генка и Кабан. Теперь они лучшие друзья."
+voice_en = "The horde ran out at dawn. Genka and Kaban took down the last corpse together. Now they are best friends."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Борщ, замороженный эспрессо, пломбир и пироги. Всё сразу. Коза Зина съела скатерть."
+voice_en = "Borscht, frozen espresso, ice cream and pies. All at once. Zina the goat ate the tablecloth."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Я смотрел на них и думал: мама бы смеялась. Мы дома. Все."
+voice_en = "I looked at them and thought: Mom would have laughed. We are home. All of us."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "КОНЕЦ ТРЕТЬЕЙ ЧАСТИ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_home_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

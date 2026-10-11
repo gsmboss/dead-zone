@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itm01"]
+
+[resource]
+script = ExtResource("1_itm01")
+id = "ammo_pack"
+title = "ПАТРОНЫ"
+description = "Пополняет запас всех стволов на 35%"
+effect = 1
+amount = 0.35
+max_stack = 5
+price = 40
+craft_cost = 2
+icon_color = Color(0.55, 0.6, 0.25, 1)

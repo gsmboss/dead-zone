@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="VoiceLines" format=3]
+
+[ext_resource type="Script" path="res://cutscene/voice_lines.gd" id="1_lines"]
+
+[resource]
+script = ExtResource("1_lines")
+location_ru = PackedStringArray("Добро пожаловать: {location}. Местные жители немного мертвоваты.", "{location}. Говорят, раньше здесь было уютно. Раньше.", "Итак, {location}. Туристический сезон закрыт. Навсегда.", "{location}. Пять звёзд на картах. Правда, все отзывы — это просто рычание.")
+location_en = PackedStringArray("Welcome to the neighborhood. The locals are a bit... dead.", "They say it used to be cozy here. Used to.", "Tourist season is closed. Permanently.", "Five stars on the map. All the reviews just say: arrgh.")
+goal_ru = PackedStringArray("Задача простая. Как и зомби. Только их больше.", "План такой: стреляем в голову. Запасной план: бежим. Очень быстро.", "Цель на экране. Если что-то пойдёт не так — это был не мой план.", "Главное правило: не обниматься с местными.")
+goal_en = PackedStringArray("The goal is simple. Like the zombies. But there are more of them.", "Plan A: aim for the head. Plan B: run. Very fast.", "The objective is on screen. If it goes wrong, it wasn't my plan.", "Rule number one: no hugging the locals.")
+fight_ru = PackedStringArray("Поехали!", "В бой! А я подержу камеру.", "Удачи. Она тебе понадобится.", "Вперёд! Я буду болеть за тебя. Из безопасного места.")
+fight_en = PackedStringArray("Let's go!", "Go get them! I'll hold the camera.", "Good luck. You'll need it.", "Go! I'll cheer for you. From a safe distance.")
+boss_ru = PackedStringArray("Ого. Это {boss}. Кажется, кто-то слишком много ел во время апокалипсиса.", "{boss}! Беги. Нет, стой. Нет, всё-таки беги!", "Встречайте: {boss}. Обнимашек не будет.", "{boss}. Не смотри ему в глаза. И в остальное тоже.")
+boss_en = PackedStringArray("Whoa. Somebody has been skipping cardio during the apocalypse.", "Okay. Run. No, wait. Yes. Run!", "Meet the big guy. No hugs, please.", "Don't look him in the eye. Or anywhere, really.")

@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://kb4dy6tcbcs3" path="res://models/zombies/Characters_Shaun.gltf" id="2_md01"]
+[ext_resource type="AudioStream" path="res://audio/weapons/rifle_shot.ogg" id="3_snd"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "СТРЕЛОК БАНДЫ"
+behavior = 3
+max_health = 80.0
+move_speed = 2.2
+attack_damage = 12.0
+detection_radius = 26.0
+close_sense_radius = 4.0
+hearing_radius = 40.0
+alert_radius = 18.0
+lose_interest_time = 12.0
+model_scene = ExtResource("2_md01")
+model_scale = 1.6
+anim_idle = &"Idle_Gun"
+anim_walk = &"Walk_Gun"
+anim_run = &"Run_Gun"
+anim_attack = &"Punch"
+tint = Color(0.55, 0.08, 0.05, 0.16)
+ranged_min_distance = 6.0
+ranged_max_distance = 30.0
+ranged_cooldown = 3.0
+ranged_windup = 0.45
+human = true
+held_weapon = "Rifle"
+anim_shoot = &"Idle_Gun"
+burst_shots = 5
+shot_interval = 0.11
+shot_damage = 9.0
+accuracy = 0.45
+preferred_distance = 15.0
+gun_sound = ExtResource("3_snd")
+taunts_ru = PackedStringArray("ЭТО НАША УЛИЦА!", "ОТДАВАЙ ТУШЁНКУ!", "БАРОН БУДЕТ ДОВОЛЕН!", "ЭЙ, ТЫ! ДА, ТЫ, С ЛИЦОМ!", "КОШЕЛЁК ИЛИ ЖИЗНЬ! ХОТЯ ДЕНЬГИ УЖЕ НИЧЕГО НЕ СТОЯТ…", "ОКРУЖАЙ ЕГО! …СТОП, КТО-НИБУДЬ УМЕЕТ ОКРУЖАТЬ?", "ЭТО НЕ ГРАБЁЖ, ЭТО НАЛОГ НА АПОКАЛИПСИС!", "Я БОЮСЬ ЗОМБИ, НО ТЕБЯ НЕ БОЮСЬ!")
+taunts_en = PackedStringArray("THIS IS OUR STREET!", "HAND OVER THE CANNED FOOD!", "THE BARON WILL BE PLEASED!", "HEY, YOU! YES, YOU, WITH THE FACE!", "YOUR MONEY OR YOUR LIFE! ...MONEY IS WORTHLESS NOW, THOUGH.", "SURROUND HIM! ...WAIT, DOES ANYONE KNOW HOW TO SURROUND?", "IT'S NOT ROBBERY, IT'S AN APOCALYPSE TAX!", "ZOMBIES SCARE ME. YOU DON'T!")
+search_points = 4
+search_radius = 9.0
+footstep_hearing_radius = 12.0
+stagger_time = 0.25
+voice_volume_db = -80.0
+score = 40
+
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

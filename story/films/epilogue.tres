@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ЭПИЛОГ"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "«Надежда» довезла вакцину до людей в горах. Через месяц Лев поймал голоса ещё трёх городов. Там тоже живут."
+voice_en = "The Nadezhda delivered the vaccine to the people in the mountains. A month later Lev picked up voices from three more cities. People live there too."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Дядя Гоша открыл в лагере кофейню «Последняя капля». Очередь — как до апокалипсиса."
+voice_en = "Uncle Gosha opened a coffee shop in the camp called 'The Last Drop'. The line is like before the apocalypse."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Шнырь ведёт бухгалтерию на советском калькуляторе и носит бороду с гордостью. Генка и Кабан моют посуду и спорят, чья тарелка чище."
+voice_en = "Shnyr keeps the books on his Soviet calculator and wears his beard with pride. Genka and Kaban wash dishes and argue whose plate is cleaner."
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "crossroad"
+duration = 5.0
+voice_ru = "Иногда мне снится город таким, каким он был. Мама берёт кофе, Тёма спорит, светофор горит зелёным."
+voice_en = "Sometimes I dream of the city as it used to be. Mom getting coffee, Tyoma arguing, the traffic light turning green."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "hope_walk"
+duration = 5.0
+voice_ru = "Эй! Хватит спать. Денис говорит, что починил тот розовый спорткар. Поехали дрифтить!"
+voice_en = "Hey! Stop sleeping. Denis says he fixed that pink sports car. Let's go drifting!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_7"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 4.0
+voice_ru = "Мы ещё вернём этот город. Улица за улицей."
+voice_en = "We'll take this city back. Street by street."
+title = "МЫ ВЕРНЁМ ЭТОТ ГОРОД"
+
+[resource]
+script = ExtResource("1_film")
+id = "epilogue"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6"), SubResource("Shot_7")])

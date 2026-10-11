@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 9
+camera = "forest_road"
+duration = 5.0
+caption = "ТРАССА НА ЮГ. ВЕЧЕР"
+voice_ru = "В фуре с надписью «Мороженое» три месяца жил дальнобойщик Михалыч. С женой. И с тёщей."
+voice_en = "A truck that said 'Ice Cream' had been home to trucker Mikhalych for three months. With his wife. And his mother-in-law."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sidewalk"
+duration = 6.0
+voice_ru = "Мороженое кончилось в первую неделю. Тёща — нет. Топливо в порту? Знаю где. Только там теперь не грузчики."
+voice_en = "The ice cream ran out in the first week. The mother-in-law didn't. Fuel in the port? I know where. Only it's not dockers there anymore."
+speaker = "МИХАЛЫЧ"
+pitch = 0.7
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_aerial"
+duration = 5.0
+caption = "ЮЖНЫЙ ПОРТ"
+voice_ru = "К вечеру показалось море. И белый корабль у причала."
+voice_en = "By evening we saw the sea. And a white ship at the pier."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_sea"
+duration = 5.0
+voice_ru = "Это море? Оно… больше, чем я думал. Можно я помолчу?"
+voice_en = "Is that the sea? It's... bigger than I thought. Can I just be quiet for a bit?"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_ship"
+duration = 4.0
+voice_ru = "Тёма молчал целых две минуты. Это рекорд."
+voice_en = "Tyoma stayed quiet for two whole minutes. A record."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_south_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])
