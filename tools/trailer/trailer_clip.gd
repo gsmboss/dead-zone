@@ -13,9 +13,14 @@ var _mode: String = ""
 var _equipped: bool = false
 var _cinema: Node
 var _pull_left: float = 4.0
+## Вертикальный ролик (окно выше, чем шире, — Shorts): камера уже, зомби ближе
+var _vertical: bool = false
+const VERTICAL_FOV: float = 60.0
 
 func _ready() -> void:
 	_args = OS.get_cmdline_user_args()
+	var window_size: Vector2i = DisplayServer.window_get_size()
+	_vertical = window_size.y > window_size.x
 	_mode = _args[0]
 	Settings.cutscenes = false
 	var lang: String = "en" if _args[_args.size() - 1] == "en" else "ru"
@@ -92,6 +97,8 @@ func _drive_player() -> void:
 		for i in _player.weapon_manager.weapons.size():
 			if _player.weapon_manager.weapons[i].id == _weapon:
 				_player.weapon_manager.equip(i)
+		if _vertical:
+			_player.weapon_manager._base_fov = VERTICAL_FOV
 		_equipped = true
 	# Постановка: дальних зомби подтягиваем полукругом перед игроком — больше действия в кадре
 	_pull_left -= get_process_delta_time()
@@ -105,9 +112,10 @@ func _drive_player() -> void:
 			var zz := node as Zombie
 			if zz == null or zz.health == null or zz.health.is_dead:
 				continue
-			if zz.global_position.distance_to(_player.global_position) > 15.0:
-				var side: float = (float(k % 5) - 2.0) * 0.35
-				var spot: Vector3 = _player.global_position + forward.rotated(Vector3.UP, side) * randf_range(10.0, 13.0)
+			var near: float = 7.0 if _vertical else 10.0
+			if zz.global_position.distance_to(_player.global_position) > near + 5.0:
+				var side: float = (float(k % 5) - 2.0) * (0.25 if _vertical else 0.35)
+				var spot: Vector3 = _player.global_position + forward.rotated(Vector3.UP, side) * randf_range(near, near + 3.0)
 				spot.y = zz.global_position.y
 				zz.global_position = spot
 				k += 1
