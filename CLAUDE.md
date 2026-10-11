@@ -518,3 +518,6 @@ store/screenshots/ (7 шт. 1920×1080, сняты в Godot). version/name 1.0.0
 Трейлер: tools/trailer/ (README.md) — trailer_clip.tscn снимает клипы Movie Maker'ом (фильм, бой с автонаведением и подтягиванием
 зомби, облёт убежища; язык ru/en — VoiceOver._language), make_cards.py — титры и заставки, build.py — сборка ffmpeg с переходами
 и музыкой CC0. Готовые ролики DeadZone_trailer_ru/en.mp4 (47 с, 1080p) в git не хранятся.
+Ролики YouTube: tools/trailer/shorts.py + shorts_edits.py (Shorts на 14 дней, монтаж в такт музыке), longform.py (пролог, обзор
+1080p), trailer_clip.gd — режимы drive, hub <уровень> <камера>, опции боя boss@/spawn=/deploy/hold; план и тексты — store/youtube_plan.md.
+

@@ -88,7 +88,7 @@ EDITS = {
             'g': ('НАЙДИ ЕГО', 'FIND HIM'),
         },
         'segments': [
-            ('v_film{en}.avi', {'ru': 8.0, 'en': 8.0}, 8, 'cut', None, [(0, 'a', 'W', 'pop', None)]),
+            ('v_film{en}.avi', {'ru': 11.0, 'en': 11.0}, 8, 'cut', None, [(0, 'a', 'W', 'pop', None)]),
             ('v_film{en}.avi', FILM_T['family'], 8, 'flash', None, [(0, 'b', 'Y', 'pop', None)]),
             ('v_film{en}.avi', {'ru': 44.0, 'en': 45.0}, 8, 'rgb', None, [(0, 'c', 'R', 'pop', 'hit')]),
             ('v_film{en}.avi', FILM_T['fall'], 8, 'rgb', None, [(0, 'd', 'W', 'slam', 'moan')]),
@@ -133,7 +133,7 @@ EDITS = {
     # День 7: убежище — было / стало
     'shelter': {
         'texts': {
-            'hook': ('ЛАГЕРЬ →\nКРЕПОСТЬ', 'CAMP →\nFORTRESS'), 'before': ('БЫЛО', 'BEFORE'), 'after': ('СТАЛО', 'AFTER'),
+            'hook': ('ИЗ ЛАГЕРЯ\nВ КРЕПОСТЬ', 'FROM CAMP\nTO FORTRESS'), 'before': ('БЫЛО', 'BEFORE'), 'after': ('СТАЛО', 'AFTER'),
             'feed': ('КОРМИ ЛЮДЕЙ', 'FEED YOUR PEOPLE'), 'build': ('СТРОЙ И\nРАСШИРЯЙ', 'BUILD AND\nEXPAND'),
         },
         'segments': [

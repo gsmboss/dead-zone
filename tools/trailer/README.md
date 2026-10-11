@@ -19,13 +19,24 @@
 2. Титры и заставки: `python3 tools/trailer/make_cards.py tools/trailer/out` (cap_*_ru/en.png, card_logo.png, card_end_ru/en.png).
 3. Сборка: `python3 tools/trailer/build.py ru tools/trailer/out` → DeadZone_trailer_ru.mp4 (ffmpeg, переходы, музыка).
 
-## Shorts (вертикальный, 1080×1920, ~23 с)
-1. Клипы снимать в вертикальном окне: в `override.cfg` ширина 1080, высота 1920 (камера в бою уже, зомби ближе — trailer_clip.gd
-   сам видит вертикаль). Имена: v_film(_en) (`film prologue 80 [en]`), v_harbor (story_voyage 3p shotgun), v_street (mission_kill
-   1p rifle), v_axe (mission_kill 1p axe), v_grave (mission_graveyard 1p shotgun), v_bridge (story_bridge 1p smg),
-   v_mountain (story_shepherd 1p awm), v_baron (story_baron 1p rifle), v_hub (`hub 10`).
-2. `python3 tools/trailer/shorts.py ru|en tools/trailer/out` → DeadZone_shorts_ru/en.mp4. Монтаж в такт combat.ogg (152 уд/мин):
-   SEGMENTS — клип, начало, длина в долях, переход (cut/punch/flash/rgb/whip), кривая скорости (замедление), надписи.
-   Шрифт Russo One (OFL) скачивается в папку клипов.
+## Shorts (вертикальные 1080×1920) и длинные видео
+1. Вертикальные клипы — в вертикальном окне (`override.cfg` 1080×1920, xvfb-run -s "-screen 0 1080x1920x24"): камера в бою уже,
+   зомби ближе (trailer_clip.gd сам видит вертикаль). Режимы съёмки:
+   - `mission <id> <сек> <1p|3p> <оружие> [boss@<с>] [spawn=тип+тип] [deploy] [hold] [en]` — бой; boss@ — босс миссии с
+     замедленным появлением перед игроком, spawn= — эти зомби по очереди (enemies/<тип>.tres), deploy — турель, капкан и мина,
+     hold — не стрелять первые 2 с (видно, кто идёт);
+   - `drive <сек>` — город: за рулём на бульваре, зомби выходят на дорогу, заносы;
+   - `hub <сек> [уровень 1..5] [orbit|camp|gate]` — убежище («до» — уровень 1 без построек), у костра, пролёт от ворот;
+   - `film <id> <сек> [en]` — фильм из story/films.
+   Имена клипов — как в tools/trailer/shorts_edits.py (v_*, hs_*, z_*, melee_*, raid*, loc_*, drive, camp2, hub_*, film_baron…).
+2. `python3 tools/trailer/shorts.py <монтаж> ru|en <папка>` → DeadZone_<монтаж>_<язык>.mp4. Монтажи на 14 дней — EDITS в
+   shorts_edits.py (trailer, headshots, boss, prologue, melee, car, shelter, zombies, camp, sniper, raid, bandits, locations, release):
+   сегменты в долях такта музыки, переходы cut/punch/flash/rgb/whip, замедление SLOWMO, надписи ru/en. Моменты хедшотов
+   удобно искать по жёлтой надписи ХЕДШОТ в кадре.
+3. Длинные (1920×1080): горизонтальные клипы c_*.avi и c_l_*.avi, `python3 tools/trailer/longform.py prologue|overview ru|en <папка>` —
+   заставка, название, разделы с плашкой и подписями, затемнения, музыка, громкость по loudnorm.
+4. Шрифт Russo One (OFL) — в папке клипов (shorts.py скачивает сам). Озвучку фильмов в ролик даёт только audio/voice
+   (tools/voice/build_voice.py, нужен доступ к huggingface.co); без неё фильмы идут с субтитрами игры.
+Названия, описания и расписание публикаций — store/youtube_plan.md.
 
 Папка out/ в git не попадает.
