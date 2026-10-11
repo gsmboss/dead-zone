@@ -2710,6 +2710,9 @@ msgstr "CRAWLER"
 msgid "ПОЛИГОН"
 msgstr "PROVING GROUND"
 
+msgid "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ"
+msgstr "PRIVACY POLICY"
+
 msgid "ПОЛНО"
 msgstr "FULL"
 

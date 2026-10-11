@@ -38,4 +38,5 @@ icon = ExtResource("5_tg")
 
 [resource]
 script = ExtResource("2_sll")
+privacy_url = "https://sites.google.com/view/salamanderlabstacktowerprivacy/untitled-page"
 links = Array[ExtResource("1_sl")]([SubResource("Social_youtube"), SubResource("Social_instagram"), SubResource("Social_telegram")])

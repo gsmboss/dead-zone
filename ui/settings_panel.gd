@@ -317,6 +317,10 @@ func _build_other() -> void:
 		var link_id: String = link.id
 		button.pressed.connect(func() -> void: GameState.open_social(link_id))
 		links.add_child(button)
+	if not GameState.social_links.privacy_url.is_empty():
+		var privacy_policy := UIKit.button("ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ", 22)
+		privacy_policy.pressed.connect(func() -> void: OS.shell_open(GameState.social_links.privacy_url))
+		content.add_child(privacy_policy)
 	if GameState.get_social_reward_left() > 0:
 		UIKit.label(UIKit.t("Награда за подписку — в убежище: МЕНЮ → СОЦСЕТИ (ещё %s)") \
 			% UIKit.coins_text(GameState.get_social_reward_left()), 20, content).modulate = UIKit.GOOD

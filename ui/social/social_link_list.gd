@@ -3,6 +3,8 @@ extends Resource
 ## Соцсети студии и правила напоминания «подпишись» (ui/social/social_links.tres)
 
 @export var links: Array[SocialLink] = []
+## Политика конфиденциальности (страница на Google Сайтах; та же ссылка — в Play Console)
+@export var privacy_url: String = ""
 ## Напоминать в убежище после стольких побед
 @export var prompt_min_wins: int = 2
 ## Не чаще раза в столько дней и не больше prompt_max раз (пока есть неполученные награды)

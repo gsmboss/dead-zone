@@ -513,5 +513,5 @@ prompt_interval_days, не больше prompt_max; перешёл хоть в �
 <uses-permission … tools:node="remove"> для REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, SCHEDULE_EXACT_ALARM, USE_EXACT_ALARM
 (их приносит Notification Scheduler; Google Play придирается) — android/build/AndroidManifest.xml руками не правится.
 Релиз: store/RELEASE.md (пошагово: экспорт AAB, политика, анкеты Play Console — возрастной рейтинг, безопасность данных AdMob,
-закрытый тест 12×14), store/listing.md (тексты ru/en), store/privacy_policy.md (ru/en, нужно опубликовать и дать ссылку),
+закрытый тест 12×14), store/listing.md (тексты ru/en), store/privacy_policy.md (ru/en; опубликована — SocialLinkList.privacy_url, кнопка ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ в настройках ПРОЧЕЕ),
 store/screenshots/ (7 шт. 1920×1080, сняты в Godot). version/name 1.0.0, code 1. Label3D вывесок LevelDressing — double_sided = false.
