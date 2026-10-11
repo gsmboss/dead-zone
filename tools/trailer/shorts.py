@@ -23,33 +23,35 @@ random.seed(7)
 T = {
     'ru': {'fall': 'ГОРОД ПАЛ', 'night': 'ЗА ОДНУ НОЧЬ', 'everywhere': 'ОНИ ПОВСЮДУ', 'grab': 'ХВАТАЙ\nОРУЖИЕ',
            'chop': 'РУБИ', 'burn': 'ЖГИ', 'shoot': 'СТРЕЛЯЙ', 'head': 'ХЕДШОТ!', 'bandits': 'БАНДИТЫ', 'boss': 'И БОССЫ',
-           'city': 'ОГРОМНЫЙ\nГОРОД', 'shelter': 'СТРОЙ\nУБЕЖИЩЕ', 'story': '30 ГЛАВ\nСЮЖЕТА',
+           'monsters': 'МОНСТРЫ', 'shelter': 'СТРОЙ\nУБЕЖИЩЕ', 'story': '30 ГЛАВ\nСЮЖЕТА',
            'soon': 'СКОРО В GOOGLE PLAY', 'sub': 'ПОДПИШИСЬ'},
     'en': {'fall': 'THE CITY FELL', 'night': 'IN ONE NIGHT', 'everywhere': "THEY'RE EVERYWHERE", 'grab': 'GRAB\nA GUN',
            'chop': 'CHOP', 'burn': 'BURN', 'shoot': 'SHOOT', 'head': 'HEADSHOT!', 'bandits': 'BANDITS', 'boss': 'AND BOSSES',
-           'city': 'HUGE\nOPEN CITY', 'shelter': 'BUILD YOUR\nSHELTER', 'story': '30 STORY\nCHAPTERS',
+           'monsters': 'MONSTERS', 'shelter': 'BUILD YOUR\nSHELTER', 'story': '30 STORY\nCHAPTERS',
            'soon': 'COMING SOON TO GOOGLE PLAY', 'sub': 'SUBSCRIBE'},
 }[LANG]
 FILM = 'v_film_en.avi' if LANG == 'en' else 'v_film.avi'
 # Кино снято с чёрными полосами — крупнее, чтобы заполнить вертикальный кадр (субтитры уходят за край)
-FILM_ZOOM = 1.33
+FILM_ZOOM = 1.55
+# Английская озвучка другой длины — планы фильма начинаются в другое время: (город пал, погоня, семья)
+FILM_T = {'ru': (53.0, 55.8, 22.0), 'en': (54.0, 57.2, 20.5)}[LANG]
 
 # Сегменты: клип, начало в клипе (с), длина в долях, вход (punch/flash/rgb/whip/cut), скорость [(доля, x)], надписи
 # Надпись: (доля от начала сегмента, ключ T, цвет, стиль slam/pop, звук)
 SEGMENTS = [
-    (FILM, 53.0, 4, 'cut', None, [(0, 'fall', WHITE, 'slam', 'hit')]),
-    (FILM, 55.8, 4, 'rgb', None, [(0, 'night', RED, 'slam', 'hit')]),
+    (FILM, FILM_T[0], 4, 'cut', None, [(0, 'fall', WHITE, 'slam', 'hit')]),
+    (FILM, FILM_T[1], 4, 'rgb', None, [(0, 'night', RED, 'slam', 'hit')]),
     ('v_harbor.avi', 11.5, 4, 'flash', None, [(0, 'everywhere', YELLOW, 'pop', 'moan')]),
-    ('v_street.avi', 9.0, 4, 'whip', None, [(0, 'grab', WHITE, 'slam', 'hit')]),
+    ('v_street.avi', 12.0, 4, 'whip', None, [(0, 'grab', WHITE, 'slam', 'hit')]),
     ('v_axe.avi', 9.5, 2, 'punch', None, [(0, 'chop', YELLOW, 'slam', 'hit')]),
-    ('v_grave.avi', 9.0, 2, 'punch', None, [(0, 'shoot', RED, 'slam', 'hit')]),
-    ('v_bridge.avi', 9.0, 2, 'punch', None, []),
-    ('v_mountain.avi', 12.55, 6, 'rgb', [(0, 1.0), (0.3, 1.0), (0.36, 0.3), (0.8, 0.3), (0.9, 1.0)],
+    ('v_grave.avi', 11.2, 2, 'punch', None, [(0, 'shoot', RED, 'slam', 'hit')]),
+    ('v_bridge.avi', 10.0, 2, 'punch', None, []),
+    ('v_street.avi', 5.0, 6, 'rgb', [(0, 1.0), (0.3, 1.0), (0.36, 0.3), (0.8, 0.3), (0.9, 1.0)],
      [(2, 'head', RED, 'slam', 'boom')]),
     ('v_baron.avi', 10.0, 4, 'whip', None, [(0, 'bandits', WHITE, 'slam', 'hit'), (2, 'boss', RED, 'slam', 'hit')]),
-    ('v_city.avi', 5.0, 4, 'flash', None, [(0, 'city', YELLOW, 'pop', 'hit')]),
+    ('v_mountain.avi', 9.3, 4, 'flash', None, [(0, 'monsters', YELLOW, 'slam', 'moan')]),
     ('v_hub.avi', 1.5, 6, 'whip', None, [(0, 'shelter', YELLOW, 'pop', 'hit')]),
-    (FILM, 18.0, 4, 'rgb', None, [(0, 'story', WHITE, 'pop', 'hit')]),
+    (FILM, FILM_T[2], 4, 'rgb', None, [(0, 'story', WHITE, 'pop', 'hit')]),
     ('END', 0, 12, 'flash', None, []),
 ]
 TOTAL_BEATS = sum(s[2] for s in SEGMENTS)
