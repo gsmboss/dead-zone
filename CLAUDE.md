@@ -515,3 +515,6 @@ prompt_interval_days, не больше prompt_max; перешёл хоть в �
 Релиз: store/RELEASE.md (пошагово: экспорт AAB, политика, анкеты Play Console — возрастной рейтинг, безопасность данных AdMob,
 закрытый тест 12×14), store/listing.md (тексты ru/en), store/privacy_policy.md (ru/en; опубликована — SocialLinkList.privacy_url, кнопка ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ в настройках ПРОЧЕЕ),
 store/screenshots/ (7 шт. 1920×1080, сняты в Godot). version/name 1.0.0, code 1. Label3D вывесок LevelDressing — double_sided = false.
+Трейлер: tools/trailer/ (README.md) — trailer_clip.tscn снимает клипы Movie Maker'ом (фильм, бой с автонаведением и подтягиванием
+зомби, облёт убежища; язык ru/en — VoiceOver._language), make_cards.py — титры и заставки, build.py — сборка ffmpeg с переходами
+и музыкой CC0. Готовые ролики DeadZone_trailer_ru/en.mp4 (47 с, 1080p) в git не хранятся.
