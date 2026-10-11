@@ -31,23 +31,25 @@ T = {
            'soon': 'COMING SOON TO GOOGLE PLAY', 'sub': 'SUBSCRIBE'},
 }[LANG]
 FILM = 'v_film_en.avi' if LANG == 'en' else 'v_film.avi'
+# Кино снято с чёрными полосами — крупнее, чтобы заполнить вертикальный кадр (субтитры уходят за край)
+FILM_ZOOM = 1.33
 
 # Сегменты: клип, начало в клипе (с), длина в долях, вход (punch/flash/rgb/whip/cut), скорость [(доля, x)], надписи
 # Надпись: (доля от начала сегмента, ключ T, цвет, стиль slam/pop, звук)
 SEGMENTS = [
-    (FILM, 41.6, 4, 'cut', None, [(0, 'fall', WHITE, 'slam', 'hit'), (2, 'night', RED, 'slam', 'hit')]),
-    (FILM, 56.0, 4, 'rgb', None, [(0, 'everywhere', YELLOW, 'pop', 'moan')]),
-    ('v_street.avi', 9.0, 4, 'flash', None, [(0, 'grab', WHITE, 'slam', 'hit')]),
-    ('v_harbor.avi', 10.0, 2, 'whip', None, []),
-    ('v_axe.avi', 9.0, 2, 'punch', None, [(0, 'chop', YELLOW, 'slam', 'hit')]),
-    ('v_flame.avi', 9.0, 2, 'punch', None, [(0, 'burn', RED, 'slam', 'hit')]),
-    ('v_grave.avi', 9.0, 2, 'punch', None, [(0, 'shoot', WHITE, 'slam', 'hit')]),
-    ('v_mountain.avi', 9.0, 6, 'rgb', [(0, 1.0), (0.3, 1.0), (0.36, 0.3), (0.8, 0.3), (0.9, 1.0)],
+    (FILM, 53.0, 4, 'cut', None, [(0, 'fall', WHITE, 'slam', 'hit')]),
+    (FILM, 55.8, 4, 'rgb', None, [(0, 'night', RED, 'slam', 'hit')]),
+    ('v_harbor.avi', 11.5, 4, 'flash', None, [(0, 'everywhere', YELLOW, 'pop', 'moan')]),
+    ('v_street.avi', 9.0, 4, 'whip', None, [(0, 'grab', WHITE, 'slam', 'hit')]),
+    ('v_axe.avi', 9.5, 2, 'punch', None, [(0, 'chop', YELLOW, 'slam', 'hit')]),
+    ('v_grave.avi', 9.0, 2, 'punch', None, [(0, 'shoot', RED, 'slam', 'hit')]),
+    ('v_bridge.avi', 9.0, 2, 'punch', None, []),
+    ('v_mountain.avi', 12.55, 6, 'rgb', [(0, 1.0), (0.3, 1.0), (0.36, 0.3), (0.8, 0.3), (0.9, 1.0)],
      [(2, 'head', RED, 'slam', 'boom')]),
-    ('v_baron.avi', 9.0, 4, 'whip', None, [(0, 'bandits', WHITE, 'slam', 'hit'), (2, 'boss', RED, 'slam', 'hit')]),
-    ('v_city.avi', 9.0, 4, 'flash', None, [(0, 'city', YELLOW, 'pop', 'hit')]),
+    ('v_baron.avi', 10.0, 4, 'whip', None, [(0, 'bandits', WHITE, 'slam', 'hit'), (2, 'boss', RED, 'slam', 'hit')]),
+    ('v_city.avi', 5.0, 4, 'flash', None, [(0, 'city', YELLOW, 'pop', 'hit')]),
     ('v_hub.avi', 1.5, 6, 'whip', None, [(0, 'shelter', YELLOW, 'pop', 'hit')]),
-    (FILM, 64.0, 4, 'rgb', None, [(0, 'story', WHITE, 'pop', 'hit')]),
+    (FILM, 18.0, 4, 'rgb', None, [(0, 'story', WHITE, 'pop', 'hit')]),
     ('END', 0, 12, 'flash', None, []),
 ]
 TOTAL_BEATS = sum(s[2] for s in SEGMENTS)
@@ -294,16 +296,16 @@ def build_audio(cuts):
             chunk[:xf] *= np.linspace(0, 1, xf)[:, None]
         track[pos:pos + n] += chunk * 0.85
         pos += len(loop) - xf
-    # Звук игры под музыкой (только сегменты без замедления)
+    # Звук игры под музыкой (без кино — там обрывки фраз, и без замедления)
     for c in cuts:
-        if c['src'] == 'END' or c['curve']:
+        if c['src'] == 'END' or c['curve'] or c['src'].startswith('v_film'):
             continue
         g = load_audio(os.path.join(D, c['src']), c['start'], c['len'])
         if len(g):
             f = min(len(g), int(0.03 * SR))
             g[:f] *= np.linspace(0, 1, f)[:, None]
             g[-f:] *= np.linspace(1, 0, f)[:, None]
-            mix_at(track, g, c['t0'], 0.55 if c['src'].startswith('v_film') else 0.4)
+            mix_at(track, g, c['t0'], 0.4)
     sfx = {
         'hit': load_audio(os.path.join(ROOT, 'audio/impacts/world_02.ogg')),
         'boom': load_audio(os.path.join(ROOT, 'audio/world/explosion_01.ogg')),
@@ -370,7 +372,7 @@ def main():
                     arr = last if last is not None else np.zeros((H, W, 3), np.uint8)
             last = arr
             # Камера: медленный наезд + удар на входе
-            z = 1.0 + 0.04 * frac
+            z = (FILM_ZOOM if c['src'].startswith('v_film') else 1.0) + 0.04 * frac
             ox = oy = 0
             if c['trans'] in ('punch', 'flash', 'rgb') and age < 0.25:
                 z += 0.14 * (1 - age / 0.25) ** 2
