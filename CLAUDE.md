@@ -508,4 +508,4 @@ ui/social/icons/*.svg) — YouTube, Instagram, Telegram по 300 монет. Gam
 can_claim_social (через claim_delay после перехода), claim_social, get_social_reward_left; сохранение "socials"
 (visited/claimed/prompt_time/prompts). Окно ui/hub/social_panel.gd (SocialPanel: ПОДПИСАТЬСЯ → ЗАБРАТЬ +N), плитка СОЦСЕТИ
 в HubMenu (значок ui/hub/icons/social.svg), напоминание HubHUD._offer_social (после prompt_min_wins побед, раз в
-prompt_interval_days, не больше prompt_max), кнопки в настройках (ПРОЧЕЕ). Подписку проверить нельзя — награда за переход.
+prompt_interval_days, не больше prompt_max; перешёл хоть в одну соцсеть — больше не спрашивает никогда, плитка пишет «ЗАБЕРИ НАГРАДУ!»), кнопки в настройках (ПРОЧЕЕ). Подписку проверить нельзя — награда за переход.

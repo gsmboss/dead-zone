@@ -1394,6 +1394,14 @@ func claim_social(link_id: String) -> int:
 	return link.reward
 
 
+## Есть награда, которую можно забрать прямо сейчас (перешёл по ссылке, но не забрал)
+func has_social_reward_ready() -> bool:
+	for link: SocialLink in social_links.links:
+		if link != null and can_claim_social(link.id):
+			return true
+	return false
+
+
 ## Сколько монет ещё можно получить за подписки
 func get_social_reward_left() -> int:
 	var total: int = 0
@@ -1403,8 +1411,11 @@ func get_social_reward_left() -> int:
 	return total
 
 
-## Пора напомнить подписаться (убежище): есть неполученные награды, хватает побед, не слишком часто
+## Пора напомнить подписаться (убежище): ещё ни разу не переходил ни в одну соцсеть (перешёл хоть раз —
+## больше не спрашиваем никогда, награды ждут в окне СОЦСЕТИ), хватает побед, не слишком часто
 func should_prompt_social() -> bool:
+	if not _socials_visited.is_empty() or not _socials_claimed.is_empty():
+		return false
 	if get_social_reward_left() <= 0 or _social_prompts >= social_links.prompt_max:
 		return false
 	if get_stat(&"mission_win") < social_links.prompt_min_wins:

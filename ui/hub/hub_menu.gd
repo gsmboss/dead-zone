@@ -167,6 +167,8 @@ func _status(id: StringName) -> String:
 		&"settings":
 			return "ГРАФИКА, УПРАВЛЕНИЕ"
 		&"social":
+			if GameState.has_social_reward_ready():
+				return "ЗАБЕРИ НАГРАДУ!"
 			var left: int = GameState.get_social_reward_left()
 			return UIKit.t("+%d МОНЕТ") % left if left > 0 else "YOUTUBE • TELEGRAM"
 		&"tutorial":

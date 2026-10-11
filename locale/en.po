@@ -1237,6 +1237,9 @@ msgstr "THREE DAYS BEFORE THE SHIP"
 msgid "ЗА ТРИ ДНЯ ДО КОРАБЛЯ ИЗ ЛАБОРАТОРИИ ПРОПАЛ ЧЕМОДАН С ВАКЦИНОЙ. И ШНЫРЬ. И ЕГО БОРОДА."
 msgstr "THREE DAYS BEFORE THE SHIP, THE CASE WITH THE VACCINE VANISHED FROM THE LAB. SO DID SHNYR. AND HIS BEARD."
 
+msgid "ЗАБЕРИ НАГРАДУ!"
+msgstr "CLAIM YOUR REWARD!"
+
 msgid "ЗАБРАТЬ"
 msgstr "CLAIM"
 
