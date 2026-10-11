@@ -29,6 +29,7 @@ var _hold: float = 0.0
 var _hub_cam: String = "orbit"
 var _drive_started: bool = false
 var _drive_yaw: float = 0.0
+var _lane_point: Vector3 = Vector3.ZERO
 var _drift_left: float = 0.0
 var _drift_wait: float = 4.0
 
@@ -132,12 +133,15 @@ func _process(delta: float) -> void:
 		"drive":
 			_drive(delta)
 		"hub":
+			if Engine.get_process_frames() % 30 == 0:
+				Ads.hide_banner()  # баннер убежища (в редакторе — заглушка) не нужен в кадре
 			match _hub_cam:
 				"camp":  # у костра: медленный наезд на сидящих
 					var fire: Vector3 = HubCamp.FIRE
-					var b: float = 0.6 + _t * 0.05
-					_cam.position = fire + Vector3(sin(b) * (6.5 - _t * 0.15), 2.2, cos(b) * (6.5 - _t * 0.15))
-					_cam.look_at(fire + Vector3.UP * 0.9)
+					var b: float = 3.85 + _t * 0.02  # с юго-запада: огонь и лица сидящих, без палатки и таблички
+					var r: float = 3.6 - _t * 0.05
+					_cam.position = fire + Vector3(sin(b) * r, 2.1, cos(b) * r)
+					_cam.look_at(fire + Vector3.UP * 0.7)
 					var p := get_tree().get_first_node_in_group(&"player") as Node3D
 					if p != null:  # разговоры у костра идут, только если игрок рядом
 						p.global_position = fire + Vector3(3.0, 0.1, 3.5)
@@ -226,7 +230,7 @@ func _mission_extras() -> void:
 		Settings.cutscenes = true
 		GameState.reset_cutscenes()
 		manager._spawn_boss()
-		_pull_boss.call_deferred()
+		_pull_boss()  # сразу: замедленное появление строит камеру от места босса
 	if not _spawn_types.is_empty() and manager.spawner != null:
 		_spawn_left -= get_process_delta_time()
 		if _spawn_left <= 0.0:
@@ -235,7 +239,7 @@ func _mission_extras() -> void:
 			_spawn_index += 1
 			if zombie != null:
 				_place_in_front(zombie, 9.0, (float(_spawn_index % 3) - 1.0) * 0.3)
-	if _deploy and _t > 1.0:
+	if _deploy and _t > 2.5:
 		_deploy = false
 		var base_yaw: float = _player.rotation.y
 		var items: Array[String] = ["turret", "bear_trap", "land_mine"]
@@ -253,6 +257,9 @@ func _pull_boss() -> void:
 		var zombie := node as Zombie
 		if zombie != null and zombie.data != null and zombie.data.is_boss:
 			_place_in_front(zombie, 12.0, 0.0)
+			var face: Vector3 = _player.global_position
+			face.y = zombie.global_position.y
+			zombie.look_at(face, Vector3.UP)  # лицом к игроку — камера появления смотрит ему в лицо
 
 
 func _place_in_front(zombie: Node3D, distance: float, side: float) -> void:
@@ -281,29 +288,33 @@ func _drive(delta: float) -> void:
 		if _t < 1.0:
 			return
 		_drive_started = true
+		_put_on_avenue(car)
 		controller.call(&"_sit_in", car, true)
 		_drive_yaw = car.global_rotation.y
+		_lane_point = car.global_position
 		Input.action_press(&"move_forward")
 		return
 	# Держим курс (машина смотрит по -Z)
 	var err: float = wrapf(car.global_rotation.y - _drive_yaw, -PI, PI)
 	_drift_wait -= delta
 	if _drift_wait <= 0.0 and _drift_left <= 0.0:
-		_drift_left = 1.4
-		_drift_wait = 5.0
+		_drift_left = 1.0
+		_drift_wait = 4.5
 	if _drift_left > 0.0:
 		_drift_left -= delta
-		var hard: bool = _drift_left > 0.7
+		var hard: bool = _drift_left > 0.5
 		_set_steer(1.0 if hard else -1.0)
 		if hard:
 			Input.action_press(&"jump")
 		else:
 			Input.action_release(&"jump")
 		if _drift_left <= 0.0:
-			_drive_yaw = car.global_rotation.y  # новый курс — куда вынесло
 			Input.action_release(&"jump")
 	else:
-		_set_steer(clampf(-err * 2.5, -1.0, 1.0))
+		# Курс и полоса: вправо от полосы — руль влево
+		var right: Vector3 = Basis(Vector3.UP, _drive_yaw) * Vector3.RIGHT
+		var lateral: float = (car.global_position - _lane_point).dot(right)
+		_set_steer(clampf(-err * 2.5 + lateral * 0.12, -1.0, 1.0))
 	# Зомби выходят на дорогу перед машиной
 	_pull_left -= delta
 	if _pull_left <= 0.0:
@@ -323,6 +334,23 @@ func _drive(delta: float) -> void:
 				spot.y = car.global_position.y
 				zombie.global_position = spot
 				k += 1
+
+
+## Машину — на бульвар (широкий проспект), в правую полосу, лицом вдоль него: впереди длинная прямая
+func _put_on_avenue(car: DrivableCar) -> void:
+	var generator: CityGenerator = null
+	for node: Node in get_tree().current_scene.find_children("*", "Node3D", true, false):
+		if node is CityGenerator:
+			generator = node
+			break
+	if generator == null or generator._lines.size() < 3:
+		return
+	var index: int = 1
+	for i in range(1, generator._lines.size() - 1):
+		if generator._is_avenue(i):
+			index = i
+			break
+	car.teleport(Vector3(generator._lines[index] + 3.5, 0.4, generator._half - 12.0), 0.0)
 
 
 func _set_steer(value: float) -> void:
