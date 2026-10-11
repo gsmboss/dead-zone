@@ -354,6 +354,7 @@ func _sign(text: String, at: Vector3, yaw: float, color: Color, font_size: int =
 	label.shaded = false
 	label.position = at
 	label.rotation.y = yaw
+	label.double_sided = false  # сзади надпись не видна (иначе читается задом наперёд)
 	add_child(label)
 
 
@@ -861,7 +862,7 @@ func _set_lodge() -> void:
 		_put(GRAVE + "stone-wall-damaged.glb", lodge + Vector3(2.5, 0.0, 0.0), PI * 0.5, 2.6)
 		_put(GRAVE + "stone-wall.glb", lodge + Vector3(0.0, 0.0, -2.5), 0.0, 2.6)
 		_put(GRAVE + "debris-wood.glb", lodge, 0.0, 2.6, false)
-		_sign("ТУРБАЗА", lodge + Vector3(0.0, 3.4, -2.6), 0.0, Color(0.85, 0.85, 0.9), 64)
+		_sign("ТУРБАЗА", lodge + Vector3(0.0, 3.4, -2.3), 0.0, Color(0.85, 0.85, 0.9), 64)
 	_scatter([GRAVE + "debris.glb", GRAVE + "debris-wood.glb"], 8, 1.0, Vector2(2.2, 2.6), false)
 	_scatter([HOLIDAY + "snow-pile.glb"], 8, 1.4, Vector2(2.4, 3.2), false)
 	_scatter([NATURE + "rock_tallA.glb", NATURE + "rock_tallB.glb"], 5, 1.8, Vector2(3.5, 4.5))
