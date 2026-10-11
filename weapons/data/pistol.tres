@@ -12,6 +12,7 @@ damage = 25.0
 max_range = 50.0
 fire_rate = 3.0
 reload_time = 1.1
+max_reserve_ammo = 72
 gun_kick = 0.04
 fire_sound = ExtResource("s_fire")
 reload_sound = ExtResource("s_reload")
