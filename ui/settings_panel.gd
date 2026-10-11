@@ -3,8 +3,6 @@ extends HubWindow
 ## Настройки по вкладкам (слева): управление, камера, кнопки, прицел, гироскоп, эффекты урона,
 ## звук, графика, сюжет, прочее. Работает в убежище и в меню паузы.
 
-const TELEGRAM_URL: String = "https://t.me/SalamanderLab"
-const INSTAGRAM_URL: String = "https://www.instagram.com/salamandersec/"
 const SLIDER_HEIGHT: float = 64.0
 const GRABBER_SIZE: int = 44
 
@@ -307,14 +305,21 @@ func _build_other() -> void:
 	var links := HBoxContainer.new()
 	links.add_theme_constant_override(&"separation", 16)
 	content.add_child(links)
-	var telegram := UIKit.button("TELEGRAM", 24)
-	telegram.size_flags_horizontal = SIZE_EXPAND_FILL
-	telegram.pressed.connect(func() -> void: OS.shell_open(TELEGRAM_URL))
-	links.add_child(telegram)
-	var instagram := UIKit.button("INSTAGRAM", 24)
-	instagram.size_flags_horizontal = SIZE_EXPAND_FILL
-	instagram.pressed.connect(func() -> void: OS.shell_open(INSTAGRAM_URL))
-	links.add_child(instagram)
+	for link: SocialLink in GameState.social_links.links:
+		if link == null:
+			continue
+		var button := UIKit.button(link.title, 24)
+		button.size_flags_horizontal = SIZE_EXPAND_FILL
+		if link.icon != null:
+			button.icon = link.icon
+			button.expand_icon = true
+			button.add_theme_constant_override(&"icon_max_width", 40)
+		var link_id: String = link.id
+		button.pressed.connect(func() -> void: GameState.open_social(link_id))
+		links.add_child(button)
+	if GameState.get_social_reward_left() > 0:
+		UIKit.label(UIKit.t("Награда за подписку — в убежище: МЕНЮ → СОЦСЕТИ (ещё %s)") \
+			% UIKit.coins_text(GameState.get_social_reward_left()), 20, content).modulate = UIKit.GOOD
 
 
 func _section(title: String) -> void:

@@ -94,8 +94,14 @@ msgstr "%s • STARTS IN %d"
 msgid "%s • УРОВЕНЬ %d"
 msgstr "%s • LEVEL %d"
 
+msgid "+%d МОНЕТ"
+msgstr "+%d COINS"
+
 msgid "+%d ЯЩ. — %d"
 msgstr "+%d CRATES — %d"
+
+msgid "+%s ЗА ПОДПИСКУ"
+msgstr "+%s FOR FOLLOWING"
 
 msgid "+12 УРОНА ЗОМБИ, КОТОРЫЙ БЬЁТ МАШИНУ; +10% ТАРАНА"
 msgstr "+12 DAMAGE TO A ZOMBIE HITTING THE CAR; +10% RAM"
@@ -171,6 +177,9 @@ msgstr "SALAMANDERLAB\nPRESENTS"
 
 msgid "WI-FI, ДО 4 ИГРОКОВ"
 msgstr "WI-FI, UP TO 4 PLAYERS"
+
+msgid "YOUTUBE, INSTAGRAM И TELEGRAM SALAMANDERLAB: НОВОСТИ, ТРЕЙЛЕРЫ И КОДЫ. ЗА ПОДПИСКИ — %s."
+msgstr "SALAMANDERLAB ON YOUTUBE, INSTAGRAM AND TELEGRAM: NEWS, TRAILERS AND CODES. FOLLOW AND GET %s."
 
 msgid "x2 МОНЕТЫ  ▶ РЕКЛАМА"
 msgstr "x2 COINS  ▶ AD"
@@ -621,6 +630,9 @@ msgstr "ENEMIES"
 
 msgid "ВСЕ ВОСЕМЬ В ЛАГЕРЕ. ДЯДЯ ГОША ВАРИЛ КОФЕ ПРЯМО В КУЗОВЕ, НА ХОДУ. НИКТО НЕ ОБЖЁГСЯ. ПОЧТИ."
 msgstr "ALL EIGHT ARE IN THE CAMP. UNCLE GOSHA BREWED COFFEE IN THE TRUCK BED, ON THE MOVE. NOBODY GOT BURNED. ALMOST."
+
+msgid "ВСЕ НАГРАДЫ ПОЛУЧЕНЫ. СПАСИБО, ЧТО ТЫ С НАМИ!"
+msgstr "ALL REWARDS CLAIMED. THANKS FOR BEING WITH US!"
 
 msgid "ВСЕГДА"
 msgstr "ALWAYS"
@@ -1341,6 +1353,9 @@ msgstr "ZOMBIE COSPLAY"
 
 msgid "ЗОНА ОТДЫХА"
 msgstr "LOUNGE"
+
+msgid "За каждую подписку — награда. Осталось получить: %s"
+msgstr "A reward for every follow. Still to claim: %s"
 
 msgid "За победу в миссии: +%d ящ. и ещё по ящику за звезду"
 msgstr "Mission win: +%d crates and one more per star"
@@ -2146,6 +2161,9 @@ msgstr "REWARD AWAITS!"
 msgid "НАГРАДА ЗА ВХОД"
 msgstr "LOGIN REWARD"
 
+msgid "НАГРАДА ПОЛУЧЕНА ✓"
+msgstr "REWARD CLAIMED ✓"
+
 msgid "НАГРАДА: %s"
 msgstr "REWARD: %s"
 
@@ -2308,6 +2326,9 @@ msgstr "FOOD NEEDED: %d (HAVE %d) — BUY IN THE BASE WINDOW"
 msgid "Набери 10000 очков дрифта"
 msgstr "Score 10000 drift points"
 
+msgid "Награда за подписку — в убежище: МЕНЮ → СОЦСЕТИ (ещё %s)"
+msgstr "Follow rewards are in the shelter: MENU → SOCIAL (%s left)"
+
 msgid "Награда: %s"
 msgstr "Reward: %s"
 
@@ -2334,6 +2355,9 @@ msgstr "Unknown quest"
 
 msgid "Нет доступных миссий"
 msgstr "No missions available"
+
+msgid "Новости обновлений, коды и общение с разработчиками"
+msgstr "Update news, codes and chatting with the developers"
 
 msgid "Новые жильцы (радио)"
 msgstr "New residents (radio)"
@@ -2436,6 +2460,9 @@ msgstr "FIGHT BACK"
 
 msgid "ОТКРЫТЫЙ ГОРОД"
 msgstr "OPEN CITY"
+
+msgid "ОТКРЫТЬ"
+msgstr "OPEN"
 
 msgid "ОТЛИЧНО! ДОБЕЙ ОСТАЛЬНЫХ — И ОБУЧЕНИЕ ПРОЙДЕНО"
 msgstr "NICE! FINISH OFF THE REST — AND THE TUTORIAL IS DONE"
@@ -2628,6 +2655,15 @@ msgstr "CONNECTING TO %s…"
 
 msgid "ПОДКЛЮЧЕНО К %s"
 msgstr "CONNECTED TO %s"
+
+msgid "ПОДПИСАТЬСЯ"
+msgstr "FOLLOW"
+
+msgid "ПОДПИШИСЬ НА SALAMANDERLAB — НОВОСТИ ИГРЫ, ТРЕЙЛЕРЫ И КОДЫ ПЕРВЫМ!"
+msgstr "FOLLOW SALAMANDERLAB — GET GAME NEWS, TRAILERS AND CODES FIRST!"
+
+msgid "ПОДПИШИСЬ НА НАС!"
+msgstr "FOLLOW US!"
 
 msgid "ПОДЪЕЗД К МОСТУ"
 msgstr "BRIDGE APPROACH"
@@ -3055,6 +3091,9 @@ msgstr "Expand the shelter to the FORTRESS level"
 msgid "Расширь убежище до уровня ФОРТ"
 msgstr "Expand the shelter to the FORT level"
 
+msgid "Ролики о разработке, трейлеры и секреты игры"
+msgstr "Devlogs, trailers and game secrets"
+
 msgid "С ГОР СПУСКАЮТСЯ МЕРТВЕЦЫ — МЕДЛЕННЫЕ ОТ ХОЛОДА, НО УПРЯМЫЕ. И СОБАКИ. СОБАКИ НЕ МЕДЛЕННЫЕ. ПРОДЕРЖИСЬ."
 msgstr "THE DEAD ARE COMING DOWN FROM THE MOUNTAINS: SLOW FROM THE COLD, BUT STUBBORN. AND DOGS. THE DOGS ARE NOT SLOW. HOLD OUT."
 
@@ -3226,6 +3265,9 @@ msgstr "SAVE"
 msgid "СОХРАНИТЬ"
 msgstr "SAVE"
 
+msgid "СОЦСЕТИ"
+msgstr "SOCIAL"
+
 msgid "СПАСЁН!"
 msgstr "RESCUED!"
 
@@ -3375,6 +3417,9 @@ msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
 
 msgid "Серия дней не ждёт: забери монеты и накорми лагерь."
 msgstr "Your streak won't wait: grab the coins and feed the camp."
+
+msgid "Скриншоты, новые зомби и закулисье студии"
+msgstr "Screenshots, new zombies and behind the scenes"
 
 msgid "Сначала построй: %s"
 msgstr "Build this first: %s"

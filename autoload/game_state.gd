@@ -33,6 +33,7 @@ const WEEKLY_EVENTS_PATH: String = "res://quests/weekly_events.tres"
 const SAVE_CODE_PREFIX: String = "DZ1"
 const SAVE_CODE_MAX_SIZE: int = 4 * 1024 * 1024
 const CAMPAIGN_PATH: String = "res://story/campaign.tres"
+const SOCIAL_PATH: String = "res://ui/social/social_links.tres"
 const PLAYER_UPGRADES: Array[String] = ["health", "armor"]
 ## Каждое прохождение миссии: зомби сильнее на 15% (до x3), награда больше на 10% (до x2)
 const DIFFICULTY_PER_CLEAR: float = 0.15
@@ -113,6 +114,12 @@ var items: Array[ItemData] = []
 var buildings: Array[BuildingData] = []
 ## Развитие убежища (base/shelter_state.gd)
 var shelter: ShelterState
+## Соцсети студии (ui/social/social_links.tres)
+var social_links: SocialLinkList
+var _socials_visited: Dictionary = {}   # id соцсети -> unix-время перехода по ссылке
+var _socials_claimed: Array[String] = []
+var _social_prompt_time: int = 0
+var _social_prompts: int = 0
 
 var _owned: Array[String] = []
 var _upgrades: Dictionary = {}     # id оружия -> {"damage": int, "magazine": int, "reload": int}
@@ -225,6 +232,10 @@ func _ready() -> void:
 			continue
 		cars.append(car)
 	shelter = ShelterState.new()
+	social_links = load(SOCIAL_PATH) as SocialLinkList if ResourceLoader.exists(SOCIAL_PATH) else null
+	if social_links == null:
+		push_warning("GameState: не найдены соцсети %s" % SOCIAL_PATH)
+		social_links = SocialLinkList.new()
 	load_game()
 	if _grant_free_weapons():
 		save_game()
@@ -1341,6 +1352,74 @@ func end_raid() -> void:
 	raid_active = false
 
 
+# ---------- Соцсети: награда за подписку ----------
+
+## Открыть соцсеть в браузере/приложении и запомнить переход (после него можно забрать награду)
+func open_social(link_id: String) -> void:
+	var link: SocialLink = social_links.find(link_id)
+	if link == null:
+		return
+	OS.shell_open(link.url)
+	if not _socials_visited.has(link_id):
+		_socials_visited[link_id] = int(Time.get_unix_time_from_system())
+		save_game()
+	progress_changed.emit()
+
+
+func is_social_visited(link_id: String) -> bool:
+	return _socials_visited.has(link_id)
+
+
+func is_social_claimed(link_id: String) -> bool:
+	return link_id in _socials_claimed
+
+
+## Награду можно забрать: перешёл по ссылке не меньше claim_delay секунд назад и ещё не забирал
+func can_claim_social(link_id: String) -> bool:
+	if not _socials_visited.has(link_id) or is_social_claimed(link_id):
+		return false
+	var since: int = int(Time.get_unix_time_from_system()) - int(_socials_visited[link_id])
+	return since >= ceili(social_links.claim_delay) or since < 0
+
+
+## Забрать награду за подписку; возвращает монеты (0 — нельзя)
+func claim_social(link_id: String) -> int:
+	var link: SocialLink = social_links.find(link_id)
+	if link == null or not can_claim_social(link_id):
+		return 0
+	_socials_claimed.append(link_id)
+	report_event(&"social_follow")
+	add_coins(link.reward)  # сохраняет
+	progress_changed.emit()
+	return link.reward
+
+
+## Сколько монет ещё можно получить за подписки
+func get_social_reward_left() -> int:
+	var total: int = 0
+	for link: SocialLink in social_links.links:
+		if link != null and not is_social_claimed(link.id):
+			total += link.reward
+	return total
+
+
+## Пора напомнить подписаться (убежище): есть неполученные награды, хватает побед, не слишком часто
+func should_prompt_social() -> bool:
+	if get_social_reward_left() <= 0 or _social_prompts >= social_links.prompt_max:
+		return false
+	if get_stat(&"mission_win") < social_links.prompt_min_wins:
+		return false
+	var now: int = int(Time.get_unix_time_from_system())
+	return _social_prompt_time <= 0 or now - _social_prompt_time >= social_links.prompt_interval_days * SECONDS_PER_DAY \
+		or now < _social_prompt_time
+
+
+func mark_social_prompted() -> void:
+	_social_prompt_time = int(Time.get_unix_time_from_system())
+	_social_prompts += 1
+	save_game()
+
+
 ## Обучение — миссия на полигоне (MissionData.tutorial)
 const TUTORIAL_PATH: String = "res://missions/data/mission_tutorial.tres"
 
@@ -1387,6 +1466,10 @@ func reset_progress() -> void:
 	_achievements_done.clear()
 	_weekly = {}
 	shelter.reset()
+	_socials_visited.clear()
+	_socials_claimed.clear()
+	_social_prompt_time = 0
+	_social_prompts = 0
 	_grant_free_weapons()
 	coins_changed.emit(coins)
 	weapons_changed.emit()
@@ -1439,6 +1522,8 @@ func save_game() -> void:
 		"achievements": _achievements_done,
 		"weekly": _weekly,
 		"shelter": shelter.to_dict(),
+		"socials": {"visited": _socials_visited, "claimed": _socials_claimed,
+			"prompt_time": _social_prompt_time, "prompts": _social_prompts},
 	}
 	var file := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
 	if file == null:
@@ -1592,6 +1677,7 @@ func load_game() -> void:
 		if item != null:
 			_inventory[item_id] = mini(int(stored[item_id]), item.max_stack)
 	shelter.from_dict(data.get("shelter", {}))
+	_load_socials(data.get("socials", {}))
 	# Старое сохранение без статистики: счётчики по уже сделанному (достижения откроются при следующем событии)
 	if not data.has("stats"):
 		var wins: int = 0
@@ -1600,6 +1686,28 @@ func load_game() -> void:
 		_stats["mission_win"] = wins
 		_stats["chapter"] = _chapters_done.size()
 		_stats["daily_streak"] = _daily_streak
+
+
+func _load_socials(source: Variant) -> void:
+	_socials_visited.clear()
+	_socials_claimed.clear()
+	_social_prompt_time = 0
+	_social_prompts = 0
+	if not source is Dictionary:
+		return
+	var data: Dictionary = source
+	var visited: Variant = data.get("visited", {})
+	if visited is Dictionary:
+		for link_id: Variant in visited:
+			if social_links.find(str(link_id)) != null:
+				_socials_visited[str(link_id)] = int((visited as Dictionary)[link_id])
+	var claimed: Variant = data.get("claimed", [])
+	if claimed is Array:
+		for link_id: Variant in claimed:
+			if social_links.find(str(link_id)) != null and not str(link_id) in _socials_claimed:
+				_socials_claimed.append(str(link_id))
+	_social_prompt_time = maxi(int(data.get("prompt_time", 0)), 0)
+	_social_prompts = maxi(int(data.get("prompts", 0)), 0)
 
 
 ## Машины автосалона из сохранения (неизвестные id отбрасываются)

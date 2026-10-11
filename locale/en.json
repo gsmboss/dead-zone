@@ -1324,5 +1324,20 @@
  "Свежие задания и награда уже в убежище. Зомби сами себя не победят.": "Fresh quests and a reward are waiting at the shelter. The zombies won't defeat themselves.",
  "Серия дней не ждёт: забери монеты и накорми лагерь.": "Your streak won't wait: grab the coins and feed the camp.",
  "Тёма спрашивает, где ты пропадаешь. Мертвецы сами себя не упокоят!": "Tyoma keeps asking where you are. The dead won't put themselves to rest!",
- "УБЕЖИЩЕ БЕЗ ТЕБЯ НЕ ТО": "THE SHELTER ISN'T THE SAME WITHOUT YOU"
+ "УБЕЖИЩЕ БЕЗ ТЕБЯ НЕ ТО": "THE SHELTER ISN'T THE SAME WITHOUT YOU",
+ "+%d МОНЕТ": "+%d COINS",
+ "+%s ЗА ПОДПИСКУ": "+%s FOR FOLLOWING",
+ "YOUTUBE, INSTAGRAM И TELEGRAM SALAMANDERLAB: НОВОСТИ, ТРЕЙЛЕРЫ И КОДЫ. ЗА ПОДПИСКИ — %s.": "SALAMANDERLAB ON YOUTUBE, INSTAGRAM AND TELEGRAM: NEWS, TRAILERS AND CODES. FOLLOW AND GET %s.",
+ "ВСЕ НАГРАДЫ ПОЛУЧЕНЫ. СПАСИБО, ЧТО ТЫ С НАМИ!": "ALL REWARDS CLAIMED. THANKS FOR BEING WITH US!",
+ "За каждую подписку — награда. Осталось получить: %s": "A reward for every follow. Still to claim: %s",
+ "НАГРАДА ПОЛУЧЕНА ✓": "REWARD CLAIMED ✓",
+ "Награда за подписку — в убежище: МЕНЮ → СОЦСЕТИ (ещё %s)": "Follow rewards are in the shelter: MENU → SOCIAL (%s left)",
+ "Новости обновлений, коды и общение с разработчиками": "Update news, codes and chatting with the developers",
+ "ОТКРЫТЬ": "OPEN",
+ "ПОДПИСАТЬСЯ": "FOLLOW",
+ "ПОДПИШИСЬ НА SALAMANDERLAB — НОВОСТИ ИГРЫ, ТРЕЙЛЕРЫ И КОДЫ ПЕРВЫМ!": "FOLLOW SALAMANDERLAB — GET GAME NEWS, TRAILERS AND CODES FIRST!",
+ "ПОДПИШИСЬ НА НАС!": "FOLLOW US!",
+ "Ролики о разработке, трейлеры и секреты игры": "Devlogs, trailers and game secrets",
+ "СОЦСЕТИ": "SOCIAL",
+ "Скриншоты, новые зомби и закулисье студии": "Screenshots, new zombies and behind the scenes"
 }

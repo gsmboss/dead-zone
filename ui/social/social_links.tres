@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="SocialLinkList" format=3]
+
+[ext_resource type="Script" path="res://ui/social/social_link.gd" id="1_sl"]
+[ext_resource type="Script" path="res://ui/social/social_link_list.gd" id="2_sll"]
+[ext_resource type="Texture2D" path="res://ui/social/icons/youtube.svg" id="3_yt"]
+[ext_resource type="Texture2D" path="res://ui/social/icons/instagram.svg" id="4_ig"]
+[ext_resource type="Texture2D" path="res://ui/social/icons/telegram.svg" id="5_tg"]
+
+[sub_resource type="Resource" id="Social_youtube"]
+script = ExtResource("1_sl")
+id = "youtube"
+title = "YOUTUBE"
+description = "Ролики о разработке, трейлеры и секреты игры"
+url = "https://www.youtube.com/@SalamanderLab"
+reward = 300
+color = Color(1, 0.2, 0.2, 1)
+icon = ExtResource("3_yt")
+
+[sub_resource type="Resource" id="Social_instagram"]
+script = ExtResource("1_sl")
+id = "instagram"
+title = "INSTAGRAM"
+description = "Скриншоты, новые зомби и закулисье студии"
+url = "https://www.instagram.com/salamandersec/"
+reward = 300
+color = Color(0.9, 0.3, 0.6, 1)
+icon = ExtResource("4_ig")
+
+[sub_resource type="Resource" id="Social_telegram"]
+script = ExtResource("1_sl")
+id = "telegram"
+title = "TELEGRAM"
+description = "Новости обновлений, коды и общение с разработчиками"
+url = "https://t.me/SalamanderLab"
+reward = 300
+color = Color(0.2, 0.65, 0.9, 1)
+icon = ExtResource("5_tg")
+
+[resource]
+script = ExtResource("2_sll")
+links = Array[ExtResource("1_sl")]([SubResource("Social_youtube"), SubResource("Social_instagram"), SubResource("Social_telegram")])

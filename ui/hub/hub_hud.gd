@@ -60,6 +60,7 @@ const TUTORIAL_OFFERED: String = "tutorial_offered"
 const DIALOG_WIDTH: float = 680.0
 const RAID_CHECK_INTERVAL: float = 5.0
 const NOTIFY_ASK_DELAY: float = 3.0
+const SOCIAL_ASK_DELAY: float = 6.0
 
 
 func offer_tutorial() -> void:
@@ -74,6 +75,26 @@ func offer_tutorial() -> void:
 	go.pressed.connect(GameState.start_tutorial)
 	row.add_child(go)
 	var later := UIKit.button("ПОЗЖЕ", 28, 240.0)
+	later.pressed.connect(_on_back)
+	row.add_child(later)
+
+
+## Напоминание подписаться на соцсети (после побед, не чаще раза в несколько дней) — с наградой
+func _offer_social() -> void:
+	if not is_inside_tree() or _exit_panel != null or _window != null or _menu != null \
+			or CutscenePlayer.active or StoryPanel.is_open or not GameState.should_prompt_social():
+		return
+	GameState.mark_social_prompted()
+	var row: HBoxContainer = _open_dialog("ПОДПИШИСЬ НА НАС!",
+		UIKit.t("YOUTUBE, INSTAGRAM И TELEGRAM SALAMANDERLAB: НОВОСТИ, ТРЕЙЛЕРЫ И КОДЫ. ЗА ПОДПИСКИ — %s.") \
+		% UIKit.coins_text(GameState.get_social_reward_left()))
+	var go := UIKit.button("ПОДПИСАТЬСЯ", 28, 260.0)
+	go.modulate = UIKit.GOOD
+	go.pressed.connect(func() -> void:
+		_on_back()
+		_choose(&"social"))
+	row.add_child(go)
+	var later := UIKit.button("ПОЗЖЕ", 28, 200.0)
 	later.pressed.connect(_on_back)
 	row.add_child(later)
 
@@ -293,6 +314,8 @@ func _choose(id: StringName) -> void:
 			_open_window(SettingsPanel.new())
 		&"tutorial":
 			GameState.start_tutorial()
+		&"social":
+			_open_window(SocialPanel.new())
 
 
 ## Кнопка в верхней строке меню убежища
@@ -308,6 +331,8 @@ func _connect_world() -> void:
 	# Разрешение на напоминания — один раз, когда игрок уже выиграл хоть одну миссию
 	if GameState.get_stat(&"mission_win") > 0:
 		get_tree().create_timer(NOTIFY_ASK_DELAY).timeout.connect(Reminders.ask_permission_once)
+	if GameState.should_prompt_social():
+		get_tree().create_timer(SOCIAL_ASK_DELAY).timeout.connect(_offer_social)
 	GameState.check_all_achievements()
 	# Вернулись из матча по сети — сразу в лобби
 	if Net.is_online():

@@ -503,3 +503,9 @@ BaseVisuals ставит в слоты BaseBuildings только построй
 drawable-*/ic_deadzone_small.png (белый череп) и drawable-xxhdpi/ic_deadzone_large.png (иконка игры) — плагин при экспорте
 копирует их в android/build/res (из pck исключены). Разрешение POST_NOTIFICATIONS — один раз (флаг notifications_asked) в
 убежище после первой победы (HubHUD). Settings.notifications — вкладка СЮЖЕТ.
+Соцсети: ui/social/social_links.tres (SocialLinkList из SocialLink: id, title, description, url, reward, color, icon —
+ui/social/icons/*.svg) — YouTube, Instagram, Telegram по 300 монет. GameState.open_social (OS.shell_open + время перехода),
+can_claim_social (через claim_delay после перехода), claim_social, get_social_reward_left; сохранение "socials"
+(visited/claimed/prompt_time/prompts). Окно ui/hub/social_panel.gd (SocialPanel: ПОДПИСАТЬСЯ → ЗАБРАТЬ +N), плитка СОЦСЕТИ
+в HubMenu (значок ui/hub/icons/social.svg), напоминание HubHUD._offer_social (после prompt_min_wins побед, раз в
+prompt_interval_days, не больше prompt_max), кнопки в настройках (ПРОЧЕЕ). Подписку проверить нельзя — награда за переход.

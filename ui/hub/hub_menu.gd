@@ -23,6 +23,7 @@ const TILES: Array = [
 	[&"online", "ПО СЕТИ", "online", Color(0.7, 0.95, 1.0)],
 	[&"settings", "НАСТРОЙКИ", "settings", Color(0.85, 0.85, 0.85)],
 	[&"tutorial", "ОБУЧЕНИЕ", "tutorial", Color(0.7, 1.0, 0.85)],
+	[&"social", "СОЦСЕТИ", "social", Color(0.75, 0.8, 1.0)],
 ]
 
 var _panel: PanelContainer
@@ -165,6 +166,9 @@ func _status(id: StringName) -> String:
 			return "WI-FI, ДО 4 ИГРОКОВ"
 		&"settings":
 			return "ГРАФИКА, УПРАВЛЕНИЕ"
+		&"social":
+			var left: int = GameState.get_social_reward_left()
+			return UIKit.t("+%d МОНЕТ") % left if left > 0 else "YOUTUBE • TELEGRAM"
 		&"tutorial":
 			return "ПРОЙДЕНО ✓" if GameState.has_seen_cutscene(TutorialDirector.DONE_FLAG) else "2 МИНУТЫ"
 	return ""
@@ -176,6 +180,8 @@ func _is_highlighted(id: StringName) -> bool:
 			return GameState.has_unclaimed_rewards()
 		&"base":
 			return GameState.shelter.needs_attention()
+		&"social":
+			return GameState.get_social_reward_left() > 0
 		&"tutorial":
 			return not GameState.has_seen_cutscene(TutorialDirector.DONE_FLAG)
 	return false
