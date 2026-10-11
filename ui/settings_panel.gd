@@ -194,6 +194,7 @@ func _build_story() -> void:
 	_toggle("ПОКАЗЫВАТЬ КАТ-СЦЕНЫ", &"cutscenes")
 	_toggle("ОЗВУЧКА КАТ-СЦЕН", &"voice_cutscenes")
 	_toggle("ГОЛОСА ВЫЖИВШИХ В УБЕЖИЩЕ", &"voice_camp")
+	_toggle("НАПОМИНАНИЯ (УВЕДОМЛЕНИЯ)", &"notifications")
 	_slider("ГРОМКОСТЬ ГОЛОСОВ", &"voice_volume", 0.0, 1.0, 0.05, _percent)
 	var language: String = "РУССКИЙ" if VoiceOver.is_russian() else "АНГЛИЙСКИЙ"
 	var voice_hint := UIKit.label(UIKit.t("ЯЗЫК ОЗВУЧКИ: %s (КАК В ТЕЛЕФОНЕ)%s") % [UIKit.t(language),

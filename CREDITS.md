@@ -62,3 +62,7 @@
 ## Музыка (audio/music/)
 - ambient_city — "EmptyCity: Background Music" (CC0), https://opengameart.org/content/emptycity-background-music
 - combat — "Fast fight / battle music (looped)" (CC0), https://opengameart.org/content/fast-fight-battle-music-looped
+
+## Плагины
+- addons/NotificationSchedulerPlugin — Godot Mobile Plugins, Notification Scheduler 6.0 (MIT, Cengiz):
+  https://github.com/godot-mobile-plugins/godot-notification-scheduler (напоминания на Android; ставится из AssetLib)

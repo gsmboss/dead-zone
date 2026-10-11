@@ -50,7 +50,7 @@ const DEFAULTS: Dictionary = {
 	"gyro_invert_x": false, "gyro_invert_y": false, "gyro_smoothing": 0.3, "gyro_rate": 60,
 	"damage_direction": true, "damage_flash": 1.0, "hit_shake": 1.0, "attacker_marker": true,
 	"torch_auto": true, "headshot_slowmo": true, "voice_cutscenes": true, "voice_camp": true, "voice_volume": 0.8,
-	"button_icons": true, "language": 0,
+	"button_icons": true, "language": 0, "notifications": true,
 	"graphics_quality": 0, "auto_tier": -1, "fps_limit": 60, "msaa": false, "lod_threshold": 1.0,
 }
 
@@ -137,6 +137,8 @@ var voice_cutscenes: bool = true
 ## Голоса выживших у костра, когда подходишь ближе
 var voice_camp: bool = true
 var voice_volume: float = 0.8
+## Напоминания «пора играть» (уведомления Android, autoload/reminders.gd)
+var notifications: bool = true
 
 var _low_fps_time: float = 0.0
 var _fps_layer: CanvasLayer

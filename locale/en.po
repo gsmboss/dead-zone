@@ -901,6 +901,9 @@ msgstr "MOUNTAIN PASS"
 msgid "ГОРОД"
 msgstr "CITY"
 
+msgid "ГОРОД ЖДЁТ ГЕРОЯ"
+msgstr "THE CITY NEEDS A HERO"
+
 msgid "ГОРОД ОГРОМНЫЙ. ВОЗЬМИ МАШИНУ: БАМПЕР — ТОЖЕ ОРУЖИЕ, А ДРИФТ НА ПЛОЩАДИ — ТОЖЕ ТАКТИКА."
 msgstr "THE CITY IS HUGE. TAKE A CAR: THE BUMPER IS A WEAPON TOO, AND DRIFTING ON THE PLAZA IS A TACTIC TOO."
 
@@ -1153,6 +1156,12 @@ msgstr "Finish a race"
 msgid "Дорога в порт идёт через склады, забитые мертвецами. Пробейся: убей 45 зомби"
 msgstr "The road to the port runs through warehouses packed with the dead. Break through: kill 45 zombies"
 
+msgid "Дядя Гоша гремит пустой кастрюлей. Пора на обед — и за наградой дня!"
+msgstr "Uncle Gosha is banging an empty pot. Lunch time — and grab your daily reward!"
+
+msgid "ЕЖЕДНЕВНАЯ НАГРАДА ГОТОВА"
+msgstr "DAILY REWARD IS READY"
+
 msgid "ЕЖЕДНЕВНО"
 msgstr "DAILY"
 
@@ -1186,8 +1195,14 @@ msgstr "WAITING FOR THE HOST TO PRESS START…"
 msgid "ЖИЗНЬ НАЛАЖИВАЕТСЯ!"
 msgstr "LIFE IS GETTING BETTER!"
 
+msgid "ЖИЛЬЦЫ ПРОГОЛОДАЛИСЬ"
+msgstr "THE RESIDENTS ARE HUNGRY"
+
 msgid "ЖИЛЬЦЫ: %d / %d МЕСТ"
 msgstr "RESIDENTS: %d / %d BEDS"
+
+msgid "Жильцы заработали монеты. Забери, пока дядя Гоша не купил ещё одну кофемашину!"
+msgstr "The residents earned coins. Grab them before uncle Gosha buys another coffee machine!"
 
 msgid "Жильцы работают: монеты копятся до %d ч. Больше людей и выше настроение — больше доход"
 msgstr "Residents work: coins pile up for up to %d h. More people and better mood — more income"
@@ -1315,6 +1330,9 @@ msgstr "GOLD MEDALS"
 msgid "ЗОМБИ ИДУТ К УБЕЖИЩУ. УДЕРЖИ ВОРОТА — НАГРАДА ×2.\nВЫЖИВШИЕ ДАЮТ ЛОВУШКИ: %s"
 msgstr "ZOMBIES ARE COMING FOR THE SHELTER. HOLD THE GATES — REWARD ×2.\nSURVIVORS HAND YOU TRAPS: %s"
 
+msgid "ЗОМБИ СКУЧАЮТ"
+msgstr "THE ZOMBIES MISS YOU"
+
 msgid "ЗОМБИ! УБЕЙ ЕГО. В ГОЛОВУ — ДВОЙНОЙ УРОН"
 msgstr "ZOMBIE! KILL IT. HEADSHOTS DEAL DOUBLE DAMAGE"
 
@@ -1353,6 +1371,9 @@ msgstr "Zombies come less often — explore the city in peace"
 
 msgid "Зомби слышат выстрел втрое ближе, нет вспышки. Урон −5%"
 msgstr "Zombies hear shots from a third of the distance, no muzzle flash. Damage −5%"
+
+msgid "Зомби штурмуют убежище. Отбей набег — награда ×2!"
+msgstr "Zombies are storming the shelter. Repel the raid — double reward!"
 
 msgid "И НАЖИМАЕТ «СОЗДАТЬ ИГРУ». ДРУЗЬЯ ПОДКЛЮЧАЮТСЯ К ЕГО СЕТИ И ВЫБИРАЮТ ИГРУ ИЗ СПИСКА, "
 msgstr "AND TAPS \"CREATE GAME\". FRIENDS CONNECT TO ITS NETWORK AND PICK THE GAME FROM THE LIST, "
@@ -1528,6 +1549,9 @@ msgstr "TWO HEADSHOTS KNOCK A HELMET OFF"
 msgid "КАССА ЛАГЕРЯ"
 msgstr "CAMP CASH BOX"
 
+msgid "КАССА ЛАГЕРЯ ПОЛНА"
+msgstr "THE CAMP CASH BOX IS FULL"
+
 msgid "КАССА ЛАГЕРЯ: %d / %d   (%d В ЧАС)"
 msgstr "CAMP CASH BOX: %d / %d   (%d PER HOUR)"
 
@@ -1695,6 +1719,12 @@ msgstr "Kaban, the Baron's former deputy, is leading what's left of the gang and
 
 msgid "Касса лагеря"
 msgstr "Camp cash box"
+
+msgid "Касса лагеря набита до отказа. Загляни и забери!"
+msgstr "The camp cash box is packed. Drop by and collect!"
+
+msgid "Касса лагеря, награда дня, набеги"
+msgstr "Camp cash box, daily reward, raids"
 
 msgid "Кольцо и разметка: три очка — неделя без дежурства"
 msgstr "A hoop and court lines: a three-pointer gets you a week off guard duty"
@@ -1990,6 +2020,9 @@ msgstr "COINS"
 msgid "МОНЕТЫ +%d  (ВСЕГО %d)"
 msgstr "COINS +%d  (TOTAL %d)"
 
+msgid "МОНЕТЫ ЖДУТ В УБЕЖИЩЕ"
+msgstr "COINS ARE WAITING AT THE SHELTER"
+
 msgid "МОНЕТЫ: %d"
 msgstr "COINS: %d"
 
@@ -2131,6 +2164,12 @@ msgstr "FOUND: "
 msgid "НАКОРМИТЬ (%d)"
 msgstr "FEED (%d)"
 
+msgid "НАПОМИНАНИЯ"
+msgstr "REMINDERS"
+
+msgid "НАПОМИНАНИЯ (УВЕДОМЛЕНИЯ)"
+msgstr "REMINDERS (NOTIFICATIONS)"
+
 msgid "НАСТРОЕНИЕ %d+: +%d%% МОНЕТ ЗА МИССИИ"
 msgstr "MOOD %d+: +%d%% MISSION COINS"
 
@@ -2227,6 +2266,9 @@ msgstr "BUT THE HOWLING DOESN'T STOP. GRANNY SHURA KNOWS WHO IT IS: \"THE SHEPHE
 msgid "НОВАЯ МАШИНА: %s"
 msgstr "NEW CAR: %s"
 
+msgid "НОВЫЕ ЗАДАНИЯ ДНЯ"
+msgstr "NEW DAILY QUESTS"
+
 msgid "НОВЫЙ ДОМ"
 msgstr "NEW HOUSE"
 
@@ -2283,6 +2325,9 @@ msgstr "Mood"
 
 msgid "Наш флаг над двором: видно издалека, что здесь живые"
 msgstr "Our flag over the yard: everyone can see the living are here"
+
+msgid "Неделя без вылазок: провизия кончается, а орда всё ближе. Вернись!"
+msgstr "A week without a raid: food is running out and the horde is closing in. Come back!"
 
 msgid "Неизвестное задание"
 msgstr "Unknown quest"
@@ -2424,6 +2469,9 @@ msgstr "Lunch once a day: %d crates (a crate feeds %d people). A day without lun
 
 msgid "Огород: +%d ящ. каждый день"
 msgstr "Garden: +%d crates every day"
+
+msgid "Они уже стучат в ворота убежища. Возвращайся, выживший!"
+msgstr "They're already knocking on the shelter gates. Come back, survivor!"
 
 msgid "Орда идёт к воротам. Поставь турели, капканы и мины (кнопка ЛОВУШКА) и удержи ворота 150 секунд"
 msgstr "A horde is heading for the gates. Set up turrets, bear traps and mines (TRAP button) and hold the gates for 150 seconds"
@@ -3319,8 +3367,14 @@ msgstr "Run over 100 zombies"
 msgid "Сборка гранат, коктейлей, аптечек и патронов из лома"
 msgstr "Craft grenades, cocktails, medkits and ammo from scrap"
 
+msgid "Свежие задания и награда уже в убежище. Зомби сами себя не победят."
+msgstr "Fresh quests and a reward are waiting at the shelter. The zombies won't defeat themselves."
+
 msgid "Семья заперлась в магазине. Расчисти улицу — убей 30 зомби"
 msgstr "A family is locked in a store. Clear the street — kill 30 zombies"
+
+msgid "Серия дней не ждёт: забери монеты и накорми лагерь."
+msgstr "Your streak won't wait: grab the coins and feed the camp."
 
 msgid "Сначала построй: %s"
 msgstr "Build this first: %s"
@@ -3481,6 +3535,9 @@ msgstr "Accuracy: %d%%  •  Health: %d%%"
 msgid "Турник и брусья: кто подтягивается, тот убегает"
 msgstr "A pull-up bar and parallel bars: those who train, outrun"
 
+msgid "Тёма спрашивает, где ты пропадаешь. Мертвецы сами себя не упокоят!"
+msgstr "Tyoma keeps asking where you are. The dead won't put themselves to rest!"
+
 msgid "У БУГАЯ БРОНЯ СПЕРЕДИ — ЗАЙДИ СБОКУ ИЛИ ЦЕЛЬСЯ В ГОЛОВУ"
 msgstr "THE BRUTE IS ARMORED IN FRONT — FLANK IT OR AIM FOR THE HEAD"
 
@@ -3504,6 +3561,9 @@ msgstr "EDIK HAS A RESORT BUS CALLED \"SWALLOW\": PINK, WITH PALM TREES ON THE S
 
 msgid "УБЕЖИЩЕ"
 msgstr "SHELTER"
+
+msgid "УБЕЖИЩЕ БЕЗ ТЕБЯ НЕ ТО"
+msgstr "THE SHELTER ISN'T THE SAME WITHOUT YOU"
 
 msgid "УБЕЖИЩЕ РАСШИРЕНО ДО КОНЦА — ЭТО КРЕПОСТЬ!"
 msgstr "THE SHELTER IS FULLY EXPANDED — IT'S A FORTRESS!"

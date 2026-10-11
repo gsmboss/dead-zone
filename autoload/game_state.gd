@@ -1304,6 +1304,11 @@ func is_raid_ready() -> bool:
 	return now >= _next_raid
 
 
+## Когда назначен следующий набег (unix-время; 0 — ещё не назначен). Для напоминаний
+func get_raid_time() -> int:
+	return _next_raid
+
+
 func get_raid_mission() -> MissionData:
 	if not ResourceLoader.exists(RAID_MISSION_PATH):
 		push_warning("GameState: нет миссии набега %s" % RAID_MISSION_PATH)

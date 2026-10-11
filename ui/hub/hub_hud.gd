@@ -59,6 +59,7 @@ func _on_back() -> void:
 const TUTORIAL_OFFERED: String = "tutorial_offered"
 const DIALOG_WIDTH: float = 680.0
 const RAID_CHECK_INTERVAL: float = 5.0
+const NOTIFY_ASK_DELAY: float = 3.0
 
 
 func offer_tutorial() -> void:
@@ -304,6 +305,9 @@ func _add_menu_button(text: String, callback: Callable) -> Button:
 
 func _connect_world() -> void:
 	_show_pending_story.call_deferred()
+	# Разрешение на напоминания — один раз, когда игрок уже выиграл хоть одну миссию
+	if GameState.get_stat(&"mission_win") > 0:
+		get_tree().create_timer(NOTIFY_ASK_DELAY).timeout.connect(Reminders.ask_permission_once)
 	GameState.check_all_achievements()
 	# Вернулись из матча по сети — сразу в лобби
 	if Net.is_online():

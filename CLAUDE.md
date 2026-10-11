@@ -494,3 +494,12 @@ BaseVisuals ставит в слоты BaseBuildings только построй
 или касса полна (needs_attention). Достижения shelter_level (record), camp_meal, decor_buy, camp_recruit.
 Отладка: F10 в debug — убежище на максимум. Тест: tools/validate/shelter_test.tscn (логика и сборка на всех уровнях,
 сохранение игрока возвращает).
+Напоминания (уведомления Android): автозагрузка Reminders (autoload/reminders.gd) поверх плагина Notification Scheduler 6.0
+(Godot Mobile Plugins, MIT; ставит пользователь из AssetLib в addons/NotificationSchedulerPlugin, нужна сборка Gradle) —
+вызовы только динамические (load скрипта + call), без плагина/не на Android ничего не делает. Свернули игру
+(APPLICATION_PAUSED/WM_CLOSE_REQUEST) — ставит: касса лагеря полна, завтра 12:00 награда дня и обед, набег
+(GameState.get_raid_time), «соскучились» через 3 и 7 дней в 18:00; ночь 22–10 переносит на утро, не чаще раза в 1.5 ч;
+вернулись — снимает (cancel по IDS). Тексты — MESSAGES (ключи перевода). Значки: assets/NotificationSchedulerPlugin/android/
+drawable-*/ic_deadzone_small.png (белый череп) и drawable-xxhdpi/ic_deadzone_large.png (иконка игры) — плагин при экспорте
+копирует их в android/build/res (из pck исключены). Разрешение POST_NOTIFICATIONS — один раз (флаг notifications_asked) в
+убежище после первой победы (HubHUD). Settings.notifications — вкладка СЮЖЕТ.
