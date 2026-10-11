@@ -3,25 +3,11 @@
 [ext_resource type="Script" path="res://base/decor_data.gd" id="1_dec01"]
 [ext_resource type="Script" path="res://base/decor_list.gd" id="2_dec02"]
 
-[sub_resource type="Resource" id="Decor_flag"]
-script = ExtResource("1_dec01")
-id = "flag"
-title = "ФЛАГ УБЕЖИЩА"
-description = "Наш флаг над двором: видно издалека, что здесь живые"
-price = 150
-comfort = 3
-required_level = 1
-zone = 2
-builder = &"flag"
-position = Vector3(-4, 0, -11.5)
-yaw_degrees = 0.0
-icon_color = Color(0.9, 0.3, 0.25, 1)
-
 [sub_resource type="Resource" id="Decor_flowers"]
 script = ExtResource("1_dec01")
 id = "flowers"
 title = "КЛУМБЫ"
-description = "Цветы в ящиках вокруг флага. Вера поливает их кофе — растут"
+description = "Круглая клумба и ящики с цветами. Вера поливает их кофе — растут"
 price = 250
 comfort = 4
 required_level = 1
@@ -139,7 +125,7 @@ comfort = 5
 required_level = 1
 zone = 2
 builder = &"basketball"
-position = Vector3(-15, 0, -4)
+position = Vector3(-13.6, 0, -4)
 yaw_degrees = 90.0
 icon_color = Color(1.0, 0.55, 0.2, 1)
 
@@ -229,4 +215,4 @@ icon_color = Color(0.9, 0.85, 0.5, 1)
 
 [resource]
 script = ExtResource("2_dec02")
-decor = Array[ExtResource("1_dec01")]([SubResource("Decor_flag"), SubResource("Decor_flowers"), SubResource("Decor_garlands"), SubResource("Decor_loungers"), SubResource("Decor_pullup"), SubResource("Decor_swings"), SubResource("Decor_christmas"), SubResource("Decor_grill"), SubResource("Decor_shower"), SubResource("Decor_basketball"), SubResource("Decor_arcade"), SubResource("Decor_bar"), SubResource("Decor_billiard"), SubResource("Decor_pool"), SubResource("Decor_windmill"), SubResource("Decor_cinema")])
+decor = Array[ExtResource("1_dec01")]([SubResource("Decor_flowers"), SubResource("Decor_garlands"), SubResource("Decor_loungers"), SubResource("Decor_pullup"), SubResource("Decor_swings"), SubResource("Decor_christmas"), SubResource("Decor_grill"), SubResource("Decor_shower"), SubResource("Decor_basketball"), SubResource("Decor_arcade"), SubResource("Decor_bar"), SubResource("Decor_billiard"), SubResource("Decor_pool"), SubResource("Decor_windmill"), SubResource("Decor_cinema")])

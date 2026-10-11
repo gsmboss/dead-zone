@@ -483,7 +483,7 @@ add_mission_food, строка в итогах), огород +4/день. На�
 копится до часов уровня (_bank_income перед сменой скорости). Новые постройки (BuildingData.builder/hub_position/
 required_level/comfort): garden, watchtower (набег — tower_raid_kit), radio, generator (+25% кассы, гирлянды), canteen.
 Обустройство: base/decor_list.tres (DecorList из DecorData: zone, price, comfort, required_level, builder, position, yaw) —
-16 вещей (флаг, клумбы, гирлянды, шезлонги, спортуголок, качели, ёлка, мангал, душ, баскетбол, автоматы, бар, бильярд,
+15 вещей (клумбы, гирлянды, шезлонги, спортуголок, качели, ёлка, мангал, душ, баскетбол, автоматы, бар, бильярд,
 бассейн, ветряк, кинотеатр). Сборщики моделей — hub/hub_decor.gd (HubDecor.build: модели Kenney через PropBatch и
 примитивы, возвращают места жильцов {pos, yaw, seated}). Во дворе всё ставит hub/hub_base.gd (HubBase): постройки и
 обустройство (пересборка по подписи набора), жильцы сверх лагеря (HubCamp.SHOWN_IN_CAMP) на местах, лимит по

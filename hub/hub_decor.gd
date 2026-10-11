@@ -177,37 +177,73 @@ static func _bulbs(root: Node3D, from: Vector3, to: Vector3, sag: float, count: 
 
 # ---------- Постройки ----------
 
-## Огород: грядки с кукурузой, пшеницей, зеленью и тыквами; ограда со стороны двора, пугало
+## Огород: вскопанная земля, три приподнятые грядки (кукуруза, капуста с дынями, тыквы), теплица,
+## дорожка вдоль ограды со стороны двора (калитка посередине), пугало, бочка с водой
 func _build_garden(root: Node3D, batch: PropBatch, xform: Transform3D) -> Array:
-	var crops: Array[String] = ["crops_cornStageD", "crops_wheatStageB", "crops_leafsStageB", "crops_cornStageD",
-		"crops_wheatStageB"]
-	for i in 6:
-		var center := Vector3(-0.7, 0.0, -5.5 + float(i) * 2.2)
-		_model(batch, NATURE + "crops_dirtDoubleRow.glb", xform, center, 90.0, 2.2, false)
-		for k in 4:
-			var offset := Vector3(-0.45 if k < 2 else 0.45, 0.0, -0.5 if k % 2 == 0 else 0.5)
-			if i < crops.size():
-				_model(batch, NATURE + crops[i] + ".glb", xform, center + offset, float(k * 70), 1.5, false)
-			else:
-				_model(batch, NATURE + ("crop_pumpkin" if k != 1 else "crop_melon") + ".glb", xform, center + offset,
-					float(k * 70), 2.0, false)
-	# Ограда со стороны двора, вход посередине
-	for z: float in [-6.0, -4.0, -2.0, 2.0, 4.0, 6.0]:
+	var soil := material(Color(0.3, 0.2, 0.12))
+	var bed_soil := material(Color(0.22, 0.14, 0.08))
+	var wood := material(Color(0.5, 0.35, 0.2))
+	_box(root, batch, xform, Vector3(-0.2, 0.03, 0.0), Vector3(3.9, 0.06, 11.6), soil)
+	# Грядки: [центр z, растения, масштаб]
+	var beds: Array = [[-4.4, ["crops_cornStageD"], 1.1], [-1.9, ["crops_leafsStageB", "crop_melon"], 1.6],
+		[0.6, ["crop_pumpkin"], 1.4]]
+	for bed: Array in beds:
+		var z: float = bed[0]
+		for side: float in [-1.0, 1.0]:
+			_box(root, batch, xform, Vector3(-0.5, 0.16, z + side * 0.9), Vector3(2.4, 0.32, 0.1), wood)
+			_box(root, batch, xform, Vector3(-0.5 + side * 1.15, 0.16, z), Vector3(0.1, 0.32, 1.7), wood)
+		_box(root, batch, xform, Vector3(-0.5, 0.14, z), Vector3(2.2, 0.26, 1.7), bed_soil)
+		batch.add_box(xform * Vector3(-0.5, 0.16, z), Vector3(2.4, 0.32, 1.9))
+		var crops: Array = bed[1]
+		for row in 2:
+			for col in 3:
+				var crop: String = crops[(row + col) % crops.size()]
+				var at := Vector3(-1.25 + col * 0.75, 0.27, z + (row - 0.5) * 0.85)
+				_centered(batch, NATURE + crop + ".glb", xform, at, float((row * 3 + col) * 55), bed[2], false)
+	# Теплица: каркас, стёкла, двускатная крыша, рассада в горшках
+	var frame := material(Color(0.85, 0.88, 0.9))
+	var glass := material(Color(0.7, 0.9, 1.0, 0.3), 0.0, true)
+	var gh := Vector3(-0.5, 0.0, 4.2)
+	for corner: Vector2 in [Vector2(-1.3, -0.95), Vector2(1.3, -0.95), Vector2(-1.3, 0.95), Vector2(1.3, 0.95)]:
+		_box(root, batch, xform, gh + Vector3(corner.x, 0.8, corner.y), Vector3(0.07, 1.6, 0.07), frame)
+	for side: float in [-1.0, 1.0]:
+		_box(root, batch, xform, gh + Vector3(0.0, 0.8, side * 0.95), Vector3(2.6, 1.6, 0.03), glass)
+		_box(root, batch, xform, gh + Vector3(side * 1.3, 0.8, 0.0), Vector3(0.03, 1.6, 1.9), glass)
+	var roof := PrismMesh.new()
+	roof.size = Vector3(2.7, 0.8, 2.0)
+	_mesh(root, roof, xform, Transform3D(Basis.IDENTITY, gh + Vector3(0.0, 2.0, 0.0)), glass, false)
+	_box(root, batch, xform, gh + Vector3(0.0, 2.38, 0.0), Vector3(0.07, 0.07, 2.0), frame)
+	batch.add_box(xform * (gh + Vector3(0.0, 1.0, 0.0)), Vector3(2.6, 2.0, 1.9))
+	_box(root, batch, xform, gh + Vector3(0.0, 0.4, 0.0), Vector3(2.2, 0.08, 0.7), wood)
+	for i in 3:
+		var pot_at: Vector3 = gh + Vector3(-0.7 + i * 0.7, 0.44, 0.0)
+		_centered(batch, NATURE + "pot_large.glb", xform, pot_at, 0.0, 0.9, false)
+		_centered(batch, NATURE + "crops_leafsStageB.glb", xform, pot_at + Vector3.UP * 0.25, i * 40.0, 0.9, false)
+	# Ограда: со стороны двора (калитка посередине) и с торцов
+	for z: float in [-5.0, -3.0, 3.0, 5.0]:
 		_model(batch, NATURE + "fence_simple.glb", xform, Vector3(1.9, 0.0, z), 90.0, 2.0, false)
-	batch.add_box(xform * Vector3(1.9, 0.4, -4.0), Vector3(0.15, 0.8, 6.0))
-	batch.add_box(xform * Vector3(1.9, 0.4, 4.0), Vector3(0.15, 0.8, 6.0))
-	# Пугало в куртке
-	var wood := material(Color(0.45, 0.32, 0.2))
+	for x: float in [-1.1, 0.9]:
+		for z: float in [-5.9, 5.9]:
+			_model(batch, NATURE + "fence_simple.glb", xform, Vector3(x, 0.0, z), 0.0, 2.0, false)
+	batch.add_box(xform * Vector3(1.9, 0.4, -4.0), Vector3(0.15, 0.8, 4.0))
+	batch.add_box(xform * Vector3(1.9, 0.4, 4.0), Vector3(0.15, 0.8, 4.0))
+	_label(root, xform, Vector3(1.9, 1.7, 0.0), "ОГОРОД", Color(0.6, 1.0, 0.45))
+	# Пугало в куртке у кукурузы
 	var jacket := material(Color(0.25, 0.4, 0.75))
-	_box(root, batch, xform, Vector3(1.0, 1.0, 2.6), Vector3(0.1, 2.0, 0.1), wood)
-	_box(root, batch, xform, Vector3(1.0, 1.55, 2.6), Vector3(0.1, 0.1, 1.3), wood)
-	_box(root, batch, xform, Vector3(1.0, 1.4, 2.6), Vector3(0.28, 0.6, 0.5), jacket)
-	_sphere(root, xform, Vector3(1.0, 2.0, 2.6), 0.2, material(Color(0.95, 0.85, 0.5)))
-	_cylinder(root, xform, Vector3(1.0, 2.2, 2.6), 0.3, 0.05, material(Color(0.8, 0.65, 0.3)))
-	_model(batch, SURVIVAL + "tool-hoe.glb", xform, Vector3(1.4, 0.0, -1.6), 20.0, 3.0, false)
-	_model(batch, SURVIVAL + "bucket.glb", xform, Vector3(1.4, 0.0, -2.4), 0.0, 3.0, false)
-	return [_spot(xform, Vector3(0.9, 0, -3.4), Vector3(-0.7, 0, -3.4)),
-		_spot(xform, Vector3(0.9, 0, 5.0), Vector3(-0.7, 0, 5.3))]
+	var pole := Vector3(1.25, 0.0, -4.4)
+	_box(root, batch, xform, pole + Vector3(0.0, 1.0, 0.0), Vector3(0.1, 2.0, 0.1), wood)
+	_box(root, batch, xform, pole + Vector3(0.0, 1.55, 0.0), Vector3(0.1, 0.1, 1.3), wood)
+	_box(root, batch, xform, pole + Vector3(0.0, 1.4, 0.0), Vector3(0.28, 0.6, 0.5), jacket)
+	_sphere(root, xform, pole + Vector3(0.0, 2.0, 0.0), 0.2, material(Color(0.95, 0.85, 0.5)))
+	_cylinder(root, xform, pole + Vector3(0.0, 2.2, 0.0), 0.3, 0.05, material(Color(0.8, 0.65, 0.3)))
+	# Бочка с водой, лейка-ведро и тяпка у дорожки
+	_cylinder(root, xform, Vector3(1.3, 0.45, 2.0), 0.35, 0.9, material(Color(0.25, 0.45, 0.6)))
+	_cylinder(root, xform, Vector3(1.3, 0.91, 2.0), 0.3, 0.02, material(Color(0.3, 0.55, 0.75), 0.3))
+	batch.add_box(xform * Vector3(1.3, 0.45, 2.0), Vector3(0.7, 0.9, 0.7))
+	_model(batch, SURVIVAL + "bucket.glb", xform, Vector3(1.4, 0.0, -1.0), 0.0, 2.5, false)
+	_model(batch, SURVIVAL + "tool-hoe.glb", xform, Vector3(1.4, 0.0, -0.5), 20.0, 2.5, false)
+	return [_spot(xform, Vector3(1.1, 0, -1.9), Vector3(-0.5, 0, -1.9)),
+		_spot(xform, Vector3(1.1, 0, 0.6), Vector3(-0.5, 0, 0.6))]
 
 
 ## Сторожевая вышка: деревянные опоры, площадка с бортом, крыша, прожектор; дозорный наверху
@@ -360,34 +396,7 @@ func _build_canteen(root: Node3D, batch: PropBatch, xform: Transform3D) -> Array
 
 # ---------- Обустройство ----------
 
-## Флаг: мачта и полотнище, колышется на ветру
-func _build_flag(root: Node3D, batch: PropBatch, xform: Transform3D) -> Array:
-	# Невысокий: из центра двора не закрывает надпись DEAD ZONE в небе
-	_cylinder(root, xform, Vector3(0.0, 2.2, 0.0), 0.06, 4.4, material(Color(0.75, 0.75, 0.78)))
-	batch.add_box(xform * Vector3(0.0, 1.0, 0.0), Vector3(0.2, 2.0, 0.2))
-	_box(root, batch, xform, Vector3(0.0, 0.15, 0.0), Vector3(0.7, 0.3, 0.7), material(Color(0.45, 0.45, 0.45)), true)
-	var pivot := _pivot(root, xform, Vector3(0.0, 3.85, 0.0))
-	var cloth := MeshInstance3D.new()
-	var cloth_mesh := BoxMesh.new()
-	cloth_mesh.size = Vector3(1.6, 1.0, 0.03)
-	cloth.mesh = cloth_mesh
-	cloth.material_override = material(Color(0.85, 0.2, 0.18))
-	cloth.position = Vector3(0.85, 0.0, 0.0)
-	pivot.add_child(cloth)
-	var stripe := MeshInstance3D.new()
-	var stripe_mesh := BoxMesh.new()
-	stripe_mesh.size = Vector3(1.6, 0.22, 0.04)
-	stripe.mesh = stripe_mesh
-	stripe.material_override = material(Color(0.95, 0.85, 0.3))
-	stripe.position = Vector3(0.85, 0.0, 0.0)
-	pivot.add_child(stripe)
-	var wave := pivot.create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	wave.tween_property(pivot, "rotation:y", 0.35, 1.3)
-	wave.tween_property(pivot, "rotation:y", -0.25, 1.5)
-	return []
-
-
-## Клумбы: ящики с цветами вокруг флага
+## Клумбы: круглая клумба в каменном бортике посередине и четыре ящика с цветами вокруг
 func _build_flowers(root: Node3D, batch: PropBatch, xform: Transform3D) -> Array:
 	var flowers: Array[String] = ["flower_redA", "flower_purpleA", "flower_yellowA"]
 	var planter := material(Color(0.45, 0.3, 0.2))
@@ -398,7 +407,14 @@ func _build_flowers(root: Node3D, batch: PropBatch, xform: Transform3D) -> Array
 		for k in 4:
 			var offset := Vector3(-0.45 + k * 0.3, 0.38, 0.0).rotated(Vector3.UP, -angle + PI * 0.5)
 			_model(batch, NATURE + flowers[(i + k) % flowers.size()] + ".glb", xform, at + offset, k * 70.0, 2.4, false)
-	_model(batch, NATURE + "pot_large.glb", xform, Vector3(0.0, 0.3, 1.1), 0.0, 1.6, false)
+	# Круглая клумба: низкая (из двора не закрывает надпись DEAD ZONE в небе)
+	_cylinder(root, xform, Vector3(0.0, 0.18, 0.0), 1.1, 0.36, material(Color(0.6, 0.6, 0.62)))
+	_cylinder(root, xform, Vector3(0.0, 0.37, 0.0), 0.95, 0.04, material(Color(0.26, 0.17, 0.1)))
+	batch.add_box(xform * Vector3(0.0, 0.18, 0.0), Vector3(1.8, 0.36, 1.8))
+	for k in 8:
+		var ring := Vector3(0.62, 0.38, 0.0).rotated(Vector3.UP, k * PI * 0.25)
+		_model(batch, NATURE + flowers[k % flowers.size()] + ".glb", xform, ring, k * 45.0, 2.6, false)
+	_model(batch, NATURE + "flower_redA.glb", xform, Vector3(0.0, 0.38, 0.0), 0.0, 3.4, false)
 	return [_spot(xform, Vector3(2.6, 0.0, 0.8), Vector3(1.6, 0.0, 1.6))]
 
 

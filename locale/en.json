@@ -1248,7 +1248,6 @@
  "Накорми лагерь 30 раз": "Feed the camp 30 times",
  "Накорми лагерь 7 раз": "Feed the camp 7 times",
  "Настроение": "Mood",
- "Наш флаг над двором: видно издалека, что здесь живые": "Our flag over the yard: everyone can see the living are here",
  "Новые жильцы (радио)": "New residents (radio)",
  "ОБЕД БЫЛ ✓": "LUNCH SERVED ✓",
  "ОБЕД! НАСТРОЕНИЕ +%d": "LUNCH! MOOD +%d",
@@ -1298,9 +1297,7 @@
  "УЮТНО": "COZY",
  "Уровни": "Levels",
  "Уют поднимает потолок настроения жильцов. Сейчас уют %d, потолок %d": "Comfort raises the residents' mood cap. Comfort now %d, cap %d",
- "ФЛАГ УБЕЖИЩА": "SHELTER FLAG",
  "ФОРТ": "FORT",
- "Цветы в ящиках вокруг флага. Вера поливает их кофе — растут": "Flowers in planters around the flag. Vera waters them with coffee — they grow",
  "ШЕЗЛОНГИ": "LOUNGERS",
  "ШЕФ-ПОВАР": "HEAD CHEF",
  "Шашлык по воскресеньям. Запах слышат даже зомби": "Shashlik on Sundays. Even the zombies can smell it",
@@ -1341,5 +1338,6 @@
  "СОЦСЕТИ": "SOCIAL",
  "Скриншоты, новые зомби и закулисье студии": "Screenshots, new zombies and behind the scenes",
  "ЗАБЕРИ НАГРАДУ!": "CLAIM YOUR REWARD!",
- "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ": "PRIVACY POLICY"
+ "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ": "PRIVACY POLICY",
+ "Круглая клумба и ящики с цветами. Вера поливает их кофе — растут": "A round flowerbed and flower planters. Vera waters them with coffee — they grow"
 }

@@ -1765,6 +1765,9 @@ msgstr "Fortress on wheels: a ram not even a fatty can stand against."
 msgid "Крикуны повсюду: орда приходит быстрее"
 msgstr "Screamers everywhere: the horde arrives faster"
 
+msgid "Круглая клумба и ящики с цветами. Вера поливает их кофе — растут"
+msgstr "A round flowerbed and flower planters. Vera waters them with coffee — they grow"
+
 msgid "Крутится и скрипит. Ток не даёт, зато красиво. Нужен уровень БАЗА"
 msgstr "Spins and creaks. No power, but pretty. Needs the BASE level"
 
@@ -2346,9 +2349,6 @@ msgstr "Feed the camp 7 times"
 
 msgid "Настроение"
 msgstr "Mood"
-
-msgid "Наш флаг над двором: видно издалека, что здесь живые"
-msgstr "Our flag over the yard: everyone can see the living are here"
 
 msgid "Неделя без вылазок: провизия кончается, а орда всё ближе. Вернись!"
 msgstr "A week without a raid: food is running out and the horde is closing in. Come back!"
@@ -3760,9 +3760,6 @@ msgstr "FINISH"
 msgid "ФИОЛЕТОВЫЙ"
 msgstr "PURPLE"
 
-msgid "ФЛАГ УБЕЖИЩА"
-msgstr "SHELTER FLAG"
-
 msgid "ФОРТ"
 msgstr "FORT"
 
@@ -3822,9 +3819,6 @@ msgstr "\"GENOME\" PLANT. THE FIRE"
 
 msgid "ЦЕХА «ГЕНОМА». ЗДЕСЬ ДЕРЖАЛИ «ГНИЛЬ-7» — ЛЕКАРСТВО, КОТОРОЕ ОТМЕНИЛО СМЕРТЬ. ЗДЕСЬ РОДИЛОСЬ ГНЕЗДО."
 msgstr "THE \"GENOME\" PLANT. THIS IS WHERE THEY KEPT \"ROT-7\" — THE MEDICINE THAT CANCELED DEATH. THIS IS WHERE THE NEST WAS BORN."
-
-msgid "Цветы в ящиках вокруг флага. Вера поливает их кофе — растут"
-msgstr "Flowers in planters around the flag. Vera waters them with coffee — they grow"
 
 msgid "ЧАСТОТА ОПРОСА (FPS ГИРОСКОПА)"
 msgstr "POLLING RATE (GYRO FPS)"
