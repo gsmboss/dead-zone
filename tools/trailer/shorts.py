@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Вертикальный ролик YouTube Shorts 1080×1920: python3 tools/trailer/shorts.py ru|en [папка с клипами v_*.avi]
+# Вертикальный ролик YouTube Shorts 1080×1920: python3 tools/trailer/shorts.py <монтаж> ru|en [папка с клипами]
+# Монтажи (клипы, надписи, музыка) — shorts_edits.py, EDITS.
 # Запускать из корня проекта. Клипы снимаются вертикально (override.cfg 1080×1920, см. README.md).
 # Монтаж в такт музыке: склейки по долям, зум-удар, цветовой сдвиг, вспышка, смаз, замедление,
 # «впрыгивающие» надписи, анимированная концовка. Звук: музыка + звук игры + удары на надписях.
@@ -8,52 +9,44 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H, FPS, SR = 1080, 1920, 30, 48000
-LANG = sys.argv[1] if len(sys.argv) > 1 else 'ru'
-D = os.path.abspath(sys.argv[2]) if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
+EDIT = sys.argv[1] if len(sys.argv) > 1 else 'trailer'
+LANG = sys.argv[2] if len(sys.argv) > 2 else 'ru'
+D = os.path.abspath(sys.argv[3]) if len(sys.argv) > 3 else os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 ROOT = os.getcwd()
-MUSIC = os.path.join(ROOT, 'audio', 'music', 'combat.ogg')
-# Музыка combat.ogg: 152 удара в минуту, первая доля на 0.255 с
-BPM, PHASE = 152.0, 0.255
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from shorts_edits import COMMON_TEXTS, EDITS, MUSIC_BEATS, MUSIC_GAIN  # noqa: E402
+
+E = EDITS[EDIT]
+MUSIC_NAME = E.get('music', 'combat')
+MUSIC = os.path.join(ROOT, 'audio', 'music', MUSIC_NAME + '.ogg')
+# Темп и первая доля музыки (замерено по огибающей громкости)
+BPM, PHASE = MUSIC_BEATS[MUSIC_NAME]
 BEAT = 60.0 / BPM
 FONT_URL = 'https://raw.githubusercontent.com/google/fonts/main/ofl/russoone/RussoOne-Regular.ttf'
 FALLBACK_FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 YELLOW, RED, WHITE = (255, 206, 60), (235, 52, 40), (255, 255, 255)
+COLORS = {'Y': YELLOW, 'R': RED, 'W': WHITE}
 random.seed(7)
-
-T = {
-    'ru': {'fall': 'ГОРОД ПАЛ', 'night': 'ЗА ОДНУ НОЧЬ', 'everywhere': 'ОНИ ПОВСЮДУ', 'grab': 'ХВАТАЙ\nОРУЖИЕ',
-           'chop': 'РУБИ', 'burn': 'ЖГИ', 'shoot': 'СТРЕЛЯЙ', 'head': 'ХЕДШОТ!', 'bandits': 'БАНДИТЫ', 'boss': 'И БОССЫ',
-           'monsters': 'МОНСТРЫ', 'shelter': 'СТРОЙ\nУБЕЖИЩЕ', 'story': '30 ГЛАВ\nСЮЖЕТА',
-           'soon': 'СКОРО В GOOGLE PLAY', 'sub': 'ПОДПИШИСЬ'},
-    'en': {'fall': 'THE CITY FELL', 'night': 'IN ONE NIGHT', 'everywhere': "THEY'RE EVERYWHERE", 'grab': 'GRAB\nA GUN',
-           'chop': 'CHOP', 'burn': 'BURN', 'shoot': 'SHOOT', 'head': 'HEADSHOT!', 'bandits': 'BANDITS', 'boss': 'AND BOSSES',
-           'monsters': 'MONSTERS', 'shelter': 'BUILD YOUR\nSHELTER', 'story': '30 STORY\nCHAPTERS',
-           'soon': 'COMING SOON TO GOOGLE PLAY', 'sub': 'SUBSCRIBE'},
-}[LANG]
-FILM = 'v_film_en.avi' if LANG == 'en' else 'v_film.avi'
+LI = 0 if LANG == 'ru' else 1
+T = {k: v[LI] for k, v in COMMON_TEXTS.items()}
+T.update({k: v[LI] for k, v in E.get('texts', {}).items()})
 # Кино снято с чёрными полосами — крупнее, чтобы заполнить вертикальный кадр (субтитры уходят за край)
 FILM_ZOOM = 1.55
-# Английская озвучка другой длины — планы фильма начинаются в другое время: (город пал, погоня, семья)
-FILM_T = {'ru': (53.0, 55.8, 22.0), 'en': (54.0, 57.2, 20.5)}[LANG]
 
-# Сегменты: клип, начало в клипе (с), длина в долях, вход (punch/flash/rgb/whip/cut), скорость [(доля, x)], надписи
-# Надпись: (доля от начала сегмента, ключ T, цвет, стиль slam/pop, звук)
-SEGMENTS = [
-    (FILM, FILM_T[0], 4, 'cut', None, [(0, 'fall', WHITE, 'slam', 'hit')]),
-    (FILM, FILM_T[1], 4, 'rgb', None, [(0, 'night', RED, 'slam', 'hit')]),
-    ('v_harbor.avi', 11.5, 4, 'flash', None, [(0, 'everywhere', YELLOW, 'pop', 'moan')]),
-    ('v_street.avi', 12.0, 4, 'whip', None, [(0, 'grab', WHITE, 'slam', 'hit')]),
-    ('v_axe.avi', 9.5, 2, 'punch', None, [(0, 'chop', YELLOW, 'slam', 'hit')]),
-    ('v_grave.avi', 11.2, 2, 'punch', None, [(0, 'shoot', RED, 'slam', 'hit')]),
-    ('v_bridge.avi', 10.0, 2, 'punch', None, []),
-    ('v_street.avi', 5.0, 6, 'rgb', [(0, 1.0), (0.3, 1.0), (0.36, 0.3), (0.8, 0.3), (0.9, 1.0)],
-     [(2, 'head', RED, 'slam', 'boom')]),
-    ('v_baron.avi', 10.0, 4, 'whip', None, [(0, 'bandits', WHITE, 'slam', 'hit'), (2, 'boss', RED, 'slam', 'hit')]),
-    ('v_mountain.avi', 9.3, 4, 'flash', None, [(0, 'monsters', YELLOW, 'slam', 'moan')]),
-    ('v_hub.avi', 1.5, 6, 'whip', None, [(0, 'shelter', YELLOW, 'pop', 'hit')]),
-    (FILM, FILM_T[2], 4, 'rgb', None, [(0, 'story', WHITE, 'pop', 'hit')]),
-    ('END', 0, 12, 'flash', None, []),
-]
+
+def _segment(raw):
+    """(клип, начало, доли, переход, кривая скорости, надписи[, опции]) → словарь; {en} в имени клипа — '_en'
+    для английского, начало может быть {'ru': .., 'en': ..}; надпись (доля, ключ T или текст, цвет Y/R/W, стиль, звук)."""
+    clip, start, beats, trans, curve, caps = raw[:6]
+    opts = raw[6] if len(raw) > 6 else {}
+    clip = clip.replace('{en}', '_en' if LANG == 'en' else '')
+    if isinstance(start, dict):
+        start = start[LANG]
+    caps = [(c[0], T.get(c[1], c[1]), COLORS.get(c[2], c[2]), c[3], c[4] if len(c) > 4 else 'hit') for c in caps]
+    return clip, start, beats, trans, curve, caps, opts
+
+
+SEGMENTS = [_segment(r) for r in E['segments']]
 TOTAL_BEATS = sum(s[2] for s in SEGMENTS)
 DURATION = TOTAL_BEATS * BEAT
 NFRAMES = int(round(DURATION * FPS))
@@ -238,7 +231,7 @@ def end_frame(age):
     t2 = title.resize((int(title.width * sc), int(title.height * sc)), Image.BILINEAR)
     fr.alpha_composite(t2, (W // 2 - t2.width // 2, 620 - t2.height // 2))
     if age > 0.5:
-        img = text_image(T['soon'], YELLOW, 70)
+        img = text_image(T[E.get('end_text', 'soon')], YELLOW, 70)
         a = min(1.0, (age - 0.5) / 0.3)
         y = int(960 + (1 - a) * 80)
         im = img.copy()
@@ -296,18 +289,22 @@ def build_audio(cuts):
         chunk = loop[:n].copy()
         if pos > 0:
             chunk[:xf] *= np.linspace(0, 1, xf)[:, None]
-        track[pos:pos + n] += chunk * 0.85
+        track[pos:pos + n] += chunk * 0.85 * MUSIC_GAIN.get(MUSIC_NAME, 1.0)
         pos += len(loop) - xf
-    # Звук игры под музыкой (без кино — там обрывки фраз, и без замедления)
+    # Звук игры под музыкой (без замедления; кино — только с опцией voice: целые фразы, музыка тише)
     for c in cuts:
-        if c['src'] == 'END' or c['curve'] or c['src'].startswith('v_film'):
+        voice = c['opts'].get('voice', False)
+        if c['src'] == 'END' or c['curve'] or ('film' in c['src'] and not voice):
             continue
+        if voice:
+            a0, a1 = int(c['t0'] * SR), int((c['t0'] + c['len']) * SR)
+            track[a0:a1] *= 0.35
         g = load_audio(os.path.join(D, c['src']), c['start'], c['len'])
         if len(g):
             f = min(len(g), int(0.03 * SR))
             g[:f] *= np.linspace(0, 1, f)[:, None]
             g[-f:] *= np.linspace(1, 0, f)[:, None]
-            mix_at(track, g, c['t0'], 0.4)
+            mix_at(track, g, c['t0'], c['opts'].get('gain', 1.0 if voice else 0.4))
     sfx = {
         'hit': load_audio(os.path.join(ROOT, 'audio/impacts/world_02.ogg')),
         'boom': load_audio(os.path.join(ROOT, 'audio/world/explosion_01.ogg')),
@@ -324,7 +321,7 @@ def build_audio(cuts):
     fo = int(1.5 * SR)
     track[-fo:] *= np.linspace(1, 0, fo)[:, None]
     track = np.tanh(track * 1.1) / np.tanh(1.1)
-    out = os.path.join(D, 'shorts_audio_%s.wav' % LANG)
+    out = os.path.join(D, 'shorts_audio_%s_%s.wav' % (EDIT, LANG))
     pcm = (np.clip(track, -1, 1) * 32767).astype('<i2')
     import wave
     with wave.open(out, 'wb') as w:
@@ -339,11 +336,12 @@ def build_audio(cuts):
 def main():
     cuts = []
     t = 0.0
-    for src, start, beats, trans, curve, caps in SEGMENTS:
+    for src, start, beats, trans, curve, caps, opts in SEGMENTS:
         length = beats * BEAT
-        cuts.append({'src': src, 'start': start, 'len': length, 't0': t, 'trans': trans, 'curve': curve, 'caps': caps})
+        cuts.append({'src': src, 'start': start, 'len': length, 't0': t, 'trans': trans, 'curve': curve, 'caps': caps,
+                     'opts': opts})
         t += length
-    video = os.path.join(D, 'shorts_video_%s.mp4' % LANG)
+    video = os.path.join(D, 'shorts_video_%s_%s.mp4' % (EDIT, LANG))
     enc = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '%dx%d' % (W, H),
                             '-r', str(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18',
                             '-pix_fmt', 'yuv420p', video], stdin=subprocess.PIPE)
@@ -353,7 +351,7 @@ def main():
         f1 = int(round((c['t0'] + c['len']) * FPS)) if ci < len(cuts) - 1 else NFRAMES
         span = source_time(c['curve'], 1.0, c['len'])
         reader = Reader(os.path.join(D, c['src']), c['start'], span) if c['src'] != 'END' else None
-        caps = [(b * BEAT, text_image(T[key], col), st) for (b, key, col, st, _s) in c['caps']]
+        caps = [(b * BEAT, text_image(text, col), st) for (b, text, col, st, _s) in c['caps']]
         last = None
         for fi in range(f0, f1):
             age = fi / FPS - c['t0']
@@ -374,7 +372,7 @@ def main():
                     arr = last if last is not None else np.zeros((H, W, 3), np.uint8)
             last = arr
             # Камера: медленный наезд + удар на входе
-            z = (FILM_ZOOM if c['src'].startswith('v_film') else 1.0) + 0.04 * frac
+            z = c['opts'].get('zoom', FILM_ZOOM if 'film' in c['src'] else 1.0) + 0.04 * frac
             ox = oy = 0
             if c['trans'] in ('punch', 'flash', 'rgb') and age < 0.25:
                 z += 0.14 * (1 - age / 0.25) ** 2
@@ -417,7 +415,7 @@ def main():
     enc.stdin.close()
     enc.wait()
     audio = build_audio(cuts)
-    final = os.path.join(D, 'DeadZone_shorts_%s.mp4' % LANG)
+    final = os.path.join(D, 'DeadZone_%s_%s.mp4' % (EDIT, LANG))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', video, '-i', audio, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
                     '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', final], check=True)
     print(final, '%.1f s' % DURATION)
