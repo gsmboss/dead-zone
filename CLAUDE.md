@@ -509,3 +509,6 @@ can_claim_social (через claim_delay после перехода), claim_soc
 (visited/claimed/prompt_time/prompts). Окно ui/hub/social_panel.gd (SocialPanel: ПОДПИСАТЬСЯ → ЗАБРАТЬ +N), плитка СОЦСЕТИ
 в HubMenu (значок ui/hub/icons/social.svg), напоминание HubHUD._offer_social (после prompt_min_wins побед, раз в
 prompt_interval_days, не больше prompt_max; перешёл хоть в одну соцсеть — больше не спрашивает никогда, плитка пишет «ЗАБЕРИ НАГРАДУ!»), кнопки в настройках (ПРОЧЕЕ). Подписку проверить нельзя — награда за переход.
+Экспорт Android: плагин редактора addons/deadzone_export (DeadZoneAndroidExport, включён в editor_plugins) вставляет в манифест
+<uses-permission … tools:node="remove"> для REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, SCHEDULE_EXACT_ALARM, USE_EXACT_ALARM
+(их приносит Notification Scheduler; Google Play придирается) — android/build/AndroidManifest.xml руками не правится.

@@ -63,7 +63,7 @@ textures/vram_compression/import_etc2_astc=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/admob/plugin.cfg")
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/deadzone_export/plugin.cfg", "res://addons/NotificationSchedulerPlugin/plugin.cfg")
 
 [admob]
 
