@@ -3013,6 +3013,9 @@ msgstr "CROSSHAIR SIZE"
 msgid "РАЗНЫЕ ВЕРСИИ ИГРЫ — ОБНОВИТЕ ИГРУ"
 msgstr "GAME VERSIONS DIFFER — UPDATE THE GAME"
 
+msgid "РАЗРАБОТЧИК"
+msgstr "DEVELOPER"
+
 msgid "РАЗРЕШЕНИЕ 3D (НИЖЕ — БЫСТРЕЕ)"
 msgstr "3D RESOLUTION (LOWER — FASTER)"
 

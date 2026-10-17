@@ -64,7 +64,8 @@ const ATTACHMENT_PATHS: Array[String] = ["res://weapons/attachments/silencer.tre
 const GEAR_PATHS: Array[String] = ["res://items/torch.tres"]
 ## Скины игрока (вид от 3-го лица и мультиплеер). Первый — по умолчанию
 const SKIN_PATHS: Array[String] = [
-	"res://player/skins/shaun.tres", "res://player/skins/lis.tres", "res://player/skins/matt.tres",
+	"res://player/skins/shaun.tres", "res://player/skins/hero.tres", "res://player/skins/lis.tres",
+	"res://player/skins/matt.tres",
 	"res://player/skins/sam.tres", "res://player/skins/kenney_male_a.tres",
 	"res://player/skins/kenney_female_a.tres", "res://player/skins/kenney_male_c.tres",
 	"res://player/skins/kenney_female_c.tres", "res://player/skins/kenney_male_e.tres",

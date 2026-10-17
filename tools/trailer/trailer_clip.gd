@@ -6,7 +6,8 @@ extends Node
 ##   drive <длительность> — город: за рулём своей машины, зомби выходят на дорогу, иногда занос
 ##   hub <длительность> [уровень 1..5] [orbit|camp|gate] — убежище нужного уровня (по умолчанию — максимум)
 ## Опции боя (после оружия): boss@<с> — босс миссии с замедленным появлением, spawn=<тип+тип> — эти зомби
-## по очереди (enemies/<тип>.tres), deploy — турель, капкан и мина перед игроком, hold — не стрелять первые 2 с
+## по очереди (enemies/<тип>.tres), deploy — турель, капкан и мина перед игроком, hold — не стрелять первые 2 с,
+## skin=<id> — скин игрока (player/skins)
 var _args: PackedStringArray
 var _t: float = 0.0
 var _duration: float = 10.0
@@ -74,6 +75,8 @@ func _start_mission() -> void:
 			_deploy = true
 		elif option == "hold":
 			_hold = 2.0
+		elif option.begins_with("skin="):
+			GameState._skin_id = option.substr(5)  # скин игрока в кадре (вид от 3-го лица)
 	_load_mission(_args[1])
 
 

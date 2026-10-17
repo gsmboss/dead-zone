@@ -520,4 +520,7 @@ store/screenshots/ (7 шт. 1920×1080, сняты в Godot). version/name 1.0.0
 и музыкой CC0. Готовые ролики DeadZone_trailer_ru/en.mp4 (47 с, 1080p) в git не хранятся.
 Ролики YouTube: tools/trailer/shorts.py + shorts_edits.py (Shorts на 14 дней, монтаж в такт музыке), longform.py (пролог, обзор
 1080p), trailer_clip.gd — режимы drive, hub <уровень> <камера>, опции боя boss@/spawn=/deploy/hold; план и тексты — store/youtube_plan.md.
+Скин «РАЗРАБОТЧИК» (player/skins/hero.tres, бесплатный, второй в SKIN_PATHS): models/characters/hero/Characters_Hero.gltf +
+Hero_Atlas.png — перекраска Characters_Matt по фото (кожа светлее, без бороды и шрама, пышные чёрные волосы, белая рубашка
+с длинными рукавами, тёмно-синие брюки); пересобрать — python3 tools/make_hero_skin.py. trailer_clip: опция skin=<id>.
 
