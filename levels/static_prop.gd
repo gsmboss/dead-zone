@@ -1,0 +1,82 @@
+class_name StaticProp
+extends StaticBody3D
+## Статичный объект окружения (модель glTF дочерней нодой).
+## В _ready сам создаёт коллизию-коробку по габаритам дочерних мешей,
+## поэтому модели можно расставлять в сцене без ручной настройки форм.
+## Для объектов с выносом (фонари, светофоры) задайте custom_size — тогда
+## коробка берётся из custom_size/custom_center, а не из габаритов меша.
+
+## Размер коробки вручную (ноль — авто по мешам)
+@export var custom_size: Vector3 = Vector3.ZERO
+## Центр коробки вручную (в локальных координатах), используется вместе с custom_size
+@export var custom_center: Vector3 = Vector3.ZERO
+## Минимальная толщина авто-коробки, чтобы плоские объекты не проваливались
+@export var min_thickness: float = 0.1
+## Взрывается от выстрела. Бочки Barrel.gltf взрывные сами (кроме убежища)
+@export var explosive: bool = false
+
+const EXPLOSIVE_MODELS: PackedStringArray = ["res://models/environment/Barrel.gltf"]
+const HUB_SCENE: String = "res://hub/hub.tscn"
+
+
+func _ready() -> void:
+	collision_layer = PhysicsLayers.WORLD
+	collision_mask = 0
+
+	var box_size: Vector3 = custom_size
+	var box_center: Vector3 = custom_center
+	if box_size == Vector3.ZERO:
+		var bounds: AABB = _compute_local_bounds()
+		if bounds.size == Vector3.ZERO:
+			push_warning("StaticProp '%s': нет мешей, коллизия не создана" % name)
+			return
+		box_size = bounds.size
+		box_center = bounds.get_center()
+
+	box_size.x = maxf(box_size.x, min_thickness)
+	box_size.y = maxf(box_size.y, min_thickness)
+	box_size.z = maxf(box_size.z, min_thickness)
+
+	var shape := BoxShape3D.new()
+	shape.size = box_size
+	var collision := CollisionShape3D.new()
+	collision.name = "AutoCollision"
+	collision.shape = shape
+	collision.position = box_center
+	add_child(collision)
+	_setup_explosive.call_deferred(AABB(box_center - box_size * 0.5, box_size))
+
+
+## Взрывная бочка (после загрузки сцены: в убежище не взрываем)
+func _setup_explosive(bounds: AABB) -> void:
+	if not is_inside_tree():
+		return
+	var scene: Node = get_tree().current_scene
+	if scene != null and scene.scene_file_path == HUB_SCENE:
+		return
+	var is_barrel: bool = explosive
+	if not is_barrel:
+		for child: Node in get_children():
+			if child.scene_file_path in EXPLOSIVE_MODELS:
+				is_barrel = true
+				break
+	if is_barrel:
+		ExplosiveBarrel.attach(self, bounds)
+
+
+## Габариты всех MeshInstance3D-потомков в локальных координатах этого тела
+func _compute_local_bounds() -> AABB:
+	var inverse_xform: Transform3D = global_transform.affine_inverse()
+	var result := AABB()
+	var has_bounds: bool = false
+	for node: Node in find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		var bounds: AABB = (inverse_xform * mesh_instance.global_transform) * mesh_instance.get_aabb()
+		if has_bounds:
+			result = result.merge(bounds)
+		else:
+			result = bounds
+			has_bounds = true
+	return result

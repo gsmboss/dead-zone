@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itm01"]
+
+[resource]
+script = ExtResource("1_itm01")
+id = "scrap"
+title = "ЛОМ"
+description = "Выпадает из зомби и лежит в городе. Из лома в мастерской убежища собираются гранаты, коктейли и аптечки"
+effect = 4
+amount = 0.0
+max_stack = 99
+price = 0
+icon_color = Color(0.55, 0.56, 0.6, 1)

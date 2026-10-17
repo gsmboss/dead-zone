@@ -1,0 +1,357 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dxkjvqcbx2yt6" path="res://ui/touch/touch_controls.gd" id="2_o6mel"]
+[ext_resource type="Script" uid="uid://dghnj5repsr7p" path="res://ui/damage_overlay.gd" id="2_wkb0e"]
+[ext_resource type="Script" uid="uid://b5ehpirj8va4c" path="res://ui/touch/virtual_joystick.gd" id="3_e7anx"]
+[ext_resource type="Script" uid="uid://l7ge3tjil0vp" path="res://ui/touch/touch_action_button.gd" id="4_ur00s"]
+[ext_resource type="Script" uid="uid://bpix1h3rg7vin" path="res://ui/crosshair.gd" id="5_ur00s"]
+[ext_resource type="Script" uid="uid://cor576lrvs0cp" path="res://ui/ammo_display.gd" id="6_wndkh"]
+[ext_resource type="Script" uid="uid://s84lkipfd2x5" path="res://ui/health_display.gd" id="8_paa45"]
+[ext_resource type="Script" uid="uid://bqofxke15edqw" path="res://ui/mission_hud.gd" id="14_mhud1"]
+[ext_resource type="PackedScene" uid="uid://ckdq70rsi165h" path="res://player/player.tscn" id="1_w7r7j"]
+[ext_resource type="PackedScene" uid="uid://ct6h4tc3s40c6" path="res://enemies/zombie.tscn" id="7_ly3hx"]
+[ext_resource type="Script" uid="uid://dvhn03ojbn765" path="res://missions/spawn_point.gd" id="10_0vv12"]
+[ext_resource type="Script" uid="uid://dovqnlj1fo70i" path="res://missions/mission_manager.gd" id="11_o5yuq"]
+[ext_resource type="Resource" path="res://missions/data/story_3.tres" id="12_miss1"]
+[ext_resource type="Script" uid="uid://bxnfpultch60d" path="res://missions/zombie_spawner.gd" id="13_xag4j"]
+[ext_resource type="Script" path="res://levels/static_prop.gd" id="30_prop1"]
+[ext_resource type="Script" path="res://levels/runtime_nav_region.gd" id="31_nav01"]
+[ext_resource type="Script" path="res://missions/defend_point.gd" id="32_def01"]
+[ext_resource type="Script" path="res://missions/item_spawn_point.gd" id="33_itm01"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_1.gltf" id="m_Blood_1"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_2.gltf" id="m_Blood_2"]
+[ext_resource type="PackedScene" path="res://models/environment/Blood_3.gltf" id="m_Blood_3"]
+[ext_resource type="Script" path="res://ui/game_menus.gd" id="50_menu1"]
+[ext_resource type="Script" path="res://levels/forest/forest_builder.gd" id="60_frs01"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_mat"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_res"]
+sky_material = SubResource("Sky_mat")
+
+[sub_resource type="Environment" id="Env_res"]
+background_mode = 2
+sky = SubResource("Sky_res")
+ambient_light_source = 3
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.26, 0.26, 0.27, 1)
+roughness = 0.95
+
+[sub_resource type="BoxShape3D" id="Wall_x"]
+size = Vector3(57, 60, 0.5)
+
+[sub_resource type="BoxShape3D" id="Wall_z"]
+size = Vector3(0.5, 60, 57)
+
+[sub_resource type="NavigationMesh" id="Nav_mesh"]
+agent_height = 1.8
+agent_radius = 0.4
+agent_max_slope = 35.0
+
+[node name="ForestLevel" type="Node3D" unique_id=1909746146]
+
+[node name="Player" parent="." unique_id=252144313 node_paths=PackedStringArray("touch_controls") instance=ExtResource("1_w7r7j")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1, -2)
+touch_controls = NodePath("../HUD/TouchControls")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=747196567]
+environment = SubResource("Env_res")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=749616815]
+transform = Transform3D(0.866025, -0.383022, 0.321394, 0, 0.642788, 0.766044, -0.5, -0.663414, 0.55667, 0, 0, 0)
+shadow_enabled = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=498262993]
+
+[node name="DamageOverlay" type="ColorRect" parent="HUD" unique_id=1835518200]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_wkb0e")
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1780298419 node_paths=PackedStringArray("joystick")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_o6mel")
+joystick = NodePath("Joystick")
+
+[node name="Joystick" type="Control" parent="HUD/TouchControls" unique_id=1314025991]
+layout_mode = 1
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_e7anx")
+
+[node name="FireButton" type="Control" parent="HUD/TouchControls" unique_id=1688909280]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -230.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"fire"
+label = "FIRE"
+
+[node name="JumpButton" type="Control" parent="HUD/TouchControls" unique_id=674373442]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -170.0
+offset_right = -260.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"jump"
+label = "JUMP"
+
+[node name="ReloadButton" type="Control" parent="HUD/TouchControls" unique_id=568355740]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -380.0
+offset_right = -100.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"reload"
+label = "R"
+
+[node name="Crosshair" type="CenterContainer" parent="HUD/TouchControls" unique_id=2080779263]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="HUD/TouchControls/Crosshair" unique_id=86499869]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "+"
+script = ExtResource("5_ur00s")
+
+[node name="SwitchButton" type="Control" parent="HUD/TouchControls" unique_id=979111094]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -380.0
+offset_right = -230.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"switch_weapon"
+label = "⇄"
+
+[node name="AimButton" type="Control" parent="HUD/TouchControls" unique_id=856198546]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -300.0
+offset_right = -360.0
+offset_bottom = -180.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_ur00s")
+action = &"aim"
+label = "ПРИЦЕЛ"
+show_aim_state = true
+
+[node name="AmmoLabel" type="Label" parent="HUD" unique_id=1137799918]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("6_wndkh")
+
+[node name="HealthLabel" type="Label" parent="HUD" unique_id=73412667]
+anchors_preset = -1
+anchor_left = 30.0
+anchor_top = 20.0
+anchor_right = 300.0
+anchor_bottom = 70.0
+offset_left = -34560.0
+offset_top = -12960.0
+offset_right = -345599.0
+offset_bottom = -45321.0
+theme_override_font_sizes/font_size = 28
+script = ExtResource("8_paa45")
+
+[node name="MissionHUD" type="Control" parent="HUD" unique_id=433307376]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_mhud1")
+
+[node name="GameMenus" type="Control" parent="HUD" unique_id=1056910491]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("50_menu1")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=697913488]
+navigation_mesh = SubResource("Nav_mesh")
+script = ExtResource("31_nav01")
+
+[node name="Floor" type="CSGBox3D" parent="NavigationRegion3D" unique_id=391557661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(56, 1, 56)
+material = SubResource("Mat_floor")
+
+[node name="Location" type="Node3D" parent="NavigationRegion3D" unique_id=1622049173]
+script = ExtResource("60_frs01")
+
+[node name="Bounds" type="StaticBody3D" parent="." unique_id=387283084]
+
+[node name="North" type="CollisionShape3D" parent="Bounds" unique_id=1994908799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -28)
+shape = SubResource("Wall_x")
+
+[node name="South" type="CollisionShape3D" parent="Bounds" unique_id=549840642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 28)
+shape = SubResource("Wall_x")
+
+[node name="West" type="CollisionShape3D" parent="Bounds" unique_id=444404286]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="East" type="CollisionShape3D" parent="Bounds" unique_id=769261453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 3, 0)
+shape = SubResource("Wall_z")
+
+[node name="Decals" type="Node3D" parent="." unique_id=954483657]
+
+[node name="Blood1" parent="Decals" unique_id=522916172 instance=ExtResource("m_Blood_1")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0.01, 0)
+
+[node name="Blood2" parent="Decals" unique_id=1716255822 instance=ExtResource("m_Blood_2")]
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -12, 0.01, -3)
+
+[node name="Blood3" parent="Decals" unique_id=485314126 instance=ExtResource("m_Blood_3")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 6, 0.01, -20)
+
+[node name="SpawnPoints" type="Node3D" parent="." unique_id=865964532]
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints" unique_id=1077810330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints" unique_id=1574526753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints" unique_id=131979127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn4" type="Marker3D" parent="SpawnPoints" unique_id=356087537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn5" type="Marker3D" parent="SpawnPoints" unique_id=820152552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn6" type="Marker3D" parent="SpawnPoints" unique_id=1548914809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, -4)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn7" type="Marker3D" parent="SpawnPoints" unique_id=106277814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 4)
+script = ExtResource("10_0vv12")
+
+[node name="Spawn8" type="Marker3D" parent="SpawnPoints" unique_id=1759633692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 27)
+script = ExtResource("10_0vv12")
+
+[node name="DefendPoint" type="Marker3D" parent="." unique_id=578760142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -3)
+script = ExtResource("32_def01")
+
+[node name="ItemPoints" type="Node3D" parent="." unique_id=1715145574]
+
+[node name="Item1" type="Marker3D" parent="ItemPoints" unique_id=1188529771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -22)
+script = ExtResource("33_itm01")
+
+[node name="Item2" type="Marker3D" parent="ItemPoints" unique_id=1000269012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -22)
+script = ExtResource("33_itm01")
+
+[node name="Item3" type="Marker3D" parent="ItemPoints" unique_id=1514281600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -17)
+script = ExtResource("33_itm01")
+
+[node name="Item4" type="Marker3D" parent="ItemPoints" unique_id=180727451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 6)
+script = ExtResource("33_itm01")
+
+[node name="Item5" type="Marker3D" parent="ItemPoints" unique_id=559952051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 3)
+script = ExtResource("33_itm01")
+
+[node name="Item6" type="Marker3D" parent="ItemPoints" unique_id=1406773869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 8)
+script = ExtResource("33_itm01")
+
+[node name="Item7" type="Marker3D" parent="ItemPoints" unique_id=1097757251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 22.5)
+script = ExtResource("33_itm01")
+
+[node name="Item8" type="Marker3D" parent="ItemPoints" unique_id=1290888986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 24)
+script = ExtResource("33_itm01")
+
+[node name="MissionManager" type="Node" parent="." unique_id=1166034990]
+script = ExtResource("11_o5yuq")
+mission = ExtResource("12_miss1")
+
+[node name="ZombieSpawner" type="Node3D" parent="MissionManager" unique_id=1275131797]
+script = ExtResource("13_xag4j")
+zombie_scene = ExtResource("7_ly3hx")

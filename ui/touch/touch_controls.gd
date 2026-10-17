@@ -8,6 +8,12 @@ extends Control
 @export var hide_without_touchscreen: bool = false
 
 var _buttons: Array[TouchActionButton] = []
+## Открыто меню поверх игры (по сети игра не на паузе): касания не управляют игроком
+var input_blocked: bool = false:
+	set(value):
+		input_blocked = value
+		if value:
+			reset_all()
 var _button_touches: Dictionary = {}  # индекс пальца -> TouchActionButton
 var _joystick_index: int = -1
 var _look_index: int = -1
@@ -22,6 +28,21 @@ func _ready() -> void:
 	if hide_without_touchscreen and not DisplayServer.is_touchscreen_available():
 		hide()
 	visibility_changed.connect(_on_visibility_changed)
+	# Раскладка из настроек: позиции, размер кнопок, сторона джойстика
+	Settings.changed.connect(apply_layout)
+	get_viewport().size_changed.connect(apply_layout)
+	apply_layout.call_deferred()
+
+
+## Расставить кнопки и джойстик по настройкам (своя раскладка, размер)
+func apply_layout() -> void:
+	if not is_inside_tree():
+		return
+	var screen: Vector2 = get_viewport_rect().size
+	for button: TouchActionButton in _buttons:
+		if is_instance_valid(button):
+			ControlLayout.apply_to_button(button, screen)
+	ControlLayout.apply_to_joystick(joystick)
 
 
 ## Вектор движения -1..1 (вперёд = -Y)
@@ -34,6 +55,24 @@ func consume_look_delta() -> Vector2:
 	var delta: Vector2 = _look_delta
 	_look_delta = Vector2.ZERO
 	return delta
+
+
+## Кнопка, созданная кодом после _ready (меню, машина)
+func register_button(button: TouchActionButton) -> void:
+	if button != null and not button in _buttons:
+		_buttons.append(button)
+		if is_inside_tree():
+			ControlLayout.apply_to_button(button, get_viewport_rect().size)
+
+
+func unregister_button(button: TouchActionButton) -> void:
+	if button == null:
+		return
+	button.force_release()
+	_buttons.erase(button)
+	for index: int in _button_touches.keys():
+		if _button_touches[index] == button:
+			_button_touches.erase(index)
 
 
 func reset_all() -> void:
@@ -49,7 +88,7 @@ func reset_all() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not is_visible_in_tree():
+	if not is_visible_in_tree() or input_blocked:
 		return
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
@@ -122,4 +161,4 @@ func _notification(what: int) -> void:
 		NOTIFICATION_APPLICATION_FOCUS_OUT, \
 		NOTIFICATION_APPLICATION_PAUSED, \
 		NOTIFICATION_WM_WINDOW_FOCUS_OUT:
-			reset_all()	
+			reset_all()

@@ -12,14 +12,38 @@ extends Resource
 @export_range(0.0, 15.0, 0.1) var spread_degrees: float = 1.0
 
 @export_group("Fire")
-## Выстрелов в секунду
+## Выстрелов (ударов) в секунду
 @export_range(0.5, 20.0, 0.1) var fire_rate: float = 4.0
+
+@export_group("Flamethrower")
+## Огнемёт: урон всем зомби в конусе на max_range каждый «выстрел», струя пламени
+@export var is_flamethrower: bool = false
+@export_range(5.0, 60.0, 1.0) var flame_cone_degrees: float = 20.0
+
+@export_group("Melee")
+## Оружие ближнего боя: без патронов, удар на max_range веером лучей
+@export var is_melee: bool = false
+## Ширина веера удара, градусы (лучи: центр и края)
+@export_range(0.0, 60.0, 1.0) var melee_arc_degrees: float = 30.0
+## Поворот модели при замахе, градусы
+@export var swing_rotation_degrees: Vector3 = Vector3(-55.0, 0.0, 25.0)
 
 @export_group("Ammo")
 @export_range(1, 200) var magazine_size: int = 12
 ## Максимальный запас патронов. -1 = бесконечный
 @export var max_reserve_ammo: int = -1
 @export_range(0.1, 5.0, 0.05) var reload_time: float = 1.2
+
+@export_group("Aim")
+## Приближение при прицеливании: FOV × множитель (меньше — сильнее зум)
+@export_range(0.1, 1.0, 0.05) var ads_fov_multiplier: float = 0.75
+## Разброс при прицеливании × множитель
+@export_range(0.0, 1.0, 0.05) var ads_spread_multiplier: float = 0.35
+## Расхождение прицела за выстрел (доля от spread_degrees) и максимум
+@export_range(0.0, 2.0, 0.05) var bloom_per_shot: float = 0.35
+@export_range(0.0, 5.0, 0.1) var max_bloom_factor: float = 2.0
+## Оптический прицел (снайперская): в прицеле — круг оптики на весь экран, модель оружия скрыта
+@export var has_scope: bool = false
 
 @export_group("Recoil")
 ## Подброс камеры вверх за выстрел, градусы
@@ -28,6 +52,18 @@ extends Resource
 @export var recoil_yaw: float = 0.4
 ## Откат модели оружия назад, метры
 @export var gun_kick: float = 0.05
+
+@export_group("Audio")
+@export var fire_sound: AudioStream
+## Звук перезарядки (обрывается, если перезарядка закончилась раньше)
+@export var reload_sound: AudioStream
+## Звук в конце перезарядки (например, передёргивание дробовика)
+@export var reload_end_sound: AudioStream
+## Затвор после каждого выстрела (болтовая винтовка): звучит через bolt_delay секунд
+@export var bolt_sound: AudioStream
+@export_range(0.0, 2.0, 0.05) var bolt_delay: float = 0.35
+@export_range(-30.0, 10.0, 0.5) var fire_volume_db: float = -4.0
+@export_range(0.5, 2.0, 0.05) var fire_pitch: float = 1.0
 
 @export_group("View Model")
 ## Модель оружия в руках (.gltf / .tscn). Пусто → серый брусок Gun
@@ -54,12 +90,33 @@ extends Resource
 @export_range(0.0, 0.2, 0.01) var reload_per_level: float = 0.08
 
 
+# ---------- Обвесы (ставит GameState.get_upgraded на копию, в .tres не сохраняются) ----------
+
+## Дальность слышимости выстрела зомби (глушитель < 1)
+var hearing_multiplier: float = 1.0
+## Без вспышки на стволе
+var hide_flash: bool = false
+## Что нарисовать на модели (AttachmentData.Look)
+var attachment_looks: Array[int] = []
+
+
+func has_look(look: int) -> bool:
+	return look in attachment_looks
+
+
 func get_fire_interval() -> float:
 	return 1.0 / maxf(fire_rate, 0.01)
 
 
 func has_infinite_reserve() -> bool:
-	return max_reserve_ammo < 0
+	return is_melee or max_reserve_ammo < 0
+
+
+## Какие улучшения доступны в оружейной (у ближнего боя только урон)
+func get_upgrade_stats() -> Array[String]:
+	if is_melee:
+		return ["damage"]
+	return ["damage", "magazine", "reload"]
 
 
 ## Цена следующего уровня; -1, если уровень максимальный

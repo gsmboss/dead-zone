@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sky_up"
+duration = 5.0
+caption = "ЮЖНЫЙ ПОРТ. ЭФИР"
+voice_ru = "Север-девять, слышу вас! Говорит капитан Якорев. Не смейтесь, это настоящая фамилия. Корабль будет у старого моста через неделю."
+voice_en = "North-Nine, I read you! Captain Yakorev speaking. Don't laugh, it's my real name. The ship will be at the old bridge in a week."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 9
+camera = "forest_camp"
+duration = 5.0
+voice_ru = "У вышки прятались четверо лесников. Месяц ели шишки. Говорят, невкусно, но полезно."
+voice_en = "Four forest rangers were hiding by the tower. They lived on pine cones for a month. Not tasty, they say, but healthy."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 8.0
+caption = "АРХИВ ВЫШКИ. ДЕНЬ НОЛЬ"
+voice_ru = "Это аварийный канал? Если кто-то найдёт моих мальчиков… Старший — упрямый, младший — с красным рюкзаком. Скажите им, что я их люблю. И пусть Тёма не ест всухомятку."
+voice_en = "Is this the emergency channel? If anyone finds my boys... The older one is stubborn, the younger one has a red backpack. Tell them I love them. And Tyoma must not eat dry food."
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "…Я не ем всухомятку. Почти."
+voice_en = "...I don't eat dry food. Almost."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_high"
+duration = 5.0
+voice_ru = "Мама осталась на мосту, чтобы мы успели. Через неделю мы вернёмся на этот мост. Все вместе."
+voice_en = "Mom stayed on the bridge so we could make it. In a week we're going back to that bridge. All of us."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ЧЕРЕЗ НЕДЕЛЮ — МОСТ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_tower_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

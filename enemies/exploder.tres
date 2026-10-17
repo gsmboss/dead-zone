@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://odbeiqagf5bi" path="res://models/zombies/Zombie_Chubby.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "ВЗРЫВНОЙ"
+behavior = 2
+max_health = 90.0
+move_speed = 2.4
+attack_damage = 10.0
+detection_radius = 16.0
+stagger_time = 0.15
+model_scene = ExtResource("2_md01")
+model_scale = 1.4
+tint = Color(0.5, 1, 0.1, 0.35)
+uses_attack_queue = false
+explode_trigger_distance = 2.2
+explode_fuse = 0.7
+explode_radius = 4.5
+explode_damage = 45.0
+explode_on_death = true
+voice_pitch = 0.9
+score = 20
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

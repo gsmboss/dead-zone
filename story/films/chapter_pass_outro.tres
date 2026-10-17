@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_pass"
+duration = 5.0
+voice_ru = "Завёлся! Я гений! Я чёрный, как трубочист, но я гений!"
+voice_en = "It started! I'm a genius! I'm black as a chimney sweep, but I'm a genius!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_gate"
+duration = 5.0
+voice_ru = "За перевалом — деревня Верхние Ключи. Частокол, дым из труб и люди на стене. Они махали нам обеими руками."
+voice_en = "Beyond the pass: the village of Upper Springs. A stockade, chimney smoke and people on the wall. They waved at us with both hands."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_wide"
+duration = 5.0
+voice_ru = "А выше, в горах, кто-то выл. Мертвецы на склонах повернули головы на звук. Разом. Как стадо."
+voice_en = "And higher up, in the mountains, something howled. The dead on the slopes turned their heads to the sound. All at once. Like a herd."
+effect = "shake"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_pass_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

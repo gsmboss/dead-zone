@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShelterConfig" format=3]
+
+[ext_resource type="Script" path="res://base/shelter_config.gd" id="1_shc01"]
+
+[resource]
+script = ExtResource("1_shc01")
+level_titles = PackedStringArray("ЛАГЕРЬ", "ДВОР", "ФОРТ", "БАЗА", "КРЕПОСТЬ")
+level_descriptions = PackedStringArray("Двор из контейнеров, костёр и пара палаток", "Стены раздвигаются: место под огород и вышку, больше жильцов", "Второй ярус контейнеров, радио, генератор и бассейн", "Двор ещё шире: столовая, кинотеатр и ветряк", "Прожекторы и флаги на стенах — самая большая крепость в округе")
+level_prices = PackedInt32Array(0, 1500, 3500, 7000, 12000)
+level_scrap = PackedInt32Array(0, 3, 6, 10, 15)
+level_half_sizes = PackedFloat32Array(16, 20, 20, 22.8, 22.8)
+level_capacity = PackedInt32Array(10, 20, 35, 55, 90)
+level_income_hours = PackedFloat32Array(4, 6, 8, 10, 12)

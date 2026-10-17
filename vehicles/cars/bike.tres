@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CarData" format=3]
+
+[ext_resource type="Script" path="res://vehicles/car_data.gd" id="1_car"]
+
+[resource]
+script = ExtResource("1_car")
+id = "bike"
+title = "МОТОЦИКЛ"
+car_class = 1
+description = "Самый быстрый разгон и юркий руль, протиснется где угодно. Но ты на виду: зомби бьют тебя, а не кузов. Можно стрелять на ходу."
+price = 1800
+bike = true
+max_speed = 30.0
+max_reverse_speed = 4.0
+acceleration = 16.0
+brake_power = 26.0
+steer_rate = 2.9
+grip = 10.0
+drift_grip = 3.5
+run_over_damage_factor = 6.0
+durability = 140.0
+tuning_base_cost = 200

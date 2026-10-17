@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup_Armored.gltf" id="2_mdl01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "garage"
+title = "ГАРАЖ"
+description = "Открывает улучшения машин: таран и двигатель"
+price = 700
+icon_color = Color(0.3, 0.5, 0.85, 1)
+hub_model = ExtResource("2_mdl01")
+hub_model_scale = 0.6

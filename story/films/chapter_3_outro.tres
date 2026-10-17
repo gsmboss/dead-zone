@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 6.0
+caption = "РАССКАЗ ВЕРЫ"
+voice_ru = "Его увели люди в красных платках. С оружием, с грузовиком. Они называют себя Стервятники. Их главный — какой-то Барон."
+voice_en = "He was taken by people in red bandanas. Armed, with a truck. They call themselves the Vultures. Their boss is some Baron."
+speaker = "ВЕРА"
+pitch = 1.1
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.0
+voice_ru = "Зомби страшные. Но зомби хотя бы честно хотят тебя съесть. Люди иногда хотят большего."
+voice_en = "Zombies are scary. But at least zombies are honest about wanting to eat you. People sometimes want more."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_3_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2")])

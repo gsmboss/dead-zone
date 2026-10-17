@@ -7,6 +7,7 @@ extends Label
 var _weapon_name: String = ""
 var _ammo_text: String = ""
 var _reloading: bool = false
+var _melee: bool = false
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func _connect_manager() -> void:
 
 func _on_weapon_changed(weapon: WeaponData) -> void:
 	_weapon_name = weapon.display_name
+	_melee = weapon.is_melee
 	_reloading = false
 	_refresh()
 
@@ -51,4 +53,7 @@ func _on_reload_ended() -> void:
 
 
 func _refresh() -> void:
-	text = "%s\n%s" % [_weapon_name, "ПЕРЕЗАРЯДКА..." if _reloading else _ammo_text]
+	if _melee:
+		text = UIKit.t("%s\nБЛИЖНИЙ БОЙ") % UIKit.t(_weapon_name)
+		return
+	text = "%s\n%s" % [UIKit.t(_weapon_name), UIKit.t("ПЕРЕЗАРЯДКА...") if _reloading else _ammo_text]

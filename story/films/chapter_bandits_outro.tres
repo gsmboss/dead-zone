@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 5.5
+voice_ru = "Не стреляй! Я Шнырь, я вообще бухгалтер! Меня заставили! Ну… я сам пришёл, но потом пожалел!"
+voice_en = "Don't shoot! I'm Weasel, I'm just an accountant! They made me! Well... I came on my own, but I regretted it!"
+speaker = "ШНЫРЬ"
+pitch = 1.45
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 6.5
+voice_ru = "Пацан с красным рюкзаком? Он у Барона на складе в промзоне. Вчера разобрал Барону рацию и собрал обратно. Лишние детали Барон ищет до сих пор."
+voice_en = "Kid with the red backpack? He's at the Baron's depot in the industrial zone. Yesterday he took the Baron's radio apart and put it back together. The Baron's still looking for the leftover parts."
+speaker = "ШНЫРЬ"
+pitch = 1.45
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "sky_up"
+duration = 4.0
+voice_ru = "Мой брат. Узнаю почерк."
+voice_en = "My brother. I'd know that style anywhere."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_bandits_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CarData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://vehicles/car_data.gd" id="1_car"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Truck_Armored.gltf" id="2_model"]
+
+[resource]
+script = ExtResource("1_car")
+id = "truck_armored"
+title = "БРОНЕГРУЗОВИК"
+car_class = 2
+durability = 700.0
+description = "Крепость на колёсах: таран, перед которым не устоит даже толстяк."
+price = 4500
+model_scene = ExtResource("2_model")
+max_speed = 19.0
+acceleration = 9.0
+steer_rate = 1.7
+grip = 9.5
+drift_grip = 2.8
+run_over_damage_factor = 30.0
+tuning_base_cost = 380

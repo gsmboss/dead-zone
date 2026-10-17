@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_aerial"
+duration = 6.0
+caption = "РАССВЕТ. ПРИЧАЛ «НАДЕЖДЫ»"
+voice_ru = "«Надежда» задымила трубой впервые за месяц. По трапу идут люди: экипаж, Михалыч с женой и тёщей."
+voice_en = "The Nadezhda smoked from her funnel for the first time in a month. People walk up the gangway: the crew, Mikhalych with his wife and mother-in-law."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_gangway"
+duration = 6.0
+voice_ru = "Я выведу их за рифы на лодке. А герань останется с вами — в море её укачивает. Меня тоже."
+voice_en = "I'll lead them past the reefs in my boat. The geranium stays with you, it gets seasick. So do I."
+speaker = "ПАЛЫЧ"
+pitch = 0.72
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_ship"
+duration = 5.0
+voice_ru = "Мотор разбудил весь порт. Держите причал, пока все не поднимутся на борт!"
+voice_en = "The engine woke up the whole port. Hold the pier until everyone is aboard!"
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_sea"
+duration = 4.0
+voice_ru = "А из воды поднимался Утопленник. Высотой с полкрана."
+voice_en = "And out of the water rose the Drowned One. Half as tall as a crane."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_quay"
+duration = 5.0
+voice_ru = "Правило номер один теперь звучит так: проверяй заднюю палубу!"
+voice_en = "Rule number one now goes like this: always check the back deck!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_voyage_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

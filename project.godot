@@ -11,15 +11,28 @@ config_version=5
 [application]
 
 config/name="Dead Zone"
-run/main_scene="uid://k6p8yjsd7l10v"
+run/main_scene="res://boot/boot.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.024, 0.09, 0.17, 1)
+boot_splash/image="res://ui/splash/salamanderlab.png"
+config/quit_on_go_back=false
+
+[audio]
+
+general/text_to_speech=true
 
 [autoload]
 
 InputSetup="*uid://eeyph23ddjd2"
 Impacts="*uid://df11sgt7xyxlh"
 GameState="*uid://cy30ouli4lnvv"
+Sfx="*res://autoload/sfx.gd"
+Settings="*res://autoload/settings.gd"
+Music="*res://autoload/music.gd"
+Net="*res://autoload/net.gd"
+Ads="*res://autoload/ads.gd"
+Reminders="*res://autoload/reminders.gd"
 
 [display]
 
@@ -30,6 +43,12 @@ window/handheld/orientation=4
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+sensors/enable_gyroscope=true
+
+[internationalization]
+
+locale/fallback="ru"
+locale/translations=PackedStringArray("res://locale/en.po")
 
 [physics]
 
@@ -40,3 +59,12 @@ pointing/emulate_touch_from_mouse=true
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 textures/vram_compression/compress_with_gpu=false
+textures/vram_compression/import_etc2_astc=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/deadzone_export/plugin.cfg", "res://addons/NotificationSchedulerPlugin/plugin.cfg")
+
+[admob]
+
+general/android/app_id="ca-app-pub-5010684167263731~1270406484"

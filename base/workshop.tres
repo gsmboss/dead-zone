@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+[ext_resource type="PackedScene" path="res://models/environment/Container_Green.gltf" id="2_mdl01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "workshop"
+title = "МАСТЕРСКАЯ"
+description = "Сборка гранат, коктейлей, аптечек и патронов из лома"
+price = 400
+icon_color = Color(0.8, 0.55, 0.2, 1)
+hub_model = ExtResource("2_mdl01")
+hub_model_scale = 0.5

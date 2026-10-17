@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_village"
+duration = 5.0
+caption = "ВЕРХНИЕ КЛЮЧИ"
+voice_ru = "Двести человек, три коровы, одна очередь. Без паники. Кто паникует — идёт в конец."
+voice_en = "Two hundred people, three cows, one queue. No panic. Whoever panics goes to the back."
+speaker = "БАБА ШУРА"
+pitch = 1.05
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_gate"
+duration = 5.0
+voice_ru = "Я видел, как Ирина делает. Три раза. Не дёргайтесь, бабушка. Это я не вам, это я себе."
+voice_en = "I saw Irina do it. Three times. Don't flinch, granny. I'm not saying that to you, I'm saying it to myself."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_pass"
+duration = 5.0
+voice_ru = "Вой с гор не стихал. И мертвецы шли на него — прямо к воротам."
+voice_en = "The howl from the mountains did not stop. And the dead followed it, straight to the gate."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 28\nВЕРХНИЕ КЛЮЧИ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_keys_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://c61l4kem7uw0p" path="res://models/zombies/Zombie_Ribcage.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "ПЛЕВУН"
+behavior = 1
+max_health = 80.0
+move_speed = 1.5
+attack_damage = 8.0
+detection_radius = 22.0
+model_scene = ExtResource("2_md01")
+model_scale = 1.6
+tint = Color(0.35, 0.9, 0.2, 0.25)
+ranged_min_distance = 6.0
+ranged_max_distance = 18.0
+ranged_cooldown = 2.8
+ranged_windup = 0.6
+projectile_damage = 12.0
+projectile_speed = 14.0
+voice_pitch = 1.3
+score = 20
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

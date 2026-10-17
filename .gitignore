@@ -8,3 +8,18 @@ export/
 *.keystore
 *.jks
 .DS_Store
+# Android: шаблон Gradle (Project → Install Android Build Template) и бинарники AdMob скачиваются локально
+/android/
+/addons/admob/android/bin/
+/addons/admob/ios/bin/
+/addons/admob/downloads/
+
+# Подпись APK и старые копии пресетов экспорта
+*.idsig
+*.apk
+*.aab
+export_presets_old.cfg
+
+# Голоса Piper для tools/voice/build_voice.py (скачиваются сами)
+tools/voice/models/
+.venv-voice/

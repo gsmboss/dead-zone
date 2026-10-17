@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itm01"]
+
+[resource]
+script = ExtResource("1_itm01")
+id = "turret"
+title = "ТУРЕЛЬ"
+description = "Ставится кнопкой ЛОВУШКА: сама стреляет по зомби в 16 м, 120 патронов"
+effect = 5
+amount = 14.0
+max_stack = 3
+price = 260
+icon_color = Color(0.35, 0.5, 0.62, 1)
+craft_cost = 8

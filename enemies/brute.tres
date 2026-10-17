@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://odbeiqagf5bi" path="res://models/zombies/Zombie_Chubby.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "БУГАЙ"
+max_health = 520.0
+move_speed = 1.3
+turn_speed = 4.0
+speed_variation = 0.08
+attack_damage = 30.0
+attack_range = 2.0
+attack_windup = 0.9
+attack_cooldown = 1.4
+detection_radius = 13.0
+stagger_time = 0.0
+body_color = Color(0.4, 0.25, 0.25, 1)
+model_scene = ExtResource("2_md01")
+model_scale = 2.25
+tint = Color(0.45, 0.05, 0.05, 0.2)
+front_armor = 0.35
+armor_color = Color(0.33, 0.34, 0.36, 1)
+search_points = 2
+footstep_hearing_radius = 5.0
+charge_enabled = true
+charge_speed = 8.0
+charge_min_distance = 5.0
+charge_max_distance = 14.0
+charge_windup = 0.9
+charge_duration = 1.2
+charge_cooldown = 8.0
+charge_damage = 30.0
+knockback = 11.0
+voice_pitch = 0.6
+voice_volume_db = 3.0
+score = 60
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

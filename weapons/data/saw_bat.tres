@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" uid="uid://bywpyrl2xwjr2" path="res://weapons/weapon_data.gd" id="1_saw_bat"]
+[ext_resource type="PackedScene" uid="uid://c6qedx16cle6f" path="res://models/weapons/WoodenBat_Saw.gltf" id="2_saw_bat"]
+
+[resource]
+script = ExtResource("1_saw_bat")
+display_name = "БИТА-ПИЛА"
+damage = 100.0
+max_range = 2.5
+spread_degrees = 0.0
+fire_rate = 1.3
+is_melee = true
+melee_arc_degrees = 44.0
+swing_rotation_degrees = Vector3(-60, 0, 30)
+magazine_size = 1
+max_reserve_ammo = -1
+recoil_pitch = 0.0
+recoil_yaw = 0.0
+gun_kick = 0.0
+view_model = ExtResource("2_saw_bat")
+model_position = Vector3(0.3, -0.45, -0.5)
+model_rotation_degrees = Vector3(-110, 0, 0)
+model_scale = 0.4
+muzzle_position = Vector3(0, 0, 0)
+id = "saw_bat"
+price = 900
+upgrade_base_cost = 220
+damage_per_level = 0.2
+metadata/_custom_type_script = "uid://bywpyrl2xwjr2"

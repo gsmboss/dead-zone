@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="MissionData" format=3]
+
+[ext_resource type="Script" uid="uid://dp7avtsfoxban" path="res://missions/mission_data.gd" id="1_mdt"]
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="sp_zd"]
+[ext_resource type="Resource" uid="uid://blma0oe3hc5y0" path="res://enemies/walker.tres" id="z_walker"]
+[ext_resource type="Resource" path="res://enemies/skeleton.tres" id="z_skeleton"]
+[ext_resource type="Resource" path="res://enemies/ghoul.tres" id="z_ghoul"]
+[ext_resource type="Resource" path="res://enemies/crawler.tres" id="z_crawler"]
+[ext_resource type="Resource" path="res://enemies/spitter.tres" id="z_spitter"]
+
+[resource]
+script = ExtResource("1_mdt")
+id = "story_4"
+title = "НОЧЬ НА КЛАДБИЩЕ"
+description = "Радист прячется в склепе. Собери 5 деталей рации среди могил"
+type = 4
+level_scene = "res://levels/graveyard_level.tscn"
+time_of_day = 3
+collect_target = 5
+walker = ExtResource("z_walker")
+runner = ExtResource("z_skeleton")
+tank = ExtResource("z_ghoul")
+tank_chance = 0.08
+specials = Array[ExtResource("sp_zd")]([ExtResource("z_crawler"), ExtResource("z_spitter")])
+reward_coins = 320
+metadata/_custom_type_script = "uid://dp7avtsfoxban"

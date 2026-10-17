@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_wide"
+duration = 5.0
+voice_ru = "Пастух рухнул в снег. Впервые за месяцы в горах стало тихо. Так тихо, что слышно, как падает снег."
+voice_en = "The Shepherd fell into the snow. For the first time in months the mountains were quiet. So quiet you could hear the snow fall."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_gate"
+duration = 5.0
+voice_ru = "Стадо без пастуха — просто мертвецы. Опасные, но глупые. Как мой бывший завуч."
+voice_en = "A herd without a shepherd is just the dead. Dangerous, but dumb. Like my former deputy principal."
+speaker = "БАБА ШУРА"
+pitch = 1.05
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 6.0
+caption = "РАДИОЭФИР"
+voice_ru = "Возвращайтесь. Скорее. К нам идёт орда — самая большая из всех. Мы держимся."
+voice_en = "Come back. Hurry. A horde is coming for us, the biggest one yet. We're holding on."
+speaker = "ЛЕВ"
+pitch = 0.75
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_shepherd_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

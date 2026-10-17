@@ -11,6 +11,36 @@
 [ext_resource type="Resource" uid="uid://c725jtemdrvwt" path="res://missions/data/mission_waves.tres" id="9_mwv01"]
 [ext_resource type="Resource" uid="uid://npkxgt3ikibj" path="res://missions/data/mission_kill.tres" id="10_mkl01"]
 [ext_resource type="Resource" uid="uid://c3rr631lkbms2" path="res://missions/data/mission_survive.tres" id="11_msv01"]
+[ext_resource type="Resource" path="res://missions/data/mission_defend.tres" id="12_mdf01"]
+[ext_resource type="Resource" path="res://missions/data/mission_collect.tres" id="13_mcl01"]
+[ext_resource type="Resource" path="res://missions/data/mission_boss.tres" id="14_mbs01"]
+[ext_resource type="Resource" path="res://missions/data/mission_endless.tres" id="15_men01"]
+[ext_resource type="Resource" path="res://missions/data/mission_city.tres" id="16_mct01"]
+[ext_resource type="Resource" path="res://missions/data/mission_graveyard.tres" id="17_mgv01"]
+[ext_resource type="Resource" path="res://missions/data/mission_shelter.tres" id="18_msh01"]
+[ext_resource type="PackedScene" path="res://models/environment/Barrel.gltf" id="m_Barrel"]
+[ext_resource type="PackedScene" path="res://models/environment/Chest.gltf" id="m_Chest"]
+[ext_resource type="PackedScene" path="res://models/environment/Chest_Special.gltf" id="m_Chest_Special"]
+[ext_resource type="PackedScene" path="res://models/environment/FireHydrant.gltf" id="m_FireHydrant"]
+[ext_resource type="PackedScene" path="res://models/environment/Pallet.gltf" id="m_Pallet"]
+[ext_resource type="PackedScene" path="res://models/environment/Pipes.gltf" id="m_Pipes"]
+[ext_resource type="PackedScene" path="res://models/environment/PlasticBarrier.gltf" id="m_PlasticBarrier"]
+[ext_resource type="PackedScene" path="res://models/environment/StreetLights.gltf" id="m_StreetLights"]
+[ext_resource type="PackedScene" path="res://models/environment/TownSign.gltf" id="m_TownSign"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficBarrier_1.gltf" id="m_TrafficBarrier_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficBarrier_2.gltf" id="m_TrafficBarrier_2"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficCone_1.gltf" id="m_TrafficCone_1"]
+[ext_resource type="PackedScene" path="res://models/environment/TrafficCone_2.gltf" id="m_TrafficCone_2"]
+[ext_resource type="PackedScene" path="res://models/vehicles/Vehicle_Pickup_Armored.gltf" id="m_Vehicle_Pickup_Armored"]
+[ext_resource type="PackedScene" path="res://models/environment/WaterTower.gltf" id="m_WaterTower"]
+[ext_resource type="PackedScene" path="res://models/environment/Wheel.gltf" id="m_Wheel"]
+[ext_resource type="PackedScene" path="res://models/environment/Wheels_Stack.gltf" id="m_Wheels_Stack"]
+[ext_resource type="Script" path="res://levels/static_prop.gd" id="30_prop1"]
+[ext_resource type="PackedScene" path="res://models/environment/Street_Straight.gltf" id="m_Street_Straight"]
+[ext_resource type="Script" path="res://hub/hologram.gd" id="40_holo1"]
+[ext_resource type="PackedScene" uid="uid://b50kq7pw2hf5q" path="res://models/zombies/Zombie_Basic.gltf" id="41_zmb01"]
+[ext_resource type="PackedScene" uid="uid://bsgnpeqcp580x" path="res://models/weapons/Rifle.gltf" id="42_rfl01"]
+[ext_resource type="Script" path="res://hub/base_visuals.gd" id="60_base1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub01"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -27,6 +57,25 @@ ambient_light_source = 3
 [sub_resource type="BoxShape3D" id="BoxShape3D_term01"]
 size = Vector3(3, 2, 3)
 
+[sub_resource type="StandardMaterial3D" id="Mat_hubfloor"]
+albedo_color = Color(0.33, 0.32, 0.3, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_hubground"]
+albedo_color = Color(0.36, 0.31, 0.24, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_hubdesk"]
+albedo_color = Color(0.27, 0.3, 0.27, 1)
+metallic = 0.3
+roughness = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wallx"]
+size = Vector3(32.8, 40, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wallz"]
+size = Vector3(0.4, 40, 32.8)
+
 [node name="Hub" type="Node3D" unique_id=846140359]
 script = ExtResource("1_hub01")
 
@@ -34,7 +83,7 @@ script = ExtResource("1_hub01")
 environment = SubResource("Environment_hub01")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=609936320]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+transform = Transform3D(0.866025, -0.383022, 0.321394, 0, 0.642788, 0.766044, -0.5, -0.663414, 0.55667, 0, 0, 0)
 shadow_enabled = true
 
 [node name="Room" type="Node3D" parent="." unique_id=571501370]
@@ -42,27 +91,168 @@ shadow_enabled = true
 [node name="Floor" type="CSGBox3D" parent="Room" unique_id=1867148235]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 use_collision = true
-size = Vector3(16, 0.5, 16)
+size = Vector3(32, 0.5, 32)
+material = SubResource("Mat_hubfloor")
 
-[node name="WallNorth" type="CSGBox3D" parent="Room" unique_id=618449449]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8)
-use_collision = true
-size = Vector3(16, 4, 0.4)
+[node name="Bounds" type="StaticBody3D" parent="Room" unique_id=616455894]
 
-[node name="WallSouth" type="CSGBox3D" parent="Room" unique_id=1503359194]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8)
-use_collision = true
-size = Vector3(16, 4, 0.4)
+[node name="North" type="CollisionShape3D" parent="Room/Bounds" unique_id=1816087198]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -16)
+shape = SubResource("BoxShape3D_wallx")
 
-[node name="WallWest" type="CSGBox3D" parent="Room" unique_id=597186023]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 0)
-use_collision = true
-size = Vector3(0.4, 4, 16)
+[node name="South" type="CollisionShape3D" parent="Room/Bounds" unique_id=642730241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 16)
+shape = SubResource("BoxShape3D_wallx")
 
-[node name="WallEast" type="CSGBox3D" parent="Room" unique_id=1290073392]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0)
-use_collision = true
-size = Vector3(0.4, 4, 16)
+[node name="West" type="CollisionShape3D" parent="Room/Bounds" unique_id=799878127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 2, 0)
+shape = SubResource("BoxShape3D_wallz")
+
+[node name="East" type="CollisionShape3D" parent="Room/Bounds" unique_id=523729283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0)
+shape = SubResource("BoxShape3D_wallz")
+
+[node name="OutsideGround" type="CSGBox3D" parent="Room" unique_id=514743897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0)
+size = Vector3(120, 0.5, 120)
+material = SubResource("Mat_hubground")
+
+[node name="Props" type="Node3D" parent="." unique_id=1071477686]
+
+[node name="PickupArmored" type="StaticBody3D" parent="Props" unique_id=1940099285]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 0, 2.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/PickupArmored" unique_id=2084727110 instance=ExtResource("m_Vehicle_Pickup_Armored")]
+
+[node name="Barrel1" type="StaticBody3D" parent="Props" unique_id=1777652994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 0, -3.2)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Barrel1" unique_id=1099975904 instance=ExtResource("m_Barrel")]
+
+[node name="Barrel2" type="StaticBody3D" parent="Props" unique_id=1070302523]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1, 0, -3.7)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Barrel2" unique_id=1190580830 instance=ExtResource("m_Barrel")]
+
+[node name="Barrel3" type="StaticBody3D" parent="Props" unique_id=1936196520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9, 0, -4.1)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Barrel3" unique_id=1361399321 instance=ExtResource("m_Barrel")]
+
+[node name="Pallet" type="StaticBody3D" parent="Props" unique_id=507811516]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6.6, 0, -6.9)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Pallet" unique_id=496555068 instance=ExtResource("m_Pallet")]
+
+[node name="ChestSpecial" type="StaticBody3D" parent="Props" unique_id=1826362772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 0.14, -6.9)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/ChestSpecial" unique_id=1199315425 instance=ExtResource("m_Chest_Special")]
+
+[node name="Chest" type="StaticBody3D" parent="Props" unique_id=1121693763]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 5.2, 0, -7.3)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Chest" unique_id=1452662844 instance=ExtResource("m_Chest")]
+
+[node name="WheelsStack" type="StaticBody3D" parent="Props" unique_id=1418466550]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1, 0, -1.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/WheelsStack" unique_id=1802904873 instance=ExtResource("m_Wheels_Stack")]
+
+[node name="Wheel" type="StaticBody3D" parent="Props" unique_id=499804946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, 0, -2.3)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Wheel" unique_id=302128585 instance=ExtResource("m_Wheel")]
+
+[node name="Pipes" type="StaticBody3D" parent="Props" unique_id=1059051491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.2, 0, -4.5)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/Pipes" unique_id=751549248 instance=ExtResource("m_Pipes")]
+
+[node name="StreetLight1" type="StaticBody3D" parent="Props" unique_id=404502734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 6.6, 0.4)
+custom_center = Vector3(0, 3.3, 0)
+
+[node name="Model" parent="Props/StreetLight1" unique_id=294713490 instance=ExtResource("m_StreetLights")]
+
+[node name="StreetLight2" type="StaticBody3D" parent="Props" unique_id=1256835503]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 7.5, 0, 7.5)
+script = ExtResource("30_prop1")
+custom_size = Vector3(0.4, 6.6, 0.4)
+custom_center = Vector3(0, 3.3, 0)
+
+[node name="Model" parent="Props/StreetLight2" unique_id=1838698399 instance=ExtResource("m_StreetLights")]
+
+[node name="FireHydrant" type="StaticBody3D" parent="Props" unique_id=1496016796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0, 6.8)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/FireHydrant" unique_id=438215987 instance=ExtResource("m_FireHydrant")]
+
+[node name="TrafficCone1" type="StaticBody3D" parent="Props" unique_id=1438158163]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, -2.6)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/TrafficCone1" unique_id=132213826 instance=ExtResource("m_TrafficCone_1")]
+
+[node name="TrafficCone2" type="StaticBody3D" parent="Props" unique_id=1886065640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, -2.6)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/TrafficCone2" unique_id=1234690139 instance=ExtResource("m_TrafficCone_2")]
+
+[node name="PlasticBarrier" type="StaticBody3D" parent="Props" unique_id=235645637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.4)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/PlasticBarrier" unique_id=227885033 instance=ExtResource("m_PlasticBarrier")]
+
+[node name="TrafficBarrier1" type="StaticBody3D" parent="Props" unique_id=176563762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, -7.2)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/TrafficBarrier1" unique_id=508469125 instance=ExtResource("m_TrafficBarrier_1")]
+
+[node name="TrafficBarrier2" type="StaticBody3D" parent="Props" unique_id=1988851399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, -7.2)
+script = ExtResource("30_prop1")
+
+[node name="Model" parent="Props/TrafficBarrier2" unique_id=619568668 instance=ExtResource("m_TrafficBarrier_2")]
+
+[node name="Outside" type="Node3D" parent="Props" unique_id=1387670034]
+
+[node name="WaterTower" parent="Props/Outside" unique_id=164601866 instance=ExtResource("m_WaterTower")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
+
+[node name="TownSign" parent="Props/Outside" unique_id=1770975072 instance=ExtResource("m_TownSign")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -22)
+
+[node name="BaseBuildings" type="Node3D" parent="." unique_id=1560241127]
+script = ExtResource("60_base1")
+
+[node name="Slot1" type="Marker3D" parent="BaseBuildings" unique_id=1183081030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -2.5, 0, 11.6)
+
+[node name="Slot2" type="Marker3D" parent="BaseBuildings" unique_id=466655869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 2.5, 0, 11.6)
+
+[node name="Slot3" type="Marker3D" parent="BaseBuildings" unique_id=748166977]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 7.5, 0, 11.6)
+
+[node name="Slot4" type="Marker3D" parent="BaseBuildings" unique_id=2138240631]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12.0, 0, 11.8)
 
 [node name="Player" parent="." unique_id=1830088657 node_paths=PackedStringArray("touch_controls") instance=ExtResource("2_plr01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4)
@@ -82,12 +272,23 @@ shape = SubResource("BoxShape3D_term01")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 use_collision = true
 size = Vector3(2, 1, 1)
+material = SubResource("Mat_hubdesk")
+
+[node name="Hologram" type="Node3D" parent="MissionTerminal" unique_id=1460371011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+script = ExtResource("40_holo1")
+model_scene = ExtResource("41_zmb01")
+model_scale = 0.4
+animation = &"Idle"
+spin_speed = 0.6
 
 [node name="Label3D" type="Label3D" parent="MissionTerminal" unique_id=824246358]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+pixel_size = 0.004
 billboard = 1
 text = "МИССИИ"
-font_size = 96
+font_size = 64
+outline_size = 16
 
 [node name="ShopTerminal" type="Area3D" parent="." unique_id=813106454]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -5)
@@ -103,12 +304,32 @@ shape = SubResource("BoxShape3D_term01")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 use_collision = true
 size = Vector3(2, 1, 1)
+material = SubResource("Mat_hubdesk")
+
+[node name="Hologram" type="Node3D" parent="ShopTerminal" unique_id=1460371012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+script = ExtResource("40_holo1")
+model_scene = ExtResource("42_rfl01")
+model_scale = 0.55
+spin_speed = 1.0
+color = Color(1, 0.75, 0.25, 0.6)
 
 [node name="Label3D" type="Label3D" parent="ShopTerminal" unique_id=1975959397]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+pixel_size = 0.004
 billboard = 1
 text = "ОРУЖЕЙНАЯ"
-font_size = 96
+font_size = 64
+outline_size = 16
+
+[node name="Road1" parent="Props/Outside" unique_id=492718981 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24)
+
+[node name="Road2" parent="Props/Outside" unique_id=811867347 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
+
+[node name="Road3" parent="Props/Outside" unique_id=790377927 instance=ExtResource("m_Street_Straight")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=329524396]
 
@@ -158,4 +379,4 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("7_hud01")
-missions = Array[ExtResource("8_mdt01")]([ExtResource("9_mwv01"), ExtResource("10_mkl01"), ExtResource("11_msv01")])
+missions = Array[ExtResource("8_mdt01")]([ExtResource("9_mwv01"), ExtResource("10_mkl01"), ExtResource("11_msv01"), ExtResource("12_mdf01"), ExtResource("13_mcl01"), ExtResource("14_mbs01"), ExtResource("15_men01"), ExtResource("16_mct01"), ExtResource("17_mgv01"), ExtResource("18_msh01")])

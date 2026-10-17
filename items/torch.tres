@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GearData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://items/gear_data.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "torch"
+title = "ФАКЕЛ"
+description = "ТЁПЛЫЙ СВЕТ В ТЕМНОТЕ. НОЧЬЮ В ГОРОДЕ ЗАГОРАЕТСЯ САМ, НА РАССВЕТЕ ГАСНЕТ. ВРУЧНУЮ — КНОПКА ФАКЕЛ ИЛИ T"
+price = 250

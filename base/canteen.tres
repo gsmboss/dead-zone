@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "canteen"
+title = "СТОЛОВАЯ"
+description = "Кухня под навесом и столы: ящик провизии кормит 8 человек вместо 5"
+price = 2500
+icon_color = Color(1, 0.55, 0.35, 1)
+required_level = 4
+comfort = 8
+builder = &"canteen"
+hub_position = Vector3(0, 0, -19.6)
+hub_yaw_degrees = 0.0

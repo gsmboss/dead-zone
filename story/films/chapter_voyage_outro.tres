@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_sea"
+duration = 4.0
+voice_ru = "Утопленник рухнул в воду, и волна окатила весь причал."
+voice_en = "The Drowned One crashed into the water, and a wave washed over the whole pier."
+effect = "shake"
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_quay"
+duration = 4.0
+voice_ru = "Поздравляю! Ты победил грузчика!"
+voice_en = "Congratulations! You beat a docker!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "lighthouse"
+duration = 5.0
+voice_ru = "Я всё слышу. Это был не грузчик. Грузчики были вежливее."
+voice_en = "I can hear you. That wasn't a docker. Dockers were more polite."
+speaker = "ПАЛЫЧ"
+pitch = 0.72
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_ship"
+duration = 5.0
+voice_ru = "Курс на юг! Двести человек ждут вакцину в горах. Высажу вас в бухте у курорта — дальше пешком."
+voice_en = "Heading south! Two hundred people are waiting for the vaccine in the mountains. I'll drop you in the bay by the resort, then it's on foot."
+speaker = "КАПИТАН"
+pitch = 0.65
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 8
+camera = "harbor_aerial"
+duration = 6.0
+voice_ru = "«Надежда» дала длинный гудок. Маяк мигнул ей в ответ. Мы с Тёмой стояли на палубе. Впереди был юг."
+voice_en = "The Nadezhda gave a long horn blast. The lighthouse blinked back. Tyoma and I stood on deck. The south lay ahead."
+
+[sub_resource type="Resource" id="Shot_6"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "КУРС НА ЮГ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_voyage_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5"), SubResource("Shot_6")])

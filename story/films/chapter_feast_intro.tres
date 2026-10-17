@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+caption = "ЛАГЕРЬ. ВЕЧЕР"
+voice_ru = "Объявляю первый кофейный фестиваль! Конкурс, танцы, гитара! И салют! Салют — это моя идея!"
+voice_en = "I declare the first coffee festival open! A contest, dancing, guitar! And fireworks! The fireworks were my idea!"
+speaker = "ДЯДЯ ГОША"
+pitch = 0.8
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Я выучила три аккорда. Все три — одинаковые, но с душой."
+voice_en = "I learned three chords. All three are the same, but with feeling."
+speaker = "ВЕРА"
+pitch = 1.1
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 4
+camera = "sky_up"
+duration = 4.0
+voice_ru = "Салют был красивый. Его увидели все. Вообще все."
+voice_en = "The fireworks were beautiful. Everyone saw them. Literally everyone."
+effect = "flash"
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "zombie_low"
+duration = 4.0
+voice_ru = "Ну вот. Гости пришли без приглашения."
+voice_en = "Well, there you go. Guests showed up uninvited."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_5"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 20\nПРАЗДНИК"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_feast_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4"), SubResource("Shot_5")])

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3]
+
+[ext_resource type="Script" path="res://base/building_data.gd" id="1_bld01"]
+
+[resource]
+script = ExtResource("1_bld01")
+id = "garden"
+title = "ОГОРОД"
+description = "Грядки и теплица: +4 ящика провизии каждый день"
+price = 900
+icon_color = Color(0.45, 0.8, 0.3, 1)
+required_level = 2
+comfort = 4
+builder = &"garden"
+hub_position = Vector3(-18, 0, -8)
+hub_yaw_degrees = 0.0

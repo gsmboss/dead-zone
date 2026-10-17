@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "bandit_orbit"
+duration = 5.5
+caption = "СТОЯНКА КОНТЕЙНЕРОВ"
+voice_ru = "Стервятники грабят колонну беженцев. Тех самых, кто отказался платить налог тушёнкой."
+voice_en = "The Vultures are robbing a convoy of refugees. The ones who refused to pay their taxes in canned meat."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "baron"
+duration = 4.5
+voice_ru = "Окружай их! Стоп. Кто-нибудь знает, как окружать?"
+voice_en = "Surround them! Wait. Does anyone know how to surround?"
+speaker = "БАНДИТ"
+pitch = 1.0
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 3
+camera = "crossroad"
+duration = 5.5
+voice_ru = "Правило номер семь: бандиты стреляют, зомби — нет. От бандитов прячься за стеной, от зомби — убегай."
+voice_en = "Rule number seven: bandits shoot, zombies don't. Hide from bandits behind walls, run from zombies."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 5\nСТЕРВЯТНИКИ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_bandits_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

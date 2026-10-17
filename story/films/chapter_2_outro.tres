@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "close_up"
+duration = 5.0
+voice_ru = "На стене магазина — надпись маркером. Почерк, который я узнаю из тысячи. Кривой, как его велосипед."
+voice_en = "On the store wall, words in marker. Handwriting I'd know anywhere. Crooked, like his bike."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 4.0
+voice_ru = "Я жив. Иду к лесу. Т."
+voice_en = "I'm alive. Going to the forest. T."
+speaker = "ТЁМА"
+pitch = 1.6
+title = "«Я ЖИВ. ИДУ К ЛЕСУ. Т.»"
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 2
+camera = "sky_up"
+duration = 5.0
+voice_ru = "Он жив. Он жив! Денис потом сказал, что я орал так, что сбежались все зомби района. Оно того стоило."
+voice_en = "He's alive. He's alive! Denis later said I yelled so loud every zombie in the district came running. It was worth it."
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_2_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_wide"
+duration = 5.0
+caption = "ПОРТОВЫЕ СКЛАДЫ"
+voice_ru = "Тут водка, тут запчасти, тут бананы. Были. Теперь тут грузчики. Тоже были."
+voice_en = "Vodka here, spare parts here, bananas here. Used to be. Now there are dockers. Used to be, too."
+speaker = "МИХАЛЫЧ"
+pitch = 0.7
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_low"
+duration = 5.0
+voice_ru = "Грузчики дня ноль так и остались на смене. У них до сих пор крепкие руки."
+voice_en = "The day zero dockers never clocked out. Their grip is still strong."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_gate"
+duration = 5.0
+voice_ru = "Михалыч, не стой столбом! Стреляй! И шапку надень, простудишься!"
+voice_en = "Mikhalych, don't just stand there! Shoot! And put your hat on, you'll catch a cold!"
+speaker = "ТЁЩА"
+pitch = 1.15
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 22\nПОРТОВЫЕ СКЛАДЫ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_depot_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

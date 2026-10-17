@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttachmentData" format=3]
+
+[ext_resource type="Script" path="res://weapons/attachment_data.gd" id="1_att01"]
+
+[resource]
+script = ExtResource("1_att01")
+id = "compensator"
+title = "КОМПЕНСАТОР"
+description = "Отдача −40%, прицел меньше расходится при стрельбе"
+slot = 0
+look = 2
+price = 250
+recoil = 0.6
+bloom = 0.65

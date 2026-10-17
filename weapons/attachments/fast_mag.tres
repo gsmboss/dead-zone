@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AttachmentData" format=3]
+
+[ext_resource type="Script" path="res://weapons/attachment_data.gd" id="1_att01"]
+
+[resource]
+script = ExtResource("1_att01")
+id = "fast_mag"
+title = "БЫСТРЫЙ МАГАЗИН"
+description = "Перезарядка на 30% быстрее"
+slot = 2
+price = 300
+reload_time = 0.7

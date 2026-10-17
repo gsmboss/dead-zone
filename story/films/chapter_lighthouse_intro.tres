@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "lighthouse"
+duration = 5.0
+caption = "МАЯК НА МОЛУ"
+voice_ru = "Смотритель маяка Палыч три месяца не выходил наружу. Он думал, что в городе забастовка."
+voice_en = "Palych, the lighthouse keeper, had not gone outside for three months. He thought the city was on strike."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_quay"
+duration = 5.0
+voice_ru = "Зомби? А я думал — грузчики без зарплаты. Они и раньше так ходили."
+voice_en = "Zombies? I thought they were dockers who never got paid. They always walked like that."
+speaker = "ПАЛЫЧ"
+pitch = 0.72
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "lighthouse"
+duration = 5.0
+voice_ru = "Лампу починю. Но генератор ревёт, как стадо китов. Сюда сбежится весь порт."
+voice_en = "I'll fix the lamp. But the generator roars like a herd of whales. The whole port will come running."
+speaker = "ПАЛЫЧ"
+pitch = 0.72
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 7
+camera = "harbor_zombies"
+duration = 4.0
+voice_ru = "Весь порт сбежался ещё до того, как он договорил."
+voice_en = "The whole port came running before he finished the sentence."
+effect = "shake"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_lighthouse_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

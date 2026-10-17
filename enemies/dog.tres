@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" uid="uid://bsomw8gt06pq4" path="res://enemies/zombie_data.gd" id="1_zd01"]
+[ext_resource type="PackedScene" uid="uid://r0g1evxcwqm5" path="res://models/zombies/Characters_GermanShepherd.gltf" id="2_md01"]
+
+[resource]
+script = ExtResource("1_zd01")
+display_name = "СОБАКА"
+max_health = 50.0
+move_speed = 5.0
+turn_speed = 12.0
+attack_damage = 8.0
+attack_range = 1.4
+attack_windup = 0.25
+attack_cooldown = 0.5
+detection_radius = 25.0
+hearing_radius = 40.0
+model_scene = ExtResource("2_md01")
+model_scale = 1.2
+anim_idle = &"Idle"
+anim_walk = &"Walk"
+anim_run = &"Run"
+anim_attack = &"Attack"
+anim_hit = &"HitReact_Left"
+anim_death = &"Death"
+hitbox_lying = true
+tint = Color(0.6, 0.1, 0.1, 0.2)
+flank_from_behind = true
+zigzag_amplitude = 0.8
+footstep_hearing_radius = 14.0
+voice_pitch = 1.5
+score = 15
+metadata/_custom_type_script = "uid://bsomw8gt06pq4"

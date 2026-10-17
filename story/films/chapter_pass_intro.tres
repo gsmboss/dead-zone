@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_wide"
+duration = 5.0
+caption = "ГОРНЫЙ ПЕРЕВАЛ"
+voice_ru = "Серпантин, снег и розовый автобус с пальмами. Самая странная экспедиция в истории гор."
+voice_en = "Switchbacks, snow and a pink bus with palm trees. The strangest expedition in the history of these mountains."
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_pass"
+duration = 5.0
+voice_ru = "Две минуты! Ну, две с половиной. Не смотрите на меня так, я под капотом!"
+voice_en = "Two minutes! Well, two and a half. Don't look at me like that, I'm under the hood!"
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_low"
+duration = 5.0
+voice_ru = "С гор спускались мертвецы. Медленные от холода, но упрямые. И собаки. Собаки — не медленные."
+voice_en = "The dead came down from the mountains. Slow from the cold, but stubborn. And dogs. The dogs were not slow."
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 5
+camera = "aerial"
+duration = 3.0
+title = "ГЛАВА 27\nГОРНЫЙ ПЕРЕВАЛ"
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_pass_intro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])

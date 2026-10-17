@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 11
+camera = "ind_fire"
+duration = 5.0
+voice_ru = "Как я? Холодно, но вкусно. Три месяца на пломбире. Хотите? У меня ещё четыре тонны."
+voice_en = "How am I? Cold, but tasty. Three months on ice cream. Want some? I have four more tons."
+speaker = "ЛЮБА"
+pitch = 1.25
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_orbit"
+duration = 5.0
+voice_ru = "Денис и Люба два часа спорили о фреоне. Самый романтичный спор в истории."
+voice_en = "Denis and Lyuba argued about freon for two hours. The most romantic argument in history."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "Холод есть. Теперь шприцы и автоклав. Они в городской больнице. Говорят, там ещё кто-то лечит."
+voice_en = "We have cold. Now syringes and an autoclave. They are at the city hospital. They say someone is still treating patients there."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_cold_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

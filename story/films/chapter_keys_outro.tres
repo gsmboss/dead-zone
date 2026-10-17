@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_village"
+duration = 5.0
+voice_ru = "Двести прививок. Ни одного промаха. Пятёрка. Дай руку, поставлю."
+voice_en = "Two hundred shots. Not a single miss. That's an A. Give me your hand, I'll write it."
+speaker = "БАБА ШУРА"
+pitch = 1.05
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_gate"
+duration = 5.0
+voice_ru = "Шестеро из деревни идут с нами. Говорят, у нас кофе и коза. Слухи дошли даже до гор."
+voice_en = "Six from the village are coming with us. They say we have coffee and a goat. Rumors have reached even the mountains."
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 12
+camera = "mount_wide"
+duration = 6.0
+voice_ru = "Это Пастух. Огромный. Воет — и мертвецы идут за ним стадом. Пока он жив, покоя не будет."
+voice_en = "That is the Shepherd. Huge. He howls and the dead follow him like a herd. As long as he lives, there will be no peace."
+speaker = "БАБА ШУРА"
+pitch = 1.05
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_keys_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3")])

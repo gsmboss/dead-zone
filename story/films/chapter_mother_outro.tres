@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="StoryFilm" format=3]
+
+[ext_resource type="Script" path="res://story/film/story_film.gd" id="1_film"]
+[ext_resource type="Script" path="res://story/film/story_shot.gd" id="2_shot"]
+
+[sub_resource type="Resource" id="Shot_1"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_mom"
+duration = 6.0
+voice_ru = "Мальчики, я не догнала. Но я видела с моста, как вы добежали. Значит, всё не зря."
+voice_en = "Boys, I didn't catch up. But from the bridge I saw you make it. So it was not for nothing."
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_2"]
+script = ExtResource("2_shot")
+mood = 0
+camera = "crossroad"
+duration = 5.0
+voice_ru = "Старший, береги его. Тёма, не ешь шоколадки на ночь. Я вас люблю. Записала, чтобы не забыли."
+voice_en = "Eldest, take care of him. Tyoma, no chocolate at night. I love you. I wrote it down so you won't forget."
+speaker = "МАМА"
+pitch = 1.2
+
+[sub_resource type="Resource" id="Shot_3"]
+script = ExtResource("2_shot")
+mood = 10
+camera = "grave_low"
+duration = 5.0
+voice_ru = "На ночь нельзя. Держи. Это тебе."
+voice_en = "Not at night. Here. This is for you."
+speaker = "ТЁМА"
+pitch = 1.6
+
+[sub_resource type="Resource" id="Shot_4"]
+script = ExtResource("2_shot")
+mood = 6
+camera = "camp_fire"
+duration = 5.0
+voice_ru = "С её записями вакцина стала лучше. И больше не растит бороду. Шнырь расстроился."
+voice_en = "With her notes the vaccine got better. And it doesn't grow beards anymore. Shnyr was upset."
+speaker = "ИРИНА"
+pitch = 1.15
+
+[resource]
+script = ExtResource("1_film")
+id = "chapter_mother_outro"
+shots = Array[ExtResource("2_shot")]([SubResource("Shot_1"), SubResource("Shot_2"), SubResource("Shot_3"), SubResource("Shot_4")])
